@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.order.dao.read.OrderDetailReadDao">
+  <resultMap id="orderDetailResultMap" type="com.star.truffle.module.order.domain.OrderDetail">
+    <result column="id" property="id" />
+    <result column="order_id" property="orderId" />
+    <result column="product_id" property="productId" />
+    <result column="title" property="title" />
+    <result column="main_picture_url" property="mainPictureUrl" />
+    <result column="original_price" property="originalPrice" />
+    <result column="price" property="price" />
+    <result column="brokerage" property="brokerage" />
+    <result column="pickup_time" property="pickupTime" />
+    <result column="specification" property="specification" />
+    <result column="count" property="count" />
+    <result column="product_info" property="productInfo" />
+  </resultMap>
+
+  <sql id="sql_column">
+    id, order_id, product_id, title, main_picture_url, original_price, price, brokerage, pickup_time, specification, count, product_info
+  </sql>
+
+  <select id="getOrderDetails" resultMap="orderDetailResultMap">
+    select
+    <include refid="sql_column" />
+    from order_detail
+    where order_id = #{orderId}
+    order by id
+  </select>
+</mapper>

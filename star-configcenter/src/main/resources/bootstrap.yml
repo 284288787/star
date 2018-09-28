@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: star-configcenter
+  profiles:
+    active: git
+  
+server:
+  port: 1112
+  servlet:
+    context-path: 
+
+eureka:
+  instance:
+    #status-page-url-path: ${server.servlet.context-path:}/swagger-ui.html
+    #home-page-url-path: ${server.servlet.context-path:}/
+    #prefer-ip-address: true
+    lease-expiration-duration-in-seconds: 30
+    lease-renewal-interval-in-seconds: 10
+    hostname: 47.105.38.227
+    instance-id: 47.105.38.227:1112
+  client:
+    serviceUrl:
+      defaultZone: http://47.105.38.227:1111/eureka/

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.product.dao.read.DistributionRegionReadDao">
+  <resultMap id="distributionRegionResponseDtoResultMap" type="com.star.truffle.module.product.dto.res.DistributionRegionResponseDto">
+    <result column="region_id" property="regionId" />
+    <result column="name" property="name" />
+    <result column="py" property="py" />
+    <result column="province_id" property="provinceId" />
+    <result column="city_id" property="cityId" />
+    <result column="area_id" property="areaId" />
+    <result column="town_id" property="townId" />
+    <result column="state" property="state" />
+    <result column="create_time" property="createTime" />
+    <result column="update_time" property="updateTime" />
+    <result column="fans_num" property="fansNum" />
+    <result column="sold_num" property="soldNum" />
+    <result column="provinceName" property="provinceName" />
+    <result column="cityName" property="cityName" />
+    <result column="areaName" property="areaName" />
+    <result column="townName" property="townName" />
+  </resultMap>
+
+  <sql id="sql_column">
+    region_id, py, `name`, province_id, city_id, area_id, town_id, state, create_time, update_time, fans_num, sold_num,
+    (select a.areaName from sys_area a where a.areaId = distribution_region.province_id) provinceName,
+    (select a.areaName from sys_area a where a.areaId = distribution_region.city_id) cityName,
+    (select a.areaName from sys_area a where a.areaId = distribution_region.area_id) areaName,
+    (select a.areaName from sys_area a where a.areaId = distribution_region.town_id) townName
+  </sql>
+
+  <sql id="sql_where">
+    <trim prefix="WHERE" prefixOverrides="AND | OR">
+      <if test="regionId != null">
+        and region_id = #{regionId}
+      </if>
+      <if test="name != null and name != ''">
+        and name like "%"#{name}"%"
+      </if>
+      <if test="py != null and py != ''">
+        and py = #{py}
+      </if>
+      <if test="provinceId != null">
+        and province_id = #{provinceId}
+      </if>
+      <if test="cityId != null">
+        and city_id = #{cityId}
+      </if>
+      <if test="areaId != null">
+        and area_id = #{areaId}
+      </if>
+      <if test="townId != null">
+        and town_id = #{townId}
+      </if>
+      <if test="state != null">
+        and state = #{state}
+      </if>
+      <if test="states != null and states != ''">
+        and state in (${states})
+      </if>
+    </trim>
+  </sql>
+
+  <select id="getDistributionRegion" resultType="com.star.truffle.module.product.dto.res.DistributionRegionResponseDto">
+    select
+    <include refid="sql_column" />
+    from distribution_region
+    where region_id = #{regionId}
+  </select>
+
+  <select id="getDistributionRegionByPy" resultType="com.star.truffle.module.product.dto.res.DistributionRegionResponseDto">
+    select
+    <include refid="sql_column" />
+    from distribution_region
+    where py = #{py}
+  </select>
+
+  <select id="queryDistributionRegion" resultMap="distributionRegionResponseDtoResultMap">
+    select
+    <include refid="sql_column" />
+    from distribution_region
+    <include refid="sql_where" />
+    order by
+    <choose>
+      <when test="pager != null and pager.orderBy != null and pager.orderBy != ''">${pager.orderBy}</when>
+      <otherwise>region_id</otherwise>
+    </choose>
+    <if test="pager != null and pager.orderType != null and pager.orderType != ''">${pager.orderType}</if>
+    <if test="pager != null and pager.pageSize!=null and pager.startIndex!=null">
+      limit #{pager.startIndex}, #{pager.pageSize}
+    </if>
+  </select>
+
+  <select id="queryDistributionRegionCount" resultType="java.lang.Long">
+    select
+    count(1)
+    from distribution_region
+    <include refid="sql_where" />
+  </select>
+</mapper>

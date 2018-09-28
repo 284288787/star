@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.user.dao.write.UriWriteDao">
+
+  <insert id="batchSaveUri" parameterType="java.util.List">
+    insert into sys_uri(uri, sourceId, intro, createTime)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.uri}, #{item.sourceId}, #{item.intro}, now())
+    </foreach>
+  </insert>
+  
+  <update id="updateUri" parameterType="com.star.truffle.module.user.domain.Uri">
+    update sys_uri 
+    <trim prefix="set" suffixOverrides=",">
+    	<if test="true">createTime = now(),</if>
+      <if test="true">sourceId = #{uri.sourceId},</if>
+      <if test="uri.intro != null and uri.intro != ''">intro = #{uri.intro},</if>
+    </trim>
+    where uri in (#{uris})
+  </update>
+  
+  <update id="updateUriDate">
+    update sys_uri set createTime = now() where uri = #{uri}
+  </update>
+  
+  <delete id="deleteUri" parameterType="java.lang.String">
+    delete from sys_uri where uri = #{uri}
+  </delete>
+  
+  <delete id="deleteUriBeforeNow">
+    delete from sys_uri where createTime &lt; #{now}
+  </delete>
+  
+</mapper>

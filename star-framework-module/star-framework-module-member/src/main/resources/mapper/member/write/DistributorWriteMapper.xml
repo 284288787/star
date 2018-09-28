@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.member.dao.write.DistributorWriteDao">
+  <insert id="saveDistributor" useGeneratedKeys="true" keyProperty="distributorId" parameterType="com.star.truffle.module.member.domain.Distributor">
+    insert into distributor(state, head, name, shop_name, shop_code, mobile, region_id, address, enabled, create_time, update_time, open_id, fans_num, sold_num)
+    values(#{state}, #{head}, #{name}, #{shopName}, #{shopCode}, #{mobile}, #{regionId}, #{address}, #{enabled}, #{createTime}, #{updateTime}, #{openId}, #{fansNum}, #{soldNum})
+  </insert>
+
+  <insert id="batchSaveDistributor" parameterType="java.util.List">
+    insert into distributor(state, head, name, shop_name, shop_code, mobile, region_id, address, enabled, create_time, update_time, open_id, fans_num, sold_num)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.state}, #{item.head}, #{item.name}, #{item.shopName}, #{item.shopCode}, #{item.mobile}, #{item.regionId}, #{item.address}, #{item.enabled}, #{item.createTime}, #{item.updateTime}, #{item.openId}, #{item.fansNum}, #{item.soldNum})
+    </foreach>
+  </insert>
+
+  <update id="updateDistributor" parameterType="com.star.truffle.module.member.dto.req.DistributorRequestDto">
+    update distributor
+    <trim prefix="set" suffixOverrides=",">
+      <if test="head != null and head != ''">head = #{head},</if>
+      <if test="name != null and name != ''">name = #{name},</if>
+      <if test="shopName != null and shopName != ''">shop_name = #{shopName},</if>
+      <if test="shopCode != null and shopCode != ''">shop_code = #{shopCode},</if>
+      <if test="mobile != null and mobile != ''">mobile = #{mobile},</if>
+      <if test="regionId != null">region_id = #{regionId},</if>
+      <if test="address != null and address != ''">address = #{address},</if>
+      <if test="enabled != null">enabled = #{enabled},</if>
+      <if test="createTime != null">create_time = #{createTime},</if>
+      <if test="updateTime != null">update_time = #{updateTime},</if>
+      <if test="openId != null and openId != ''">open_id = #{openId},</if>
+      <if test="fansNum != null">fans_num = #{fansNum},</if>
+      <if test="soldNum != null">sold_num = #{soldNum},</if>
+      <if test="state != null">state = #{state},</if>
+    </trim>
+    where distributor_id = #{distributorId}
+  </update>
+
+  <delete id="deleteDistributor" parameterType="java.lang.Long">
+    delete from distributor where distributor_id = #{distributorId}
+  </delete>
+
+  <resultMap id="distributorResponseDtoResultMap" type="com.star.truffle.module.member.dto.res.DistributorResponseDto">
+    <result column="distributor_id" property="distributorId" />
+    <result column="head" property="head" />
+    <result column="name" property="name" />
+    <result column="shop_name" property="shopName" />
+    <result column="shop_code" property="shopCode" />
+    <result column="mobile" property="mobile" />
+    <result column="region_id" property="regionId" />
+    <result column="regionName" property="regionName" />
+    <result column="address" property="address" />
+    <result column="enabled" property="enabled" />
+    <result column="create_time" property="createTime" />
+    <result column="update_time" property="updateTime" />
+    <result column="open_id" property="openId" />
+    <result column="fans_num" property="fansNum" />
+    <result column="sold_num" property="soldNum" />
+    <result column="provinceId" property="provinceId" />
+    <result column="provinceName" property="provinceName" />
+    <result column="cityId" property="cityId" />
+    <result column="cityName" property="cityName" />
+    <result column="areaId" property="areaId" />
+    <result column="areaName" property="areaName" />
+    <result column="townId" property="townId" />
+    <result column="townName" property="townName" />
+    <result column="state" property="state" />
+  </resultMap>
+
+  <sql id="sql_column">
+    distributor_id, head, distributor.`name`, shop_name, shop_code, mobile, distributor.region_id, address, distributor.state, 
+    enabled, distributor.create_time, distributor.update_time, open_id, distributor.fans_num, 
+    distributor.sold_num, r.`name` regionName, p.shortName provinceName , c.shortName cityName, 
+    a.shortName areaName, t.shortName townName,
+    p.areaId provinceId , c.areaId cityId, a.areaId areaId, t.areaId townId
+  </sql>
+
+  <select id="getDistributor" resultType="com.star.truffle.module.member.dto.res.DistributorResponseDto">
+    select
+    <include refid="sql_column" />
+    from distributor
+    inner join distribution_region r on r.region_id = distributor.region_id
+    INNER JOIN sys_area p on p.areaId = r.province_id
+    LEFT JOIN sys_area c on c.areaId = r.city_id
+    LEFT JOIN sys_area a on a.areaId = r.area_id
+    LEFT JOIN sys_area t on t.areaId = r.town_id
+    where distributor_id = #{distributorId}
+  </select>
+
+</mapper>

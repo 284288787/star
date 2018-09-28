@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.user.dao.write.UserAccountWriteDao">
+  <resultMap id="userAccountResultMap" type="com.star.truffle.module.user.domain.UserAccount">
+    <result column="userId" property="userId" />
+    <result column="account" property="account" />
+    <result column="password" property="password" />
+    <result column="nonExpired" property="nonExpired" />
+    <result column="nonLocked" property="nonLocked" />
+    <result column="enabled" property="enabled" />
+    <result column="deleted" property="deleted" />
+    <result column="expiredTime" property="expiredTime" />
+    <result column="lockedTime" property="lockedTime" />
+    <result column="enabledTime" property="enabledTime" />
+    <result column="deletedTime" property="deletedTime" />
+    <result column="createTime" property="createTime" />
+    <result column="lastModifyTime" property="lastModifyTime" />
+  </resultMap>
+
+  <sql id="sql_column">
+    sys_useraccount.userId,account,password,nonExpired,nonLocked,enabled,deleted,expiredTime,lockedTime,enabledTime,deletedTime,createTime,sys_useraccount.lastModifyTime,`name`,mobile
+  </sql>
+
+  <select id="getUserAccountByUserId" resultType="com.star.truffle.module.user.dto.UserAccountDto">
+    select
+    <include refid="sql_column" />
+    from sys_useraccount left join sys_userInfo on sys_useraccount.userId = sys_userInfo.userId
+    where sys_useraccount.userId = #{userId}
+  </select>
+
+  <insert id="saveUserAccount" parameterType="com.star.truffle.module.user.domain.UserAccount">
+    insert into sys_useraccount(userId,account,password,nonExpired,nonLocked,enabled,deleted,expiredTime,lockedTime,enabledTime,deletedTime,createTime,lastModifyTime)
+    values(#{userId},#{account},#{password},#{nonExpired},#{nonLocked},#{enabled},#{deleted},#{expiredTime},#{lockedTime},#{enabledTime},#{deletedTime},#{createTime},#{lastModifyTime})
+  </insert>
+  
+  <update id="updateUserAccount" parameterType="com.star.truffle.module.user.domain.UserAccount">
+    update sys_useraccount 
+    <trim prefix="set" suffixOverrides=",">
+      <if test="password != null and password != ''">password = #{password},</if>
+      <if test="nonExpired != null">nonExpired = #{nonExpired},</if>
+      <if test="nonLocked != null">nonLocked = #{nonLocked},</if>
+      <if test="enabled != null">enabled = #{enabled},</if>
+      <if test="deleted != null">deleted = #{deleted},</if>
+      <if test="expiredTime != null">expiredTime = #{expiredTime},</if>
+      <if test="lockedTime != null">lockedTime = #{lockedTime},</if>
+      <if test="enabledTime != null">enabledTime = #{enabledTime},</if>
+      <if test="deletedTime != null">deletedTime = #{deletedTime},</if>
+      <if test="lastModifyTime != null">lastModifyTime = #{lastModifyTime},</if>
+    </trim>
+    where userId = #{userId}
+  </update>
+  
+  <delete id="deleteUserAccount" parameterType="java.lang.Long">
+    delete from sys_useraccount where userId = #{userId}
+  </delete>
+  
+  <insert id="saveUserAccountType" parameterType="com.star.truffle.module.user.domain.UserAccountType">
+    insert into sys_useraccounttype(userId,userType,typeName)
+    values(#{userId},#{userType},#{typeName})
+  </insert>
+  
+  <delete id="deleteUserAccountType" >
+    delete from sys_useraccounttype where userId = #{userId} and userType = #{userType}
+  </delete>
+</mapper>

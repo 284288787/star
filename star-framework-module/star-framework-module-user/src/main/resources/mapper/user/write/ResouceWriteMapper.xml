@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.user.dao.write.ResourceWriteDao">
+
+  <insert id="saveResource" parameterType="com.star.truffle.module.user.domain.Resource">
+    insert into sys_resource(sourceId,sourceName,sourceIcoCls,parentId,enabled,idx)
+    values(#{sourceId},#{sourceName},#{sourceIcoCls},#{parentId},#{enabled},#{idx})
+  </insert>
+  
+  <update id="updateResource" parameterType="com.star.truffle.module.user.domain.Resource">
+    update sys_resource 
+    <trim prefix="set" suffixOverrides=",">
+      <if test="sourceName != null and sourceName != ''">sourceName = #{sourceName},</if>
+      <if test="sourceIcoCls != null and sourceIcoCls != ''">sourceIcoCls = #{sourceIcoCls},</if>
+      <if test="parentId != null">parentId = #{parentId},</if>
+      <if test="enabled != null">enabled = #{enabled},</if>
+      <if test="idx != null">idx = #{idx},</if>
+    </trim>
+    where sourceId = #{sourceId}
+  </update>
+  
+  <delete id="deleteResource" parameterType="java.lang.Long">
+    delete from sys_resource where sourceId = #{sourceId}
+  </delete>
+</mapper>

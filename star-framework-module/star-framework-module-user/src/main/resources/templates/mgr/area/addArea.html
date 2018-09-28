@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jquery-ui/jquery-ui.min.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jqGrid/css/ui.jqgrid.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/artDialog/skins/simple-star.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/buttons.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/editEntityTable.css}" />
+</head>
+<body>
+	<div class="edit-container">
+		<form action="" id="editAreaForm">
+      <input type="hidden" name="parentId">
+			<table class="gy_table">
+				<tr>
+					<td><strong>全称：</strong></td>
+				</tr>
+				<tr>
+					<td><input type="text" name="areaName" placeholder="地区全称" maxlength="50"></td>
+				</tr>
+				<tr>
+					<td><strong>拼音全拼：</strong></td>
+				</tr>
+				<tr>
+					<td><input type="text" name="pinyin" placeholder="全称的全拼" maxlength="100"></td>
+				</tr>
+				<tr>
+					<td><strong>拼音首字母：</strong></td>
+				</tr>
+				<tr>
+					<td><input type="text" name="py" placeholder="全拼的首字母" maxlength="20"></td>
+				</tr>
+				<tr>
+					<td><strong>简称：</strong></td>
+				</tr>
+				<tr>
+					<td><input type="text" name="shortName" placeholder="地区简称" maxlength="50"></td>
+				</tr>
+				<tr>
+					<td>
+						<div class="btnGroup">
+							<input type="button" value="保存" class="button blue" id="saveBtn"> <input type="button" value="关闭" class="button grey" onclick="art.dialog.close();">
+						</div>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/artDialog/js/jquery.artDialog.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/artDialog/js/iframeTools.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/jquery-validation/dist/jquery.validate.min.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/jquery-validation/dist/additional-methods-local.js}"></script>
+	<script type="text/javascript" th:src="@{/js/mgr/area/addArea.js}"></script>
+</body>
+</html>

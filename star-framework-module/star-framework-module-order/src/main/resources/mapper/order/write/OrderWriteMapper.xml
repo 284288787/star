@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.order.dao.write.OrderWriteDao">
+  <insert id="saveOrder" useGeneratedKeys="true" keyProperty="orderId" parameterType="com.star.truffle.module.order.domain.Order">
+    insert into `order`(order_id, order_code, type, member_id, open_id, `name`, mobile, delivery_type, province_id, city_id, area_id, delivery_address, delivery_name, delivery_mobile, despatch_money, total_money, total_brokerage, region_id, distributor_id, shop_address, shop_name, shop_mobile, state, pickup_code, create_time)
+    values(#{orderId}, #{orderCode}, #{type}, #{memberId}, #{openId}, #{name}, #{mobile}, #{deliveryType}, #{provinceId}, #{cityId}, #{areaId}, #{deliveryAddress}, #{deliveryName}, #{deliveryMobile}, #{despatchMoney}, #{totalMoney}, #{totalBrokerage}, #{regionId}, #{distributorId}, #{shopAddress}, #{shopName}, #{shopMobile}, #{state}, #{pickupCode}, #{createTime})
+  </insert>
+
+  <insert id="batchSaveOrder" parameterType="java.util.List">
+    insert into `order`(order_id, order_code, type, member_id, open_id, `name`, mobile, delivery_type, province_id, city_id, area_id, delivery_address, delivery_name, delivery_mobile, despatch_money, total_money, total_brokerage, region_id, distributor_id, shop_address, shop_name, shop_mobile, state, pickup_code, create_time)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.orderId}, #{item.orderCode}, #{item.type}, #{item.memberId}, #{item.openId}, #{item.name}, #{item.mobile}, #{item.deliveryType}, #{item.provinceId}, #{item.cityId}, #{item.areaId}, #{item.deliveryAddress}, #{item.deliveryName}, #{item.deliveryMobile}, #{despatchMoney}, #{item.totalMoney}, #{item.totalBrokerage}, #{item.regionId}, #{item.distributorId}, #{item.shopAddress}, #{item.shopName}, #{item.shopMobile}, #{item.state}, #{item.pickupCode}, #{item.createTime})
+    </foreach>
+  </insert>
+
+  <update id="updateOrder" parameterType="com.star.truffle.module.order.dto.req.OrderRequestDto">
+    update `order`
+    <trim prefix="set" suffixOverrides=",">
+      <if test="orderCode != null">order_code = #{orderCode},</if>
+      <if test="type != null">type = #{type},</if>
+      <if test="memberId != null">member_id = #{memberId},</if>
+      <if test="openId != null and openId != ''">open_id = #{openId},</if>
+      <if test="name != null and name != ''">`name` = #{name},</if>
+      <if test="mobile != null and mobile != ''">mobile = #{mobile},</if>
+      <if test="deliveryType != null">delivery_type = #{deliveryType},</if>
+      <if test="provinceId != null">province_id = #{provinceId},</if>
+      <if test="cityId != null">city_id = #{cityId},</if>
+      <if test="areaId != null">area_id = #{areaId},</if>
+      <if test="deliveryAddress != null and deliveryAddress != ''">delivery_address = #{deliveryAddress},</if>
+      <if test="deliveryName != null and deliveryName != ''">delivery_name = #{deliveryName},</if>
+      <if test="deliveryMobile != null and deliveryMobile != ''">delivery_mobile = #{deliveryMobile},</if>
+      <if test="despatchMoney != null">despatch_money = #{despatchMoney},</if>
+      <if test="totalMoney != null">total_money = #{totalMoney},</if>
+      <if test="totalBrokerage != null">total_brokerage = #{totalBrokerage},</if>
+      <if test="regionId != null">region_id = #{regionId},</if>
+      <if test="distributorId != null">distributor_id = #{distributorId},</if>
+      <if test="shopAddress != null and shopAddress != ''">shop_address = #{shopAddress},</if>
+      <if test="shopName != null and shopName != ''">shop_name = #{shopName},</if>
+      <if test="shopMobile != null and shopMobile != ''">shop_mobile = #{shopMobile},</if>
+      <if test="state != null">state = #{state},</if>
+      <if test="pickupCode != null and pickupCode != ''">pickup_code = #{pickupCode},</if>
+      <if test="createTime != null">create_time = #{createTime},</if>
+    </trim>
+    where order_id = #{orderId}
+  </update>
+
+  <delete id="deleteOrder" parameterType="java.lang.Long">
+    delete from `order` where order_id = #{orderId}
+  </delete>
+
+  <resultMap id="orderResponseDtoResultMap" type="com.star.truffle.module.order.dto.res.OrderResponseDto">
+    <result column="order_id" property="orderId" />
+    <result column="order_code" property="orderCode" />
+    <result column="type" property="type" />
+    <result column="member_id" property="memberId" />
+    <result column="open_id" property="openId" />
+    <result column="name" property="name" />
+    <result column="mobile" property="mobile" />
+    <result column="delivery_type" property="deliveryType" />
+    <result column="province_id" property="provinceId" />
+    <result column="city_id" property="cityId" />
+    <result column="area_id" property="areaId" />
+    <result column="delivery_address" property="deliveryAddress" />
+    <result column="delivery_name" property="deliveryName" />
+    <result column="delivery_mobile" property="deliveryMobile" />
+    <result column="despatch_money" property="despatchMoney" />
+    <result column="total_money" property="totalMoney" />
+    <result column="total_brokerage" property="totalBrokerage" />
+    <result column="region_id" property="regionId" />
+    <result column="distributor_id" property="distributorId" />
+    <result column="shop_address" property="shopAddress" />
+    <result column="shop_name" property="shopName" />
+    <result column="shop_mobile" property="shopMobile" />
+    <result column="state" property="state" />
+    <result column="pickup_code" property="pickupCode" />
+    <result column="create_time" property="createTime" />
+  </resultMap>
+
+  <sql id="sql_column">
+    order_id, order_code, `order`.type, member_id, `order`.open_id, `order`.`name`, `order`.mobile, delivery_type, `order`.province_id, `order`.city_id, `order`.area_id, delivery_address, delivery_name, delivery_mobile, despatch_money, total_money, total_brokerage, `order`.region_id, `order`.distributor_id, `order`.shop_address, `order`.shop_name, `order`.shop_mobile, `order`.state, pickup_code, `order`.create_time
+   	, r.`name` region_name, p.areaId regionProvinceId, p.shortName regionProvinceName, c.areaId regionCityId, c.shortName regionCityName, a.areaId regionAreaId, a.shortName regionAreaName, t.areaId regionTownId, t.shortName regionTownName
+		,	d.`name` distributor_name
+  </sql>
+
+  <select id="getOrder" resultType="com.star.truffle.module.order.dto.res.OrderResponseDto">
+    select
+    <include refid="sql_column" />
+    from `order`
+		INNER JOIN distributor d on d.distributor_id = `order`.distributor_id
+		INNER JOIN distribution_region r on `order`.region_id = r.region_id
+		INNER JOIN sys_area p on p.areaId = r.province_id
+		LEFT JOIN sys_area c on c.areaId = r.city_id
+		LEFT JOIN sys_area a on a.areaId = r.area_id
+		LEFT JOIN sys_area t on t.areaId = r.town_id
+    where order_id = #{orderId}
+  </select>
+
+</mapper>

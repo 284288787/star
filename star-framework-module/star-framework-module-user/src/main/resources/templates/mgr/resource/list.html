@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
+<head>
+<title>资源列表</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jquery-ui/jquery-ui.min.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jqGrid/css/ui.jqgrid.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/artDialog/skins/simple-star.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jquery-zTree/css/style.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jquery-zTree/css/zTreeStyle/zTreeStyle.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/buttons.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/pageList.css}" />
+<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/jquery-ui/jquery-ui.min.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/jqGrid/js/jquery.jqGrid.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/jquery-zTree/jquery.ztree.core.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/jquery-zTree/jquery.ztree.excheck.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/jquery-zTree/jquery.ztree.exedit.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/jqGrid/js/i18n/grid.locale-cn.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/artDialog/js/jquery.artDialog.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/artDialog/js/iframeTools.js}"></script>
+</head>
+<body>
+  <div class="main-container" id="main-container">
+    <table class="ztree">
+      <tr>
+        <td width="300px">
+          <div class="zTreeDemoBackground left">
+            <ul id="resourceTree" class="ztree"></ul>
+          </div>
+        </td>
+        <td>
+          <!-- <div class="menuUri hidden">
+						<span>菜单路径：</span><input class="ipt400" type="text" name="menuUri" value="/common/mgr/" placeholder="/common/mgr/">
+						<input class="menuUriEnter" type="button" value="确定">
+					</div> -->
+          <div class="data-container">
+            <table id="grid-table"></table>
+            <div id="grid-pager"></div>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <script type="text/javascript" th:src="@{/webjars/star/js/star.list.comm.js}"></script>
+  <script type="text/javascript" th:src="@{/js/mgr/resource/listUri.js}"></script>
+  <script type="text/javascript" th:src="@{/js/mgr/resource/resource.ztree.js}"></script>
+</body>
+</html>

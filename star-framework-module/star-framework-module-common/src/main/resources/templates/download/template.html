@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Excel导出模板</title>
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/buttons.css}" />
+</head>
+<body>
+  选择要下载的模板：
+  <select id="templateKey" multiple="multiple">
+    <option value="student">学生</option>
+    <option value="teacher">教师</option>
+    <option value="a">其他不存在的</option>
+  </select>
+  <input type="button" class="button green" value="下载" id="downloadExcelBtn">
+  <script type="text/javascript" th:src="@{/webjars/star/js/jquery.min-1.11.3.js}"></script>
+  <script type="text/javascript">
+  $(function(){
+    $("#downloadExcelBtn").click(function(){
+      var templateKey = $("#templateKey").val();
+      var url = '/download/excel';
+      if(templateKey.length>1){
+        url+='/templates/'+templateKey;
+      }else{
+        url+='/template/'+templateKey;
+      }
+      window.open(url);
+    });
+  });
+  </script>
+</body>
+</html>

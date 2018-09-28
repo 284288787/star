@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.order.dao.read.ShoppingCartReadDao">
+  <resultMap id="shoppingCartResponseDtoResultMap" type="com.star.truffle.module.order.dto.res.ShoppingCartResponseDto">
+    <result column="cart_id" property="cartId" />
+    <result column="product_id" property="productId" />
+    <result column="member_id" property="memberId" />
+    <result column="num" property="num" />
+    <result column="checked" property="checked" />
+    <result column="create_time" property="createTime" />
+    <result column="state" property="state" />
+    <result column="title" property="title" />
+    <result column="original_price" property="originalPrice" />
+    <result column="price" property="price" />
+    <result column="specification" property="specification" />
+  </resultMap>
+
+  <sql id="sql_column">
+    cart_id, shopping_cart.product_id, member_id, num, checked, shopping_cart.create_time,
+    p.title, p.original_price, p.price, p.specification, p.state
+  </sql>
+
+  <sql id="sql_where">
+    <trim prefix="WHERE" prefixOverrides="AND | OR">
+      <if test="cartId != null">
+        and cart_id = #{cartId}
+      </if>
+    </trim>
+  </sql>
+
+  <select id="getShoppingCart" resultType="com.star.truffle.module.order.dto.res.ShoppingCartResponseDto">
+    select
+    <include refid="sql_column" />
+    from shopping_cart
+    INNER JOIN product p on p.product_id = shopping_cart.product_id and p.state in (1,2,3)
+    where cart_id = #{cartId}
+  </select>
+
+  <select id="queryShoppingCart" resultMap="shoppingCartResponseDtoResultMap">
+    select
+    <include refid="sql_column" />
+    from shopping_cart
+    INNER JOIN product p on p.product_id = shopping_cart.product_id and p.state in (1,2,3)
+    <include refid="sql_where" />
+    order by
+    cart_id desc
+    <if test="pager != null and pager.pageSize!=null and pager.startIndex!=null">
+      limit #{pager.startIndex}, #{pager.pageSize}
+    </if>
+  </select>
+
+  <select id="queryShoppingCartCount" resultType="java.lang.Long">
+    select
+    count(1)
+    from shopping_cart
+    INNER JOIN product p on p.product_id = shopping_cart.product_id and p.state in (1,2,3)
+    <include refid="sql_where" />
+  </select>
+</mapper>

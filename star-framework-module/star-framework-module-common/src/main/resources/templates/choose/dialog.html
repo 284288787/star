@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jquery-ui/jquery-ui.min.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jqGrid/css/ui.jqgrid.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/artDialog/skins/simple-star.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/buttons.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/pageList.css}" />
+<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/jquery-ui/jquery-ui.min.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/jqGrid/js/jquery.jqGrid.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/jqGrid/js/i18n/grid.locale-cn.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/artDialog/js/jquery.artDialog.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/artDialog/js/iframeTools.source.js}"></script>
+</head>
+<body>
+  <div class="main-container data-container" id="main-container">
+    <div class="search-container">
+      <form id="queryForm">
+        <span th:each="col:${columns}" th:if="${col.type!=null}">
+          <span th:if="${col.type=='choose'}" style="display:inline-block"><span th:text="${col.caption}">姓名</span>：
+            <input type="text" th:name="${col.viewName}" th:attr="data-javaname=${col.javaName},data-service=${col.service},data-jsname=${col.jsName},data-jsviewname=${col.jsViewName}" th:placeholder="${col.placeholder == null ? col.caption : col.placeholder}"/>
+            <input type="hidden" th:name="${col.javaName}"/>
+          </span> 
+          <span th:if="${col.type=='text'}" style="display:inline-block"><span th:text="${col.caption}">姓名</span>：
+            <input type="text" th:name="${col.javaName}" th:placeholder="${col.placeholder == null ? col.caption : col.placeholder}"/>
+          </span> 
+          <span th:if="${col.type=='date'}" style="display:inline-block"><span>起止日期</span>：
+            <input type="text" id="beginTime" name="beginTime" placeholder="开始日期" class="Wdate" onclick="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})">
+            <input type="text" id="endTime" name="endTime" placeholder="终止日期" class="Wdate" onclick="WdatePicker({minDate:'#F{$dp.$D(\'beginTime\')}',isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})">
+          </span> 
+          <span th:if="${col.type=='datetime'}" style="display:inline-block"><span>起止日期</span>：
+            <input type="text" id="beginTime" name="beginTime" placeholder="开始日期" class="Wdate" onclick="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+            <input type="text" id="endTime" name="endTime" placeholder="终止日期" class="Wdate" onclick="WdatePicker({minDate:'#F{$dp.$D(\'beginTime\')}',isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+          </span> 
+          <span th:if="${col.type=='area'}" style="display:inline-block"><span>所属地区</span>：
+            <input type="text" name="areaName" placeholder="选择所属地区" >
+            <input type="hidden" name="provinceId">
+            <input type="hidden" name="cityId">
+            <input type="hidden" name="areaId">
+            <input type="hidden" name="townId">
+          </span> 
+        </span>
+        <span> 
+          <a onclick="dialogHandle.query()" class="button blue">查询</a> 
+          <a onclick="dialogHandle.reset()" class="button grey">清空</a>
+        </span>
+      </form>
+    </div>
+    <div class="data-container">
+      <table id="grid-table"></table>
+      <div id="grid-pager"></div>
+    </div>
+    <div class="btnGroup alignCenter">
+      <input type="button" value="确定" class="button blue" id="enterBtn">
+      <input type="button" value="关闭" class="button grey" onclick="art.dialog.close();">
+    </div>
+  </div>
+  <script type="text/javascript" th:src="@{/webjars/star/js/star.list.comm.js}"></script>
+  <script type="text/javascript" th:src="@{/webjars/My97DatePicker/WdatePicker.js}"></script>
+  <script type="text/javascript" th:src="@{/webjars/star/js/star.utils.js}"></script>
+  <script type="text/javascript" th:inline="javascript">
+  var basePath = "/";
+  var conditions = [[${conditions}]];
+  for(var i in conditions){
+    var con = conditions[i];
+    $("input[name="+i+"]").val(con);
+  }
+  var dialogHandle = new ListHandle({
+    basePath: basePath,
+    tableId: '#grid-table',
+    pagerId: '#grid-pager',
+    formId: '#queryForm',
+    primaryKey: 'distributorId',
+    urls:{
+      list: basePath+'choose/dialogData?service='+[[${service}]],
+    }
+  },{});
+  var columns = [[${columns}]];
+  var opts = artDialog.data("opts");
+  $(function() {
+    var chooses = new Array(); 
+    $("input[data-javaname]").each(function(){
+      var name = $(this).attr("name");
+      var javaname = $(this).attr("data-javaname");
+      var jsname = $(this).attr("data-jsname");
+      var jsviewname = $(this).attr("data-jsviewname");
+      var service = $(this).attr("data-service");
+      var placeholder = $(this).attr("placeholder");
+      chooses.push({
+        object: $("input[name="+name+"]"),
+        service: service,
+        title: placeholder,
+        width: "750px",
+        height: "480px",
+        /* valid: function(){
+          return {valid:true};
+        },
+        condition: function(){
+          return $("#condition").val();
+        }, */
+        callback: function(rowObject){
+          $("input[name="+name+"]").val(rowObject[jsviewname]);
+          $("input[name="+javaname+"]").val(rowObject[jsname]);
+        }
+      });
+    });
+    new UtilsHandle({
+      basePath: basePath,
+      chooseArea: {items: [
+        {
+          areaNameObj: $("input[name=areaName]"),
+          onClick: function(){
+          },
+          callback: function(areas){
+            $("input[name=provinceId],input[name=cityId],input[name=areaId],input[name=townd]").val("");
+            var condition = {};
+            if(areas.provinceId){
+              $("input[name=provinceId]").val(areas.provinceId);
+              condition["provinceId"] = areas.provinceId;
+            }
+            if(areas.cityId){
+              $("input[name=cityId]").val(areas.cityId);
+              condition["cityId"] = areas.cityId;
+            }
+            if(areas.areaId){
+              $("input[name=areaId]").val(areas.areaId);
+              condition["areaId"] = areas.areaId;
+            }
+            if(areas.townId){
+              $("input[name=townd]").val(areas.townId);
+              condition["townId"] = areas.townId;
+            }
+            $("#condition").val(JSON.stringify(condition));
+          }
+        }
+      ]},
+      choose: chooses
+    },{});
+    
+    var colNames = new Array();
+    var colModel = new Array();
+    for(var i in columns){
+      var col = columns[i];
+      if(! col.notInList){
+        colNames.push(col.caption);
+        colModel.push({
+          name: col.javaName, index: col.dsName, width: col.width, align: col.align, hidden: col.hidden
+        });
+      }
+    }
+    var rowList = [10, 20, 30, 50];
+    var rownumbers = true;
+    var multiselect = false;
+    var config={colNames: colNames, colModel: colModel, dataType: "local", height:"300px", rowList: rowList, rownumbers: rownumbers, multiselect: multiselect};
+    setTimeout(function(){
+      dialogHandle.init(config);
+      dialogHandle.query();
+    }, 320);
+    
+    
+    if (opts && opts.areaId) {
+      $("li[data-id=" + opts.areaId + "]").addClass("on");
+      var clone = $("li.on").parents("div.item").remove();
+      $("div.item:first").before(clone);
+    }
+    $("#enterBtn").click(function() {
+      var rowId=$('#grid-table').jqGrid('getGridParam','selrow'); //selarrrow
+      var rowData = $('#grid-table').jqGrid('getRowData', rowId);
+      if (opts) {
+        opts.callback(rowData);
+        art.dialog.close();
+      }
+    });
+  });
+  </script>
+</body>
+</html>

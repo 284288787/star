@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.product.dao.read.ProductInventoryReadDao">
+
+  <select id="getProductInventoryByProductId" resultType="com.star.truffle.module.product.domain.ProductInventory">
+    select
+    id, product_id, number, sold_number, type, number_type
+    from product_inventory
+    where product_id = #{productId} and type = ${type}
+  </select>
+
+</mapper>

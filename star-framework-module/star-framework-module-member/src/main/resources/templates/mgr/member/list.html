@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:star="http://star">
+<head>
+<title>消费者列表</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jquery-ui/jquery-ui.min.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jqGrid/css/ui.jqgrid.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/artDialog/skins/simple-star.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/buttons.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/pageList.css}" />
+<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/jquery-ui/jquery-ui.min.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/jqGrid/js/jquery.jqGrid.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/jqGrid/js/i18n/grid.locale-cn.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/artDialog/js/jquery.artDialog.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/artDialog/js/iframeTools.js}"></script>
+</head>
+<body>
+  <div class="main-container data-container" id="main-container">
+    <div class="search-container">
+      <form id="queryForm">
+        <span>手机号：
+          <input type="text" name="mobile" placeholder="手机号"/>
+        </span> 
+        <span> 
+          <a onclick="memberHandle.query()" class="button blue">查询</a> 
+          <a onclick="memberHandle.reset()" class="button grey">清空</a>
+        </span>
+      </form>
+    </div>
+    <div class="btnGroup">
+       
+    </div>
+    <div class="data-container">
+      <table id="grid-table"></table>
+      <div id="grid-pager"></div>
+    </div>
+  </div>
+  <script type="text/javascript" th:src="@{/webjars/star/js/star.authorize.js}"></script>
+  <script type="text/javascript" th:inline="javascript" star:authorize-uri="/member/editBefore/*">
+  addAuthorize("member-editBefore", true);
+  </script>
+  <script type="text/javascript" th:inline="javascript" star:authorize-uri="/member/disabled">
+  addAuthorize("member-disabled", true);
+  </script>
+  <script type="text/javascript" th:inline="javascript" star:authorize-uri="/member/enabled">
+  addAuthorize("member-enabled", true);
+  </script>
+  <script type="text/javascript" th:src="@{/webjars/star/js/star.list.comm.js}"></script>
+  <script type="text/javascript" th:inline="javascript" th:src="@{/js/mgr/member/list.js}"></script>
+</body>
+</html>

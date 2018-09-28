@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  
+  <parent>
+    <groupId>com.star.truffle</groupId>
+    <artifactId>star-framework-parent</artifactId>
+    <version>0.1.2-SNAPSHOT</version>
+    <relativePath>../star-framework-parent</relativePath>
+  </parent>
+  
+  <artifactId>star-framework-starters</artifactId>
+  <name>star-framework-starters</name>
+  <description>star-framework-starters</description>
+  <packaging>pom</packaging>
+
+  <properties>
+    <main.basedir>${basedir}/..</main.basedir>
+  </properties>
+
+  <modules>
+    <module>star-framework-starter-cloud</module>
+    <module>star-framework-starter-web</module>
+    <module>star-framework-starter-jackson</module>
+    <module>star-framework-starter-okhttp</module>
+    <module>star-framework-starter-swagger</module>
+    <module>star-framework-starter-jdbc</module>
+    <module>star-framework-starter-mybatis</module>
+    <module>star-framework-starter-redis</module>
+    <module>star-framework-starter-ehcache</module>
+    <module>star-framework-starter-feign</module>
+    <module>star-framework-starter-security</module>
+  </modules>
+
+</project>

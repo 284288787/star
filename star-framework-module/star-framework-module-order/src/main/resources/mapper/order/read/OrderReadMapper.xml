@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.order.dao.read.OrderReadDao">
+  <resultMap id="orderResponseDtoResultMap" type="com.star.truffle.module.order.dto.res.OrderResponseDto">
+    <result column="order_id" property="orderId" />
+    <result column="order_code" property="orderCode" />
+    <result column="type" property="type" />
+    <result column="member_id" property="memberId" />
+    <result column="open_id" property="openId" />
+    <result column="name" property="name" />
+    <result column="mobile" property="mobile" />
+    <result column="delivery_type" property="deliveryType" />
+    <result column="province_id" property="provinceId" />
+    <result column="city_id" property="cityId" />
+    <result column="area_id" property="areaId" />
+    <result column="delivery_address" property="deliveryAddress" />
+    <result column="delivery_name" property="deliveryName" />
+    <result column="delivery_mobile" property="deliveryMobile" />
+    <result column="despatch_money" property="despatchMoney" />
+    <result column="total_money" property="totalMoney" />
+    <result column="total_brokerage" property="totalBrokerage" />
+    <result column="region_id" property="regionId" />
+    <result column="distributor_id" property="distributorId" />
+    <result column="shop_address" property="shopAddress" />
+    <result column="shop_name" property="shopName" />
+    <result column="shop_mobile" property="shopMobile" />
+    <result column="state" property="state" />
+    <result column="pickup_code" property="pickupCode" />
+    <result column="create_time" property="createTime" />
+    <result column="region_name" property="regionName" />
+    <result column="distributor_name" property="distributorName" />
+  </resultMap>
+
+  <sql id="sql_column">
+    order_id, order_code, `order`.type, member_id, `order`.open_id, `order`.`name`, `order`.mobile, delivery_type, `order`.province_id, `order`.city_id, `order`.area_id, delivery_address, delivery_name, delivery_mobile, despatch_money, total_money, total_brokerage, `order`.region_id, `order`.distributor_id, `order`.shop_address, `order`.shop_name, `order`.shop_mobile, `order`.state, pickup_code, `order`.create_time
+   	, r.`name` region_name, p.areaId regionProvinceId, p.shortName regionProvinceName, c.areaId regionCityId, c.shortName regionCityName, a.areaId regionAreaId, a.shortName regionAreaName, t.areaId regionTownId, t.shortName regionTownName
+		,	d.`name` distributor_name
+  </sql>
+
+  <sql id="sql_where">
+    <trim prefix="WHERE" prefixOverrides="AND | OR">
+      <if test="orderId != null">
+        and order_id = #{orderId}
+      </if>
+      <if test="orderCode != null">
+        and order_code = #{orderCode}
+      </if>
+      <if test="type != null">
+        and `order`.type = #{type}
+      </if>
+      <if test="memberId != null">
+        and member_id = #{memberId}
+      </if>
+      <if test="name != null and name != ''">
+        and `order`.`name` = #{name}
+      </if>
+      <if test="mobile != null and mobile != ''">
+        and `order`.mobile = #{mobile}
+      </if>
+      <if test="deliveryType != null">
+        and delivery_type = #{deliveryType}
+      </if>
+      <if test="regionProvinceId != null">
+        and p.areaId = #{regionProvinceId}
+      </if>
+      <if test="regionCityId != null">
+        and c.areaId = #{regionCityId}
+      </if>
+      <if test="regionAreaId != null">
+        and a.areaId = #{regionAreaId}
+      </if>
+      <if test="regionTownId != null">
+        and t.areaId = #{regionTownId}
+      </if>
+      <if test="regionId != null">
+        and `order`.region_id = #{regionId}
+      </if>
+      <if test="distributorId != null">
+        and `order`.distributor_id = #{distributorId}
+      </if>
+      <if test="shopName != null and shopName != ''">
+        and `order`.shop_name like "%"#{shopName}"%"
+      </if>
+      <if test="shopMobile != null and shopMobile != ''">
+        and `order`.shop_mobile = #{shopMobile}
+      </if>
+      <if test="state != null">
+        and `order`.state = #{state}
+      </if>
+      <if test="pickupCode != null and pickupCode != ''">
+        and pickup_code = #{pickupCode}
+      </if>
+    </trim>
+  </sql>
+
+  <select id="getOrder" resultType="com.star.truffle.module.order.dto.res.OrderResponseDto">
+    select
+    <include refid="sql_column" />
+    from `order`
+		INNER JOIN distributor d on d.distributor_id = `order`.distributor_id
+		INNER JOIN distribution_region r on `order`.region_id = r.region_id
+		INNER JOIN sys_area p on p.areaId = r.province_id
+		LEFT JOIN sys_area c on c.areaId = r.city_id
+		LEFT JOIN sys_area a on a.areaId = r.area_id
+		LEFT JOIN sys_area t on t.areaId = r.town_id
+    where order_id = #{orderId}
+  </select>
+
+  <select id="queryOrder" resultMap="orderResponseDtoResultMap">
+    select
+    <include refid="sql_column" />
+    from `order`
+		INNER JOIN distributor d on d.distributor_id = `order`.distributor_id
+		INNER JOIN distribution_region r on `order`.region_id = r.region_id
+		INNER JOIN sys_area p on p.areaId = r.province_id
+		LEFT JOIN sys_area c on c.areaId = r.city_id
+		LEFT JOIN sys_area a on a.areaId = r.area_id
+		LEFT JOIN sys_area t on t.areaId = r.town_id
+    <include refid="sql_where" />
+    order by
+    <choose>
+      <when test="pager != null and pager.orderBy != null and pager.orderBy != ''">${pager.orderBy}</when>
+      <otherwise>order_id</otherwise>
+    </choose>
+    <if test="pager != null and pager.orderType != null and pager.orderType != ''">${pager.orderType}</if>
+    <if test="pager != null and pager.pageSize!=null and pager.startIndex!=null">
+      limit #{pager.startIndex}, #{pager.pageSize}
+    </if>
+  </select>
+
+  <select id="queryOrderCount" resultType="java.lang.Long">
+    select
+    count(1)
+    from `order`
+		INNER JOIN distributor d on d.distributor_id = `order`.distributor_id
+		INNER JOIN distribution_region r on `order`.region_id = r.region_id
+		INNER JOIN sys_area p on p.areaId = r.province_id
+		LEFT JOIN sys_area c on c.areaId = r.city_id
+		LEFT JOIN sys_area a on a.areaId = r.area_id
+		LEFT JOIN sys_area t on t.areaId = r.town_id
+    <include refid="sql_where" />
+  </select>
+</mapper>

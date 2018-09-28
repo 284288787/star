@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:star="http://star">
+<head>
+<title>商品库存列表</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jquery-ui/jquery-ui.min.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jqGrid/css/ui.jqgrid.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/artDialog/skins/simple-star.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/buttons.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/pageList.css}" />
+<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/jquery-ui/jquery-ui.min.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/jqGrid/js/jquery.jqGrid.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/jqGrid/js/i18n/grid.locale-cn.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/artDialog/js/jquery.artDialog.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/artDialog/js/iframeTools.js}"></script>
+</head>
+<body>
+  <div class="main-container data-container" id="main-container">
+    <div class="search-container">
+      <form id="queryForm">
+        <span>商品ID：
+          <input type="text" name="productId" placeholder="商品ID"/>
+        </span> 
+        <span> 
+          <a onclick="productInventoryHandle.query()" class="button blue">查询</a> 
+          <a onclick="productInventoryHandle.reset()" class="button grey">清空</a>
+        </span>
+      </form>
+    </div>
+    <div class="btnGroup">
+      <a star:authorize-uri="/productInventory/add" onclick="productInventoryHandle.addNew()" class="button grey">新增</a>
+      <a star:authorize-uri="/productInventory/enabled" onclick="productInventoryHandle.enabled()" class="button blue">启用</a>
+      <a star:authorize-uri="/productInventory/disabled" onclick="productInventoryHandle.disabled()" class="button yellow">禁用</a>
+      <a star:authorize-uri="/productInventory/deleted" onclick="productInventoryHandle.remove()" class="button red">删除</a> 
+    </div>
+    <div class="data-container">
+      <table id="grid-table"></table>
+      <div id="grid-pager"></div>
+    </div>
+  </div>
+  <script type="text/javascript" th:src="@{/webjars/star/js/star.authorize.js}"></script>
+  <script type="text/javascript" th:inline="javascript" star:authorize-uri="/productInventory/editBefore/*">
+  addAuthorize("productInventory-editBefore", true);
+  </script>
+  <script type="text/javascript" th:inline="javascript" star:authorize-uri="/productInventory/disabled">
+  addAuthorize("productInventory-disabled", true);
+  </script>
+  <script type="text/javascript" th:inline="javascript" star:authorize-uri="/productInventory/enabled">
+  addAuthorize("productInventory-enabled", true);
+  </script>
+  <script type="text/javascript" th:src="@{/webjars/star/js/star.list.comm.js}"></script>
+  <script type="text/javascript" th:inline="javascript" th:src="@{/js/mgr/productInventory/list.js}"></script>
+</body>
+</html>

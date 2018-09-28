@@ -1,0 +1,9 @@
+spring:
+  cloud:
+    config:
+      username: didisunliu
+      password: star_2018
+      server:
+        git:
+          uri: https://github.com/didisunliu/config-repo  #uri: file:///D:/work/git-star/star
+          search-paths: '{application}'

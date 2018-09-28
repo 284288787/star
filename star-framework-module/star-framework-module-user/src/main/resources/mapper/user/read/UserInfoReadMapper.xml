@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.user.dao.read.UserInfoReadDao">
+  <resultMap id="userInfoResultMap" type="com.star.truffle.module.user.domain.UserInfo">
+    <result column="userId" property="userId" />
+    <result column="name" property="name" />
+    <result column="mobile" property="mobile" />
+    <result column="lastModifyTime" property="lastModifyTime" />
+  </resultMap>
+
+  <sql id="sql_column">
+    userId,name,mobile,lastModifyTime
+  </sql>
+
+  <sql id="sql_where">
+    <trim prefix="WHERE" prefixOverrides="AND | OR">
+      <if test="userId != null">
+        and userId = #{userId}
+      </if>
+      <if test="name != null and name != ''">
+        and name = #{name}
+      </if>
+      <if test="mobile != null and mobile != ''">
+        and mobile = #{mobile}
+      </if>
+    </trim>
+  </sql>
+
+  <select id="getUserInfoByUserId" resultType="com.star.truffle.module.user.domain.UserInfo">
+    select
+    <include refid="sql_column" />
+    from sys_userinfo
+    where userId = #{userId}
+  </select>
+
+  <select id="queryUserInfoCount" resultType="java.lang.Integer">
+    select
+    count(1)
+    from sys_userinfo
+    <include refid="sql_where" />
+  </select>
+
+  <select id="queryUserInfo" resultMap="userInfoResultMap">
+    select
+    <include refid="sql_column" />
+    from sys_userinfo
+    <include refid="sql_where" />
+    order by
+    <choose>
+      <when test="s_orderBy != null and s_orderBy != ''">${s_orderBy}</when>
+      <otherwise>userId</otherwise>
+    </choose>
+    <if test="s_orderType != null and s_orderType != ''">${s_orderType}</if>
+    <if test="pageSize!=null and startIndex!=null">
+      limit #{startIndex}, #{pageSize}
+    </if>
+  </select>
+</mapper>

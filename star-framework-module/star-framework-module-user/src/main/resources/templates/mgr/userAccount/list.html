@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:star="http://star">
+<head>
+<title>用户列表</title><!-- <span sec:authentication="principal.userInfo.name">未登录</span> -->
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jquery-ui/jquery-ui.min.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jqGrid/css/ui.jqgrid.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/artDialog/skins/simple-star.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/buttons.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/pageList.css}" />
+<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/jquery-ui/jquery-ui.min.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/jqGrid/js/jquery.jqGrid.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/jqGrid/js/i18n/grid.locale-cn.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/artDialog/js/jquery.artDialog.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/artDialog/js/iframeTools.js}"></script>
+</head>
+<body>
+	<div class="main-container data-container" id="main-container">
+		<div class="search-container">
+			<form id="queryForm">
+				<span>帐号：<input type="text" name="account" placeholder="请输入要查找的完整帐号"></span> 
+				<span>是否可用：
+					<select name="enabled">
+						<option value="">全部</option>
+						<option value="1">可用</option>
+						<option value="0">禁用</option>
+					</select>
+				</span> 
+				<span> 
+					<a onclick="userHandle.query()" class="button blue">查询</a> 
+					<a onclick="userHandle.reset()" class="button grey">清空</a>
+				</span>
+			</form>
+		</div>
+		<div class="btnGroup">
+			<a star:authorize-uri="/userAccount/add" onclick="userHandle.addNew()" class="button grey">新增</a> 
+			<a star:authorize-uri="/userAccount/enabled" onclick="userHandle.enabled()" class="button blue">启用</a> 
+			<a star:authorize-uri="/userAccount/disabled" onclick="userHandle.disabled()" class="button yellow">禁用</a> 
+			<a star:authorize-uri="/userAccount/deleted" onclick="userHandle.remove()" class="button red">删除</a>
+		</div>
+		<div class="data-container">
+			<table id="grid-table"></table>
+			<div id="grid-pager"></div>
+		</div>
+	</div>
+	<script type="text/javascript" th:src="@{/webjars/star/js/star.authorize.js}"></script>
+	<script type="text/javascript" th:inline="javascript" star:authorize-uri="/userAccount/changePassword">
+	addAuthorize("useraccount-changePassword", true);
+	</script>
+	<script type="text/javascript" th:inline="javascript" star:authorize-uri="/userInfo/editBefore/*">
+	addAuthorize("useraccount-editBefore", true);
+	</script>
+	<script type="text/javascript" th:inline="javascript" star:authorize-uri="/userAccount/disabled">
+	addAuthorize("useraccount-disabled", true);
+	</script>
+	<script type="text/javascript" th:inline="javascript" star:authorize-uri="/userAccount/enabled">
+	addAuthorize("useraccount-enabled", true);
+	</script>
+	<script type="text/javascript" th:inline="javascript" star:authorize-uri="/userAccount/locked">
+	addAuthorize("useraccount-locked", true);
+	</script>
+	<script type="text/javascript" th:inline="javascript" star:authorize-uri="/userAccount/unlock">
+	addAuthorize("useraccount-unlock", true);
+	</script>
+	<script type="text/javascript" th:inline="javascript" star:authorize-uri="/role/setRole/*">
+	addAuthorize("useraccount-setRole", true);
+	</script>
+	<script type="text/javascript" th:inline="javascript" star:authorize-uri="/role/viewRole/*">
+	addAuthorize("useraccount-viewRole", true);
+	</script>
+	<script type="text/javascript" th:src="@{/webjars/star/js/star.list.comm.js}"></script>
+	<script type="text/javascript" th:inline="javascript" th:src="@{/js/mgr/userAccount/list.js}"></script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+.gy_table {
+	margin: 0 auto 5px auto;
+	background: #fff;
+	border: 1px solid #d8d8d8;
+	padding: 10px 20px 0px 20px;
+	border-radius: 3px;
+	width: 90%;
+}
+.protable{
+	border-collapse:collapse;border-spacing:0;
+	margin: 0 0 5px 0;
+	background: #fff;
+	border: 2px solid #9b9bff;
+	padding: 10px 20px 0px 20px;
+	border-radius: 2px;
+	width: 100%;
+}
+.protable td {
+	color: #000;
+	padding: 5px 2px;
+}
+.protable td:nth-of-type(odd){
+	text-align: right;
+}
+.protable input[type=text],.gy_table input[type=password] {
+	height: 30px;
+	padding-left: 3px;
+}
+
+.protable select {
+	height: 30px;
+}
+.gy_table2 {
+	border-collapse:collapse;border-spacing:0;
+	margin: 0 0 5px 0;
+	background: #fff;
+	border: 2px solid #9b9bff;
+	padding: 10px 20px 0px 20px;
+	border-radius: 2px;
+	width: 100%;
+}
+
+.gy_table td {
+	color: #000;
+	padding: 5px 2px;
+}
+table.gy_table > tbody > tr > td:nth-of-type(odd){
+	text-align: right;
+}
+table.gy_table2 > tbody > tr > td:nth-of-type(even){
+	text-align: left;
+}
+.borderbottom{
+	border-bottom: 1px solid #d8d8d8;
+}
+.bordertop{
+	border-top: 1px solid #d8d8d8;
+}
+.hidden{
+	display:none
+}
+.floatRigth{
+	float: right;
+	padding-right: 20px;
+	font-size:12px;
+	color: gray;
+}
+.rule{
+	font-size:12px;
+	font-weight: bold;
+	color: gray;
+}
+.littleTitle{
+	height: 40px;
+	line-height: 40px;
+	background-color:#9ec7ef;color:#FFF
+	font-size: 18px;
+	padding-left: 10px;
+	font-weight: bold;
+}
+.alignright {
+	text-align: right;
+}
+.gy_table input[type=text],.gy_table input[type=password] {
+	height: 30px;
+	padding-left: 3px;
+}
+
+.gy_table select {
+	height: 26px;
+}
+
+.btnGroup {
+	margin: 12px 0px;
+	text-align: center;
+	bottom: 0;
+	width: 100%;
+}
+
+.btnGroup input {
+	height: 30px;
+	width: 80px;
+}
+.error{
+	color:red;
+}
+.ipt200{
+	width: 200px;
+}
+.ipt300{
+	width: 300px;
+}
+.ipt400{
+	width: 400px;
+}

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.product.dao.read.ProductReadDao">
+  <resultMap id="productResponseDtoResultMap" type="com.star.truffle.module.product.dto.res.ProductResponseDto">
+    <result column="product_id" property="productId" />
+    <result column="title" property="title" />
+    <result column="subtitle" property="subtitle" />
+    <result column="tag" property="tag" />
+    <result column="presell_time" property="presellTime" />
+    <result column="off_shelf_time" property="offShelfTime" />
+    <result column="pickup_time" property="pickupTime" />
+    <result column="state" property="state" />
+    <result column="original_price" property="originalPrice" />
+    <result column="price" property="price" />
+    <result column="supplier" property="supplier" />
+    <result column="brand" property="brand" />
+    <result column="specification" property="specification" />
+    <result column="origin_place" property="originPlace" />
+    <result column="description" property="description" />
+    <result column="subscribers" property="subscribers" />
+    <result column="create_time" property="createTime" />
+    <result column="create_user" property="createUser" />
+    <result column="update_time" property="updateTime" />
+    <result column="update_user" property="updateUser" />
+    <result column="brokerage_type" property="brokerageType" />
+    <result column="brokerage_value" property="brokerageValue" />
+    <result column="number_type" property="numberType" />
+    <result column="number" property="number" />
+    <result column="sold_number" property="soldNumber" />
+    <result column="type" property="type" />
+  </resultMap>
+
+  <sql id="sql_column">
+    product.product_id, title, subtitle, tag, presell_time, off_shelf_time, pickup_time, state, original_price, price, supplier, brand, specification, origin_place, description, subscribers, create_time, create_user, update_time, update_user, brokerage_type, brokerage_value,
+    number_type, number, sold_number, type,
+    (select p.url from product_picture p where p.product_id = product.product_id and p.type = 1 limit 1) mainPictureUrl
+  </sql>
+
+  <sql id="sql_where">
+    <trim prefix="WHERE" prefixOverrides="AND | OR">
+      <if test="productId != null">
+        and product.product_id = #{productId}
+      </if>
+      <if test="title != null and title != ''">
+        and title like "%"#{title}"%"
+      </if>
+      <if test="state != null">
+        and state = #{state}
+      </if>
+      <if test="brokerageType != null">
+        and brokerage_type = #{brokerageType}
+      </if>
+    </trim>
+  </sql>
+
+  <select id="getProduct" resultType="com.star.truffle.module.product.dto.res.ProductResponseDto">
+    select
+    <include refid="sql_column" />
+    from product
+    inner join product_inventory i on product.product_id = i.product_id 
+    where product.product_id = #{productId}
+  </select>
+
+  <select id="queryProduct" resultMap="productResponseDtoResultMap">
+    select
+    <include refid="sql_column" />
+    from product
+    inner join product_inventory i on product.product_id = i.product_id 
+    <include refid="sql_where" />
+    order by
+    <choose>
+      <when test="pager != null and pager.orderBy != null and pager.orderBy != ''">${pager.orderBy}</when>
+      <otherwise>product.product_id</otherwise>
+    </choose>
+    <if test="pager != null and pager.orderType != null and pager.orderType != ''">${pager.orderType}</if>
+    <if test="pager != null and pager.pageSize!=null and pager.startIndex!=null">
+      limit #{pager.startIndex}, #{pager.pageSize}
+    </if>
+  </select>
+
+  <select id="queryProductCount" resultType="java.lang.Long">
+    select
+    count(1)
+    from product
+    inner join product_inventory i on product.product_id = i.product_id 
+    <include refid="sql_where" />
+  </select>
+</mapper>

@@ -1,0 +1,15 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.star.truffle.core.jackson.JsonConfig,\
+com.star.truffle.core.okhttp.OkHttpConfig,\
+com.star.truffle.core.okhttp.OkHttpLoggingAutoConfiguration,\
+com.star.truffle.core.web.config.SpringContextConfig,\
+com.star.truffle.core.web.config.SpringMvcConfig,\
+com.star.truffle.core.web.config.MvcInterceptorsConfig,\
+com.star.truffle.core.web.config.RestControllerExceptionHandler,\
+com.star.truffle.core.web.config.ControllerExceptionHandler,\
+com.star.truffle.core.swagger.SwaggerConfig,\
+com.star.truffle.core.jdbc.MysqlDataSourceConfiguration,\
+com.star.truffle.core.mybatis.MybatisAutoConfiguration,\
+com.star.truffle.core.redis.RedisCacheAutoConfiguration,\
+com.star.truffle.core.ehcache.EHcacheCacheAutoConfig,\
+com.star.truffle.core.thytag.StarSpringSecurityDialect

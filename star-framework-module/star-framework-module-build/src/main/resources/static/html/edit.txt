@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>编辑 ${title}</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jquery-ui/jquery-ui.min.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jqGrid/css/ui.jqgrid.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/artDialog/skins/simple-star.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/buttons.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/editEntityTable.css}" />
+</head>
+<body>
+  <div class="edit-container">
+    <form action="" id="edit${entity.beanName}Form">
+      <input type="hidden" name="${primary.javaName}" th:value="${r'${'}${entityNameVar}ResponseDto.${primary.javaName}${r'}'}">
+      <table class="gy_table">
+      <#list fields as field>
+        <tr>
+          <td><strong>${field.caption}：</strong></td>
+        </tr>
+        <tr>
+          <td>
+          <#if field.fieldEdit.inputType.name() == 'text'>
+            <input type="text" name="${field.javaName}" placeholder="${(null == field.fieldEdit.placeholder)?string(field.caption,field.fieldEdit.placeholder)}" th:value="${r'${'}${entityNameVar}ResponseDto.${field.javaName}${r'}'}">
+          </#if>
+          <#if field.fieldEdit.inputType.name() == 'select'>
+            <select name="${field.javaName}">
+              <option value="">请选择...</option>
+              <#list field.fieldEdit.select.options as opt>
+              <option value="${opt['value']}" th:selected="${r'${'}${entityNameVar}ResponseDto.${field.javaName} eq ${opt['value']}${r'}'}">${opt['caption']}</option>
+              </#list>
+            </select>
+          </#if>
+          <#if field.fieldEdit.inputType.name() == 'date'>
+            <#assign needDateJs=true>
+            <input type="text" class="Wdate" name="${field.javaName}" placeholder="${(null == field.fieldEdit.placeholder)?string(field.caption,field.fieldEdit.placeholder)}"
+              <#if field.fieldEdit.pattern?exists && field.fieldEdit.pattern == 'Y-m-d H:i:s'>
+               th:value="${r'${'}#dates.format(${entityNameVar}ResponseDto.${field.javaName},'yyyy-MM-dd HH:mm:ss')${r'}'}" onclick="WdatePicker({maxDate:'%y-%M-%d %H:%m:%s',isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+              <#else>
+               th:value="${r'${'}#dates.format(${entityNameVar}ResponseDto.${field.javaName},'yyyy-MM-dd')${r'}'}" onclick="WdatePicker({maxDate:'%y-%M-%d',isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd'})"> 
+              </#if>
+          </#if>
+          <#if field.fieldEdit.inputType.name() == 'area'>
+            <input type="text" name="${(null == field.fieldEdit.substituteName)?string(field.javaName, field.fieldEdit.substituteName)}" placeholder="${(null == field.fieldEdit.placeholder)?string(field.caption,field.fieldEdit.placeholder)}" th:value="${r'${'}${entityNameVar}ResponseDto.${(null == field.fieldEdit.substituteName)?string(field.javaName, field.fieldEdit.substituteName)}${r'}'}">
+            <#if field.fieldEdit.substituteName?exists><input type="hidden" name = "${field.javaName}" th:value="${r'${'}${entityNameVar}ResponseDto.${field.javaName}${r'}'}"></#if>
+          </#if>
+          </td>
+        </tr>
+      </#list>
+        <tr>
+          <td>
+            <div class="btnGroup">
+              <input type="button" value="保存" class="button blue" id="saveBtn"> <input type="button" value="关闭" class="button grey" onclick="art.dialog.close();">
+            </div>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </div>
+  <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/artDialog/js/jquery.artDialog.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/artDialog/js/iframeTools.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/jquery-validation/dist/jquery.validate.min.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/jquery-validation/dist/additional-methods-local.js}"></script>
+	<#if needDateJs>
+	<script type="text/javascript" th:src="@{/webjars/My97DatePicker/WdatePicker.js}"></script>
+	</#if>
+  <script type="text/javascript" th:src="@{/js/mgr/${entityNameVar}/edit${entity.beanName}.js}"></script>
+</body>
+</html>

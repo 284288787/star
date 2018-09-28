@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>添加 分销商</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jquery-ui/jquery-ui.min.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jqGrid/css/ui.jqgrid.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/artDialog/skins/simple-star.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/buttons.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/editEntityTable.css}" />
+</head>
+<body>
+  <div class="edit-container">
+    <form action="" id="editDistributorForm">
+      <table class="gy_table">
+        <tr>
+          <td class="titleTd100"><strong>头像：</strong></td>
+          <td>
+            <img th:src="@{/webjars/star/images/uploadBtn.png}" height="72px" width="72px" id="uploadPicBtn">
+          </td>
+        </tr>
+        <tr>
+          <td class="titleTd100"><strong>分销商姓名：</strong></td>
+          <td>
+            <input type="text" name="name" placeholder="分销商姓名">
+          </td>
+        </tr>
+        <tr>
+          <td class="titleTd100"><strong>店铺名称：</strong></td>
+          <td>
+            <input type="text" name="shopName" class="ipt300" placeholder="店铺名称">
+          </td>
+        </tr>
+        <tr>
+          <td class="titleTd100"><strong>手机号：</strong></td>
+          <td>
+            <input type="text" name="mobile" placeholder="手机号">
+          </td>
+        </tr>
+        <tr>
+          <td class="titleTd100"><strong>分销区域：</strong></td>
+          <td>
+            <input type="text" name="regionName" placeholder="分销区域">
+            <input type="hidden" name="regionId">
+          </td>
+        </tr>
+        <tr>
+          <td class="titleTd100"><strong>详细地址：</strong></td>
+          <td>
+            <input type="text" name="address" class="ipt400" placeholder="详细地址，例如：黄兴路步行街123号">
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <div class="btnGroup">
+              <input type="button" value="保存" class="button blue" id="saveBtn"> <input type="button" value="关闭" class="button grey" onclick="art.dialog.close();">
+            </div>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </div>
+  <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/artDialog/js/jquery.artDialog.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/artDialog/js/iframeTools.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/jquery-validation/dist/jquery.validate.min.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/jquery-validation/dist/additional-methods-local.js}"></script>
+  <script type="text/javascript" th:src="@{/webjars/star/js/star.utils.js}"></script>
+  <script type="text/javascript" th:src="@{/js/mgr/distributor/addDistributor.js}"></script>
+</body>
+</html>

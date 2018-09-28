@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.user.dao.write.UserInfoWriteDao">
+  <resultMap id="userInfoResultMap" type="com.star.truffle.module.user.domain.UserInfo">
+    <result column="userId" property="userId" />
+    <result column="name" property="name" />
+    <result column="mobile" property="mobile" />
+    <result column="lastModifyTime" property="lastModifyTime" />
+  </resultMap>
+
+  <sql id="sql_column">
+    userId,`name`,mobile,lastModifyTime
+  </sql>
+
+  <sql id="sql_where">
+    <trim prefix="WHERE" prefixOverrides="AND | OR">
+      <if test="userId != null">
+        and userId = #{userId}
+      </if>
+      <if test="name != null and name != ''">
+        and name = #{name}
+      </if>
+      <if test="mobile != null and mobile != ''">
+        and mobile = #{mobile}
+      </if>
+    </trim>
+  </sql>
+
+  <select id="getUserInfoByUserId" resultType="com.star.truffle.module.user.domain.UserInfo">
+    select
+    <include refid="sql_column" />
+    from sys_userinfo
+    where userId = #{userId}
+  </select>
+
+  <insert id="saveUserInfo" parameterType="com.star.truffle.module.user.domain.UserInfo">
+    insert into sys_userinfo(userId,`name`,mobile,lastModifyTime)
+    values(#{userId},#{name},#{mobile},#{lastModifyTime})
+  </insert>
+  
+  <update id="updateUserInfo" parameterType="com.star.truffle.module.user.domain.UserInfo">
+    update sys_userinfo 
+    <trim prefix="set" suffixOverrides=",">
+      <if test="name != null and name != ''">`name` = #{name},</if>
+      <if test="mobile != null and mobile != ''">mobile = #{mobile},</if>
+      <if test="lastModifyTime != null">lastModifyTime = #{lastModifyTime},</if>
+    </trim>
+    where userId = #{userId}
+  </update>
+  
+  <delete id="deleteByUserId" parameterType="java.lang.Long">
+    delete from sys_userinfo where userId = #{userId}
+  </delete>
+</mapper>

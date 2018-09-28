@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.user.dao.write.AreaWriteDao">
+
+  <insert id="saveArea" useGeneratedKeys="true" keyProperty="areaId" parameterType="com.star.truffle.module.user.domain.Area">
+    insert into sys_area(parentId,code,type,status,shortName,areaName,pinyin,py,marker,longitude,latitude)
+    values(#{parentId},#{code},#{type},1,#{shortName},#{areaName},#{pinyin},#{py},#{marker},#{longitude},#{latitude})
+  </insert>
+  
+  <update id="updateArea" parameterType="com.star.truffle.module.user.domain.Area">
+    update sys_area 
+    <trim prefix="set" suffixOverrides=",">
+      <if test="status != null">status = #{status},</if>
+    </trim>
+    where areaId = #{areaId}
+  </update>
+  
+  <delete id="deleteArea" parameterType="java.lang.Long">
+    delete from sys_area where areaId = #{areaId}
+  </delete>
+</mapper>

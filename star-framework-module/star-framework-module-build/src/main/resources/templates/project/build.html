@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>创建项目</title>
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/artDialog/skins/simple-star.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/buttons.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/dist/css/table.css}" />
+</head>
+<body>
+	<div class="main-container" id="main-container">
+		<table class="gy_table">
+			<tr>
+		 		<td class="borderbottom">框架版本号：</td>
+		 		<td class="borderbottom"><input type="text" name="frameworkVersion" value="0.0.1-SNAPSHOT" readonly="readonly"></td>
+		 	</tr>
+			<tr>
+		 		<td>项目名称：</td>
+		 		<td><input type="text" name="projectName" style="width:400px" placeholder="项目名称"></td>
+		 	</tr>
+			<tr>
+		 		<td class="borderbottom"></td>
+		 		<td class="borderbottom"><span class="rule">由字母、减号组成；名称以字母开头，减号只能出现一次，且不能以减号结尾；名称长度不得小于2位且不得大于30位。例如：user</span></td>
+		 	</tr>
+			<tr>
+		 		<td>端口号：</td>
+		 		<td><input type="text" name="projectPort" placeholder="端口号"><span></span></td>
+		 	</tr>
+		 	<tr>
+		 		<td class="borderbottom"></td>
+		 		<td class="borderbottom"><span class="rule">请使用大于13000的端口号，13000之前的端口已经用于框架相关服务的端口</span></td>
+		 	</tr>
+			<tr>
+		 		<td></td>
+		 		<td>
+		 			<input type="checkbox" checked name="createPom" id="createPom"><label for="createPom">生成pom.xml</label>
+		 			<input type="checkbox" checked name="createBootstrap" id="createBootstrap"><label for="createBootstrap">生成bootstrap.yml</label>
+		 			<input type="checkbox" checked name="createApplication" id="createApplication"><label for="createApplication">生成Application.java</label>
+		 			<input type="checkbox" checked name="createModuleConfig" id="createModuleConfig"><label for="createModuleConfig">生成ModuleCofing(enableModuleXXX.java, XXXModuleConfig.java, XXX为项目名称)</label>
+		 		</td>
+		 	</tr>
+		 	<tr>
+		 		<td class="borderbottom"></td>
+		 		<td class="borderbottom"><span class="rule">如果项目已经存在，那么上面选项均可以不选，只需要生成业务代码，拷贝至已有项目即可</span></td>
+		 	</tr>
+			<tr>
+		 		<td class="borderbottom"></td>
+		 		<td class="borderbottom"><span>至此，项目是一个可以启动的空项目(前3个生成都选中的情况下)，没有任何的业务代码。<br>如果想要加入业务代码，请点击增加业务按钮</span></td>
+		 	</tr>
+		 	<tr>
+		 		<td></td>
+		 		<td>
+		 			<input type="button" class="button green" value="增加业务" id="addBusiness"> <input type="button" class="button gblue" value="生成项目" id="buildProject">
+		 		</td>
+		 	</tr>
+		</table>
+	</div>
+</body>
+<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/artDialog/js/jquery.artDialog.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/artDialog/js/iframeTools.js}"></script>
+<script type="text/javascript" th:src="@{/dist/js/build.js}"></script>
+</html>

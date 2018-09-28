@@ -1,0 +1,17 @@
+/**create by framework at {now}**/
+package {package};
+
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@ComponentScan(basePackages = {
+    "{daoPackage}",
+    "{cachePackage}",
+    "{servicePackage}",
+    "{controllerPackage}",
+    "{propertiesPackage}",
+})
+public class {moduleName}ModuleConfig {
+
+}

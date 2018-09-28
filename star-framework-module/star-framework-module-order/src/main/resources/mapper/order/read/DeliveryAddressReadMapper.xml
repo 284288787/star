@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.order.dao.read.DeliveryAddressReadDao">
+  <resultMap id="deliveryAddressResponseDtoResultMap" type="com.star.truffle.module.order.dto.res.DeliveryAddressResponseDto">
+    <result column="id" property="id" />
+    <result column="member_id" property="memberId" />
+    <result column="name" property="name" />
+    <result column="mobile" property="mobile" />
+    <result column="province_id" property="provinceId" />
+    <result column="city_id" property="cityId" />
+    <result column="area_id" property="areaId" />
+    <result column="address" property="address" />
+    <result column="def" property="def" />
+    <result column="provinceName" property="provinceName" />
+    <result column="cityName" property="cityName" />
+    <result column="areaName" property="areaName" />
+  </resultMap>
+
+  <sql id="sql_column">
+    id, member_id, `name`, mobile, province_id, city_id, area_id, address, def, p.shortName provinceName, c.shortName cityName, a.shortName areaName
+  </sql>
+
+  <sql id="sql_where">
+    <trim prefix="WHERE" prefixOverrides="AND | OR">
+      <if test="id != null">
+        and id = #{id}
+      </if>
+      <if test="member_id != null">
+        and member_id = #{memberId}
+      </if>
+      <if test="def != null">
+        and def = #{def}
+      </if>
+    </trim>
+  </sql>
+
+  <select id="getDeliveryAddress" resultType="com.star.truffle.module.order.dto.res.DeliveryAddressResponseDto">
+    select
+    <include refid="sql_column" />
+    from delivery_address
+    INNER JOIN sys_area p on p.areaId = delivery_address.province_id
+    INNER JOIN sys_area c on c.areaId = delivery_address.city_id
+    INNER JOIN sys_area a on a.areaId = delivery_address.area_id
+    where id = #{id}
+  </select>
+
+  <select id="queryDeliveryAddress" resultMap="deliveryAddressResponseDtoResultMap">
+    select
+    <include refid="sql_column" />
+    from delivery_address
+    INNER JOIN sys_area p on p.areaId = delivery_address.province_id
+    INNER JOIN sys_area c on c.areaId = delivery_address.city_id
+    INNER JOIN sys_area a on a.areaId = delivery_address.area_id
+    <include refid="sql_where" />
+    order by
+    id desc
+    <if test="pager != null and pager.pageSize!=null and pager.startIndex!=null">
+      limit #{pager.startIndex}, #{pager.pageSize}
+    </if>
+  </select>
+
+  <select id="queryDeliveryAddressCount" resultType="java.lang.Long">
+    select
+    count(1)
+    from delivery_address
+    INNER JOIN sys_area p on p.areaId = delivery_address.province_id
+    INNER JOIN sys_area c on c.areaId = delivery_address.city_id
+    INNER JOIN sys_area a on a.areaId = delivery_address.area_id
+    <include refid="sql_where" />
+  </select>
+</mapper>

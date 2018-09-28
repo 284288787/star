@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.user.dao.read.ResourceReadDao">
+  <resultMap id="resourceResultMap" type="com.star.truffle.module.user.dto.ResourceDto">
+    <result column="sourceId" property="sourceId" />
+    <result column="sourceName" property="sourceName" />
+    <result column="sourceIcoCls" property="sourceIcoCls" />
+    <result column="parentId" property="parentId" />
+    <result column="enabled" property="enabled" />
+    <result column="idx" property="idx" />
+    <result column="childNum" property="childNum" />
+    <result column="roleNum" property="roleNum" />
+  </resultMap>
+  <resultMap id="roleResourceResultMap" type="com.star.truffle.module.user.dto.RoleResourceRelationDto">
+    <result column="roleName" property="roleName" />
+    <result column="uri" property="uri" />
+  </resultMap>
+
+  <sql id="sql_column">
+    sourceId,sourceName,sourceIcoCls,parentId,enabled,idx,
+    (select count(1) from sys_resource r where r.parentId = sys_resource.sourceId) childNum
+  </sql>
+
+  <sql id="sql_where">
+    <trim prefix="WHERE" prefixOverrides="AND | OR">
+      <if test="sourceId != null">
+        and sourceId = #{sourceId}
+      </if>
+      <if test="parentId != null">
+        and parentId = #{parentId}
+      </if>
+      <if test="enabled != null">
+        and enabled = #{enabled}
+      </if>
+      <if test="idx != null and idx != ''">
+        and idx ${idx}
+      </if>
+      <if test="roleIds != null and roleIds != ''">
+        and exists (select * from sys_role_source_relation rs where rs.sourceId = sys_resource.sourceId and rs.roleId in (#{roleIds}))
+      </if>
+    </trim>
+  </sql>
+
+  <select id="getResource" resultType="com.star.truffle.module.user.dto.ResourceDto">
+    select
+    <include refid="sql_column" />
+    from sys_resource
+    where sourceId = #{sourceId}
+  </select>
+
+  <select id="queryResourceCount" resultType="java.lang.Integer">
+    select
+    count(1)
+    from sys_resource
+    <include refid="sql_where" />
+  </select>
+
+  <select id="queryResource" resultMap="resourceResultMap">
+    select
+    <include refid="sql_column" />
+    <if test="roleId != null">
+    , (select count(1) from sys_role_source_relation sr where sr.sourceId = sys_resource.sourceId and sr.roleId = ${roleId}) roleNum
+    </if>
+    from sys_resource
+    <include refid="sql_where" />
+    order by
+    <choose>
+      <when test="s_orderBy != null and s_orderBy != ''">${s_orderBy}</when>
+      <otherwise>idx</otherwise>
+    </choose>
+    <if test="s_orderType != null and s_orderType != ''">${s_orderType}</if>
+    <if test="pageSize!=null and startIndex!=null">
+      limit #{startIndex}, #{pageSize}
+    </if>
+  </select>
+
+  <select id="queryAllRoleResource" resultMap="roleResourceResultMap">
+	SELECT
+	 s.uri,
+	 o.roleName
+	FROM
+	 `sys_resource` t, sys_role_source_relation s, sys_role o
+	WHERE
+	 t.enabled = 1 and t.sourceId = s.sourceId and s.roleId = o.roleId
+    order by o.roleName
+  </select>
+
+  <select id="getResourceMainUri" resultType="java.lang.String">
+	SELECT
+	 s.uri
+	FROM
+	 sys_role_source_relation s
+	WHERE
+	 s.roleId in (#{roleIds}) and s.sourceId = #{sourceId} and s.mainUri = 1
+  limit 1
+  </select>
+</mapper>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.order.dao.read.OrderAfterSaleReadDao">
+  <resultMap id="orderAfterSaleResponseDtoResultMap" type="com.star.truffle.module.order.dto.res.OrderAfterSaleResponseDto">
+    <result column="id" property="id" />
+    <result column="order_id" property="orderId" />
+    <result column="after_code" property="afterCode" />
+    <result column="open_id" property="openId" />
+    <result column="name" property="name" />
+    <result column="mobile" property="mobile" />
+    <result column="total_money" property="totalMoney" />
+    <result column="remark" property="remark" />
+    <result column="state" property="state" />
+    <result column="reason" property="reason" />
+    <result column="create_time" property="createTime" />
+  </resultMap>
+
+  <sql id="sql_column">
+    id, order_id, after_code, open_id, `name`, mobile, total_money, remark, state, reason, create_time
+  </sql>
+
+  <sql id="sql_where">
+    <trim prefix="WHERE" prefixOverrides="AND | OR">
+      <if test="id != null">
+        and id = #{id}
+      </if>
+      <if test="orderId != null">
+        and order_id = #{orderId}
+      </if>
+      <if test="afterCode != null">
+        and after_code = #{afterCode}
+      </if>
+      <if test="mobile != null and mobile != ''">
+        and mobile = #{mobile}
+      </if>
+      <if test="state != null">
+        and state = #{state}
+      </if>
+    </trim>
+  </sql>
+
+  <select id="getOrderAfterSale" resultType="com.star.truffle.module.order.dto.res.OrderAfterSaleResponseDto">
+    select
+    <include refid="sql_column" />
+    from order_aftersale
+    where id = #{id}
+  </select>
+
+  <select id="queryOrderAfterSale" resultMap="orderAfterSaleResponseDtoResultMap">
+    select
+    <include refid="sql_column" />
+    from order_aftersale
+    <include refid="sql_where" />
+    order by
+    <choose>
+      <when test="pager != null and pager.orderBy != null and pager.orderBy != ''">${pager.orderBy}</when>
+      <otherwise>id</otherwise>
+    </choose>
+    <if test="pager != null and pager.orderType != null and pager.orderType != ''">${pager.orderType}</if>
+    <if test="pager != null and pager.pageSize!=null and pager.startIndex!=null">
+      limit #{pager.startIndex}, #{pager.pageSize}
+    </if>
+  </select>
+
+  <select id="queryOrderAfterSaleCount" resultType="java.lang.Long">
+    select
+    count(1)
+    from order_aftersale
+    <include refid="sql_where" />
+  </select>
+</mapper>

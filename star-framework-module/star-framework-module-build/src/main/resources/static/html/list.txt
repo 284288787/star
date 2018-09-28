@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:star="http://star">
+<head>
+<title>${title}列表</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jquery-ui/jquery-ui.min.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jqGrid/css/ui.jqgrid.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/artDialog/skins/simple-star.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/buttons.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/pageList.css}" />
+<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/jquery-ui/jquery-ui.min.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/jqGrid/js/jquery.jqGrid.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/jqGrid/js/i18n/grid.locale-cn.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/artDialog/js/jquery.artDialog.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/artDialog/js/iframeTools.js}"></script>
+</head>
+<body>
+  <div class="main-container data-container" id="main-container">
+    <div class="search-container">
+      <form id="queryForm">
+      <#list fields as field>
+        <span>${field.caption}：
+        <#if field.fieldQuery.inputType.name() == 'text'>
+          <input type="text" name="${field.javaName}" placeholder="${field.caption}"/>
+        </#if>
+        <#if field.fieldQuery.inputType.name() == 'select'>
+          <select name="${field.javaName}">
+            <option value="">全部</option>
+            <#list field.fieldQuery.select.options as opt>
+            <option value="${opt['value']}">${opt['caption']}</option>
+            </#list>
+          </select>
+        </#if>
+        <#if field.fieldQuery.inputType.name() == 'date'>
+          <input type="text" class="Wdate" name="${field.javaName}" placeholder="${field.caption}"
+            <#if field.fieldQuery.pattern?exists && field.fieldQuery.pattern == 'Y-m-d H:i:s'>
+             onclick="WdatePicker({maxDate:'%y-%M-%d %H:%m:%s',isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})">
+            <#else>
+              onclick="WdatePicker({maxDate:'%y-%M-%d',isShowClear:false,readOnly:true,dateFmt:'yyyy-MM-dd'})"> 
+            </#if>
+        </#if>
+        <#if field.fieldQuery.inputType.name() == 'area'>
+          <input type="text" name="${(null == field.fieldQuery.substituteName)?string(field.javaName, field.fieldQuery.substituteName)}" placeholder="${field.caption}">
+          <#if field.fieldQuery.substituteName?exists><input type="hidden" name = "${field.javaName}"></#if>
+        </#if>
+        </span> 
+      </#list>
+        <span> 
+          <a onclick="${entityNameVar}Handle.query()" class="button blue">查询</a> 
+          <a onclick="${entityNameVar}Handle.reset()" class="button grey">清空</a>
+        </span>
+      </form>
+    </div>
+    <div class="btnGroup">
+      <#if entity.btnAdd><a star:authorize-uri="/${entityNameVar}/add" onclick="${entityNameVar}Handle.addNew()" class="button grey">新增</a></#if><#if entity.btnEnabled>
+      <a star:authorize-uri="/${entityNameVar}/enabled" onclick="${entityNameVar}Handle.enabled()" class="button blue">启用</a></#if><#if entity.btnEnabled>
+      <a star:authorize-uri="/${entityNameVar}/disabled" onclick="${entityNameVar}Handle.disabled()" class="button yellow">禁用</a></#if><#if entity.btnDelete>
+      <a star:authorize-uri="/${entityNameVar}/deleted" onclick="${entityNameVar}Handle.remove()" class="button red">删除</a></#if> 
+    </div>
+    <div class="data-container">
+      <table id="grid-table"></table>
+      <div id="grid-pager"></div>
+    </div>
+  </div>
+  <script type="text/javascript" th:src="@{/webjars/star/js/star.authorize.js}"></script>
+  <script type="text/javascript" th:inline="javascript" star:authorize-uri="/${entityNameVar}/editBefore/*">
+  addAuthorize("${entityNameVar}-editBefore", true);
+  </script>
+  <script type="text/javascript" th:inline="javascript" star:authorize-uri="/${entityNameVar}/disabled">
+  addAuthorize("${entityNameVar}-disabled", true);
+  </script>
+  <script type="text/javascript" th:inline="javascript" star:authorize-uri="/${entityNameVar}/enabled">
+  addAuthorize("${entityNameVar}-enabled", true);
+  </script>
+  <script type="text/javascript" th:src="@{/webjars/star/js/star.list.comm.js}"></script>
+  <script type="text/javascript" th:inline="javascript" th:src="@{/js/mgr/${entityNameVar}/list.js}"></script>
+</body>
+</html>

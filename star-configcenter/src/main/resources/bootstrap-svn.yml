@@ -1,0 +1,12 @@
+spring:
+  profiles:
+    active: subversion
+  cloud:
+    config:
+      server:
+        svn:
+          uri: https://liuhua-pc/svn/config-repo/
+          username: liuhua
+          password: liuhua
+          search-paths: '{application}'
+          default-label: trunk

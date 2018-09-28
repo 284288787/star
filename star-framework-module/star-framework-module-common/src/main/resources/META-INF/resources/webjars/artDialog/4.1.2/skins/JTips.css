@@ -1,0 +1,204 @@
+﻿@charset "utf-8";
+/*
+ * artDialog skin
+ *一丝冰凉修改
+ *2011-10-17
+ *QQ:50167214
+ * http://code.google.com/p/artdialog/
+ * (c) 2009-2011 TangBin, http://www.planeArt.cn
+ * This is licensed under the GNU LGPL, version 2.1 or later.
+ * For details, see: http://creativecommons.org/licenses/LGPL/2.1/
+ */
+ 
+/* 对话框皮肤 Start */
+body { _margin:0; _height:100%; /*IE6 BUG*/ }
+.aui_outer { text-align:left; }
+table.aui_border, table.aui_dialog { border:0; margin:0; border-collapse:collapse; width:auto; }
+.aui_nw, .aui_n, .aui_ne, .aui_w, .aui_c, .aui_e, .aui_sw, .aui_s, .aui_se, .aui_header, .aui_tdIcon, .aui_main, .aui_footer { padding:0; }
+.aui_header, .aui_buttons button { font: 12px/1.11 'Microsoft Yahei', Tahoma, Arial, Helvetica, STHeiti; _font-family:Tahoma,Arial,Helvetica,STHeiti; -o-font-family: Tahoma, Arial; }
+.aui_title { overflow:hidden; text-overflow: ellipsis; }
+
+
+/*************关闭按钮**************/
+.aui_close { display:block; position:absolute; text-decoration:none; _cursor:pointer; }
+.aui_close:hover { text-decoration:none; }/* outline:none;*/
+
+
+.aui_main { text-align:center; min-width:5em; min-width:0\9/*IE8 BUG*/; }
+.aui_content { display:inline-block; *zoom:1; *display:inline; text-align:left; border:none 0;}
+.aui_content.aui_state_full { display:block; width:100%; margin:0; padding:0!important; height:100%; }
+.aui_loading { width:96px; height:28px; text-align:center; text-indent:-999em; overflow:hidden; background:url(icons/loading.gif) no-repeat center center;}
+.aui_icon { vertical-align: middle; }
+.aui_buttons { padding:8px; text-align:right; white-space:nowrap; }
+.aui_buttons button { margin-left:15px; padding: 6px 8px; cursor: pointer; display: inline-block; text-align: center; line-height: 1; *padding:4px 10px; *height:2em; letter-spacing:2px; font-family: Tahoma, Arial/9!important; width:auto; overflow:visible; *width:1; color: #333; border: solid 1px #999; border-radius: 5px; background: #DDD; filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFF', endColorstr='#DDDDDD'); background: linear-gradient(top, #FFF, #DDD); background: -moz-linear-gradient(top, #FFF, #DDD); background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#FFF), to(#DDD)); text-shadow: 0px 1px 1px rgba(255, 255, 255, 1); box-shadow: 0 1px 0 rgba(255, 255, 255, .7),  0 -1px 0 rgba(0, 0, 0, .09); -moz-transition:-moz-box-shadow linear .2s; -webkit-transition: -webkit-box-shadow linear .2s; transition: box-shadow linear .2s; }
+.aui_buttons button::-moz-focus-inner{ border:0; padding:0; margin:0; }
+.aui_buttons button:focus { border-color:#426DC9; box-shadow:0 0 8px rgba(66, 109, 201, .9); }
+.aui_buttons button:hover { color:#000; border-color:#666; }
+.aui_buttons button:active { border-color:#666; filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#DDDDDD', endColorstr='#FFFFFF'); background: linear-gradient(top, #DDD, #FFF); background: -moz-linear-gradient(top, #DDD, #FFF); background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#DDD), to(#FFF)); box-shadow:inset 0 1px 5px rgba(66, 109, 201, .9), inset 0 1px 1em rgba(0, 0, 0, .3); }
+.aui_buttons button[disabled] { cursor:default; color:#666; background:#DDD; border: solid 1px #999; filter:alpha(opacity=50); opacity:.5; box-shadow:none; }
+button.aui_state_highlight { color: #FFF; border: solid 1px #1c6a9e; background: #2288cc; filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#33bbee', endColorstr='#2288cc'); background: linear-gradient(top, #33bbee, #2288cc); background: -moz-linear-gradient(top, #33bbee, #2288cc); background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#33bbee), to(#2288cc)); text-shadow: -1px -1px 1px #1c6a9e; }
+button.aui_state_highlight:hover { color:#FFF; border-color:#0F3A56; }
+button.aui_state_highlight:active { border-color:#1c6a9e; filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#33bbee', endColorstr='#2288cc'); background: linear-gradient(top, #33bbee, #2288cc); background: -moz-linear-gradient(top, #33bbee, #2288cc); background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#33bbee), to(#2288cc)); }
+/* common end */
+.aui_inner { background:#FFF; }/*内边框样式*/
+.aui_inner {border:1px solid rgba(0, 0, 0, .7); border:1px solid #333\9; }
+.aui_outer{border:1px solid rgba(0, 0, 0, .5); border:none\9; border-radius:5px;}
+.aui_border { box-shadow: none; }
+.aui_nw, .aui_ne, .aui_sw, .aui_se { width:6px; height:6px; }/*边框宽度*/
+.aui_nw, .aui_n, .aui_ne, .aui_w, .aui_e, .aui_sw, .aui_s, .aui_se { background:rgba(0, 0, 0, .2); background:#000\9; filter:alpha(opacity=30); }/*边框透明度*/
+.aui_state_lock .aui_nw, .aui_state_lock .aui_n, .aui_state_lock .aui_ne, .aui_state_lock .aui_w, .aui_state_lock .aui_e, .aui_state_lock .aui_sw, .aui_state_lock .aui_s, .aui_state_lock .aui_se { background:rgba(0, 0, 0, .5); background:#000\9; filter:alpha(opacity=50); }/*锁屏是边框背景*/
+.aui_state_focus .aui_dialog { box-shadow: 0 0 3px rgba(0, 0, 0, 0.4); }
+.aui_state_focus .aui_outer { box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1); }
+.aui_state_lock .aui_border { box-shadow:0 3px 26px rgba(0, 0, 0, .9); }
+.aui_state_drag .aui_outer, .aui_outer:active { box-shadow:none; }
+
+/*************标题栏样式*********/
+.aui_titleBar { position:relative; height:100%; }
+.aui_state_drag .aui_titleBar { box-shadow:none; }
+
+.aui_title { height:28px; line-height:27px; padding:0 28px 0 10px; background-color:#3A6EA5; font-weight:bold; color:#CCC; border-style:solid; border-width:1px; border-color:#4E84C0 #4780BE #17356C #4780BE; border-bottom-color:#0D1D3C\9; font-family: Tahoma, Arial/9!important; 
+
+background: linear-gradient(top, #6998CB, #3A6EA5); background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#6998CB), to(#3A6EA5)); background: -moz-linear-gradient(top, #6998CB, #3A6EA5); filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#427CBD', endColorstr='#2d5d90'); }
+.aui_state_focus .aui_title { border-top-color:#739ECE; background-color:#214FA3; color:#FFF }
+.aui_state_drag .aui_title { border-top-color:#4E84C0; border-bottom-color:rgba(23, 53, 108, .2); background: linear-gradient(top, #3A6EA5, #6998CB); background: -moz-linear-gradient(top, #3A6EA5, #6998CB); background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#3A6EA5), to(#6998CB)); filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#2d5d90', endColorstr='#427CBD'); box-shadow:none; }
+
+/*************关闭按钮样式**************/
+.aui_close { margin-top:2px; padding:2px; top:0; right:2px; width:21px; height:21px; line-height:18px;  font-size:21px; _line-height:22px; _font-size:21px; text-align:center; color: #CCC; font-family: Tahoma, sans-serif ; /*/2011-10-6使用tahoma字体修复IE6关闭按钮样式不统一,修复按钮居中/_font-family: '\u9ed1\u4f53', 'Book Antiqua', Palatino;*/ text-decoration:none; border:1px solid transparent; _border:0 none; border-radius:15px;  }
+.aui_state_focus .aui_close {color:#FFF;}
+.aui_close:hover { color:#FFF;  text-decoration:none; background-color:#A81E21; border:1px solid #666; _border:0 none; box-shadow: 0 1px 0 rgba(255, 255, 255, .5), inset 0 1px 0 rgba(255, 255, 255, .5); outline:none;}/* outline:none;*/
+.aui_close:active { box-shadow: none; outline:none;}/* outline:none;*/
+/*************关闭按钮样式end**************/
+
+.aui_content { color:#666; }
+.aui_state_focus .aui_content { color:#000; }/*获得焦点时主体颜色*/
+.aui_buttons { background-color:#F6F6F6; border-top:solid 1px #DADEE5; }
+/*对话框皮肤 End*/
+
+/*
+*JTips 多彩风格 
+*【一丝冰凉】倾情奉献
+*2011-10-17 
+*QQ:50167214
+*所有 .aui_w等边框类去掉!important
+*IE全部采用背景图片实现
+*/
+.aui_state_noTitle .aui_title { display:none;}/*不显示标题栏*/
+.aui_state_noTitle .aui_close { display:none!important;}/*不显示关闭按钮，纯Tips显示关闭按钮会造成用户无谓的点击*/
+.aui_state_noTitle .aui_titleBar { bottom:0; _bottom:0; _margin-top:0; }
+
+.aui_state_noTitle .aui_s,
+.aui_state_noTitle .aui_n,
+.aui_state_noTitle .aui_e,
+.aui_state_noTitle .aui_w,
+.aui_state_noTitle .aui_nw,
+.aui_state_noTitle .aui_ne,
+.aui_state_noTitle .aui_sw,
+.aui_state_noTitle .aui_se,
+.aui_state_noTitle .aui_dialog,
+.aui_state_noTitle .aui_inner,
+.aui_state_noTitle .aui_outer { border:0 none; box-shadow:none; background:none;} /*重置样式*/
+.aui_state_noTitle .aui_nw,
+.aui_state_noTitle .aui_ne,
+.aui_state_noTitle .aui_sw,
+.aui_state_noTitle .aui_se {width:0;height:0;}/*重置边框大小*/
+
+/*JTips Start*/
+
+/*JTips QQ 
+*2011-10-14
+*选择自己喜欢的风格，替换本组样式
+*/
+/*IE采用背景图片方式渐进增强,目前只有QQTips灰色风格*/
+.aui_state_noTitle .aui_content{color: #606060; font-size:14px; font-weight:bold; text-align:center;}/*主体样式*/
+/*QQTips End*/
+
+.aui_state_noTitle .aui_outer {border:1px solid #FFF; /*外边框*/
+						 box-shadow: 0 1px 10px #666;}
+.aui_state_noTitle .aui_inner {border:none;*border:1px solid #CCC; /*内边框*/
+	background:-webkit-gradient(linear,0% 0%,0% 100%,from(#FAFAFA),to(#E4E4E4));
+    background:-moz-linear-gradient(top, #FAFAFA, #E4E4E4);
+	background:-o-linear-gradient(top,#FAFAFA, #E4E4E4);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#FAFAFA', endColorstr='#E4E4E4');
+	}
+/*JTips QQ End*/
+/******************************多彩风格开始*************************************/
+.aui_state_noTitle .aui_content{color:#FFF;}/*文字颜色*/
+/*JTips Green  
+*2011-10-14
+*选择自己喜欢的风格，替换本组样式
+*/
+.aui_state_noTitle .aui_outer {border:1px solid #769b27; /*外边框*/
+						 box-shadow: 0 1px 10px #66773a;} 
+.aui_state_noTitle .aui_inner {border:1px solid #c5e18a; /*内边框*/
+	background:-webkit-gradient(linear,0% 0%,0% 100%,from(#b4d65d),to(#8ab333));
+    background:-moz-linear-gradient(top, #b4d65d, #8ab333);
+	background:-o-linear-gradient(top, #b4d65d, #8ab333);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#b4d65d', endColorstr='#8ab333');
+	}
+/*JTips Green End*/
+
+/*JTips Yellow  
+*2011-10-14
+*选择自己喜欢的风格，替换本组样式
+*/
+.aui_state_noTitle .aui_outer {border:1px solid #d17301; /*外边框*/
+						 box-shadow: 0 1px 10px #906213;}
+.aui_state_noTitle .aui_inner {border:1px solid #ffe692; /*内边框*/
+	background:-webkit-gradient(linear,0% 0%,0% 100%,from(#ffc83d),to(#ff9c00));
+    background:-moz-linear-gradient(top, #ffc83d, #ff9c00);
+	background:-o-linear-gradient(top, #ffc83d, #ff9c00);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffc83d', endColorstr='#ff9c00');
+	}
+/*JTips Yellow End*/
+
+/*JTips Red  
+*2011-10-14
+*选择自己喜欢的风格，替换本组样式
+*/
+.aui_state_noTitle .aui_outer {border:1px solid #b00d0d; /*外边框*/
+					  	 box-shadow: 0 1px 10px #800a0a;}
+.aui_state_noTitle .aui_inner {border:1px solid #db5a58; /*内边框*/
+	background:-webkit-gradient(linear,0% 0%,0% 100%,from(#e8392f),to(#b21313));
+    background:-moz-linear-gradient(top, #e8392f, #b21313);
+	background:-o-linear-gradient(top, #e8392f, #b21313);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#e8392f', endColorstr='#b21313');
+	}
+/*JTips Red End*/
+
+/*JTips Blue  
+*2011-10-14
+*选择自己喜欢的风格，替换本组样式
+*/
+.aui_state_noTitle .aui_outer {border:1px solid #0b6693; /*外边框*/
+						 box-shadow: 0 1px 10px #082556;}
+.aui_state_noTitle .aui_inner {border:1px solid #5083db; /*内边框*/
+	background:-webkit-gradient(linear,0% 0%,0% 100%,from(#1a8cd3),to(#033b9a));
+    background:-moz-linear-gradient(top, #1a8cd3, #033b9a);
+	background:-o-linear-gradient(top,#1a8cd3, #033b9a);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#1a8cd3', endColorstr='#033b9a');
+	}
+/*JTips Blue End*/
+
+/*JTips Black  
+*2011-10-14
+*选择自己喜欢的风格，替换本组样式
+*/
+.aui_state_noTitle .aui_outer {border:1px solid #333; /*外边框*/
+						 box-shadow: 0 1px 10px #333;}
+.aui_state_noTitle .aui_inner {border:1px solid #666; /*内边框*/
+	background:-webkit-gradient(linear,0% 0%,0% 100%,from(#555),to(#000));
+    background:-moz-linear-gradient(top, #555, #000);
+	background:-o-linear-gradient(top,#555, #000);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#555555', endColorstr='#000000');	
+	}
+/*JTips Black End*/
+
+/******************************多彩风格结束*************************************/
+
+/*JTips 公用样式*/
+.aui_state_noTitle .aui_outer { *border:none;/*隐藏边框 修复IE6-7边框1px间距*/ border-radius:5px;}/*外边框*/
+.aui_state_noTitle .aui_inner { zoom:1; border-radius:4px; overflow:hidden;/*内边框*/
+	/*filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#555555', endColorstr='#000000');*/
+	}
+.aui_icon img {margin-left:10px;}/*无标题提示图标样式*/
+/*JTips End*/

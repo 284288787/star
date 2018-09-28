@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>文件[图片]上传</title>
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/artDialog/skins/simple-star.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/buttons.css}" />
+</head>
+<body>
+  <input type="button" value="上传1" id="uploadImgBtn1" class="button green">
+  <div id="images1"></div>
+  <input type="button" value="上传2" id="uploadImgBtn2" class="button green">
+  <div id="images2"></div>
+
+  <script type="text/javascript" th:src="@{/webjars/star/js/jquery.min-1.11.3.js}"></script>
+  <script type="text/javascript" th:src="@{/webjars/star/js/star.utils.js}"></script>
+  <script type="text/javascript" th:src="@{/webjars/artDialog/js/jquery.artDialog.js}"></script>
+  <script type="text/javascript" th:src="@{/webjars/artDialog/js/iframeTools.source.js}"></script>
+  <script type="text/javascript">
+var utilsHandle = new UtilsHandle({
+  basePath: "/",
+  uploadImages: {uploadFileId: 'uploadImage', multiple: true, items: [{
+    data: {"mark": 1},
+    uploadBtn: $('#uploadImgBtn1'), 
+    success: function (data, textStatus) {
+      if(data.code==0){
+        for(var o in data.data){
+          var pic = data.data[o].mark;
+          $('#images1').append('<img class="dataImg" width="70px" height="70px" src="'+(pic)+'" data="'+pic+'"></span>'); 
+        }
+      }else{
+        artDialog.alert(data.msg);
+      }
+    },
+    complete: function (XMLHttpRequest, textStatus) { 
+      $('.dataImg').unbind().click(function(){
+        if($('#viewImg').length>0){ 
+          $('#viewImg').remove(); 
+        } 
+        $('body').append('<img id="viewImg" style="display:none" src="'+$(this).attr("src")+'">');
+        $('#viewImg').load(function(){
+          var w=$(this).width();
+          var h=$(this).height();
+          var l = w / h;
+          artDialog.alert2('<div style="width:'+w+'px;height:'+h+'px;"><img style="height:'+h+'px" src="'+$(this).attr("src")+'">') 
+        }); 
+      }); 
+    } 
+  },
+  {
+    uploadBtn: $('#uploadImgBtn2'), 
+    success: function (data, textStatus) {
+      if(data.code==0){
+        for(var o in data.data){
+          var pic = data.data[o];
+          $('#images2').append('<img class="dataImg" width="70px" height="70px" src="'+(pic)+'" data="'+pic+'"></span>'); 
+        }
+      }else{
+        artDialog.alert(data.msg);
+      }
+    },
+    complete: function (XMLHttpRequest, textStatus) { 
+      $('.dataImg').unbind().click(function(){
+        if($('#viewImg').length>0){ 
+          $('#viewImg').remove(); 
+        } 
+        $('body').append('<img id="viewImg" style="display:none" src="'+$(this).attr("src")+'">');
+        $('#viewImg').load(function(){
+          var w=$(this).width();
+          var h=$(this).height();
+          var l = w / h;
+          artDialog.alert2('<div style="width:'+w+'px;height:'+h+'px;"><img style="height:'+h+'px" src="'+$(this).attr("src")+'">') 
+        }); 
+      }); 
+    } 
+  }]}
+});
+</script>
+</body>
+</html>

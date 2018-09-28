@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jquery-ui/jquery-ui.min.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jqGrid/css/ui.jqgrid.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/artDialog/skins/simple-star.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/buttons.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/pageList.css}" />
+<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/jquery-ui/jquery-ui.min.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/jqGrid/js/jquery.jqGrid.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/jqGrid/js/i18n/grid.locale-cn.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/artDialog/js/jquery.artDialog.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/artDialog/js/iframeTools.js}"></script>
+</head>
+<body>
+	<div class="main-container data-container" id="main-container">
+		<div class="search-container">
+			<form id="queryForm">
+				<span>角色：<input type="text" name="roleRemark"> </span>
+				<span> 
+				<a onclick="urHandle.query()" class="button blue">查询</a>
+				<a onclick="urHandle.reset()" class="button grey">清空</a>
+				</span>
+			</form>
+		</div>
+		<div class="btnGroup">
+			<a onclick="urHandle.setRole()" class="button grey" id="enterBtn">确认分配给用户</a>
+		</div>
+		<div class="data-container">
+			<table id="grid-table"></table>
+			<div id="grid-pager"></div>
+		</div>
+	</div>
+	<script type="text/javascript" th:src="@{/webjars/star/js/star.list.comm.js}"></script>
+	<script type="text/javascript" th:inline="javascript">
+	var basePath="/";
+	var params = artDialog.data("params");
+	var urHandle = new ListHandle({
+		basePath: $("#basePath").val(),
+		tableId: '#grid-table',
+		pagerId: '#grid-pager',
+		formId: '#queryForm',
+		primaryKey: 'roleId',
+		urls:{
+			list: basePath+'role/setRole/'+params.userId,        //列表
+		}
+	},{
+		setRole: function(){
+			var ids = urHandle.getIds();
+			$.ajax({
+				url: basePath+'role/saveRoleRelation',
+				data: {userId: params.userId, roleIds: ids},
+				type: 'post',
+				dataType: 'json',
+				success: function(res){
+					if(res.code==0){
+						artDialog.alert("分配成功")
+					}else{
+						artDialog.alert(res.msg)
+					}
+				}
+			});
+		}
+	});
+	$(function(){
+		$("#enterBtn").text("确认分配给用户 " + params.name);
+		var colNames = ['roleId', 'userId', '角色', '角色编码'];
+		var colModel = [
+			{name: 'roleId', index: 'roleId', hidden: true, formatter: function(cellvalue, options, rowObject){
+				return cellvalue.toFixed(0);
+			}},
+			{name: 'userId', index: 'userId', hidden: true, formatter: function(cellvalue, options, rowObject){
+				if(cellvalue)
+					return cellvalue.toFixed(0);
+				else
+					return "";
+			}},
+			{name: 'roleRemark', index: 'roleRemark', align: "left", sortable: false}, 
+			{name: 'roleName', index: 'roleName', width: 90, align: "center", sortable: false}
+		];
+		var rowList = [10, 20, 30];
+		var rownumbers = true;
+		var multiselect = true;
+		var config={caption: "", colNames: colNames, colModel: colModel, rowList: rowList, rownumbers: rownumbers, multiselect: multiselect, height: '430px', callback: function(table){
+			var ids=table.jqGrid('getDataIDs');
+			$.each(ids, function(i, rowIdx){
+				var curChk = $("#"+rowIdx+"").find(":checkbox");
+				var rowData = table.jqGrid("getRowData", rowIdx);
+				if(rowData.userId){
+					curChk.attr("checked", true);
+					urHandle.setId(rowIdx);
+				}
+			});
+		}};
+		window.setTimeout(function(){
+			urHandle.init(config);
+		}, 100)
+	});
+	</script>
+</body>
+</html>

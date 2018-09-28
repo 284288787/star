@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.product.dao.write.ProductSubscriptionWriteDao">
+  <insert id="saveProductSubscription" useGeneratedKeys="true" keyProperty="id" parameterType="com.star.truffle.module.product.domain.ProductSubscription">
+    insert into product_subscription(id, product_id, member_id, create_time)
+    values(#{id}, #{productId}, #{memberId}, #{createTime})
+  </insert>
+
+  <insert id="batchSaveProductSubscription" parameterType="java.util.List">
+    insert into product_subscription(id, product_id, member_id, create_time)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.id}, #{item.productId}, #{item.memberId}, #{item.createTime})
+    </foreach>
+  </insert>
+
+  <update id="updateProductSubscription" parameterType="com.star.truffle.module.product.dto.req.ProductSubscriptionRequestDto">
+    update product_subscription
+    <trim prefix="set" suffixOverrides=",">
+      <if test="productId != null">product_id = #{productId},</if>
+      <if test="memberId != null">member_id = #{memberId},</if>
+      <if test="createTime != null">create_time = #{createTime},</if>
+    </trim>
+    where id = #{id}
+  </update>
+
+  <delete id="deleteProductSubscription" parameterType="java.lang.Long">
+    delete from product_subscription where id = #{id}
+  </delete>
+
+  <resultMap id="productSubscriptionResponseDtoResultMap" type="com.star.truffle.module.product.dto.res.ProductSubscriptionResponseDto">
+    <result column="id" property="id" />
+    <result column="product_id" property="productId" />
+    <result column="member_id" property="memberId" />
+    <result column="create_time" property="createTime" />
+  </resultMap>
+
+  <sql id="sql_column">
+    id, product_id, member_id, create_time
+  </sql>
+
+  <select id="getProductSubscription" resultType="com.star.truffle.module.product.dto.res.ProductSubscriptionResponseDto">
+    select
+    <include refid="sql_column" />
+    from product_subscription
+    where id = #{id}
+  </select>
+
+</mapper>

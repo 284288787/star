@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/artDialog/skins/simple-star.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/buttons.css}" />
+<style type="text/css">
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+.btnGroup {
+  margin-bottom: 12px;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+ul {
+  margin: 0 0 0 25px;
+  padding: 0;
+  list-style-type: none;
+  display: block;
+}
+
+ul li {
+  margin: 3px 3px;
+  padding: 0;
+  display: inline;
+  white-space: nowrap;
+  height: 30px;
+  line-height: 30px;
+  color: blue;
+  cursor: default;
+}
+
+.province {
+  font-weight: bold;
+  height: 35px;
+  line-height: 32px;
+  background-color: #fefefe;
+}
+
+.on {
+  color: red
+}
+</style>
+</head>
+<body>
+  <div class="edit-container">
+    <div style="height: 550px; overflow-y: scroll;">
+      <div class="item" th:each="area:${provinces}">
+        <div class="province" th:text="${area.shortName}">省</div>
+        <ul>
+          <li th:each="city:${area.children}" th:attr="data-id=${city.areaId},data-provinceid=${area.areaId},data-provincename=${area.shortName}" th:text="${city.shortName}">市</li>
+        </ul>
+      </div>
+    </div>
+    <div class="btnGroup">
+      <input type="button" value="关闭" class="button grey" onclick="art.dialog.close();">
+    </div>
+  </div>
+  <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+  <script type="text/javascript" th:src="@{/webjars/artDialog/js/jquery.artDialog.js}"></script>
+  <script type="text/javascript" th:src="@{/webjars/artDialog/js/iframeTools.source.js}"></script>
+  <script type="text/javascript" th:inline="javascript">
+      var opts = artDialog.data("opts");
+      $(function() {
+        if (opts && opts.areaId) {
+          $("li[data-id=" + opts.areaId + "]").addClass("on");
+          var clone = $("li.on").parents("div.item").remove();
+          $("div.item:first").before(clone);
+        }
+        $("li").click(function() {
+          var parentId = $.trim($(this).attr("data-provinceid"));
+          var parentName = $.trim($(this).attr("data-provincename"));
+          var areaId = $(this).attr("data-id");
+          var areaName = $.trim($(this).text());
+          if (opts) {
+            opts.callback(areaId, areaName, parentId, parentName);
+            art.dialog.close();
+          }
+        });
+      });
+    </script>
+</body>
+</html>

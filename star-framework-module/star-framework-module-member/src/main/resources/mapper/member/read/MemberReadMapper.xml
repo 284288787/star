@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.member.dao.read.MemberReadDao">
+  <resultMap id="memberResponseDtoResultMap" type="com.star.truffle.module.member.dto.res.MemberResponseDto">
+    <result column="member_id" property="memberId" />
+    <result column="head" property="head" />
+    <result column="name" property="name" />
+    <result column="mobile" property="mobile" />
+    <result column="open_id" property="openId" />
+    <result column="create_time" property="createTime" />
+    <result column="state" property="state" />
+  </resultMap>
+
+  <sql id="sql_column">
+    member_id, head, name, mobile, open_id, create_time, state
+  </sql>
+
+  <sql id="sql_where">
+    <trim prefix="WHERE" prefixOverrides="AND | OR">
+      <if test="memberId != null">
+        and member_id = #{memberId}
+      </if>
+      <if test="head != null and head != ''">
+        and head = #{head}
+      </if>
+      <if test="mobile != null and mobile != ''">
+        and mobile = #{mobile}
+      </if>
+    </trim>
+  </sql>
+
+  <select id="getMember" resultType="com.star.truffle.module.member.dto.res.MemberResponseDto">
+    select
+    <include refid="sql_column" />
+    from member_info
+    where member_id = #{memberId}
+  </select>
+
+  <select id="getMemberByOpenId" resultType="com.star.truffle.module.member.dto.res.MemberResponseDto">
+    select
+    <include refid="sql_column" />
+    from member_info
+    where open_id = #{openId}
+  </select>
+
+  <select id="queryMember" resultMap="memberResponseDtoResultMap">
+    select
+    <include refid="sql_column" />
+    from member_info
+    <include refid="sql_where" />
+    order by
+    <choose>
+      <when test="pager != null and pager.orderBy != null and pager.orderBy != ''">${pager.orderBy}</when>
+      <otherwise>member_id</otherwise>
+    </choose>
+    <if test="pager != null and pager.orderType != null and pager.orderType != ''">${pager.orderType}</if>
+    <if test="pager != null and pager.pageSize!=null and pager.startIndex!=null">
+      limit #{pager.startIndex}, #{pager.pageSize}
+    </if>
+  </select>
+
+  <select id="queryMemberCount" resultType="java.lang.Long">
+    select
+    count(1)
+    from member_info
+    <include refid="sql_where" />
+  </select>
+</mapper>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.order.dao.write.ShoppingCartWriteDao">
+  <insert id="saveShoppingCart" useGeneratedKeys="true" keyProperty="cartId" parameterType="com.star.truffle.module.order.domain.ShoppingCart">
+    insert into shopping_cart(cart_id, product_id, member_id, num, checked, create_time)
+    values(#{cartId}, #{productId}, #{memberId}, #{num}, #{checked}, #{createTime})
+  </insert>
+
+  <insert id="batchSaveShoppingCart" parameterType="java.util.List">
+    insert into shopping_cart(cart_id, product_id, member_id, num, checked, create_time)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.cartId}, #{item.productId}, #{item.memberId}, #{item.num}, #{item.checked}, #{item.createTime})
+    </foreach>
+  </insert>
+
+  <update id="updateShoppingCart" parameterType="com.star.truffle.module.order.dto.req.ShoppingCartRequestDto">
+    update shopping_cart
+    <trim prefix="set" suffixOverrides=",">
+      <if test="num != null">num = #{num},</if>
+      <if test="checked != null">checked = #{checked},</if>
+    </trim>
+    where cart_id = #{cartId}
+  </update>
+
+  <delete id="deleteShoppingCart" parameterType="java.lang.Long">
+    delete from shopping_cart where cart_id = #{cartId}
+  </delete>
+
+  <resultMap id="shoppingCartResponseDtoResultMap" type="com.star.truffle.module.order.dto.res.ShoppingCartResponseDto">
+    <result column="cart_id" property="cartId" />
+    <result column="product_id" property="productId" />
+    <result column="member_id" property="memberId" />
+    <result column="num" property="num" />
+    <result column="checked" property="checked" />
+    <result column="create_time" property="createTime" />
+    <result column="state" property="state" />
+    <result column="title" property="title" />
+    <result column="original_price" property="originalPrice" />
+    <result column="price" property="price" />
+    <result column="specification" property="specification" />
+  </resultMap>
+
+  <sql id="sql_column">
+    cart_id, shopping_cart.product_id, member_id, num, checked, shopping_cart.create_time,
+    p.title, p.original_price, p.price, p.specification, p.state
+  </sql>
+
+  <select id="getShoppingCart" resultType="com.star.truffle.module.order.dto.res.ShoppingCartResponseDto">
+    select
+    <include refid="sql_column" />
+    from shopping_cart
+    INNER JOIN product p on p.product_id = shopping_cart.product_id and p.state in (1,2,3)
+    where cart_id = #{cartId}
+  </select>
+
+</mapper>

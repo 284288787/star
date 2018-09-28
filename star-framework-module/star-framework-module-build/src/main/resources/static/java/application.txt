@@ -1,0 +1,21 @@
+/**create by framework at {now}**/
+package {package};
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
+import com.star.truffle.common.config.EnableModuleStatic;
+import com.star.truffle.core.security.DisableSecurity;
+
+@EnableModuleStatic
+@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class, DataSourceTransactionManagerAutoConfiguration.class})
+@EnableDiscoveryClient
+@DisableSecurity
+public class {moduleName}Application {
+
+  public static void main(String[] args) {
+    SpringApplication.run({moduleName}Application.class, args);
+  }
+}

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.user.dao.read.UriReadDao">
+  <resultMap id="uriResultMap" type="com.star.truffle.module.user.dto.UriDto">
+    <result column="uri" property="uri" />
+    <result column="sourceId" property="sourceId" />
+    <result column="sourceName" property="sourceName" />
+    <result column="intro" property="intro" />
+    <result column="createTime" property="createTime" />
+    <result column="roleNum" property="roleNum" />
+  </resultMap>
+
+  <sql id="sql_column">
+    uri,sourceId,intro,createTime
+  </sql>
+
+  <sql id="sql_where">
+    <trim prefix="WHERE" prefixOverrides="AND | OR">
+      <if test="sourceId != null">
+        and sourceId = #{sourceId}
+      </if>
+    </trim>
+  </sql>
+
+  <select id="getUri" resultType="com.star.truffle.module.user.domain.Uri">
+    select
+    <include refid="sql_column" />
+    from sys_uri
+    where uri = #{uri}
+  </select>
+
+  <select id="queryUriCount" resultType="java.lang.Integer">
+    select
+    count(1)
+    from sys_uri
+    <include refid="sql_where" />
+  </select>
+  
+  <select id="queryUri" resultMap="uriResultMap">
+    select
+    <include refid="sql_column" />,
+    (select r.sourceName from sys_resource r where r.sourceId = sys_uri.sourceId) sourceName
+    <if test="roleId != null">
+    , (select count(1) from sys_role_source_relation sr where sr.uri = sys_uri.uri and sr.roleId = ${roleId}) roleNum
+    , (select count(1) from sys_role_source_relation sr where sr.uri = sys_uri.uri and sr.roleId = ${roleId} and sr.mainUri = 1 ) mainUri
+    </if>
+    from sys_uri
+    <include refid="sql_where" />
+    order by
+    <choose>
+      <when test="s_orderBy != null and s_orderBy != ''">${s_orderBy}</when>
+      <otherwise>uri</otherwise>
+    </choose>
+    <if test="s_orderType != null and s_orderType != ''">${s_orderType}</if>
+    <if test="pageSize != null and startIndex != null">
+      limit #{startIndex}, #{pageSize}
+    </if>
+  </select>
+
+</mapper>

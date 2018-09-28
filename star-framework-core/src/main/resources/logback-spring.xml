@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <!-- 默认配置 -->
+  <include resource="star-logback.xml"/>
+  <!-- 自定义日志 -->
+  <appender name="CUSTOM_CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+      <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符 -->
+      <pattern>[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%t] %-5level %logger{50} - %msg%n</pattern>
+    </encoder>
+  </appender>
+ 
+  <springProfile name="local">
+    <!-- 日志输出级别 -->
+    <root level="INFO">
+      <appender-ref ref="CONSOLE"/>
+      <appender-ref ref="CUSTOM_CONSOLE"/>
+    </root>
+  </springProfile>
+ 
+  <springProfile name="dev">
+    <!-- 日志输出级别 -->
+    <root level="INFO">
+      <appender-ref ref="CONSOLE"/>
+      <appender-ref ref="INFO"/>
+      <appender-ref ref="ERROR"/>
+      <appender-ref ref="DEV_SYSLOG"/>
+      <appender-ref ref="CUSTOM_CONSOLE"/>
+    </root>
+  </springProfile>
+ 
+ 
+  <springProfile name="test">
+    <!-- 日志输出级别 -->
+    <root level="INFO">
+      <appender-ref ref="CONSOLE"/>
+      <appender-ref ref="INFO"/>
+      <appender-ref ref="ERROR"/>
+      <appender-ref ref="TEST_SYSLOG"/>
+      <appender-ref ref="CUSTOM_CONSOLE"/>
+    </root>
+  </springProfile>
+ 
+ 
+  <springProfile name="pro">
+    <!-- 日志输出级别 -->
+    <root level="INFO">
+      <appender-ref ref="CONSOLE"/>
+      <appender-ref ref="INFO"/>
+      <appender-ref ref="ERROR"/>
+      <appender-ref ref="CUSTOM_CONSOLE"/>
+    </root>
+  </springProfile>
+</configuration>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>选择文件夹</title>
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/artDialog/skins/simple-star.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jquery-zTree/css/zTreeStyle/zTreeStyle.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/build/css/style.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/buttons.css}" />
+<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/jquery-zTree/jquery.ztree.core.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/jquery-zTree/jquery.ztree.excheck.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/jquery-zTree/jquery.ztree.exedit.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/artDialog/js/jquery.artDialog.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/artDialog/js/iframeTools.js}"></script>
+</head>
+<body>
+	<div class="main-container" id="main-container">
+		<div class="zTreeDemoBackground left">
+			<ul id="dir" class="ztree"></ul>
+		</div>
+		<div class="btnGroup">
+			<input type="button" class="button gblue" value="新建文件夹" id="newDir">
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<input type="button" class="button blue" value="选择文件夹" id="thisDir">
+		</div>
+	</div>
+	<script type="text/javascript" th:src="@{/webjars/build/js/dir.ztree.js}"></script>
+	<script type="text/javascript" th:inline="javascript">
+		$(function(){
+			
+		});
+	</script>
+</body>
+</html>

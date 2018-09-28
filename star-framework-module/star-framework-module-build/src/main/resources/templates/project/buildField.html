@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>创建字段</title>
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/artDialog/skins/simple-star.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/buttons.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/dist/css/table.css}" />
+</head>
+<body>
+	<div class="main-container" id="main-container">
+		<table class="protable ">
+			<tr>
+		 		<td style="text-align:left;padding-left:20px;font-weight:bold;background-color:#9ec7ef;color:#FFF" class="borderbottom">字段信息</td>
+		 		<td style="text-align:right;padding-right:20px;background-color:#9ec7ef;color:#FFF" class="borderbottom">
+		 		</td>
+		 	</tr>
+			<tr>
+		 		<td width="150px" style="white-space: nowrap">字段名称：</td>
+		 		<td><input type="text" name="fieldCaption" placeholder="字段名称，例如：姓名" maxlength="10"></td>
+		 	</tr>
+		 	<tr>
+		 		<td class="borderbottom"></td>
+		 		<td class="borderbottom"><span class="rule">字段名称用于：注释，网页上显示，请务必填写正确</span></td>
+		 	</tr>
+			<tr>
+		 		<td style="white-space: nowrap">Java属性名：</td>
+		 		<td><input type="text" name="javaName" class="ipt200" placeholder="Java属性名" maxlength="20"></td>
+		 	</tr>
+		 	<tr>
+		 		<td></td>
+		 		<td><span class="rule">Java属性名由字母、数字组成；须以字母开头，且首字母必须小写；长度不得小于2位且不得大于30位</span></td>
+		 	</tr>
+			<tr>
+		 		<td style="white-space: nowrap">Java属性类型：</td>
+		 		<td>
+		 			<select name="javaType">
+		 				<option value="String" data-dsType='{"VARCHAR":"varchar","TEXT":"text","LONGTEXT":"longtext"}'>String</option>
+		 				<option value="Long" data-dsType='{"BIGINT":"bigint"}'>Long</option>
+		 				<option value="Integer" data-dsType='{"INT":"int","TINYINT":"tinyint"}'>Integer</option>
+		 				<option value="Date" data-dsType='{"DATETIME":"datetime"}'>Date</option>
+		 			</select>
+		 		</td>
+		 	</tr>
+		 	<tr>
+		 		<td class="borderbottom"></td>
+		 		<td class="borderbottom"><span class="rule">需要用到Double Float类型，用Integer代替。例如金额，使用分作单位</span></td>
+		 	</tr>
+		 	<tr>
+		 		<td style="white-space: nowrap">Mysql字段名：</td>
+		 		<td><input type="text" name="dsName" class="ipt200" placeholder="Mysql字段名，可空" maxlength="20"></td>
+		 	</tr>
+		 	<tr>
+		 		<td class="borderbottom"></td>
+		 		<td class="borderbottom"><span class="rule">Mysql字段名由小写字母、数字、下划线组成；须以字母开头，长度不得小于2位且不得大于30位；<br>若为空则将Java属性名的大写字母变成下划线加小写字母生成的字符串作为Mysql字段名</span></td>
+		 	</tr>
+		 	<tr>
+		 		<td style="white-space: nowrap">Mysql字段类型：</td>
+		 		<td>
+		 			<select name="dsType"></select>
+		 		</td>
+		 	</tr>
+		 	<tr>
+		 		<td class="borderbottom"></td>
+		 		<td class="borderbottom"><span class="rule">Java属性类型决定数据库字段类型</span></td>
+		 	</tr>
+		 	<tr>
+		 		<td style="white-space: nowrap">Mysql字段长度：</td>
+		 		<td><input type="text" name="length" placeholder="数字" maxlength="4" style="width:80px"></td>
+		 	</tr>
+		 	<tr>
+		 		<td style="white-space: nowrap">主键：</td>
+		 		<td><input type="checkbox" name="primaryKey"></td>
+		 	</tr>
+		 	<tr>
+		 		<td class="borderbottom"></td>
+		 		<td class="borderbottom"><span class="rule">规定，只有Long类型才可以设置主键</span></td>
+		 	</tr>
+		 	<tr class="createListHtmlDiv">
+		 		<td></td>
+		 		<td>
+		 			<input class="checkboxCreate" type="checkbox" name="createQueryCheckbox" id="createQueryCheckbox" checked><label for="createQueryCheckbox">该字段需要作为查询条件</label>
+		 		</td>
+		 	</tr>
+		 	<tr class="createListHtmlDiv">
+		 		<td></td>
+		 		<td>
+		 			<input class="checkboxCreate" type="checkbox" name="createListCheckbox" id="createListCheckbox" checked><label for="createListCheckbox">该字段需要在列表展示</label>
+		 		</td>
+		 	</tr>
+		 	<tr class="createAddHtmlDiv">
+		 		<td></td>
+		 		<td>
+		 			<input class="checkboxCreate" type="checkbox" name="createAddCheckbox" id="createAddCheckbox" checked><label for="createAddCheckbox">该字段需要在添加页面展示</label>
+		 		</td>
+		 	</tr>
+		 	<tr class="createEditHtmlDiv">
+		 		<td></td>
+		 		<td>
+		 			<input class="checkboxCreate" type="checkbox" name="createEditCheckbox" id="createEditCheckbox" checked><label for="createEditCheckbox">该字段需要在编辑页面展示</label>
+		 		</td>
+		 	</tr>
+		</table>
+		<table class="protable createListHtmlDiv createQueryHtmlDiv">
+			<tr>
+		 		<td style="text-align:left;padding-left:20px;font-weight:bold;background-color:#9ec7ef;color:#FFF" class="borderbottom">查询条件配置</td>
+		 		<td style="text-align:right;padding-right:20px;background-color:#9ec7ef;color:#FFF" class="borderbottom">
+		 		</td>
+		 	</tr>
+			<tr>
+		 		<td width="150px" style="white-space: nowrap">数据类型：</td>
+		 		<td>
+		 			<select name="queryInputType" class="inputType">
+			 			<option value="text">text</option>
+			 			<option value="select">select</option>
+			 			<option value="date">date</option>
+			 		</select>
+		 		</td>
+		 	</tr>
+		 	<tr class="inputTypeValue">
+		 		<td></td>
+		 		<td><input type="text" name="queryInputTypeValue" class="ipt400" placeholder=""></td>
+		 	</tr>
+		 	<tr>
+		 		<td class="bordertop" style="white-space: nowrap">隐藏：</td>
+		 		<td class="bordertop"><input type="checkbox" name="queryHidden"></td>
+		 	</tr>
+		 	<tr>
+		 		<td style="white-space: nowrap">替身：</td>
+		 		<td><input type="checkbox" name="querySubstitute"></td>
+		 	</tr>
+		 	<tr>
+		 		<td style="white-space: nowrap">替身名称：</td>
+		 		<td><input type="text" name="querySubstituteName" placeholder="由字母、数字组成" maxlength="20"></td>
+		 	</tr>
+		 	<tr>
+		 		<td></td>
+		 		<td><span class="rule">例如：地区字段，在bean里有areaId和areaName两个属性，展现在页面上是areaName，隐藏在页面上是areaId；即，areaName为areaId的替身</span></td>
+		 	</tr>
+		</table>
+		<table class="protable createListHtmlDiv">
+			<tr>
+		 		<td style="text-align:left;padding-left:20px;font-weight:bold;background-color:#9ec7ef;color:#FFF" class="borderbottom">列表页配置</td>
+		 		<td style="text-align:right;padding-right:20px;background-color:#9ec7ef;color:#FFF" class="borderbottom">
+		 		</td>
+		 	</tr>
+			<tr>
+		 		<td width="150px" style="white-space: nowrap">数据类型：</td>
+		 		<td>
+		 			<select name="listInputType" class="inputType">
+			 			<option value="text">text</option>
+			 			<option value="select">select</option>
+			 			<option value="date">date</option>
+			 		</select>
+		 		</td>
+		 	</tr>
+		 	<tr class="inputTypeValue">
+		 		<td></td>
+		 		<td><input type="text" name="listInputTypeValue" placeholder=""></td>
+		 	</tr>
+		 	<tr>
+		 		<td class="bordertop" width="150px" style="white-space: nowrap">显示宽度：</td>
+		 		<td class="bordertop"><input type="text" name="listWidth" placeholder="显示宽度" maxlength="5"></td>
+		 	</tr>
+		 	<tr>
+		 		<td class="borderbottom"></td>
+		 		<td class="borderbottom"><span class="rule">显示宽度可以填写百分比(例如：30)，或填写固定的像素值(例如：50px)</span></td>
+		 	</tr>
+		 	<tr>
+		 		<td style="white-space: nowrap">对齐方式：</td>
+		 		<td>
+		 			<select name="listAlign">
+		 				<option value="center">center</option>
+		 			</select>
+		 		</td>
+		 	</tr>
+		 	<tr>
+		 		<td style="white-space: nowrap">可排序：</td>
+		 		<td><input type="checkbox" name="listSort"></td>
+		 	</tr>
+		 	<tr>
+		 		<td style="white-space: nowrap">可编辑：</td>
+		 		<td><input type="checkbox" name="listEdit"></td>
+		 	</tr>
+		</table>
+		<table class="protable createAddHtmlDiv">
+			<tr>
+		 		<td style="text-align:left;padding-left:20px;font-weight:bold;background-color:#9ec7ef;color:#FFF" class="borderbottom">新增页配置</td>
+		 		<td style="text-align:right;padding-right:20px;background-color:#9ec7ef;color:#FFF" class="borderbottom">
+		 		</td>
+		 	</tr>
+			<tr>
+		 		<td width="150px" style="white-space: nowrap">数据类型：</td>
+		 		<td>
+		 			<select name="addInputType" class="inputType">
+			 			<option value="text">text</option>
+			 			<option value="select">select</option>
+			 			<option value="date">date</option>
+			 		</select>
+		 		</td>
+		 	</tr>
+		 	<tr class="inputTypeValue">
+		 		<td></td>
+		 		<td><input type="text" name="addInputTypeValue" placeholder=""></td>
+		 	</tr>
+		 	<tr class="placeholder">
+		 		<td style="white-space: nowrap">placeholder：</td>
+		 		<td><input type="text" name="addPlaceholder" placeholder="空则取字段名称"></td>
+		 	</tr>
+		 	<tr>
+		 		<td class="bordertop" style="white-space: nowrap">必填：</td>
+		 		<td class="bordertop"><input type="checkbox" name="addRequired"></td>
+		 	</tr>
+		 	<tr>
+		 		<td class="borderbottom" style="white-space: nowrap">未填提示：</td>
+		 		<td class="borderbottom"><input type="text" name="addRequiredMsg" placeholder="必填提示文本" maxlength="20"></td>
+		 	</tr>
+		 	<tr>
+		 		<td style="white-space: nowrap">正则表达式：</td>
+		 		<td><input type="text" name="addZhengze" placeholder="空则表示可以随意填写"></td>
+		 	</tr>
+		 	<tr>
+		 		<td></td>
+		 		<td><span class="rule">如果值为 日期 电话号码 电子邮件 金额 时，表达式直接填写date mobile email money</span></td>
+		 	</tr>
+		 	<tr>
+		 		<td class="borderbottom" style="white-space: nowrap">不满足表达式提示：</td>
+		 		<td class="borderbottom"><input type="text" name="addZhengzeMsg" placeholder="正则提示文本" maxlength="20"></td>
+		 	</tr>
+		 	<tr>
+		 		<td style="white-space: nowrap">隐藏：</td>
+		 		<td><input type="checkbox" name="addHidden"></td>
+		 	</tr>
+		 	<tr>
+		 		<td style="white-space: nowrap">替身：</td>
+		 		<td><input type="checkbox" name="addSubstitute"></td>
+		 	</tr>
+		 	<tr>
+		 		<td style="white-space: nowrap">替身名称：</td>
+		 		<td><input type="text" name="addSubstituteName" placeholder="由字母、数字组成" maxlength="20"></td>
+		 	</tr>
+		 	<tr>
+		 		<td></td>
+		 		<td><span class="rule">例如：地区字段，在bean里有areaId和areaName两个属性，展现在页面上是areaName，隐藏在页面上是areaId；即，areaName为areaId的替身</span></td>
+		 	</tr>
+		</table>
+		<table class="protable createEditHtmlDiv">
+			<tr>
+		 		<td style="text-align:left;padding-left:20px;font-weight:bold;background-color:#9ec7ef;color:#FFF" class="borderbottom">编辑页配置</td>
+		 		<td style="background-color:#9ec7ef" class="borderbottom">
+		 		</td>
+		 	</tr>
+			<tr>
+		 		<td width="150px" style="white-space: nowrap">数据类型：</td>
+		 		<td>
+		 			<select name="editInputType" class="inputType">
+			 			<option value="text">text</option>
+			 			<option value="select">select</option>
+			 			<option value="date">date</option>
+			 		</select>
+		 		</td>
+		 	</tr>
+		 	<tr class="inputTypeValue">
+		 		<td></td>
+		 		<td><input type="text" name="editInputTypeValue" placeholder=""></td>
+		 	</tr>
+		 	<tr class="placeholder">
+		 		<td style="white-space: nowrap">placeholder：</td>
+		 		<td><input type="text" name="editPlaceholder" placeholder="空则取字段名称"></td>
+		 	</tr>
+		 	<tr>
+		 		<td class="bordertop" style="white-space: nowrap">必填：</td>
+		 		<td class="bordertop"><input type="checkbox" name="editRequired"></td>
+		 	</tr>
+		 	<tr>
+		 		<td class="borderbottom" style="white-space: nowrap">未填提示：</td>
+		 		<td class="borderbottom"><input type="text" name="editRequiredMsg" placeholder="必填提示文本" maxlength="20"></td>
+		 	</tr>
+		 	<tr>
+		 		<td style="white-space: nowrap">正则表达式：</td>
+		 		<td><input type="text" name="editZhengze" placeholder="空则表示可以随意填写"></td>
+		 	</tr>
+		 	<tr>
+		 		<td></td>
+		 		<td><span class="rule">如果值为 日期 电话号码 电子邮件 金额 时，表达式直接填写date mobile email money</span></td>
+		 	</tr>
+		 	<tr>
+		 		<td class="borderbottom" style="white-space: nowrap">不满足表达式提示：</td>
+		 		<td class="borderbottom"><input type="text" name="editZhengzeMsg" placeholder="正则提示文本" maxlength="20"></td>
+		 	</tr>
+		 	<tr>
+		 		<td style="white-space: nowrap">隐藏：</td>
+		 		<td><input type="checkbox" name="editHidden"></td>
+		 	</tr>
+		 	<tr>
+		 		<td style="white-space: nowrap">替身：</td>
+		 		<td><input type="checkbox" name="editSubstitute"></td>
+		 	</tr>
+		 	<tr>
+		 		<td style="white-space: nowrap">替身名称：</td>
+		 		<td><input type="text" name="editSubstituteName" placeholder="由字母、数字组成" maxlength="20"></td>
+		 	</tr>
+		 	<tr>
+		 		<td></td>
+		 		<td><span class="rule">例如：地区字段，在bean里有areaId和areaName两个属性，展现在页面上是areaName，隐藏在页面上是areaId；即，areaName为areaId的替身</span></td>
+		 	</tr>
+		</table>
+		<div class="btnGroup">
+			<input type="button" value="添加" class="button blue" id="saveBtn"> <input type="button" value="关闭" class="button grey" onclick="art.dialog.close();">
+		</div>
+	</div>
+</body>
+<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/artDialog/js/jquery.artDialog.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/artDialog/js/iframeTools.js}"></script>
+<script type="text/javascript" th:inline="javascript">
+$(function(){
+	var params = artDialog.data("params");
+	if(params){
+		if (! params.createListHtml) $(".createListHtmlDiv").remove();
+		if (! params.createAddHtml) $(".createAddHtmlDiv").remove();
+		if (! params.createEditHtml) $(".createEditHtmlDiv").remove();
+	}
+	$(".checkboxCreate").change(function(){
+		var obj=$("."+$(this).attr("name").replace("Checkbox", "HtmlDiv")+":not(tr)");
+		var check = this.checked;
+		if(check) obj.show();
+		else obj.hide();
+	});
+	$("select[name=javaType]").change(function(){
+		var selectedOpt = $("option:selected", $(this));
+		var value = selectedOpt.val();
+		var json = selectedOpt.attr("data-dsType");
+		var dataDsType = JSON.parse(json);
+		var html = '';
+		for(var o in dataDsType){
+			html+='<option value="'+o+'">'+dataDsType[o]+'</option>'
+		}
+		$("select[name=dsType]").html(html);
+		if(value == 'Long'){
+			$(":checkbox[name=primaryKey]").removeAttr("disabled");
+		}else{
+			$(":checkbox[name=primaryKey]").attr("disabled", "disabled");
+		}
+		if(value == 'Date'){
+			$("input[name=length]").attr("disabled", "disabled");
+			$("select.inputType").val("date").attr("disabled", "disabled");
+			$("tr.inputTypeValue,tr.placeholder").hide();
+		}
+	});
+	$("select[name=javaType]").change();
+});
+</script>
+</html>

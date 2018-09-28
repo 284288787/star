@@ -1,0 +1,85 @@
+.gy_table {
+  margin: 0 auto 5px auto;
+  background: #fff;
+  border: 1px solid #d8d8d8;
+  padding: 10px 20px 0px 20px;
+  border-radius: 10px;
+  width: 90%;
+}
+.gy_table_view {
+  margin: 0 auto 5px auto;
+  border-collapse:collapse;
+  border: 1px solid #d8d8d8;
+  padding: 10px 20px 0px 20px;
+  border-radius: 10px;
+  width: 90%;
+}
+.gy_table_view td {
+	width: 25%;
+  padding: 5px 2px;
+  border: 1px solid #d8d8d8;
+}
+
+.gy_table2 {
+  margin: 0 0 5px 0;
+  background: #fff;
+  border: 1px solid #d8d8d8;
+}
+
+.gy_table td {
+  padding: 5px 2px;
+  border-bottom: 1px solid #d8d8d8;
+}
+
+.alignright {
+  text-align: right;
+}
+
+.gy_table input[type=text], .gy_table input[type=password] {
+  height: 20px;
+  padding-left: 3px;
+}
+
+.gy_table select {
+  height: 26px;
+}
+
+.gy_table .btnGroup {
+  margin: 12px 0px;
+  text-align: center;
+  bottom: 0;
+  width: 100%;
+}
+
+.gy_table .btnGroup input {
+  height: 30px;
+  width: 80px;
+}
+
+.error {
+  color: red;
+}
+
+.close {
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  right: -10px;
+  top: -65px;
+  color: red;
+  cursor: default;
+}
+
+.tip{
+  color: gray;
+  font-size:12px;
+}
+
+.ipt500{width:500px;}
+.ipt400{width:400px;}
+.ipt300{width:300px;}
+.ipt200{width:200px;}
+.ipt100{width:100px;}
+.titleTd{width:150px;text-align:right;white-space:nowrap;}
+.titleTd100{width:100px;text-align:right;white-space:nowrap;}
+.topTd{vertical-align: top;}

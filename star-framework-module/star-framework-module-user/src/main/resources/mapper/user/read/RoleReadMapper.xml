@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.user.dao.read.RoleReadDao">
+  <resultMap id="roleResultMap" type="com.star.truffle.module.user.domain.Role">
+    <result column="roleId" property="roleId" />
+    <result column="roleName" property="roleName" />
+    <result column="roleRemark" property="roleRemark" />
+    <result column="roleIntro" property="roleIntro" />
+    <result column="createTime" property="createTime" />
+    <result column="createUser" property="createUser" />
+    <result column="createUser" property="createUser" />
+  </resultMap>
+  <resultMap id="userRoleResultMap" type="com.star.truffle.module.user.dto.UserRoleRelationDto">
+    <result column="userId" property="userId" />
+    <result column="roleId" property="roleId" />
+    <result column="roleRemark" property="roleRemark" />
+  </resultMap>
+
+  <sql id="sql_column">
+    roleId,roleName,roleRemark,roleIntro,createTime,createUser
+  </sql>
+
+  <sql id="sql_where">
+    <trim prefix="WHERE" prefixOverrides="AND | OR">
+      <if test="roleId != null">
+        and roleId = #{roleId}
+      </if>
+      <if test="roleRemark != null and roleRemark != ''">
+        and roleRemark = #{roleRemark}
+      </if>
+      <if test="roleName != null and roleName != ''">
+        and roleName = #{roleName}
+      </if>
+      <if test="userIds != null and userIds != ''">
+        and exists (select * from sys_user_role_relation ur where ur.roleId = sys_role.roleId and ur.userId in (#{userIds}))
+      </if>
+    </trim>
+  </sql>
+
+  <select id="getRole" resultType="com.star.truffle.module.user.domain.Role">
+    select
+    <include refid="sql_column" />
+    from sys_role
+    where roleId = #{roleId}
+  </select>
+
+  <select id="queryRoleCount" resultType="java.lang.Integer">
+    select
+    count(1)
+    from sys_role
+    <include refid="sql_where" />
+  </select>
+
+  <select id="queryRole" resultMap="roleResultMap">
+    select
+    <include refid="sql_column" />
+    from sys_role
+    <include refid="sql_where" />
+    order by
+    <choose>
+      <when test="s_orderBy != null and s_orderBy != ''">${s_orderBy}</when>
+      <otherwise>roleId</otherwise>
+    </choose>
+    <if test="s_orderType != null and s_orderType != ''">${s_orderType}</if>
+    <if test="pageSize!=null and startIndex!=null">
+      limit #{startIndex}, #{pageSize}
+    </if>
+  </select>
+
+  <select id="queryUserRoleRelationCountByUserId" resultType="java.lang.Integer">
+    select
+    count(1)
+    from (
+      select userId, roleId
+      from sys_user_role_relation where userId = #{userId}
+    ) u right join sys_role on u.roleId = sys_role.roleId
+    <trim prefix="WHERE" prefixOverrides="AND | OR">
+      <if test="roleRemark != null and roleRemark != ''">
+        and sys_role.roleRemark = #{roleRemark}
+      </if>
+    </trim>
+  </select>
+  <select id="queryUserRoleRelationByUserId" resultMap="userRoleResultMap">
+    select
+      userId, sys_role.roleId, sys_role.roleRemark
+    from (
+      select userId, roleId
+      from sys_user_role_relation where userId = #{userId}
+    ) u right join sys_role on u.roleId = sys_role.roleId
+    <trim prefix="WHERE" prefixOverrides="AND | OR">
+      <if test="roleRemark != null and roleRemark != ''">
+        and sys_role.roleRemark = #{roleRemark}
+      </if>
+    </trim>
+    order by
+    <choose>
+      <when test="s_orderBy != null and s_orderBy != ''">${s_orderBy}</when>
+      <otherwise>roleId</otherwise>
+    </choose>
+    <if test="s_orderType != null and s_orderType != ''">${s_orderType}</if>
+    <if test="pageSize!=null and startIndex!=null">
+      limit #{startIndex}, #{pageSize}
+    </if>
+  </select>
+  
+  <select id="queryUserRoleRelationCount" resultType="java.lang.Integer">
+    select
+    count(1)
+    from sys_user_role_relation s
+    <trim prefix="WHERE" prefixOverrides="AND | OR">
+      <if test="roleId != null">
+        and s.roleId = #{roleId}
+      </if>
+      <if test="userId != null">
+        and s.userId = #{userId}
+      </if>
+    </trim>
+  </select>
+  
+  <select id="queryUserRoleRelation" resultMap="userRoleResultMap">
+    select
+      s.userId, s.roleId, (select roleRemark from sys_role where sys_role.roleId = s.roleId) roleRemark
+    from sys_user_role_relation s
+    <trim prefix="WHERE" prefixOverrides="AND | OR">
+      <if test="roleId != null">
+        and s.roleId = #{roleId}
+      </if>
+      <if test="userId != null">
+        and s.userId = #{userId}
+      </if>
+    </trim>
+    order by
+    <choose>
+      <when test="s_orderBy != null and s_orderBy != ''">${s_orderBy}</when>
+      <otherwise>roleId</otherwise>
+    </choose>
+    <if test="s_orderType != null and s_orderType != ''">${s_orderType}</if>
+    <if test="pageSize!=null and startIndex!=null">
+      limit #{startIndex}, #{pageSize}
+    </if>
+  </select>
+</mapper>

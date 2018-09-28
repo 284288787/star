@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.user.dao.write.RoleWriteDao">
+
+  <insert id="saveRole" parameterType="com.star.truffle.module.user.domain.Role">
+    insert into sys_role(roleId,roleName,roleRemark,roleIntro,createTime,createUser)
+    values(#{roleId},#{roleName},#{roleRemark},#{roleIntro},#{createTime},#{createUser})
+  </insert>
+  
+  <update id="updateRole" parameterType="com.star.truffle.module.user.domain.Role">
+    update sys_role 
+    <trim prefix="set" suffixOverrides=",">
+      <if test="roleName != null and roleName != ''">roleName = #{roleName},</if>
+      <if test="roleRemark != null and roleRemark != ''">roleRemark = #{roleRemark},</if>
+      <if test="roleIntro != null and roleIntro != ''">roleIntro = #{roleIntro},</if>
+    </trim>
+    where roleId = #{roleId}
+  </update>
+  
+  <delete id="deleteRole" parameterType="java.lang.Long">
+    delete from sys_role where roleId = #{roleId}
+  </delete>
+  
+  <delete id="deleteRoleResourceRelationByRoleId" parameterType="java.lang.Long">
+    delete from sys_role_source_relation where roleId = #{roleId}
+  </delete>
+  
+  <delete id="deleteRoleResourceRelationByResourceId" parameterType="java.lang.Long">
+    delete from sys_role_source_relation where sourceId = #{sourceId}
+  </delete>
+  
+  <delete id="deleteRoleResourceRelationBy">
+    delete from sys_role_source_relation where roleId = #{roleId} and sourceId = #{sourceId} and uri = #{uri}
+  </delete>
+  
+  <insert id="batchSaveRoleResource" parameterType="java.util.List">
+    insert into sys_role_source_relation(roleId, sourceId, uri, mainUri, createTime, createUser)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.roleId},#{item.sourceId},#{item.uri},#{item.mainUri},#{item.createTime},#{item.createUser})
+    </foreach>
+  </insert>
+  
+  <update id="updateMainUri" parameterType="com.star.truffle.module.user.domain.RoleResourceRelation">
+    update sys_role_source_relation set mainUri = 0 where roleId = #{roleId} and sourceId = #{sourceId};
+    update sys_role_source_relation set mainUri = 1 where roleId = #{roleId} and sourceId = #{sourceId} and uri = #{uri}
+  </update>
+  
+  <delete id="deleteUserRoleRelationByUserId" parameterType="java.lang.Long">
+    delete from sys_user_role_relation where userId = #{userId}
+  </delete>
+  
+  <delete id="deleteUserRoleRelationByRoleId" parameterType="java.lang.Long">
+    delete from sys_user_role_relation where roleId = #{roleId}
+  </delete>
+  
+  <insert id="batchSaveUserRole" parameterType="java.util.List">
+    insert into sys_user_role_relation(roleId, userId, createTime, createUser)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.roleId},#{item.userId},#{item.createTime},#{item.createUser})
+    </foreach>
+  </insert>
+</mapper>

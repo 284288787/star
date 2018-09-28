@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/artDialog/skins/simple-star.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/buttons.css}" />
+</head>
+<body>
+  <div class="edit-container">
+    <input type="text" name="areaName1" placeholder="选择城市">
+    <input type="text" name="areaId1">
+    <input type="text" name="areaName2" placeholder="选择城市">
+    <input type="text" name="areaId2">
+    <input type="text" name="areaName3" placeholder="选择城市">
+    <input type="text" name="areaId3">
+    <br>
+    <input type="text" name="areaName4" placeholder="选择地区">
+    <input type="text" name="areaId4">
+    <input type="text" name="areaName5" placeholder="选择地区">
+    <input type="text" name="areaId5">
+  </div>
+  <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+  <script type="text/javascript" th:src="@{/webjars/artDialog/js/jquery.artDialog.js}"></script>
+  <script type="text/javascript" th:src="@{/webjars/artDialog/js/iframeTools.source.js}"></script>
+  <script type="text/javascript" th:src="@{/webjars/star/js/star.utils.js}"></script>
+  <script type="text/javascript" th:inline="javascript">
+      $(function() {
+        new UtilsHandle({
+          chooseCity: {key: 'areaId', items: [
+            {
+              areaNameObj: $("input[name=areaName1]"),
+              areaIdObj: $("input[name=areaId1]")
+            },
+            {
+              areaNameObj: $("input[name=areaName2]"),
+              areaIdObj: $("input[name=areaId2]")
+            },
+            {
+              areaNameObj: $("input[name=areaName3]"),
+              areaIdObj: $("input[name=areaId3]")
+            }
+          ]},
+          chooseArea: {items: [
+            {
+              areaNameObj: $("input[name=areaName4]"),
+              callback: function(areas){
+                alert(JSON.stringify(areas))
+              }
+            },
+            {
+              areaNameObj: $("input[name=areaName5]"),
+            }
+          ]}
+        },{});
+      });
+    </script>
+</body>
+</html>

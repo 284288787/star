@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.alibaba.dao.write.SmsIdentityDao">
+
+  <insert id="saveSmsIdentity" useGeneratedKeys="true" keyProperty="id" parameterType="com.star.truffle.module.alibaba.domain.SmsIdentity">
+    insert into sms_identity(mobile,tag,`code`,content,createTime)
+    values(#{mobile},#{tag},#{code},#{content},#{createTime})
+  </insert>
+  
+  <select id="getSmsIdentity" resultType="com.star.truffle.module.alibaba.domain.SmsIdentity">
+    select
+    id, mobile,tag,`code`,content,createTime
+    from sms_identity
+    where mobile = #{mobile} and tag = #{tag} 
+    order by id desc
+    limit 1
+  </select>
+  
+  <delete id="deleteSmsIdentity" >
+    delete from sms_identity where mobile = #{mobile} and tag = #{tag}
+  </delete>
+</mapper>

@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.user.dao.read.UserAccountReadDao">
+  <resultMap id="userAccountDtoResultMap" type="com.star.truffle.module.user.dto.UserAccountDto">
+    <result column="userId" property="userId" />
+    <result column="account" property="account" />
+    <result column="password" property="password" />
+    <result column="nonExpired" property="nonExpired" />
+    <result column="nonLocked" property="nonLocked" />
+    <result column="enabled" property="enabled" />
+    <result column="deleted" property="deleted" />
+    <result column="expiredTime" property="expiredTime" />
+    <result column="lockedTime" property="lockedTime" />
+    <result column="enabledTime" property="enabledTime" />
+    <result column="deletedTime" property="deletedTime" />
+    <result column="createTime" property="createTime" />
+    <result column="lastModifyTime" property="lastModifyTime" />
+    <result column="name" property="name" />
+    <result column="mobile" property="mobile" />
+    <result column="typeName" property="typeName" />
+  </resultMap>
+
+  <sql id="sql_column">
+    sys_useraccount.userId,account,password,nonExpired,nonLocked,enabled,deleted,expiredTime,lockedTime,enabledTime,deletedTime,createTime,sys_useraccount.lastModifyTime,`name`,mobile
+  </sql>
+
+  <sql id="sql_where">
+    <trim prefix="WHERE" prefixOverrides="AND | OR">
+      <if test="userId != null">
+        and sys_useraccount.userId = #{userId}
+      </if>
+      <if test="account != null and account != ''">
+        and account = #{account}
+      </if>
+      <if test="name != null and name != ''">
+        and `name` = #{name}
+      </if>
+      <if test="mobile != null and mobile != ''">
+        and mobile = #{mobile}
+      </if>
+      <if test="nonExpired != null">
+        and nonExpired = #{nonExpired}
+      </if>
+      <if test="nonLocked != null">
+        and nonLocked = #{nonLocked}
+      </if>
+      <if test="enabled != null">
+        and enabled = #{enabled}
+      </if>
+      <if test="deleted != null">
+        and deleted = #{deleted}
+      </if>
+    </trim>
+  </sql>
+
+  <select id="getUserAccountByUserId" resultType="com.star.truffle.module.user.dto.UserAccountDto">
+    select
+    <include refid="sql_column" />,
+    (select GROUP_CONCAT(t.userType order by t.id) from sys_useraccounttype t where t.userId = sys_useraccount.userId) userType,
+    (select GROUP_CONCAT(t.typeName order by t.id) from sys_useraccounttype t where t.userId = sys_useraccount.userId) typeName
+    from sys_useraccount left join sys_userInfo on sys_useraccount.userId = sys_userInfo.userId
+    where sys_useraccount.userId = #{userId}
+  </select>
+
+  <select id="getUserAccountByAccount" resultType="com.star.truffle.module.user.dto.UserAccountDto">
+    select
+    <include refid="sql_column" />,
+    (select GROUP_CONCAT(t.userType order by t.id) from sys_useraccounttype t where t.userId = sys_useraccount.userId) userType,
+    (select GROUP_CONCAT(t.typeName order by t.id) from sys_useraccounttype t where t.userId = sys_useraccount.userId) typeName
+    from sys_useraccount left join sys_userInfo on sys_useraccount.userId = sys_userInfo.userId
+    where account = #{account}
+  </select>
+
+  <select id="queryUserAccountCount" resultType="java.lang.Integer">
+    select
+    count(1)
+    from sys_useraccount left join sys_userInfo on sys_useraccount.userId = sys_userInfo.userId
+    <include refid="sql_where" />
+  </select>
+
+  <select id="queryUserAccount" resultMap="userAccountDtoResultMap">
+    select
+    <include refid="sql_column" />,
+    (select GROUP_CONCAT(t.userType order by t.id) from sys_useraccounttype t where t.userId = sys_useraccount.userId) userType,
+    (select GROUP_CONCAT(t.typeName order by t.id) from sys_useraccounttype t where t.userId = sys_useraccount.userId) typeName
+    from sys_useraccount left join sys_userInfo on sys_useraccount.userId = sys_userInfo.userId
+    <include refid="sql_where" />
+    order by
+    <choose>
+      <when test="s_orderBy != null and s_orderBy != ''">${s_orderBy}</when>
+      <otherwise>sys_useraccount.userId</otherwise>
+    </choose>
+    <if test="s_orderType != null and s_orderType != ''">${s_orderType}</if>
+    <if test="pageSize != null and startIndex != null">
+      limit #{startIndex}, #{pageSize}
+    </if>
+  </select>
+	
+	<resultMap id="userAccountTypeResultMap" type="com.star.truffle.module.user.domain.UserAccountType">
+    <result column="userId" property="userId" />
+    <result column="userType" property="userType" />
+    <result column="typeName" property="typeName" />
+  </resultMap>
+  
+  <select id="queryUserAccountType" resultMap="userAccountTypeResultMap">
+    select
+    	userId, userType, typeName
+    from sys_useraccounttype where userId = #{userId}
+  </select>
+  
+  <select id="getUserAccountType" resultType="com.star.truffle.module.user.domain.UserAccountType">
+    select
+    	userId, userType, typeName
+    from sys_useraccounttype where userId = #{userId} and userType = #{userType}
+  </select>
+</mapper>

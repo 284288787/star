@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.member.dao.write.MemberWriteDao">
+  <insert id="saveMember" useGeneratedKeys="true" keyProperty="memberId" parameterType="com.star.truffle.module.member.domain.Member">
+    insert into member_info(member_id, head, name, mobile, open_id, create_time, state)
+    values(#{memberId}, #{head}, #{name}, #{mobile}, #{openId}, #{createTime}, #{state})
+  </insert>
+
+  <insert id="batchSaveMember" parameterType="java.util.List">
+    insert into member_info(member_id, head, name, mobile, open_id, create_time, state)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.memberId}, #{item.head}, #{item.name}, #{item.mobile}, #{item.openId}, #{item.createTime}, #{item.state})
+    </foreach>
+  </insert>
+
+  <update id="updateMember" parameterType="com.star.truffle.module.member.dto.req.MemberRequestDto">
+    update member_info
+    <trim prefix="set" suffixOverrides=",">
+      <if test="head != null and head != ''">head = #{head},</if>
+      <if test="name != null and name != ''">name = #{name},</if>
+      <if test="mobile != null and mobile != ''">mobile = #{mobile},</if>
+      <if test="openId != null and openId != ''">open_id = #{openId},</if>
+      <if test="createTime != null">create_time = #{createTime},</if>
+      <if test="state != null">state = #{state},</if>
+    </trim>
+    where member_id = #{memberId}
+  </update>
+
+  <delete id="deleteMember" parameterType="java.lang.Long">
+    delete from member_info where member_id = #{memberId}
+  </delete>
+
+  <resultMap id="memberResponseDtoResultMap" type="com.star.truffle.module.member.dto.res.MemberResponseDto">
+    <result column="member_id" property="memberId" />
+    <result column="head" property="head" />
+    <result column="name" property="name" />
+    <result column="mobile" property="mobile" />
+    <result column="open_id" property="openId" />
+    <result column="create_time" property="createTime" />
+    <result column="state" property="state" />
+  </resultMap>
+
+  <sql id="sql_column">
+    member_id, head, name, mobile, open_id, create_time, state
+  </sql>
+
+  <select id="getMember" resultType="com.star.truffle.module.member.dto.res.MemberResponseDto">
+    select
+    <include refid="sql_column" />
+    from member_info
+    where member_id = #{memberId}
+  </select>
+
+</mapper>

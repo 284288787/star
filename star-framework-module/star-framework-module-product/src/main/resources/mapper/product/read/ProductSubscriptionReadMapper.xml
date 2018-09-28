@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.product.dao.read.ProductSubscriptionReadDao">
+  <resultMap id="productSubscriptionResponseDtoResultMap" type="com.star.truffle.module.product.dto.res.ProductSubscriptionResponseDto">
+    <result column="id" property="id" />
+    <result column="product_id" property="productId" />
+    <result column="member_id" property="memberId" />
+    <result column="create_time" property="createTime" />
+    <result column="name" property="name" />
+    <result column="mobile" property="mobile" />
+    <result column="head" property="head" />
+    <result column="title" property="title" />
+  </resultMap>
+
+  <sql id="sql_column">
+    id, product_subscription.product_id, m.member_id, product_subscription.create_time,
+    m.head, m.`name`, m.mobile, p.title
+  </sql>
+
+  <sql id="sql_where">
+    <trim prefix="WHERE" prefixOverrides="AND | OR">
+      <if test="id != null">
+        and id = #{id}
+      </if>
+    </trim>
+  </sql>
+
+  <select id="getProductSubscription" resultType="com.star.truffle.module.product.dto.res.ProductSubscriptionResponseDto">
+    select
+    <include refid="sql_column" />
+    from product_subscription
+    inner join member_info m on m.member_id = product_subscription.member_id
+    where id = #{id}
+  </select>
+
+  <select id="queryProductSubscription" resultMap="productSubscriptionResponseDtoResultMap">
+    select
+    <include refid="sql_column" />
+    from product_subscription
+    inner join member_info m on m.member_id = product_subscription.member_id
+    inner join product p on p.product_id = product_subscription.product_id
+    <include refid="sql_where" />
+    order by
+    <choose>
+      <when test="pager != null and pager.orderBy != null and pager.orderBy != ''">${pager.orderBy}</when>
+      <otherwise>id</otherwise>
+    </choose>
+    <if test="pager != null and pager.orderType != null and pager.orderType != ''">${pager.orderType}</if>
+    <if test="pager != null and pager.pageSize!=null and pager.startIndex!=null">
+      limit #{pager.startIndex}, #{pager.pageSize}
+    </if>
+  </select>
+
+  <select id="queryProductSubscriptionCount" resultType="java.lang.Long">
+    select
+    count(1)
+    from product_subscription
+    inner join member_info m on m.member_id = product_subscription.member_id
+    <include refid="sql_where" />
+  </select>
+</mapper>

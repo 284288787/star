@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.star.truffle</groupId>
+  <artifactId>star-framework-build</artifactId>
+  <packaging>pom</packaging>
+  <version>0.1.2-SNAPSHOT</version>
+  <name>star-framework-build</name>
+  <description>star-framework-build</description>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <main.basedir>${basedir}</main.basedir>
+    <revision>0.1.2-SNAPSHOT</revision>
+  </properties>
+  <profiles>
+    <profile>
+      <id>default</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <modules>
+        <module>star-framework-core</module>
+        <module>star-framework-dependencies</module>
+        <module>star-framework-starters</module>
+        <module>star-framework-parent</module>
+      </modules>
+    </profile>
+    <profile>
+      <id>sample</id>
+      <!-- <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation> -->
+      <modules>
+        <module>star-framework-samples</module>
+      </modules>
+    </profile>
+  </profiles>
+  <repositories>
+    <repository>
+      <id>maven-public</id>
+      <url>http://local.cnhnkj.cn:8081/repository/maven-public/</url>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+  
+  <distributionManagement>
+    <repository>
+      <id>releases</id>
+      <name>releases</name>
+      <url>http://local.cnhnkj.cn:8081/repository/maven-releases/</url>
+    </repository>
+    <snapshotRepository>
+      <id>snapshots</id>
+      <name>snapshots</name>
+      <url>http://local.cnhnkj.cn:8081/repository/maven-snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
+</project>

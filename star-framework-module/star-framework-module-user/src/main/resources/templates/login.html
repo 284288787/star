@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title th:text="${buiProperties.systemTitle}">登录</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/login.css}" />
+</head>
+<body>
+	<form method="post" id="loginForm" action="/j_spring_security_check" th:action="@{/j_spring_security_check}">
+		<div><label for="username">手机:</label><input type="text" class="placeholder" maxlength="11" id="j_username" name="j_username" placeholder="手机号"></div>
+		<div><label for="password">密码:</label><input type="password" class="placeholder" maxlength="32" id="j_password" name="j_password" placeholder="密码"></div>
+		<div><input type="checkbox" name="remember-me" id="remember-me" /><label for="remember-me">记住我</label></div>
+		<button type="submit" id="enterBtn">登   录</button><br/><br/>
+		<label style="color:red" th:if="${param.error}" th:text="${session.SPRING_SECURITY_LAST_EXCEPTION.message}">123</label>
+	</form>
+</body>
+</html>

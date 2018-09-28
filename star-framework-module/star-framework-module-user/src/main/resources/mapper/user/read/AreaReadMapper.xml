@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.user.dao.read.AreaReadDao">
+  <resultMap id="areaResultMap" type="com.star.truffle.module.user.domain.Area">
+    <result column="areaId" property="areaId" />
+    <result column="parentId" property="parentId" />
+    <result column="code" property="code" />
+    <result column="type" property="type" />
+    <result column="status" property="status" />
+    <result column="shortName" property="shortName" />
+    <result column="areaName" property="areaName" />
+    <result column="pinyin" property="pinyin" />
+    <result column="py" property="py" />
+    <result column="marker" property="marker" />
+    <result column="longitude" property="longitude" />
+    <result column="latitude" property="latitude" />
+  </resultMap>
+
+  <sql id="sql_column">
+    areaId,parentId,code,type,status,shortName,areaName,pinyin,py,marker,longitude,latitude
+  </sql>
+
+  <sql id="sql_where">
+    <trim prefix="WHERE" prefixOverrides="AND | OR">
+      <if test="areaId != null">
+        and areaId = #{areaId}
+      </if>
+      <if test="parentId != null">
+        and parentId = #{parentId}
+      </if>
+      <if test="code != null">
+        and code = #{code}
+      </if>
+      <if test="type != null">
+        and type = #{type}
+      </if>
+      <if test="status != null">
+        and status = #{status}
+      </if>
+      <if test="areaName != null and areaName != ''">
+        and areaName like '${areaName}%'
+      </if>
+      <if test="pinyin != null and pinyin != ''">
+        and pinyin like concat(#{pinyin},'%')
+      </if>
+    </trim>
+  </sql>
+
+  <select id="getById" resultType="com.star.truffle.module.user.domain.Area">
+    select
+    <include refid="sql_column" />
+    from sys_area
+    where areaId = #{areaId}
+  </select>
+
+  <select id="queryAreaCount" resultType="java.lang.Long">
+    select
+    count(1)
+    from sys_area
+    <include refid="sql_where" />
+  </select>
+  
+  <select id="queryArea" resultMap="areaResultMap">
+    select
+    <include refid="sql_column" />
+    from sys_area
+    <include refid="sql_where" />
+    order by
+    <choose>
+      <when test="s_orderBy != null and s_orderBy != ''">${s_orderBy}</when>
+      <otherwise>parentId, `status` desc, py</otherwise>
+    </choose>
+    <if test="s_orderType != null and s_orderType != ''">${s_orderType}</if>
+    <if test="pageSize != null and startIndex != null">
+      limit #{startIndex}, #{pageSize}
+    </if>
+  </select>
+
+</mapper>

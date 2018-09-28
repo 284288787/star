@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.product.dao.write.DistributionRegionWriteDao">
+  <insert id="saveDistributionRegion" useGeneratedKeys="true" keyProperty="regionId" parameterType="com.star.truffle.module.product.domain.DistributionRegion">
+    insert into distribution_region(region_id, py, `name`, province_id, city_id, area_id, town_id, state, create_time, update_time, fans_num, sold_num)
+    values(#{regionId}, #{py}, #{name}, #{provinceId}, #{cityId}, #{areaId}, #{townId}, #{state}, #{createTime}, #{updateTime}, #{fansNum}, #{soldNum})
+  </insert>
+
+  <insert id="batchSaveDistributionRegion" parameterType="java.util.List">
+    insert into distribution_region(region_id, py, `name`, province_id, city_id, area_id, town_id, state, create_time, update_time, fans_num, sold_num)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.regionId}, #{item.py}, #{item.name}, #{item.provinceId}, #{item.cityId}, #{item.areaId}, #{item.townId}, #{item.state}, #{item.createTime}, #{item.updateTime}, #{item.fansNum}, #{item.soldNum})
+    </foreach>
+  </insert>
+
+  <update id="updateDistributionRegion" parameterType="com.star.truffle.module.product.dto.req.DistributionRegionRequestDto">
+    update distribution_region
+    <trim prefix="set" suffixOverrides=",">
+      <if test="name != null and name != ''">name = #{name},</if>
+      <if test="py != null and py != ''">py = #{py},</if>
+      <if test="provinceId != null">province_id = #{provinceId},</if>
+      <if test="cityId != null">city_id = #{cityId},</if>
+      <if test="areaId != null">area_id = #{areaId},</if>
+      <if test="townId != null">town_id = #{townId},</if>
+      <if test="state != null">state = #{state},</if>
+      <if test="updateTime != null">update_time = #{updateTime},</if>
+      <if test="fansNum != null">fans_num = #{fansNum},</if>
+      <if test="soldNum != null">sold_num = #{soldNum},</if>
+    </trim>
+    where region_id = #{regionId}
+  </update>
+
+  <delete id="deleteDistributionRegion" parameterType="java.lang.Long">
+    delete from distribution_region where region_id = #{regionId}
+  </delete>
+
+  <resultMap id="distributionRegionResponseDtoResultMap" type="com.star.truffle.module.product.dto.res.DistributionRegionResponseDto">
+    <result column="region_id" property="regionId" />
+    <result column="name" property="name" />
+    <result column="py" property="py" />
+    <result column="province_id" property="provinceId" />
+    <result column="city_id" property="cityId" />
+    <result column="area_id" property="areaId" />
+    <result column="town_id" property="townId" />
+    <result column="state" property="state" />
+    <result column="create_time" property="createTime" />
+    <result column="update_time" property="updateTime" />
+    <result column="fans_num" property="fansNum" />
+    <result column="sold_num" property="soldNum" />
+    <result column="provinceName" property="provinceName" />
+    <result column="cityName" property="cityName" />
+    <result column="areaName" property="areaName" />
+    <result column="townName" property="townName" />
+  </resultMap>
+
+  <sql id="sql_column">
+    region_id, py, `name`, province_id, city_id, area_id, town_id, state, create_time, update_time, fans_num, sold_num,
+    (select a.areaName from sys_area a where a.areaId = distribution_region.province_id) provinceName,
+    (select a.areaName from sys_area a where a.areaId = distribution_region.city_id) cityName,
+    (select a.areaName from sys_area a where a.areaId = distribution_region.area_id) areaName,
+    (select a.areaName from sys_area a where a.areaId = distribution_region.town_id) townName
+  </sql>
+
+  <select id="getDistributionRegion" resultType="com.star.truffle.module.product.dto.res.DistributionRegionResponseDto">
+    select
+    <include refid="sql_column" />
+    from distribution_region
+    where region_id = #{regionId}
+  </select>
+
+</mapper>

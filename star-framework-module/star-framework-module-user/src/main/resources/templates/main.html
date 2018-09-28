@@ -1,0 +1,56 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4" xmlns:star="http://star">
+<head>
+<title th:text="${buiProperties.systemTitle}">天山折梅手</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="/bui/assets/css/dpl-min.css" rel="stylesheet" type="text/css" />
+<link href="/bui/assets/css/bui-min.css" rel="stylesheet" type="text/css" />
+<link href="/bui/assets/css/main-min.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/artDialog/skins/simple-star.css}" />
+</head>
+<body>
+	<div class="header">
+		<div class="dl-title">
+			<span class="lp-title-port" th:text="${buiProperties.systemTitle}">天山折梅手</span>
+		</div>
+		<div class="dl-log">
+			欢迎您，<span th:each="user: ${starUserInfo.userInfos}"><span class="dl-log-user" th:if="${user.userType=='userInfoService'}" th:text="${(user.userInfo == null || user.userInfo.name == null) ? starUserInfo.username : user.userInfo.name}">未登录</span></span>
+			<a star:authorize-uri="/changeMinePass" href="javascript: changeMinePass();" title="修改密码" class="dl-log-quit">[修改密码]</a>
+			<a href="/logout" title="退出系统" class="dl-log-quit">[退出]</a>
+		</div>
+	</div>
+	<div class="content">
+		<div class="dl-main-nav">
+			<ul id="J_Nav" class="nav-list ks-clear">
+				<li class="nav-item " th:classappend="${item.selected ? 'dl-selected': ''}" th:each="item: ${starUserInfo.navMenus}"><div class="nav-item-inner" th:classappend="${item.icoCls}" th:text="${item.name}"></div></li>
+			</ul>
+		</div>
+		<ul id="J_NavContent" class="dl-tab-conten"></ul>
+	</div>
+	<script type="text/javascript" src="/bui/assets/js/jquery-1.8.1.min.js"></script>
+	<script type="text/javascript" src="/bui/assets/js/bui.js"></script>
+	<script type="text/javascript" src="/bui/assets/js/config.js"></script>
+	<script type="text/javascript" th:src="@{/webjars/artDialog/js/jquery.artDialog.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/artDialog/js/iframeTools.js}"></script>
+	<script type="text/javascript" th:inline="javascript">
+		BUI.use('common/main', function() {
+			new PageUtil.MainPage({
+				modulesConfig : /*[[${starUserInfo.menu}]]*/ '[{}]'
+			});
+		});
+		function changeMinePass(){
+			artDialog.open('/common/mgr/userAccount/changeMinePass',{
+				title: "修改登录密码",
+				width : '456px',
+				height: '330px',
+				drag:true,
+				resize:true,
+				lock:true/* ,
+				close:function(){
+					document.location.reload();
+				} */
+			});
+		}
+	</script>
+</body>
+</html>

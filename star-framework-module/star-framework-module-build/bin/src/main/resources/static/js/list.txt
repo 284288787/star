@@ -1,0 +1,50 @@
+var basePath = "/";
+var ${entityNameVar}Handle = new ListHandle({
+  basePath: basePath,
+  tableId: '#grid-table',
+  pagerId: '#grid-pager',
+  formId: '#queryForm',
+  entityName: '${title}',
+  winWidth: '${winWidth}',
+  winHeight: '${winHeight}',
+  primaryKey: '${primaryKey}',
+  urls:{
+    list: basePath+'${entityNameVar}/list',
+    addBefore: basePath+'common/mgr/${entityNameVar}/add${entityName}',
+    editBefore: basePath+'${entityNameVar}/editBefore',
+    enabled: basePath+'${entityNameVar}/enabled',
+    disabled: basePath+'${entityNameVar}/disabled',
+    deleted: basePath+'${entityNameVar}/deleted',
+  }
+},{});
+$(function(){
+  var colNames = [<#list fields as field>'${field.caption}', </#list>'操作'];
+  var colModel = [
+    <#list fields as field>
+    {name: '${field.javaName}', index: '${field.dsName}', width: ${field.fieldList.width}, align: "${field.fieldList.align}"<#if field.primaryKey>, formatter: function(cellvalue, options, rowObject){
+      return cellvalue.toFixed(0);
+    }</#if><#if field.fieldList.inputType.name() == 'select'>, formatter: 'select', editoptions: ${field.fieldList.options}</#if><#if field.fieldList.inputType.name() == 'date'>, formatter:'date', formatoptions: {newformat:'${field.fieldList.pattern}'}</#if>}, 
+    </#list>
+    {align: "center", editable: false, sortable: false, formatter: function(cellvalue, options, rowObject){
+      var temp = '';<#if entity.btnEdit>
+      if(hasAuthorize('${entityNameVar}-editBefore')){
+        temp += '<a class="linetaga" href="javascript: ${entityNameVar}Handle.edit(\'' + rowObject.${primaryKey}.toFixed(0) + '\');" >编辑</a>';
+      }</#if><#if entity.btnEnabled>
+      if(rowObject.enabled==1){
+        if(hasAuthorize('${entityNameVar}-disabled')){
+          temp += '<a class="linetaga" href="javascript: ${entityNameVar}Handle.disabled(\'' + rowObject.${primaryKey}.toFixed(0) + '\');" >禁用</a>';
+        }
+      }else{
+        if(hasAuthorize('${entityNameVar}-enabled')){
+          temp += '<a class="linetaga" href="javascript: ${entityNameVar}Handle.enabled(\'' + rowObject.${primaryKey}.toFixed(0) + '\');" >启用</a>';
+        }
+      }</#if>
+      return temp;
+    }}
+  ];
+  var rowList = [10, 20, 30, 50];
+  var rownumbers = true;
+  var multiselect = true;
+  var config={caption: "${title}列表", colNames: colNames, colModel: colModel, rowList: rowList, rownumbers: rownumbers, multiselect: multiselect};
+  ${entityNameVar}Handle.init(config);
+});

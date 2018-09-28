@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>订单详情</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jquery-ui/jquery-ui.min.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jqGrid/css/ui.jqgrid.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/artDialog/skins/simple-star.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/buttons.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/pageList.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/editEntityTable.css}" />
+</head>
+<body>
+  <div class="edit-container">
+     <table class="gy_table_view">
+       <tr>
+         <td>订单状态：</td>
+         <td th:text="${{1:'待付款',2:'待提货',3:'已提货',4:'已退货',5:'已删除'}[orderResponseDto.state]}"></td>
+         <td>订单编号：</td>
+         <td th:text="${orderResponseDto.orderCode}"></td>
+       </tr>
+       <tr>
+       	 <td>总金额：</td>
+         <td th:text="${orderResponseDto.totalMoney / 100.0}"></td>
+         <td>总提成：</td>
+         <td th:text="${orderResponseDto.totalBrokerage / 100.0}"></td>
+       </tr>
+       <tr>
+       	 <td>分销区域：</td>
+         <td th:text="${orderResponseDto.regionName}"></td>
+         <td>分销商：</td>
+         <td th:text="${orderResponseDto.distributorName}"></td>
+       </tr>
+     </table>
+     <div style="width:90%; margin: 0 auto 5px auto;">
+     	<table id="grid-table"></table>
+     </div>
+  </div>
+  <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+  <script type="text/javascript" th:src="@{/webjars/jqGrid/js/jquery.jqGrid.js}"></script>
+  <script type="text/javascript" th:src="@{/webjars/jqGrid/js/i18n/grid.locale-cn.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/artDialog/js/jquery.artDialog.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/artDialog/js/iframeTools.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/star/js/star.list.comm.js}"></script>
+	<script type="text/javascript" th:inline="javascript">
+	var basePath = "/";
+	var orderDetailHandle = new ListHandle({
+	  basePath: basePath,
+	  tableId: '#grid-table',
+	  pagerId: '#grid-pager',
+	  formId: '#queryForm',
+	  entityName: '订单商品列表',
+	  winWidth: '900px',
+	  winHeight: '700px',
+	  primaryKey: 'orderId',
+	  urls:{
+	    list: basePath+'order/listDetails?orderId='+[[${orderResponseDto.orderId}]],
+	  }
+	},{});
+	$(function(){
+		  var colNames = [ 'productId', '供应标题', '供应原价', '供应售价', '单件提成', '购买数量', '总价', '总提成', '提货时间'];
+		  var colModel = [
+		    {name: 'productId', index: 'productId', width: 50, align: "center"}, 
+		    {name: 'title', index: 'title', align: "center"}, 
+		    {name: 'originalPrice', index: 'originalPrice', width: 50, align: "center", formatter: function(cellvalue, options, rowObject){
+		        return (cellvalue / 100.0).toFixed(2);
+		      }}, 
+		    {name: 'price', index: 'price', width: 50, align: "center", formatter: function(cellvalue, options, rowObject){
+		        return (cellvalue / 100.0).toFixed(2);
+		    }}, 
+		    {name: 'brokerage', index: 'brokerage', width: 50, align: "center", formatter: function(cellvalue, options, rowObject){
+		        return (cellvalue / 100.0).toFixed(2);
+		    }}, 
+		    {name: 'count', index: 'count', width: 50, align: "center"}, 
+		    {name: 'price', index: 'price', width: 50, align: "center", formatter: function(cellvalue, options, rowObject){
+		        return (cellvalue / 100.0 * rowObject.count).toFixed(2);
+		    }}, 
+		    {name: 'brokerage', index: 'brokerage', width: 50, align: "center", formatter: function(cellvalue, options, rowObject){
+		        return (cellvalue / 100.0 * rowObject.count).toFixed(2);
+		    }}, 
+		    {name: 'pickupTime', index: 'pickupTime', width: 50, align: "center", formatter:'date', formatoptions: {newformat:'Y-m-d H:i:s'}}, 
+		  ];
+		  var rowList = [10, 20, 30, 50];
+		  var rownumbers = true;
+		  var multiselect = false;
+		  var config={caption: "订单商品列表", colNames: colNames, colModel: colModel, rowList: rowList, rownumbers: rownumbers, multiselect: multiselect};
+		  setTimeout(function(){
+			  orderDetailHandle.init(config);
+		  }, 120);
+		});
+	</script>
+</body>
+</html>

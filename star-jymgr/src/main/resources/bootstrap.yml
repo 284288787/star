@@ -1,0 +1,26 @@
+server:
+  port: 8080
+  error:
+    whitelabel:
+      enabled: false
+spring:
+  mvc:
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
+  profiles:
+    active: test
+  application:
+    name: star-jymgr
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML5
+    encoding: UTF-8
+    servlet.content-type: text/html
+eureka:
+  client:
+    registry-fetch-interval-seconds: 20
+    serviceUrl:
+      defaultZone: http://10.10.18.95:1111/eureka/,http://10.10.18.96:1111/eureka/

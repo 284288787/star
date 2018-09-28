@@ -1,0 +1,21 @@
+server:
+  port: {port}
+  error:
+    whitelabel:
+      enabled: false
+spring:
+  mvc:
+    throw-exception-if-no-handler-found: true
+  resources:
+    add-mappings: false
+  profiles:
+    active: test
+  application:
+    name: {projectName}
+  thymeleaf:
+    cache: false
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML5
+    encoding: UTF-8
+    content-type: text/html

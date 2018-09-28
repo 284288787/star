@@ -1,0 +1,33 @@
+.search-container{
+	margin: 0 0 12px;
+	padding-bottom: 10px;
+	border-bottom: 1px dotted #e2e2e2;
+}
+.search-container span{
+	margin-right: 10px;
+}
+.search-container span input{
+	height:20px;
+	padding-left:3px;
+}
+.search-container span select{
+	height:26px;
+}
+.data-container .btnGroup{
+	margin:12px 0;
+}
+.linetaga{
+    text-decoration: none;
+    color: green !important;
+    margin-left: 15px;
+}
+.listBtnsSpan{
+	text-align:left;
+	padding-left:10px;
+}
+.alignCenter{
+  text-align: center;
+}
+#queryForm span{
+	display:inline-block
+}

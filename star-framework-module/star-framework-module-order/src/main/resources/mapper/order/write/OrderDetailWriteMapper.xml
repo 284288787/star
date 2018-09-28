@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.order.dao.write.OrderDetailWriteDao">
+
+  <insert id="batchSaveOrderDetail" parameterType="java.util.List">
+    insert into order_detail(order_id, product_id, title, main_picture_url, original_price, price, brokerage, pickup_time, specification, count, product_info)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.orderId}, #{item.productId}, #{item.title}, #{item.mainPictureUrl}, #{item.originalPrice}, #{item.price}, #{item.brokerage}, #{item.pickupTime}, #{item.specification}, #{item.count}, #{item.productInfo})
+    </foreach>
+  </insert>
+</mapper>

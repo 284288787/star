@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.product.dao.write.ProductWriteDao">
+  <insert id="saveProduct" useGeneratedKeys="true" keyProperty="productId" parameterType="com.star.truffle.module.product.domain.Product">
+    insert into product(product_id, title, subtitle, tag, presell_time, off_shelf_time, pickup_time, state, original_price, price, supplier, brand, specification, origin_place, description, subscribers, create_time, create_user, update_time, update_user, brokerage_type, brokerage_value)
+    values(#{productId}, #{title}, #{subtitle}, #{tag}, #{presellTime}, #{offShelfTime}, #{pickupTime}, #{state}, #{originalPrice}, #{price}, #{supplier}, #{brand}, #{specification}, #{originPlace}, #{description}, #{subscribers}, #{createTime}, #{createUser}, #{updateTime}, #{updateUser}, #{brokerageType}, #{brokerageValue})
+  </insert>
+
+  <insert id="batchSaveProduct" parameterType="java.util.List">
+    insert into product(product_id, title, subtitle, tag, presell_time, off_shelf_time, pickup_time, state, original_price, price, supplier, brand, specification, origin_place, description, subscribers, create_time, create_user, update_time, update_user, brokerage_type, brokerage_value)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.productId}, #{item.title}, #{item.subtitle}, #{item.tag}, #{item.presellTime}, #{item.offShelfTime}, #{item.pickupTime}, #{item.state}, #{item.originalPrice}, #{item.price}, #{item.supplier}, #{item.brand}, #{item.specification}, #{item.originPlace}, #{item.description}, #{item.subscribers}, #{item.createTime}, #{item.createUser}, #{item.updateTime}, #{item.updateUser}, #{item.brokerageType}, #{item.brokerageValue})
+    </foreach>
+  </insert>
+
+  <update id="updateProduct" parameterType="com.star.truffle.module.product.dto.req.ProductRequestDto">
+    update product
+    <trim prefix="set" suffixOverrides=",">
+      <if test="title != null and title != ''">title = #{title},</if>
+      <if test="subtitle != null and subtitle != ''">subtitle = #{subtitle},</if>
+      <if test="tag != null and tag != ''">tag = #{tag},</if>
+      <if test="presellTime != null">presell_time = #{presellTime},</if>
+      <if test="offShelfTime != null">off_shelf_time = #{offShelfTime},</if>
+      <if test="pickupTime != null">pickup_time = #{pickupTime},</if>
+      <if test="state != null">state = #{state},</if>
+      <if test="originalPrice != null">original_price = #{originalPrice},</if>
+      <if test="price != null">price = #{price},</if>
+      <if test="supplier != null and supplier != ''">supplier = #{supplier},</if>
+      <if test="brand != null and brand != ''">brand = #{brand},</if>
+      <if test="specification != null and specification != ''">specification = #{specification},</if>
+      <if test="originPlace != null and originPlace != ''">origin_place = #{originPlace},</if>
+      <if test="description != null and description != ''">description = #{description},</if>
+      <if test="subscribers != null">subscribers = #{subscribers},</if>
+      <if test="createTime != null">create_time = #{createTime},</if>
+      <if test="createUser != null and createUser != ''">create_user = #{createUser},</if>
+      <if test="updateTime != null">update_time = #{updateTime},</if>
+      <if test="updateUser != null and updateUser != ''">update_user = #{updateUser},</if>
+      <if test="brokerageType != null">brokerage_type = #{brokerageType},</if>
+      <if test="brokerageValue != null">brokerage_value = #{brokerageValue},</if>
+    </trim>
+    where product_id = #{productId}
+  </update>
+
+  <delete id="deleteProduct" parameterType="java.lang.Long">
+    delete from product where product_id = #{productId}
+  </delete>
+
+  <resultMap id="productResponseDtoResultMap" type="com.star.truffle.module.product.dto.res.ProductResponseDto">
+    <result column="product_id" property="productId" />
+    <result column="title" property="title" />
+    <result column="subtitle" property="subtitle" />
+    <result column="tag" property="tag" />
+    <result column="presell_time" property="presellTime" />
+    <result column="off_shelf_time" property="offShelfTime" />
+    <result column="pickup_time" property="pickupTime" />
+    <result column="state" property="state" />
+    <result column="original_price" property="originalPrice" />
+    <result column="price" property="price" />
+    <result column="supplier" property="supplier" />
+    <result column="brand" property="brand" />
+    <result column="specification" property="specification" />
+    <result column="origin_place" property="originPlace" />
+    <result column="description" property="description" />
+    <result column="subscribers" property="subscribers" />
+    <result column="create_time" property="createTime" />
+    <result column="create_user" property="createUser" />
+    <result column="update_time" property="updateTime" />
+    <result column="update_user" property="updateUser" />
+    <result column="brokerage_type" property="brokerageType" />
+    <result column="brokerage_value" property="brokerageValue" />
+  </resultMap>
+
+  <sql id="sql_column">
+    product.product_id, title, subtitle, tag, presell_time, off_shelf_time, pickup_time, state, original_price, price, supplier, brand, specification, origin_place, description, subscribers, create_time, create_user, update_time, update_user, brokerage_type, brokerage_value,
+    number_type, number, sold_number, type,
+    (select p.url from product_picture p where p.product_id = product.product_id and p.type = 1 limit 1) mainPictureUrl
+  </sql>
+
+  <select id="getProduct" resultType="com.star.truffle.module.product.dto.res.ProductResponseDto">
+    select
+    <include refid="sql_column" />
+    from product
+    inner join product_inventory i on product.product_id = i.product_id 
+    where product.product_id = #{productId}
+  </select>
+
+</mapper>

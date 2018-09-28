@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Excel导入</title>
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/artDialog/skins/simple-star.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/buttons.css}" />
+<style type="text/css">
+html, body{
+  margin:0;
+  padding:0
+}
+div{
+  font-size: 14px;
+}
+.head{
+  height: 40px;
+  line-height: 40px;
+  margin: 0px;
+  font-size: 14px;
+  background-color: #eeeeee;
+}
+.title{
+  height: 40px;
+  line-height: 40px;
+  margin: 5px 0px;
+  font-size: 14px;
+  font-weight: bold;
+  background-color: #eeeee0;
+}
+.title span:last-child{
+  float: right;
+  color: red;
+  padding-right:30px;
+}
+.btns{
+  padding-left:10px;
+}
+.result{
+  display:none;
+  height: 706px;
+  width: 100%;
+  background-color: #dfdfdf;
+}
+.gy_table{border-collapse:collapse;border-spacing:0;width:100%; margin:5px auto 8px auto; background:#fff; border:1px solid #d8d8d8;}
+.gy_table th{ padding:10px 0px;background:#eeeeee;}
+.gy_table td{ padding:10px 0px; text-align: center; border:1px solid #d8d8d8;}
+.info{
+  color: gray
+}
+</style>
+</head>
+<body>
+  <input type="button" class="button green" value="选择Excel文件" id="uploadExcelBtn">
+  <input type="checkbox" id="errorImport" checked disabled>有错误数据时，所有数据禁止导入？
+  <p class="info">导入结果，如果出现[导入被终止，存在异常数据]的提示，表示存在错误数据。红色标记出来的即为错误数据，鼠标指向红色标记可查看具体的错误信息</p>
+  <div style="display:non1e">
+    <div class="title">导入结果 <span class="btns">  </span> <span></span></div>
+  </div>
+  <script type="text/javascript" th:src="@{/webjars/star/js/jquery.min-1.11.3.js}"></script>
+  <script type="text/javascript" th:src="@{/webjars/star/js/star.utils.js}"></script>
+  <script type="text/javascript" th:src="@{/webjars/artDialog/js/jquery.artDialog.js}"></script>
+  <script type="text/javascript" th:src="@{/webjars/artDialog/js/iframeTools.source.js}"></script>
+  <script type="text/javascript">
+  $(function(){
+    var importHandle = "com.star.truffle.common.importdata.TestImport";//artDialog.data("importHandle");
+    new UtilsHandle({
+      basePath: "/",
+      uploadExcels: {uploadFileId: 'uploadFile', multiple: true, items: [{
+        uploadBtn: $('#uploadExcelBtn'), 
+        data: {'type': 'excel', 'handle': importHandle, 'errorImport': 1},
+        beforeSend: function(xhr){
+          $(".title span:not(.btns)").text("导入中...");
+        },
+        success: function (data, filenames) {
+          $(".title span:not(.btns)").text("");
+          $(".btns").html("");
+          $(".result", $(".title").parent()).remove();
+          if(data.code == 0){
+            for(var i in data.data){
+              var o = data.data[i];
+              for(var j in o){
+                var filename=o[j].filename;
+                var sheetName=o[j].sheetName;
+                var status= o[j].status;
+                var heads = o[j].heads;
+                var errorRecords = o[j].errorRecords;
+                var successRecords = o[j].successRecords;
+                var clr="green";
+                if(i==0){
+                  clr="yellow";
+                }
+                $(".btns").append('<input type="button" value="'+filename+'('+sheetName+')" class="fortable button '+clr+'">');
+                var html='<div class="result" data-for="'+filename+'('+sheetName+')">';
+                html+='  <table class="gy_table">';
+                html+='<tr>';
+                html+='<th>所在行</th>';
+                for(var k in heads){
+                  html+='<th>'+heads[k]+'</th>';
+                }
+                var bool = true;
+                html+='</tr>';
+                if(status==2){
+                  html+='<tr><td colspan="'+(heads.length+1)+'">导入完成</td></tr>';
+                  bool = false;
+                }else if(status==1){
+                  html+='<tr><td colspan="'+(heads.length+1)+'">导入失败，列数不匹配</td></tr>';
+                }else if(status==0){
+                  html+='<tr><td colspan="'+(heads.length+1)+'">导入失败，没有数据</td></tr>';
+                }else{
+                  if(errorRecords && errorRecords.length>0){
+                    html+=viewResult(errorRecords);
+                  }
+                }
+                if(bool)
+                  html+=viewResult(successRecords);
+                html+='</table></div>';
+                $(".title").parent().append(html);
+              }
+            }
+            $(".title").parent().show();
+            //$(".gy_table tr:not(:eq(0))").remove();
+            $(".fortable").click(function(){
+              var val=$(this).val();
+              $(".fortable").siblings().removeClass("yellow");
+              $(".fortable").siblings().addClass("green");
+              $(this).addClass("yellow");
+              $(".result").hide();
+              $(".result[data-for='"+val+"']").show();
+            });
+            $(".fortable:first").click();
+          }else{
+            artDialog.alert(data.msg);
+            return;
+          }
+        },
+        complete: function (data, filenames) {
+          
+        } 
+      }]}
+    });
+  });
+  function viewResult(list){
+    var html="";
+    for(var i in list){
+      html+="<tr>";
+      html+="<td>@hang@</td>";
+      for(var j in list[i]){
+        var temp = list[i][j];
+        if(temp.valid){
+          html+="<td>"+temp.sourceValue+"</td>";
+        }else{
+          html+="<td style='color:red' title='"+temp.desc+"'>"+temp.sourceValue+"</td>";
+        }
+        html = html.replace("@hang@", temp.rowNum);
+      }
+      html+="</tr>"
+    }
+    return html;
+  }
+</script>
+</body>
+</html>

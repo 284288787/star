@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.member.dao.read.DistributorReadDao">
+  <resultMap id="distributorResponseDtoResultMap" type="com.star.truffle.module.member.dto.res.DistributorResponseDto">
+    <result column="distributor_id" property="distributorId" />
+    <result column="head" property="head" />
+    <result column="name" property="name" />
+    <result column="shop_name" property="shopName" />
+    <result column="shop_code" property="shopCode" />
+    <result column="mobile" property="mobile" />
+    <result column="region_id" property="regionId" />
+    <result column="regionName" property="regionName" />
+    <result column="address" property="address" />
+    <result column="enabled" property="enabled" />
+    <result column="create_time" property="createTime" />
+    <result column="update_time" property="updateTime" />
+    <result column="open_id" property="openId" />
+    <result column="fans_num" property="fansNum" />
+    <result column="sold_num" property="soldNum" />
+    <result column="provinceName" property="provinceName" />
+    <result column="cityId" property="cityId" />
+    <result column="cityName" property="cityName" />
+    <result column="areaId" property="areaId" />
+    <result column="areaName" property="areaName" />
+    <result column="townId" property="townId" />
+    <result column="townName" property="townName" />
+    <result column="state" property="state" />
+  </resultMap>
+
+  <sql id="sql_column">
+    distributor_id, head, distributor.`name`, shop_name, shop_code, mobile, distributor.region_id, address, distributor.state, 
+    enabled, distributor.create_time, distributor.update_time, open_id, distributor.fans_num, 
+    distributor.sold_num, r.`name` regionName, r.`name` regionName, p.shortName provinceName , 
+    c.shortName cityName, a.shortName areaName, t.shortName townName,
+    p.areaId provinceId , c.areaId cityId, a.areaId areaId, t.areaId townId
+  </sql>
+
+  <sql id="sql_where">
+    <trim prefix="WHERE" prefixOverrides="AND | OR">
+      <if test="distributorId != null">
+        and distributor_id = #{distributorId}
+      </if>
+      <if test="name != null and name != ''">
+        and distributor.name = "%"#{name}"%"
+      </if>
+      <if test="shopName != null and shopName != ''">
+        and shop_name = "%"#{shopName}"%"
+      </if>
+      <if test="shopCode != null and shopCode != ''">
+        and shop_code = #{shopCode}
+      </if>
+      <if test="mobile != null and mobile != ''">
+        and mobile = #{mobile}
+      </if>
+      <if test="regionId != null">
+        and distributor.region_id = #{regionId}
+      </if>
+      <if test="provinceId != null">
+        and p.areaId = #{provinceId}
+      </if>
+      <if test="cityId != null">
+        and c.areaId = #{cityId}
+      </if>
+      <if test="areaId != null">
+        and a.areaId = #{areaId}
+      </if>
+      <if test="townId != null">
+        and t.areaId = #{townId}
+      </if>
+      <if test="enabled != null">
+        and enabled = #{enabled}
+      </if>
+    </trim>
+  </sql>
+
+  <select id="getDistributor" resultType="com.star.truffle.module.member.dto.res.DistributorResponseDto">
+    select
+    <include refid="sql_column" />
+    from distributor
+    inner join distribution_region r on r.region_id = distributor.region_id
+    INNER JOIN sys_area p on p.areaId = r.province_id
+    LEFT JOIN sys_area c on c.areaId = r.city_id
+    LEFT JOIN sys_area a on a.areaId = r.area_id
+    LEFT JOIN sys_area t on t.areaId = r.town_id
+    where distributor_id = #{distributorId}
+  </select>
+
+  <select id="getDistributorByOpenId" resultType="com.star.truffle.module.member.dto.res.DistributorResponseDto">
+    select
+    <include refid="sql_column" />
+    from distributor
+    inner join distribution_region r on r.region_id = distributor.region_id
+    INNER JOIN sys_area p on p.areaId = r.province_id
+    LEFT JOIN sys_area c on c.areaId = r.city_id
+    LEFT JOIN sys_area a on a.areaId = r.area_id
+    LEFT JOIN sys_area t on t.areaId = r.town_id
+    where open_id = #{openId}
+  </select>
+
+  <select id="queryDistributor" resultMap="distributorResponseDtoResultMap">
+    select
+    <include refid="sql_column" />
+    from distributor
+    inner join distribution_region r on r.region_id = distributor.region_id
+    INNER JOIN sys_area p on p.areaId = r.province_id
+    LEFT JOIN sys_area c on c.areaId = r.city_id
+    LEFT JOIN sys_area a on a.areaId = r.area_id
+    LEFT JOIN sys_area t on t.areaId = r.town_id
+    <include refid="sql_where" />
+    order by
+    <choose>
+      <when test="pager != null and pager.orderBy != null and pager.orderBy != ''">${pager.orderBy}</when>
+      <otherwise>distributor_id</otherwise>
+    </choose>
+    <if test="pager != null and pager.orderType != null and pager.orderType != ''">${pager.orderType}</if>
+    <if test="pager != null and pager.pageSize!=null and pager.startIndex!=null">
+      limit #{pager.startIndex}, #{pager.pageSize}
+    </if>
+  </select>
+
+  <select id="queryDistributorCount" resultType="java.lang.Long">
+    select
+    count(1)
+    from distributor
+    inner join distribution_region r on r.region_id = distributor.region_id
+    INNER JOIN sys_area p on p.areaId = r.province_id
+    LEFT JOIN sys_area c on c.areaId = r.city_id
+    LEFT JOIN sys_area a on a.areaId = r.area_id
+    LEFT JOIN sys_area t on t.areaId = r.town_id
+    <include refid="sql_where" />
+  </select>
+</mapper>
