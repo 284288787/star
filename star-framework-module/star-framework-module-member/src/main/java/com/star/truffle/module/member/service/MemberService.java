@@ -94,14 +94,14 @@ public class MemberService {
   }
 
   public MemberResponseDto getMemberByOpenId(String openId) {
-    MemberResponseDto memberResponseDto = this.memberCache.getMemberByOpenId(openId);
-    if (null == memberResponseDto) {
+    MemberResponseDto member = this.memberCache.getMemberByOpenId(openId);
+    if (null == member) {
       throw new StarServiceException(ApiCode.NO_EXISTS);
     }
-    if (memberResponseDto.getState() == LoginStateEnum.logout.getState()) {
+    if (member.getState() == LoginStateEnum.logout.getState()) {
       throw new StarServiceException(ApiCode.NO_LOGIN);
     }
-    return memberResponseDto;
+    return member;
   }
   
   public List<MemberResponseDto> queryMember(MemberRequestDto memberRequestDto) {
