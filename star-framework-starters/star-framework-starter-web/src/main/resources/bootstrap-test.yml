@@ -7,9 +7,6 @@ spring:
       #uri: http://localhost:7001
       #fail-fast: true
 eureka:
-  instance:
-    hostname: 47.105.38.227
-    home-page-url-path: ${server.servlet.context-path:}/
   client:
     serviceUrl:
       defaultZone: http://47.105.38.227:1111/eureka/
