@@ -23,6 +23,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.star.truffle.core.jackson.StarJson;
+import com.star.truffle.core.util.DateUtils;
 import com.star.truffle.core.web.ApiResult;
 
 import lombok.extern.slf4j.Slf4j;
@@ -61,7 +62,7 @@ public class RequestInfoAspect {
     }
     params.put("result", object);
     
-    log.info(starJson.obj2string(params));
+    log.info(DateUtils.formatTodayDateTime() + " -> " + starJson.obj2string(params));
     return object;
   }
   
