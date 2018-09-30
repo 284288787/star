@@ -187,7 +187,7 @@
     </dependency>
 
     <!--elastic job -->
-    <dependency>
+    <!-- <dependency>
       <groupId>com.dangdang</groupId>
       <artifactId>elastic-job-lite-core</artifactId>
       <optional>true</optional>
@@ -196,7 +196,7 @@
       <groupId>com.dangdang</groupId>
       <artifactId>elastic-job-lite-spring</artifactId>
       <optional>true</optional>
-    </dependency>
+    </dependency> -->
 
     <!-- security -->
     <dependency>
