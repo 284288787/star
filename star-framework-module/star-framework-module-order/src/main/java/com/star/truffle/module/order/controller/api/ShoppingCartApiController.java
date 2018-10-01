@@ -72,7 +72,7 @@ public class ShoppingCartApiController {
   @ApiImplicitParams({
     @ApiImplicitParam(name = "memberId", value = "用户Id", dataType = "Long", required = true, paramType = "query"),
     @ApiImplicitParam(name = "cartId", value = "购物车Id", dataType = "Long", required = true, paramType = "query"),
-    @ApiImplicitParam(name = "num", value = "数量", dataType = "int", required = true, paramType = "query"),
+    @ApiImplicitParam(name = "num", value = "数量 ", dataType = "int", required = true, paramType = "query"),
   })
   public ApiResult<Void> updateShoppingCart(@ApiIgnore ShoppingCartRequestDto shoppingCartRequestDto) {
     try {
