@@ -107,6 +107,7 @@ public class ShoppingCartApiController {
   @RequestMapping(value = "/deleteShoppingCart", method = RequestMethod.POST)
   @ApiOperation(value = "删除购物车", notes = "删除购物车", httpMethod = "POST", response = ApiResult.class)
   @ApiImplicitParams({
+    @ApiImplicitParam(name = "memberId", value = "用户Id", dataType = "Long", required = true, paramType = "query"),
     @ApiImplicitParam(name = "cartIds", value = "主键，多个逗号分隔", dataType = "String", required = true, paramType = "query")
   })
   public ApiResult<Void> deleteShoppingCart(String cartIds) {

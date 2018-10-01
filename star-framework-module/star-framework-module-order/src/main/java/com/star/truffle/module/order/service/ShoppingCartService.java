@@ -1,6 +1,7 @@
 /**create by framework at 2018年09月21日 15:21:35**/
 package com.star.truffle.module.order.service;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.star.truffle.core.StarServiceException;
 import com.star.truffle.core.web.ApiCode;
+import com.star.truffle.module.member.constant.EnabledEnum;
 import com.star.truffle.module.order.cache.ShoppingCartCache;
 import com.star.truffle.module.order.dto.req.ShoppingCartRequestDto;
 import com.star.truffle.module.order.dto.res.ShoppingCartResponseDto;
@@ -38,8 +40,28 @@ public class ShoppingCartService {
     if (product.getState() >= ProductEnum.offshelf.state()) {
       throw new StarServiceException(ApiCode.PARAM_ERROR, "供应已下架或已不存在");
     }
-    this.shoppingCartCache.saveShoppingCart(shoppingCart);
-    return shoppingCart.getCartId();
+    ShoppingCartRequestDto queryParam = new ShoppingCartRequestDto();
+    queryParam.setMemberId(shoppingCart.getMemberId());
+    queryParam.setProductId(shoppingCart.getProductId());
+    List<ShoppingCartResponseDto> list = this.shoppingCartCache.queryShoppingCart(queryParam);
+    Long cartId = null;
+    if (null != list && ! list.isEmpty()) {
+      ShoppingCartResponseDto cart = list.get(0);
+      ShoppingCartRequestDto shoppingCartRequestDto = new ShoppingCartRequestDto();
+      shoppingCartRequestDto.setCartId(cart.getCartId());
+      shoppingCartRequestDto.setNum(cart.getNum() + shoppingCart.getNum());
+      if (cart.getChecked() != EnabledEnum.enabled.val()) {
+        shoppingCartRequestDto.setChecked(EnabledEnum.enabled.val());
+      }
+      this.shoppingCartCache.updateShoppingCart(shoppingCartRequestDto);
+      cartId = cart.getCartId();
+    }else {
+      shoppingCart.setChecked(EnabledEnum.enabled.val());
+      shoppingCart.setCreateTime(new Date());
+      this.shoppingCartCache.saveShoppingCart(shoppingCart);
+      cartId = shoppingCart.getCartId();
+    }
+    return cartId;
   }
 
   public void updateShoppingCart(ShoppingCartRequestDto shoppingCartRequestDto) {
