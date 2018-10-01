@@ -19,4 +19,6 @@ public class ShoppingCartResponseDto extends ShoppingCart {
   private Integer price;
   // 商品规格 例如：1袋
   private String specification;
+  
+  private String mainPictureUrl;
 }

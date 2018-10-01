@@ -43,7 +43,8 @@
 
   <sql id="sql_column">
     cart_id, shopping_cart.product_id, member_id, num, checked, shopping_cart.create_time,
-    p.title, p.original_price, p.price, p.specification, p.state
+    p.title, p.original_price, p.price, p.specification, p.state,
+    (select pp.url from product_picture pp where pp.product_id = shopping_cart.product_id and pp.type = 1 limit 1) mainPictureUrl
   </sql>
 
   <select id="getShoppingCart" resultType="com.star.truffle.module.order.dto.res.ShoppingCartResponseDto">
