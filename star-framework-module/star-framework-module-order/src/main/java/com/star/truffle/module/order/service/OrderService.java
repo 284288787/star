@@ -81,6 +81,8 @@ public class OrderService {
       orderRequestDto.setDeliveryMobile(deliveryAddress.getMobile());
       orderRequestDto.setDespatchMoney(orderProperties.getDespatchMoney());
     }
+    Integer totalMoney = 0;
+    Integer totalBrokerage = 0;
     List<OrderDetail> details = orderRequestDto.getDetails();
     for (OrderDetail detail : details) {
       ProductResponseDto product = this.productService.getProduct(detail.getProductId());
@@ -95,7 +97,11 @@ public class OrderService {
       detail.setPickupTime(product.getPickupTime());
       detail.setSpecification(product.getSpecification());
       detail.setProductInfo(starJson.obj2string(product));
+      totalMoney += detail.getPrice() * detail.getCount();
+      totalBrokerage += detail.getBrokerage() * detail.getCount();
     }
+    orderRequestDto.setTotalMoney(totalMoney);
+    orderRequestDto.setTotalBrokerage(totalBrokerage);
     orderRequestDto.setRegionId(distributor.getRegionId());
     orderRequestDto.setShopAddress(distributor.getAddress());
     orderRequestDto.setShopName(distributor.getShopName());
@@ -108,6 +114,9 @@ public class OrderService {
     orderRequestDto.setCreateTime(new Date());
     OrderResponseDto orderResponseDto = this.orderCache.saveOrder(orderRequestDto);
     Long orderId = orderResponseDto.getOrderId();
+    for (OrderDetail orderDetail : details) {
+      orderDetail.setOrderId(orderId);
+    }
     this.orderDetailCache.saveOrderDetail(orderId, details);
     
     OrderRequestDto param = new OrderRequestDto();

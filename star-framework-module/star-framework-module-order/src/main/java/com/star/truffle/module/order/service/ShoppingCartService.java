@@ -11,9 +11,14 @@ import org.springframework.stereotype.Service;
 import com.star.truffle.core.StarServiceException;
 import com.star.truffle.core.web.ApiCode;
 import com.star.truffle.module.member.constant.EnabledEnum;
+import com.star.truffle.module.order.cache.DeliveryAddressCache;
 import com.star.truffle.module.order.cache.ShoppingCartCache;
+import com.star.truffle.module.order.dto.req.DeliveryAddressRequestDto;
 import com.star.truffle.module.order.dto.req.ShoppingCartRequestDto;
+import com.star.truffle.module.order.dto.res.DeliveryAddressResponseDto;
+import com.star.truffle.module.order.dto.res.EnterOrder;
 import com.star.truffle.module.order.dto.res.ShoppingCartResponseDto;
+import com.star.truffle.module.order.properties.OrderProperties;
 import com.star.truffle.module.product.constant.ProductEnum;
 import com.star.truffle.module.product.dto.res.ProductResponseDto;
 import com.star.truffle.module.product.service.ProductService;
@@ -25,6 +30,10 @@ public class ShoppingCartService {
   private ShoppingCartCache shoppingCartCache;
   @Autowired
   private ProductService productService;
+  @Autowired
+  private OrderProperties orderProperties;
+  @Autowired
+  private DeliveryAddressCache deliveryAddressCache;
 
   public Long saveShoppingCart(ShoppingCartRequestDto shoppingCart) {
     if (null == shoppingCart || ! shoppingCart.checkSaveData()) {
@@ -80,18 +89,24 @@ public class ShoppingCartService {
     this.shoppingCartCache.updateShoppingCart(shoppingCartRequestDto);
   }
   
-  public void updateShoppingCartChecked(ShoppingCartRequestDto shoppingCartRequestDto) {
-    if (null == shoppingCartRequestDto || null == shoppingCartRequestDto.getCartId()) {
+  public void updateShoppingCartChecked(Long memberId, String cartIds, int checked) {
+    if (null == memberId || StringUtils.isBlank(cartIds)) {
       throw new StarServiceException(ApiCode.PARAM_ERROR);
     }
-    ShoppingCartResponseDto cart = this.shoppingCartCache.getShoppingCart(shoppingCartRequestDto.getCartId());
-    if (null == cart) {
-      throw new StarServiceException(ApiCode.PARAM_ERROR, "信息不存在");
+    String[] ids = cartIds.split(",");
+    for (String id : ids) {
+      ShoppingCartResponseDto cart = this.shoppingCartCache.getShoppingCart(Long.parseLong(id));
+      if (null == cart) {
+        throw new StarServiceException(ApiCode.PARAM_ERROR, "信息不存在");
+      }
+      if (cart.getMemberId() != memberId.longValue()) {
+        throw new StarServiceException(ApiCode.PARAM_ERROR, "不能修改别人的购物车");
+      }
+      ShoppingCartRequestDto shoppingCartRequestDto = new ShoppingCartRequestDto();
+      shoppingCartRequestDto.setCartId(cart.getCartId());
+      shoppingCartRequestDto.setChecked(checked);
+      this.shoppingCartCache.updateShoppingCart(shoppingCartRequestDto);
     }
-    if (cart.getMemberId() != shoppingCartRequestDto.getMemberId().longValue()) {
-      throw new StarServiceException(ApiCode.PARAM_ERROR, "不能修改别人的购物车");
-    }
-    this.shoppingCartCache.updateShoppingCart(shoppingCartRequestDto);
   }
 
   public void deleteShoppingCart(Long cartId) {
@@ -123,6 +138,33 @@ public class ShoppingCartService {
 
   public Long queryShoppingCartCount(ShoppingCartRequestDto shoppingCartRequestDto) {
     return this.shoppingCartCache.queryShoppingCartCount(shoppingCartRequestDto);
+  }
+
+  public EnterOrder enterOrder(Long memberId) {
+    ShoppingCartRequestDto shoppingCartRequestDto = new ShoppingCartRequestDto();
+    shoppingCartRequestDto.setMemberId(memberId);
+    shoppingCartRequestDto.setChecked(EnabledEnum.enabled.val());
+    List<ShoppingCartResponseDto> products = this.shoppingCartCache.queryShoppingCart(shoppingCartRequestDto);
+    for (ShoppingCartResponseDto shoppingCartResponseDto : products) {
+      ProductResponseDto productResponseDto = this.productService.getProduct(shoppingCartResponseDto.getProductId());
+      if (null == productResponseDto) {
+        throw new StarServiceException(ApiCode.PARAM_ERROR, "商品不存在");
+      }
+      if (productResponseDto.getState() != ProductEnum.onshelf.state()) {
+        throw new StarServiceException(ApiCode.PARAM_ERROR, "商品现在已不能购买");
+      }
+    }
+    Integer despatchMoney = this.orderProperties.getDespatchMoney();
+    DeliveryAddressRequestDto deliveryAddressRequestDto = new DeliveryAddressRequestDto();
+    deliveryAddressRequestDto.setMemberId(memberId);
+    deliveryAddressRequestDto.setDef(EnabledEnum.enabled.val());
+    List<DeliveryAddressResponseDto> list = this.deliveryAddressCache.queryDeliveryAddress(deliveryAddressRequestDto);
+    DeliveryAddressResponseDto deliveryAddress = null;
+    if (null != list && ! list.isEmpty()) {
+      deliveryAddress = list.get(0);
+    }
+    EnterOrder enterOrder = new EnterOrder(despatchMoney, products, deliveryAddress);
+    return enterOrder;
   }
 
 }

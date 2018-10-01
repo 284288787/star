@@ -12,6 +12,7 @@ import com.star.truffle.core.StarServiceException;
 import com.star.truffle.core.web.ApiCode;
 import com.star.truffle.core.web.ApiResult;
 import com.star.truffle.module.order.dto.req.ShoppingCartRequestDto;
+import com.star.truffle.module.order.dto.res.EnterOrder;
 import com.star.truffle.module.order.dto.res.ShoppingCartResponseDto;
 import com.star.truffle.module.order.service.ShoppingCartService;
 
@@ -90,11 +91,12 @@ public class ShoppingCartApiController {
   @ApiOperation(value = "选中/不选中", notes = "选中/不选中", httpMethod = "POST", response = ApiResult.class)
   @ApiImplicitParams({
     @ApiImplicitParam(name = "memberId", value = "用户Id", dataType = "Long", required = true, paramType = "query"),
-    @ApiImplicitParam(name = "cartId", value = "购物车Id", dataType = "Long", required = true, paramType = "query"),
+    @ApiImplicitParam(name = "cartIds", value = "购物车Id", dataType = "String", required = true, paramType = "query"),
+    @ApiImplicitParam(name = "checked", value = "是否选中 1是 0否", dataType = "int", required = true, paramType = "query"),
   })
-  public ApiResult<Void> updateShoppingCartChecked(@ApiIgnore ShoppingCartRequestDto shoppingCartRequestDto) {
+  public ApiResult<Void> updateShoppingCartChecked(Long memberId, String cartIds, int checked) {
     try {
-      shoppingCartService.updateShoppingCartChecked(shoppingCartRequestDto);
+      shoppingCartService.updateShoppingCartChecked(memberId, cartIds, checked);
       return ApiResult.success();
     } catch (StarServiceException e) {
       return ApiResult.fail(e.getCode(), e.getMsg());
@@ -122,4 +124,20 @@ public class ShoppingCartApiController {
     }
   }
 
+  @RequestMapping(value = "/enterOrder", method = RequestMethod.POST)
+  @ApiOperation(value = "确认订单", notes = "确认订单", httpMethod = "POST", response = ApiResult.class)
+  @ApiImplicitParams({
+    @ApiImplicitParam(name = "memberId", value = "用户Id", dataType = "Long", required = true, paramType = "query"),
+  })
+  public ApiResult<EnterOrder> enterOrder(Long memberId) {
+    try {
+      EnterOrder enterOrder = shoppingCartService.enterOrder(memberId);
+      return ApiResult.success(enterOrder);
+    } catch (StarServiceException e) {
+      return ApiResult.fail(e.getCode(), e.getMsg());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return ApiResult.fail(ApiCode.SYSTEM_ERROR);
+    }
+  }
 }
