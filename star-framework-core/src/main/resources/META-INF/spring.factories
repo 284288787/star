@@ -12,4 +12,5 @@ com.star.truffle.core.jdbc.MysqlDataSourceConfiguration,\
 com.star.truffle.core.mybatis.MybatisAutoConfiguration,\
 com.star.truffle.core.redis.RedisCacheAutoConfiguration,\
 com.star.truffle.core.ehcache.EHcacheCacheAutoConfig,\
-com.star.truffle.core.thytag.StarSpringSecurityDialect
+com.star.truffle.core.thytag.StarSpringSecurityDialect,\
+com.star.truffle.core.web.response.RequestInfoAspect

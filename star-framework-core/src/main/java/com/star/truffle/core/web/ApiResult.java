@@ -12,6 +12,8 @@ public class ApiResult<T> {
   private String msg;
   private T data;
   
+  private String traceId;
+  
   public ApiResult(int code, String msg){
     this.setCode(code);
     this.setMsg(msg);

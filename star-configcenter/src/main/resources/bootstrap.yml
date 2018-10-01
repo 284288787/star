@@ -11,13 +11,11 @@ server:
 
 eureka:
   instance:
-    #status-page-url-path: ${server.servlet.context-path:}/swagger-ui.html
-    #home-page-url-path: ${server.servlet.context-path:}/
     #prefer-ip-address: true
     lease-expiration-duration-in-seconds: 30
     lease-renewal-interval-in-seconds: 10
     hostname: 47.105.38.227
-    instance-id: 47.105.38.227:1112
+    instance-id: ${spring.cloud.client.hostname}:${spring.application.name}:${server.port}
   client:
     serviceUrl:
       defaultZone: http://47.105.38.227:1111/eureka/

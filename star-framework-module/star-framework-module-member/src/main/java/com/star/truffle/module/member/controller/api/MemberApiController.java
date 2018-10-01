@@ -29,8 +29,8 @@ public class MemberApiController {
   @Autowired
   private MemberService memberService;
 
-  @RequestMapping(value = "/getMemberByOpenId", method = RequestMethod.POST)
-  @ApiOperation(value = "根据openId获取消费者", notes = "根据openId获取消费者，如果获取不到，则需要创建", httpMethod = "POST", response = MemberResponseDto.class)
+  @RequestMapping(value = "/getLoginMemberByOpenId", method = RequestMethod.POST)
+  @ApiOperation(value = "获取登录信息", notes = "根据openId获取登录信息", httpMethod = "POST", response = MemberResponseDto.class)
   @ApiImplicitParams({
     @ApiImplicitParam(name = "openId", value = "微信openId", dataType = "String", required = true, paramType = "query")
   })

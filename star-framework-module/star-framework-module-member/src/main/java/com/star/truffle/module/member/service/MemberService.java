@@ -39,12 +39,12 @@ public class MemberService {
       throw new StarServiceException(ApiCode.PARAM_ERROR);
     }
     smsIdentityService.verify(member.getMobile(), member.getTag(), member.getCode());
-    MemberResponseDto memberResponseDto = getMemberByOpenId(member.getOpenId());
+    MemberResponseDto memberResponseDto = this.memberCache.getMemberByOpenId(member.getOpenId());
     if (null == memberResponseDto) {
       member.setCreateTime(new Date());
       member.setState(LoginStateEnum.login.getState());
       this.memberCache.saveMember(member);
-      memberResponseDto = getMemberByOpenId(member.getOpenId());
+      memberResponseDto = this.memberCache.getMemberByOpenId(member.getOpenId());
     } else if (memberResponseDto.getState() == LoginStateEnum.logout.getState()) {
       memberResponseDto.setState(LoginStateEnum.login.getState());
       MemberRequestDto memberRequestDto = new MemberRequestDto();
@@ -94,11 +94,14 @@ public class MemberService {
   }
 
   public MemberResponseDto getMemberByOpenId(String openId) {
-    MemberResponseDto memberResponseDto = this.memberCache.getMemberByOpenId(openId);
-    if (null != memberResponseDto && memberResponseDto.getState() == LoginStateEnum.logout.getState()) {
+    MemberResponseDto member = this.memberCache.getMemberByOpenId(openId);
+    if (null == member) {
+      throw new StarServiceException(ApiCode.NO_EXISTS);
+    }
+    if (member.getState() == LoginStateEnum.logout.getState()) {
       throw new StarServiceException(ApiCode.NO_LOGIN);
     }
-    return memberResponseDto;
+    return member;
   }
   
   public List<MemberResponseDto> queryMember(MemberRequestDto memberRequestDto) {

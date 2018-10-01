@@ -57,7 +57,7 @@ public class OrderService {
   }
 
   public Long saveMemberOrder(OrderRequestDto orderRequestDto) {
-    if (null == orderRequestDto || orderRequestDto.checkMemberSave()) {
+    if (null == orderRequestDto || ! orderRequestDto.checkMemberSave()) {
       throw new StarServiceException(ApiCode.PARAM_ERROR);
     }
     MemberResponseDto member = memberService.getMember(orderRequestDto.getMemberId());
@@ -118,7 +118,7 @@ public class OrderService {
   }
   
   public Long saveDistributorOrder(OrderRequestDto orderRequestDto) {
-    if (null == orderRequestDto || orderRequestDto.checkDistributorSave()) {
+    if (null == orderRequestDto || ! orderRequestDto.checkDistributorSave()) {
       throw new StarServiceException(ApiCode.PARAM_ERROR);
     }
     DistributorResponseDto distributor = distributorService.getDistributor(orderRequestDto.getDistributorId());
