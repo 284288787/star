@@ -23,8 +23,26 @@ public class DeliveryAddressService {
     if (null == deliveryAddress || ! deliveryAddress.checkeSaveData()) {
       throw new StarServiceException(ApiCode.PARAM_ERROR);
     }
-    this.deliveryAddressCache.saveDeliveryAddress(deliveryAddress);
-    return deliveryAddress.getId();
+    
+    DeliveryAddressRequestDto param = new DeliveryAddressRequestDto();
+    param.setMemberId(deliveryAddress.getMemberId());
+    param.setDef(1);
+    List<DeliveryAddressResponseDto> list = this.deliveryAddressCache.queryDeliveryAddress(param);
+    if (null == list || list.isEmpty()) {
+      deliveryAddress.setDef(1);
+    }
+    DeliveryAddressResponseDto newAddress = this.deliveryAddressCache.saveDeliveryAddress(deliveryAddress);
+    if (newAddress.getDef() == 1) {
+      if (null != list && ! list.isEmpty()) {
+        for (DeliveryAddressResponseDto deliveryAddressResponseDto : list) {
+          DeliveryAddressRequestDto deliveryAddressRequestDto = new DeliveryAddressRequestDto();
+          deliveryAddressRequestDto.setId(deliveryAddressResponseDto.getId());
+          deliveryAddressRequestDto.setDef(0);
+          this.deliveryAddressCache.updateDeliveryAddress(deliveryAddressRequestDto);
+        }
+      }
+    }
+    return newAddress.getId();
   }
 
   public void updateDeliveryAddress(DeliveryAddressRequestDto deliveryAddressRequestDto) {
@@ -38,6 +56,24 @@ public class DeliveryAddressService {
     if (da.getMemberId() != deliveryAddressRequestDto.getMemberId().longValue()) {
       throw new StarServiceException(ApiCode.PARAM_ERROR, "不能修改别人的收货地址");
     }
+    
+    if (deliveryAddressRequestDto.getDef() == 1) {
+      DeliveryAddressRequestDto param = new DeliveryAddressRequestDto();
+      param.setMemberId(deliveryAddressRequestDto.getMemberId());
+      param.setDef(1);
+      List<DeliveryAddressResponseDto> list = this.deliveryAddressCache.queryDeliveryAddress(param);
+      if (null != list && ! list.isEmpty()) {
+        for (DeliveryAddressResponseDto deliveryAddressResponseDto : list) {
+          if (deliveryAddressResponseDto.getId() != deliveryAddressRequestDto.getId()) {
+            DeliveryAddressRequestDto deliveryAddress = new DeliveryAddressRequestDto();
+            deliveryAddressRequestDto.setId(deliveryAddressResponseDto.getId());
+            deliveryAddressRequestDto.setDef(0);
+            this.deliveryAddressCache.updateDeliveryAddress(deliveryAddress);
+          }
+        }
+      }
+    }
+    
     this.deliveryAddressCache.updateDeliveryAddress(deliveryAddressRequestDto);
   }
   
