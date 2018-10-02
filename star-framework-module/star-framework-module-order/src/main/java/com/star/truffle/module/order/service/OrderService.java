@@ -23,8 +23,10 @@ import com.star.truffle.module.order.constant.OrderTypeEnum;
 import com.star.truffle.module.order.domain.Order;
 import com.star.truffle.module.order.domain.OrderDetail;
 import com.star.truffle.module.order.dto.req.OrderRequestDto;
+import com.star.truffle.module.order.dto.req.ShoppingCartRequestDto;
 import com.star.truffle.module.order.dto.res.DeliveryAddressResponseDto;
 import com.star.truffle.module.order.dto.res.OrderResponseDto;
+import com.star.truffle.module.order.dto.res.ShoppingCartResponseDto;
 import com.star.truffle.module.order.properties.OrderProperties;
 import com.star.truffle.module.product.constant.BrokerageTypeEnum;
 import com.star.truffle.module.product.constant.ProductEnum;
@@ -50,6 +52,8 @@ public class OrderService {
   private DistributorService distributorService;
   @Autowired
   private ProductService productService;
+  @Autowired
+  private ShoppingCartService shoppingCartService;
   
   public Long saveOrder(Order order) {
     this.orderCache.saveOrder(order);
@@ -123,6 +127,19 @@ public class OrderService {
     param.setOrderId(orderId);
     param.setOrderCode(8000000 + orderId);
     this.orderCache.updateOrder(param);
+    
+    //删除购物车里相关的商品
+    ShoppingCartRequestDto shoppingCartRequestDto = new ShoppingCartRequestDto();
+    shoppingCartRequestDto.setMemberId(orderRequestDto.getMemberId());
+    for (OrderDetail orderDetail : details) {
+      shoppingCartRequestDto.setProductId(orderDetail.getProductId());
+      List<ShoppingCartResponseDto> ps = shoppingCartService.queryShoppingCart(shoppingCartRequestDto);
+      if (null != ps && ! ps.isEmpty()) {
+        for (ShoppingCartResponseDto shoppingCartResponseDto : ps) {
+          this.shoppingCartService.deleteShoppingCart(shoppingCartResponseDto.getCartId());
+        }
+      }
+    }
     return orderId;
   }
   

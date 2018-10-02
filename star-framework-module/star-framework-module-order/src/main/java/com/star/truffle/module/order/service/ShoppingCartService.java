@@ -1,6 +1,7 @@
 /**create by framework at 2018年09月21日 15:21:35**/
 package com.star.truffle.module.order.service;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.star.truffle.core.StarServiceException;
+import com.star.truffle.core.jackson.StarJson;
 import com.star.truffle.core.web.ApiCode;
 import com.star.truffle.module.member.constant.EnabledEnum;
 import com.star.truffle.module.order.cache.DeliveryAddressCache;
@@ -34,6 +36,8 @@ public class ShoppingCartService {
   private OrderProperties orderProperties;
   @Autowired
   private DeliveryAddressCache deliveryAddressCache;
+  @Autowired
+  private StarJson starJson;
 
   public Long saveShoppingCart(ShoppingCartRequestDto shoppingCart) {
     if (null == shoppingCart || ! shoppingCart.checkSaveData()) {
@@ -164,6 +168,29 @@ public class ShoppingCartService {
       deliveryAddress = list.get(0);
     }
     EnterOrder enterOrder = new EnterOrder(despatchMoney, products, deliveryAddress);
+    return enterOrder;
+  }
+
+  public EnterOrder buyNow(Long memberId, Long productId, int num) {
+    ProductResponseDto productResponseDto = this.productService.getProduct(productId);
+    if (null == productResponseDto) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR, "商品不存在");
+    }
+    if (productResponseDto.getState() != ProductEnum.onshelf.state()) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR, "商品现在已不能购买");
+    }
+    ShoppingCartResponseDto shoppingCartResponseDto = starJson.str2obj(starJson.obj2string(productResponseDto), ShoppingCartResponseDto.class);
+    shoppingCartResponseDto.setNum(num);
+    Integer despatchMoney = this.orderProperties.getDespatchMoney();
+    DeliveryAddressRequestDto deliveryAddressRequestDto = new DeliveryAddressRequestDto();
+    deliveryAddressRequestDto.setMemberId(memberId);
+    deliveryAddressRequestDto.setDef(EnabledEnum.enabled.val());
+    List<DeliveryAddressResponseDto> list = this.deliveryAddressCache.queryDeliveryAddress(deliveryAddressRequestDto);
+    DeliveryAddressResponseDto deliveryAddress = null;
+    if (null != list && ! list.isEmpty()) {
+      deliveryAddress = list.get(0);
+    }
+    EnterOrder enterOrder = new EnterOrder(despatchMoney, Arrays.asList(shoppingCartResponseDto), deliveryAddress);
     return enterOrder;
   }
 

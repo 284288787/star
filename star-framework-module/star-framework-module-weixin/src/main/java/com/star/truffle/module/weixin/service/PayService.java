@@ -62,7 +62,8 @@ public class PayService {
     }
 
     String outTradeNo = UUID.randomUUID().toString().replace("-", "");
-    PayReqData prd = new PayReqData(order.getShopName(), order.getOrderId().toString(), outTradeNo, order.getTotalMoney() + order.getDespatchMoney(), order.getCreateTime(), weixinConfig.getAppId(), weixinConfig.getKey(), weixinConfig.getMchId(), weixinConfig.getNotifyUrl(), ip, weixinConfig.getTradeType(), order.getOpenId());
+    Integer money = order.getTotalMoney() + (null == order.getDespatchMoney() ? 0 : order.getDespatchMoney());
+    PayReqData prd = new PayReqData(order.getShopName(), order.getOrderId().toString(), outTradeNo, money, order.getCreateTime(), weixinConfig.getAppId(), weixinConfig.getKey(), weixinConfig.getMchId(), weixinConfig.getNotifyUrl(), ip, weixinConfig.getTradeType(), order.getOpenId());
     PayResData res = weiXinApiDao.unifiedOrderGZH(prd);
     Map<String, Object> payInfo = starJson.bean2Map(res);
     payInfo.remove("appid");

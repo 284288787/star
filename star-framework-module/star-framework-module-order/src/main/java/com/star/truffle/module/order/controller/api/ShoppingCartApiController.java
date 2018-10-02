@@ -123,7 +123,7 @@ public class ShoppingCartApiController {
       return ApiResult.fail(ApiCode.SYSTEM_ERROR);
     }
   }
-
+  
   @RequestMapping(value = "/enterOrder", method = RequestMethod.POST)
   @ApiOperation(value = "确认订单", notes = "确认订单", httpMethod = "POST", response = ApiResult.class)
   @ApiImplicitParams({
@@ -132,6 +132,25 @@ public class ShoppingCartApiController {
   public ApiResult<EnterOrder> enterOrder(Long memberId) {
     try {
       EnterOrder enterOrder = shoppingCartService.enterOrder(memberId);
+      return ApiResult.success(enterOrder);
+    } catch (StarServiceException e) {
+      return ApiResult.fail(e.getCode(), e.getMsg());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return ApiResult.fail(ApiCode.SYSTEM_ERROR);
+    }
+  }
+
+  @RequestMapping(value = "/buyNow", method = RequestMethod.POST)
+  @ApiOperation(value = "立即购买", notes = "立即购买", httpMethod = "POST", response = ApiResult.class)
+  @ApiImplicitParams({
+    @ApiImplicitParam(name = "memberId", value = "用户Id", dataType = "Long", required = true, paramType = "query"),
+    @ApiImplicitParam(name = "productId", value = "供应Id", dataType = "Long", required = true, paramType = "query"),
+    @ApiImplicitParam(name = "num", value = "购买数量", dataType = "int", required = true, paramType = "query"),
+  })
+  public ApiResult<EnterOrder> buyNow(Long memberId, Long productId, int num) {
+    try {
+      EnterOrder enterOrder = shoppingCartService.buyNow(memberId, productId, num);
       return ApiResult.success(enterOrder);
     } catch (StarServiceException e) {
       return ApiResult.fail(e.getCode(), e.getMsg());

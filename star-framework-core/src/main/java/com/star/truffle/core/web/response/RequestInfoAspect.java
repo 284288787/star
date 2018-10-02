@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -79,6 +80,9 @@ public class RequestInfoAspect {
     }
     Map<String, Object> context = new LinkedHashMap<>();
     for (int i = 0; i < names.length; i++) {
+      if (args[i] instanceof HttpServletRequest || args[i] instanceof HttpServletResponse) {
+        continue;
+      }
       context.put(names[i], args[i]);// paramNames即参数名
     }
     return context;
