@@ -11,8 +11,10 @@ import org.springframework.stereotype.Service;
 import com.star.truffle.core.StarServiceException;
 import com.star.truffle.core.jackson.StarJson;
 import com.star.truffle.core.web.ApiCode;
+import com.star.truffle.module.alibaba.service.SmsUtil;
 import com.star.truffle.module.member.dto.res.MemberResponseDto;
 import com.star.truffle.module.member.service.MemberService;
+import com.star.truffle.module.order.constant.DeliveryTypeEnum;
 import com.star.truffle.module.order.constant.OrderStateEnum;
 import com.star.truffle.module.order.dto.req.OrderRequestDto;
 import com.star.truffle.module.order.dto.res.OrderResponseDto;
@@ -87,6 +89,9 @@ public class PayService {
         OrderRequestDto orderRequestDto = new OrderRequestDto();
         orderRequestDto.setOrderId(order.getOrderId());
         orderRequestDto.setState(OrderStateEnum.nosend.state());
+        if (order.getDeliveryType() == DeliveryTypeEnum.self.type()) {
+          orderRequestDto.setPickupCode(SmsUtil.buildCode(4));
+        }
         orderService.updateOrder(orderRequestDto);
       }
     }

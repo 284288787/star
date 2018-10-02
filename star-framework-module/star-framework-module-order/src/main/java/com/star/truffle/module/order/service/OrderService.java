@@ -204,7 +204,14 @@ public class OrderService {
   }
 
   public List<OrderResponseDto> queryOrder(OrderRequestDto orderRequestDto) {
-    return this.orderCache.queryOrder(orderRequestDto);
+    List<OrderResponseDto> orders = this.orderCache.queryOrder(orderRequestDto);
+    if (null != orders && ! orders.isEmpty()) {
+      for (OrderResponseDto orderResponseDto : orders) {
+        List<OrderDetail> details = orderDetailCache.getOrderDetails(orderResponseDto.getOrderId());
+        orderResponseDto.setDetails(details);
+      }
+    }
+    return orders;
   }
 
   public Long queryOrderCount(OrderRequestDto orderRequestDto) {

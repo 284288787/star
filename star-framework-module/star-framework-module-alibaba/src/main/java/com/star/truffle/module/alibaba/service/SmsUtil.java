@@ -52,7 +52,7 @@ public class SmsUtil {
     return sendSmsResponse;
   }
 
-  private static String buildCode(int len) {
+  public static String buildCode(int len) {
     Random random = new Random();
     String code = "";
     for (int i = 0; i < len; i++) {
