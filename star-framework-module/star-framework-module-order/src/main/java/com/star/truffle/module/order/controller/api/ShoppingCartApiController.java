@@ -31,7 +31,7 @@ public class ShoppingCartApiController {
 
   @Autowired
   private ShoppingCartService shoppingCartService;
-
+  
   @RequestMapping(value = "/queryShoppingCart", method = RequestMethod.POST)
   @ApiOperation(value = "根据条件获取购物车列表", notes = "根据条件获取购物车列表", httpMethod = "POST", response = ApiResult.class)
   @ApiImplicitParams({
@@ -41,6 +41,23 @@ public class ShoppingCartApiController {
     try {
       List<ShoppingCartResponseDto> list = shoppingCartService.queryShoppingCart(shoppingCartRequestDto);
       return ApiResult.success(list);
+    } catch (StarServiceException e) {
+      return ApiResult.fail(e.getCode(), e.getMsg());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return ApiResult.fail(ApiCode.SYSTEM_ERROR);
+    }
+  }
+
+  @RequestMapping(value = "/queryShoppingCartCount", method = RequestMethod.POST)
+  @ApiOperation(value = "统计总数", notes = "统计总数", httpMethod = "POST", response = ApiResult.class)
+  @ApiImplicitParams({
+    @ApiImplicitParam(name = "memberId", value = "会员ID", dataType = "Long", required = true, paramType = "query"),
+  })
+  public ApiResult<Long> queryShoppingCartCount(@ApiIgnore ShoppingCartRequestDto shoppingCartRequestDto) {
+    try {
+      Long number = shoppingCartService.queryShoppingCartCount(shoppingCartRequestDto);
+      return ApiResult.success(number);
     } catch (StarServiceException e) {
       return ApiResult.fail(e.getCode(), e.getMsg());
     } catch (Exception e) {
@@ -91,12 +108,11 @@ public class ShoppingCartApiController {
   @ApiOperation(value = "选中/不选中", notes = "选中/不选中", httpMethod = "POST", response = ApiResult.class)
   @ApiImplicitParams({
     @ApiImplicitParam(name = "memberId", value = "用户Id", dataType = "Long", required = true, paramType = "query"),
-    @ApiImplicitParam(name = "cartIds", value = "购物车Id", dataType = "String", required = true, paramType = "query"),
-    @ApiImplicitParam(name = "checked", value = "是否选中 1是 0否", dataType = "int", required = true, paramType = "query"),
+    @ApiImplicitParam(name = "cartIds", value = "需选中的购物车Id，多个用逗号分隔，空则去掉所有的选中状态", dataType = "String", required = false, paramType = "query"),
   })
-  public ApiResult<Void> updateShoppingCartChecked(Long memberId, String cartIds, int checked) {
+  public ApiResult<Void> updateShoppingCartChecked(Long memberId, String cartIds) {
     try {
-      shoppingCartService.updateShoppingCartChecked(memberId, cartIds, checked);
+      shoppingCartService.updateShoppingCartChecked(memberId, cartIds);
       return ApiResult.success();
     } catch (StarServiceException e) {
       return ApiResult.fail(e.getCode(), e.getMsg());
@@ -115,6 +131,23 @@ public class ShoppingCartApiController {
   public ApiResult<Void> deleteShoppingCart(String cartIds) {
     try {
       shoppingCartService.deleteShoppingCart(cartIds);
+      return ApiResult.success();
+    } catch (StarServiceException e) {
+      return ApiResult.fail(e.getCode(), e.getMsg());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return ApiResult.fail(ApiCode.SYSTEM_ERROR);
+    }
+  }
+  
+  @RequestMapping(value = "/enterOrderCheck", method = RequestMethod.POST)
+  @ApiOperation(value = "确认订单之前的校验", notes = "确认订单之前的校验 true表示可以下单", httpMethod = "POST", response = ApiResult.class)
+  @ApiImplicitParams({
+    @ApiImplicitParam(name = "memberId", value = "用户Id", dataType = "Long", required = true, paramType = "query"),
+  })
+  public ApiResult<Void> enterOrderCheck(Long memberId) {
+    try {
+      shoppingCartService.enterOrderCheck(memberId);
       return ApiResult.success();
     } catch (StarServiceException e) {
       return ApiResult.fail(e.getCode(), e.getMsg());

@@ -1,6 +1,8 @@
 /**create by framework at 2018年09月18日 10:59:57**/
 package com.star.truffle.module.product.controller.api;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -43,7 +45,7 @@ public class ProductSubscriptionApiController {
       return ApiResult.fail(ApiCode.SYSTEM_ERROR);
     }
   }
-
+  
   @RequestMapping(value = "/unsubscribe", method = RequestMethod.POST)
   @ApiOperation(value = "取消关注供应", notes = "取消关注供应", httpMethod = "POST", response = ApiResult.class)
   @ApiImplicitParams({
@@ -54,6 +56,24 @@ public class ProductSubscriptionApiController {
     try {
       productSubscriptionService.unsubscribe(productId, openId);
       return ApiResult.success();
+    } catch (StarServiceException e) {
+      return ApiResult.fail(e.getCode(), e.getMsg());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return ApiResult.fail(ApiCode.SYSTEM_ERROR);
+    }
+  }
+
+  @RequestMapping(value = "/isSubscription", method = RequestMethod.POST)
+  @ApiOperation(value = "是否关注供应", notes = "取消关注供应", httpMethod = "POST", response = ApiResult.class)
+  @ApiImplicitParams({
+    @ApiImplicitParam(name = "productIds", value = "供应id，多个用逗号分隔", dataType = "String", required = true, paramType = "query"),
+    @ApiImplicitParam(name = "openId", value = "用户的openId", dataType = "Long", required = true, paramType = "query")
+  })
+  public ApiResult<Map<Long, Boolean>> isSubscription(String productIds, String openId) {
+    try {
+      Map<Long, Boolean> map = productSubscriptionService.isSubscription(productIds, openId);
+      return ApiResult.success(map);
     } catch (StarServiceException e) {
       return ApiResult.fail(e.getCode(), e.getMsg());
     } catch (Exception e) {

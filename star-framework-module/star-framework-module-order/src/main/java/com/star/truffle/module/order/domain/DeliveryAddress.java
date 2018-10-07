@@ -22,6 +22,12 @@ public class DeliveryAddress {
   private Long cityId;
   // 区县
   private Long areaId;
+  // 省
+  private String provinceName;
+  // 市
+  private String cityName;
+  // 区县
+  private String areaName;
   // 详细地址
   private String address;
   // 是否默认

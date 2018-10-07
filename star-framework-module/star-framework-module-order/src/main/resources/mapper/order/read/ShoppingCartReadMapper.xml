@@ -13,12 +13,14 @@
     <result column="original_price" property="originalPrice" />
     <result column="price" property="price" />
     <result column="specification" property="specification" />
+    <result column="pickup_time" property="pickupTime" />
   </resultMap>
 
   <sql id="sql_column">
     cart_id, shopping_cart.product_id, member_id, num, checked, shopping_cart.create_time,
     p.title, p.original_price, p.price, p.specification, p.state,
-    (select pp.url from product_picture pp where pp.product_id = shopping_cart.product_id and pp.type = 1 limit 1) mainPictureUrl
+    (select pp.url from product_picture pp where pp.product_id = shopping_cart.product_id and pp.type = 1 limit 1) mainPictureUrl,
+    p.pickup_time
   </sql>
 
   <sql id="sql_where">

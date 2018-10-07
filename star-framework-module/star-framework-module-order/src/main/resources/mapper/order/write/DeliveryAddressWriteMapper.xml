@@ -2,15 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.star.truffle.module.order.dao.write.DeliveryAddressWriteDao">
   <insert id="saveDeliveryAddress" useGeneratedKeys="true" keyProperty="id" parameterType="com.star.truffle.module.order.domain.DeliveryAddress">
-    insert into delivery_address(id, member_id, `name`, mobile, province_id, city_id, area_id, address, def)
-    values(#{id}, #{memberId}, #{name}, #{mobile}, #{provinceId}, #{cityId}, #{areaId}, #{address}, #{def})
+    insert into delivery_address(id, member_id, `name`, mobile, province_id, city_id, area_id, province_name, city_name, area_name, address, def)
+    values(#{id}, #{memberId}, #{name}, #{mobile}, #{provinceId}, #{cityId}, #{areaId}, #{provinceName}, #{cityName}, #{areaName}, #{address}, #{def})
   </insert>
 
   <insert id="batchSaveDeliveryAddress" parameterType="java.util.List">
-    insert into delivery_address(id, member_id, `name`, mobile, province_id, city_id, area_id, address, def)
+    insert into delivery_address(id, member_id, `name`, mobile, province_id, city_id, area_id, province_name, city_name, area_name, address, def)
     values
     <foreach collection="list" item="item" index="index" separator=",">
-      (#{item.id}, #{item.memberId}, #{item.name}, #{item.mobile}, #{item.provinceId}, #{item.cityId}, #{item.areaId}, #{item.address}, #{item.def})
+      (#{item.id}, #{item.memberId}, #{item.name}, #{item.mobile}, #{item.provinceId}, #{item.cityId}, #{item.areaId}, #{item.provinceName}, #{item.cityName}, #{item.areaName}, #{item.address}, #{item.def})
     </foreach>
   </insert>
 
@@ -20,9 +20,6 @@
       <if test="memberId != null">member_id = #{memberId},</if>
       <if test="name != null and name != ''">`name` = #{name},</if>
       <if test="mobile != null and mobile != ''">mobile = #{mobile},</if>
-      <if test="provinceId != null">province_id = #{provinceId},</if>
-      <if test="cityId != null">city_id = #{cityId},</if>
-      <if test="areaId != null">area_id = #{areaId},</if>
       <if test="address != null and address != ''">address = #{address},</if>
       <if test="def != null">def = #{def},</if>
     </trim>
@@ -43,22 +40,19 @@
     <result column="area_id" property="areaId" />
     <result column="address" property="address" />
     <result column="def" property="def" />
-    <result column="provinceName" property="provinceName" />
-    <result column="cityName" property="cityName" />
-    <result column="areaName" property="areaName" />
+    <result column="province_name" property="provinceName" />
+    <result column="city_name" property="cityName" />
+    <result column="area_name" property="areaName" />
   </resultMap>
 
   <sql id="sql_column">
-    id, member_id, `name`, mobile, province_id, city_id, area_id, address, def, p.shortName provinceName, c.shortName cityName, a.shortName areaName
+    id, member_id, `name`, mobile, province_id, city_id, area_id, address, def, province_name, city_name, area_name
   </sql>
 
   <select id="getDeliveryAddress" resultType="com.star.truffle.module.order.dto.res.DeliveryAddressResponseDto">
     select
     <include refid="sql_column" />
     from delivery_address
-    INNER JOIN sys_area p on p.areaId = delivery_address.province_id
-    INNER JOIN sys_area c on c.areaId = delivery_address.city_id
-    INNER JOIN sys_area a on a.areaId = delivery_address.area_id
     where id = #{id}
   </select>
 

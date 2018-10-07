@@ -8,8 +8,4 @@ import com.star.truffle.module.order.domain.DeliveryAddress;
 @Getter
 @Setter
 public class DeliveryAddressResponseDto extends DeliveryAddress {
-
-  private String provinceName;
-  private String cityName;
-  private String areaName;
 }

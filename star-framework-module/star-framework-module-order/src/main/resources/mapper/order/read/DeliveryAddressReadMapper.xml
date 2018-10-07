@@ -11,13 +11,13 @@
     <result column="area_id" property="areaId" />
     <result column="address" property="address" />
     <result column="def" property="def" />
-    <result column="provinceName" property="provinceName" />
-    <result column="cityName" property="cityName" />
-    <result column="areaName" property="areaName" />
+    <result column="province_name" property="provinceName" />
+    <result column="city_name" property="cityName" />
+    <result column="area_name" property="areaName" />
   </resultMap>
 
   <sql id="sql_column">
-    id, member_id, `name`, mobile, province_id, city_id, area_id, address, def, p.shortName provinceName, c.shortName cityName, a.shortName areaName
+    id, member_id, `name`, mobile, province_id, city_id, area_id, address, def, province_name, city_name, area_name
   </sql>
 
   <sql id="sql_where">
@@ -38,9 +38,6 @@
     select
     <include refid="sql_column" />
     from delivery_address
-    INNER JOIN sys_area p on p.areaId = delivery_address.province_id
-    INNER JOIN sys_area c on c.areaId = delivery_address.city_id
-    INNER JOIN sys_area a on a.areaId = delivery_address.area_id
     where id = #{id}
   </select>
 
@@ -48,9 +45,6 @@
     select
     <include refid="sql_column" />
     from delivery_address
-    INNER JOIN sys_area p on p.areaId = delivery_address.province_id
-    INNER JOIN sys_area c on c.areaId = delivery_address.city_id
-    INNER JOIN sys_area a on a.areaId = delivery_address.area_id
     <include refid="sql_where" />
     order by
     id desc
@@ -63,9 +57,6 @@
     select
     count(1)
     from delivery_address
-    INNER JOIN sys_area p on p.areaId = delivery_address.province_id
-    INNER JOIN sys_area c on c.areaId = delivery_address.city_id
-    INNER JOIN sys_area a on a.areaId = delivery_address.area_id
     <include refid="sql_where" />
   </select>
 </mapper>

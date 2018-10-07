@@ -93,23 +93,25 @@ public class ShoppingCartService {
     this.shoppingCartCache.updateShoppingCart(shoppingCartRequestDto);
   }
   
-  public void updateShoppingCartChecked(Long memberId, String cartIds, int checked) {
-    if (null == memberId || StringUtils.isBlank(cartIds)) {
+  public void updateShoppingCartChecked(Long memberId, String cartIds) {
+    if (null == memberId) {
       throw new StarServiceException(ApiCode.PARAM_ERROR);
     }
-    String[] ids = cartIds.split(",");
-    for (String id : ids) {
-      ShoppingCartResponseDto cart = this.shoppingCartCache.getShoppingCart(Long.parseLong(id));
-      if (null == cart) {
-        throw new StarServiceException(ApiCode.PARAM_ERROR, "信息不存在");
+    cartIds = "," + cartIds + ",";
+    ShoppingCartRequestDto param = new ShoppingCartRequestDto();
+    param.setMemberId(memberId);
+    List<ShoppingCartResponseDto> list = this.shoppingCartCache.queryShoppingCart(param);
+    if (null != list && !list.isEmpty()) {
+      for (ShoppingCartResponseDto shoppingCartResponseDto : list) {
+        ShoppingCartRequestDto shoppingCartRequestDto = new ShoppingCartRequestDto();
+        shoppingCartRequestDto.setCartId(shoppingCartResponseDto.getCartId());
+        if (cartIds.indexOf("," + shoppingCartResponseDto.getCartId() + ",") != -1) {
+          shoppingCartRequestDto.setChecked(1);
+        }else {
+          shoppingCartRequestDto.setChecked(0);
+        }
+        this.shoppingCartCache.updateShoppingCart(shoppingCartRequestDto);
       }
-      if (cart.getMemberId() != memberId.longValue()) {
-        throw new StarServiceException(ApiCode.PARAM_ERROR, "不能修改别人的购物车");
-      }
-      ShoppingCartRequestDto shoppingCartRequestDto = new ShoppingCartRequestDto();
-      shoppingCartRequestDto.setCartId(cart.getCartId());
-      shoppingCartRequestDto.setChecked(checked);
-      this.shoppingCartCache.updateShoppingCart(shoppingCartRequestDto);
     }
   }
 
@@ -141,9 +143,40 @@ public class ShoppingCartService {
   }
 
   public Long queryShoppingCartCount(ShoppingCartRequestDto shoppingCartRequestDto) {
-    return this.shoppingCartCache.queryShoppingCartCount(shoppingCartRequestDto);
+    if (null == shoppingCartRequestDto || null == shoppingCartRequestDto.getMemberId()) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR);
+    }
+    long num = 0;
+    List<ShoppingCartResponseDto> list = this.shoppingCartCache.queryShoppingCart(shoppingCartRequestDto);
+    if (null != list && !list.isEmpty()) {
+      for (ShoppingCartResponseDto shoppingCartResponseDto : list) {
+        num += shoppingCartResponseDto.getNum();
+      }
+    }
+    return num;
   }
 
+  public void enterOrderCheck(Long memberId) {
+    ShoppingCartRequestDto shoppingCartRequestDto = new ShoppingCartRequestDto();
+    shoppingCartRequestDto.setMemberId(memberId);
+    shoppingCartRequestDto.setChecked(EnabledEnum.enabled.val());
+    int len = 0;
+    List<ShoppingCartResponseDto> products = this.shoppingCartCache.queryShoppingCart(shoppingCartRequestDto);
+    for (ShoppingCartResponseDto shoppingCartResponseDto : products) {
+      ProductResponseDto productResponseDto = this.productService.getProduct(shoppingCartResponseDto.getProductId());
+      if (null == productResponseDto) {
+        throw new StarServiceException(ApiCode.PARAM_ERROR, "商品不存在");
+      }
+      if (productResponseDto.getState() >= ProductEnum.sellout.state()) {
+        throw new StarServiceException(ApiCode.PARAM_ERROR, "商品现在已不能购买");
+      }
+      len ++;
+    }
+    if (len == 0) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR, "购物车里没有可下单的商品");
+    }
+  }
+  
   public EnterOrder enterOrder(Long memberId) {
     ShoppingCartRequestDto shoppingCartRequestDto = new ShoppingCartRequestDto();
     shoppingCartRequestDto.setMemberId(memberId);
@@ -151,12 +184,13 @@ public class ShoppingCartService {
     List<ShoppingCartResponseDto> products = this.shoppingCartCache.queryShoppingCart(shoppingCartRequestDto);
     for (ShoppingCartResponseDto shoppingCartResponseDto : products) {
       ProductResponseDto productResponseDto = this.productService.getProduct(shoppingCartResponseDto.getProductId());
-      if (null == productResponseDto) {
-        throw new StarServiceException(ApiCode.PARAM_ERROR, "商品不存在");
+      if (null == productResponseDto || productResponseDto.getState() >= ProductEnum.sellout.state()) {
+        continue;
+//        throw new StarServiceException(ApiCode.PARAM_ERROR, "商品不存在");
       }
-      if (productResponseDto.getState() != ProductEnum.onshelf.state()) {
-        throw new StarServiceException(ApiCode.PARAM_ERROR, "商品现在已不能购买");
-      }
+//      if (productResponseDto.getState() != ProductEnum.onshelf.state()) {
+//        throw new StarServiceException(ApiCode.PARAM_ERROR, "商品现在已不能购买");
+//      }
     }
     Integer despatchMoney = this.orderProperties.getDespatchMoney();
     DeliveryAddressRequestDto deliveryAddressRequestDto = new DeliveryAddressRequestDto();

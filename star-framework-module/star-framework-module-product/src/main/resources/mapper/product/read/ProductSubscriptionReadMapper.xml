@@ -22,6 +22,12 @@
       <if test="id != null">
         and id = #{id}
       </if>
+      <if test="memberId != null">
+        and product_subscription.member_id = #{memberId}
+      </if>
+      <if test="productId != null">
+        and product_subscription.product_id = #{productId}
+      </if>
     </trim>
   </sql>
 

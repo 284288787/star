@@ -35,12 +35,15 @@ public class MemberService {
   }
   
   public MemberResponseDto login(MemberRequestDto member) {
-    if (null == member || ! member.checkSaveData()) {
+    if (null == member || StringUtils.isBlank(member.getMobile()) || StringUtils.isBlank(member.getCode()) || null == member.getTag()) {
       throw new StarServiceException(ApiCode.PARAM_ERROR);
     }
     smsIdentityService.verify(member.getMobile(), member.getTag(), member.getCode());
     MemberResponseDto memberResponseDto = this.memberCache.getMemberByOpenId(member.getOpenId());
     if (null == memberResponseDto) {
+      if (! member.checkSaveData()) {
+        throw new StarServiceException(ApiCode.PARAM_ERROR);
+      }
       member.setCreateTime(new Date());
       member.setState(LoginStateEnum.login.getState());
       this.memberCache.saveMember(member);

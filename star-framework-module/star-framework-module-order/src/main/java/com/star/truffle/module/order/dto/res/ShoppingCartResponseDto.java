@@ -3,6 +3,9 @@ package com.star.truffle.module.order.dto.res;
 
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Date;
+
 import com.star.truffle.module.order.domain.ShoppingCart;
 
 @Getter
@@ -21,4 +24,6 @@ public class ShoppingCartResponseDto extends ShoppingCart {
   private String specification;
   
   private String mainPictureUrl;
+  
+  private Date pickupTime;
 }

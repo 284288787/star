@@ -15,16 +15,16 @@ public class DeliveryAddressRequestDto extends DeliveryAddress {
   private Page pager;
   
   public boolean checkeSaveData() {
-    if (null != getId() || null == getMemberId() || null == getProvinceId() || null == getCityId()
-        || null == getAreaId() || null == getDef() || StringUtils.isBlank(getName()) || StringUtils.isBlank(getMobile())) {
+    if (null != getId() || null == getMemberId() || StringUtils.isBlank(getProvinceName()) || StringUtils.isBlank(getCityName())
+        || StringUtils.isBlank(getAreaName()) || null == getDef() || StringUtils.isBlank(getName()) || StringUtils.isBlank(getMobile())) {
       return false;
     }
     return true;
   }
 
   public boolean checkeUpdateData() {
-    if (null == getId() || null == getMemberId() || null == getProvinceId() || null == getCityId()
-        || null == getAreaId() || null == getDef() || StringUtils.isBlank(getName()) || StringUtils.isBlank(getMobile())) {
+    if (null == getId() || null == getMemberId() || StringUtils.isBlank(getProvinceName()) || StringUtils.isBlank(getCityName())
+        || StringUtils.isBlank(getAreaName()) || null == getDef() || StringUtils.isBlank(getName()) || StringUtils.isBlank(getMobile())) {
       return false;
     }
     return true;

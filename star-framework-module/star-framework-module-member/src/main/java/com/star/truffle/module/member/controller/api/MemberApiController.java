@@ -62,8 +62,8 @@ public class MemberApiController {
   @ApiImplicitParams({
     @ApiImplicitParam(name = "head", value = "头像链接", dataType = "String", required = true, paramType = "query"),
     @ApiImplicitParam(name = "name", value = "姓名", dataType = "String", required = true, paramType = "query"),
-    @ApiImplicitParam(name = "mobile", value = "手机号", dataType = "String", required = true, paramType = "query"),
     @ApiImplicitParam(name = "openId", value = "openId", dataType = "String", required = true, paramType = "query"),
+    @ApiImplicitParam(name = "mobile", value = "手机号", dataType = "String", required = true, paramType = "query"),
     @ApiImplicitParam(name = "code", value = "验证码", paramType = "query", required = true, dataType = "String"),
     @ApiImplicitParam(name = "tag", value = "标识(1会员登录 2分销商登录)", paramType = "query", required = true, dataType = "int")
   })

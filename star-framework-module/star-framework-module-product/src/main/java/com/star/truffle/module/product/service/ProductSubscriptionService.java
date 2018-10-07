@@ -2,7 +2,9 @@
 package com.star.truffle.module.product.service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -104,6 +106,32 @@ public class ProductSubscriptionService {
     for (ProductSubscriptionResponseDto productSubscriptionResponseDto : list) {
       productSubscriptionCache.deleteProductSubscription(productSubscriptionResponseDto.getId());
     }
+  }
+
+  public Map<Long, Boolean> isSubscription(String productIds, String openId) {
+    if (StringUtils.isBlank(productIds) || StringUtils.isBlank(openId)) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR);
+    }
+    MemberResponseDto member = memberService.getMemberByOpenId(openId);
+    if (null == member) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR, "用户不存在");
+    }
+    if (member.getState() == LoginStateEnum.logout.getState()) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR, "用户未登录");
+    }
+    ProductSubscriptionRequestDto productSubscriptionRequestDto = new ProductSubscriptionRequestDto();
+    productSubscriptionRequestDto.setMemberId(member.getMemberId());
+    List<ProductSubscriptionResponseDto> list = productSubscriptionCache.queryProductSubscription(productSubscriptionRequestDto);
+    Map<Long, Boolean> map = new HashMap<>();
+    if (null != list && ! list.isEmpty()) {
+      String temp = "," + productIds + ",";
+      for (ProductSubscriptionResponseDto productSubscriptionResponseDto : list) {
+        if (temp.indexOf("," + productSubscriptionResponseDto.getProductId() + ",") != -1) {
+          map.put(productSubscriptionResponseDto.getProductId(), true);
+        }
+      }
+    }
+    return map;
   }
 
 }
