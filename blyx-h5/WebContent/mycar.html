@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta name="applicable-device" content="mobile">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="format-detection" content="telephone=no,email=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="full-screen" content="yes">
+<meta name="x5-fullscreen" content="true">
+<link rel="stylesheet" href="css/mui.min.css">
+<link rel="stylesheet" href="css/icons-extra.css">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/mycar.css">
+<script src="js/jquery.min.js"></script>
+<script src="js/mui.min.js"></script>
+<title>购物车</title>
+</head>
+<body>
+  <header id="header" class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" href="index.html"></a>
+    <h1 class="mui-title">购物车</h1>
+    <button class="mui-btn mui-btn-blue mui-btn-link mui-pull-right">编辑</button>
+  </header>
+  <div class="main mui-scroll-wrapper">
+    <div class="mui-scroll">
+    <ul>
+    </ul>
+    </div>
+  </div>
+  <nav class="mui-bar mui-bar-tab bot " id="nav">
+    <span class="mui-tab-item" id="mean1"> <span class="mui-tab-label">
+        <div class="mui-input-row mui-checkbox mui-left">
+          <label>全选</label> <input name="checkbox" id="selectall" value="Item 1" type="checkbox" class="allcheck">
+        </div>
+    </span>
+    </span> <span class="mui-tab-item " id="mean2"> <span class="mui-tab-label"> 合计：<b class="red">￥ 00.00</b>
+    </span>
+    </span> <span class="mui-tab-item " id="mean3"> <span class="mui-tab-label" id="sub">去结算</span>
+    </span>
+  </nav>
+  <script type="text/javascript" src="js/bl/star.common.js"></script>
+  <script type="text/javascript" src="js/bl/mycar.js"></script>
+</body>
+</html>

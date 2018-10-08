@@ -26,11 +26,11 @@ public class Order {
   // 收货类型 1自提 2快递
   private Integer deliveryType;
   // 收货地址-省
-  private Long provinceId;
+  private String provinceName;
   // 收货地址-市
-  private Long cityId;
+  private String cityName;
   // 收货地址-区县
-  private Long areaId;
+  private String areaName;
   // 收货地址
   private String deliveryAddress;
   // 收件人

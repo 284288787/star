@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta name="applicable-device" content="mobile">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="format-detection" content="telephone=no,email=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="full-screen" content="yes">
+<meta name="x5-fullscreen" content="true">
+<link rel="stylesheet" href="css/mui.min.css">
+<link rel="stylesheet" href="css/icons-extra.css">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/pay.css">
+<script src="js/jquery.min.js"></script>
+<script src="js/mui.min.js"></script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+<title>支付订单</title>
+</head>
+<body>
+  <header id="header" class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">支付订单</h1>
+  </header>
+  <div class="main">
+    <div class="colorbox">
+      <div id="demo1" class="mui-text-center">
+        <p class="mui-progressbar mui-progressbar-success" data-progress="20">
+          <span></span>
+        </p>
+        <span class="bef"><span class="mui-icon mui-icon-checkmarkempty"></span></span> <span class="aft"></span>
+      </div>
+      <div class="wd80">
+        <span>提交订单</span><span>在线付款</span>
+      </div>
+      <p class="num">订单金额：<span>￥<b>0.00</b></span></p>
+      <p class="info">订单提交成功，请在<span>30</span>分钟内完成支付。</p>
+    </div>
+    <div class="payaway">
+      <span>支付方式：</span> <img src="images/wx.png" alt=""> <span><b>微信支付</b></span>
+    </div>
+    <div class="mui-button-login">
+      <button type="button" class="mui-btn mui-btn-danger mui-btn-block btred">去付款</button>
+    </div>
+  </div>
+  <script type="text/javascript" src="js/bl/star.common.js"></script>
+  <script type="text/javascript" src="js/bl/pay.js"></script>
+  <script type="text/javascript">
+      var progressbar1 = mui('#demo1');
+      mui(progressbar1).progressbar().setProgress(50)
+    </script>
+</body>
+</html>

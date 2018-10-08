@@ -77,9 +77,9 @@ public class OrderService {
       if (null == deliveryAddress) {
         throw new StarServiceException(ApiCode.PARAM_ERROR, "收获地址不存在");
       }
-      orderRequestDto.setProvinceId(deliveryAddress.getProvinceId());
-      orderRequestDto.setCityId(deliveryAddress.getCityId());
-      orderRequestDto.setAreaId(deliveryAddress.getAreaId());
+      orderRequestDto.setProvinceName(deliveryAddress.getProvinceName());
+      orderRequestDto.setCityName(deliveryAddress.getCityName());
+      orderRequestDto.setAreaName(deliveryAddress.getAreaName());
       orderRequestDto.setDeliveryAddress(deliveryAddress.getAddress());
       orderRequestDto.setDeliveryName(deliveryAddress.getName());
       orderRequestDto.setDeliveryMobile(deliveryAddress.getMobile());

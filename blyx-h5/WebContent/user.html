@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta name="applicable-device" content="mobile">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="format-detection" content="telephone=no,email=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="full-screen" content="yes">
+<meta name="x5-fullscreen" content="true">
+<link rel="stylesheet" href="css/mui.min.css">
+<link rel="stylesheet" href="css/icons-extra.css">
+<link rel="stylesheet" href="css/login.css">
+<link rel="stylesheet" href="css/common.css">
+<script src="js/jquery.min.js"></script>
+<script src="js/mui.min.js"></script>
+<title>个人中心</title>
+</head>
+<body>
+  <header id="header" class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" href="index.html"></a>
+    <h1 class="mui-title">个人中心</h1>
+    <a class="mui-icon mui-icon-home mui-pull-right" href="index.html"></a>
+  </header>
+  <div class="main">
+    <div class="userInfo">
+      <div class="infomation clearfix">
+        <img class="head" src="images/qq.png">
+        <p class="bigp"></p>
+        <p class="mobile"></p>
+        <!-- <span @click="show=true"><van-icon name="qr" /></span> -->
+      </div>
+    </div>
+    <ul class="mui-table-view navlist">
+      <li class="mui-table-view-cell"><a class="mui-navigate-right" href="orderlist.html"> <span class="mui-icon mui-icon-extra mui-icon-extra-topic color1"></span> 全部订单
+      </a></li>
+      <li class="mui-table-view-cell"><a class="mui-navigate-right" href="orderlist.html#item2mobile"> <span class="mui-icon mui-icon-extra mui-icon-extra-prech color2"></span> 未付款
+      </a></li>
+      <li class="mui-table-view-cell"><a class="mui-navigate-right" href="orderlist.html#item3mobile"> <span class="mui-icon mui-icon-extra mui-icon-extra-outline color3"></span> 待提货
+      </a></li>
+      <li class="mui-table-view-cell"><a class="mui-navigate-right" href="orderlist.html#item4mobile"> <span class="mui-icon mui-icon-extra mui-icon-extra-gift color4"></span> 已提货
+      </a></li>
+      <li class="mui-table-view-cell"><a class="mui-navigate-right address"> <span class="mui-icon mui-icon-location color5"></span> 地址管理
+      </a></li>
+    </ul>
+    <div class="mui-button-login">
+      <a class="mui-btn mui-btn-danger mui-btn-block mui-btn-outlined bgw" href="index.html">去购物</a>
+      <a class="mui-btn mui-btn-block logoutbtn">退出当前账号</a>
+    </div>
+  </div>
+  <script type="text/javascript" src="js/bl/star.common.js"></script>
+  <script type="text/javascript">
+    $(function(){
+      var user = getLoginInfo();
+      if(! user){
+        document.location.href='login.html?redirect_url=user.html';
+      }
+      $(".head").attr("src", IMAGE_PREFIX + user.head);
+      $(".bigp").text(user.name);
+      $(".mobile").text(user.mobile);
+      $(".logoutbtn").on("tap", function(){
+        ajax({
+          url: '/api/member/logout',
+          data: {'openId': user.openId},
+          success: function(){
+            logout();
+            document.location.href='login.html';
+          }
+        });
+        return false;
+      });
+      $(".address").on('tap', function(){
+        delLocalData("to");
+        delLocalData("deliveryAddressId");
+        document.location.href="addresslist.html";
+        return false;
+      });
+    });
+  </script>
+</body>
+</html>

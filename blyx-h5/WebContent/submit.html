@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta name="applicable-device" content="mobile">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="format-detection" content="telephone=no,email=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="full-screen" content="yes">
+<meta name="x5-fullscreen" content="true">
+<link rel="stylesheet" href="css/mui.min.css">
+<link rel="stylesheet" href="css/icons-extra.css">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/submit.css">
+<script src="js/jquery.min.js"></script>
+<script src="js/mui.min.js"></script>
+<title>确认订单</title>
+</head>
+<body>
+  <header id="header" class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" href="mycar.html"></a>
+    <h1 class="mui-title">确认订单</h1>
+  </header>
+  <div class="main">
+    <div class="address">
+      <div id="segmentedControl" class="mui-segmented-control mui-segmented-control-negative">
+        <a class="mui-control-item mui-active" href="#item1">自提</a> <a class="mui-control-item" href="#item2">快递</a>
+      </div>
+    </div>
+    <div class="van-contact-card">
+      <div id="item1" class="mui-control-content mui-active ">
+        <div class="myself">收货人： <input type="text" name="name"/> <input type="text" name="mobile"/>
+        </div>
+        <p class="blank">提货地址：<span>湖南省长沙雨花区</span></p>
+        <p class="red">自提点：<span></span></p>
+      </div>
+      <div id="item2" class="mui-control-content pading">
+      <input type="hidden" name="deliveryAddressId" id="deliveryAddressId">
+        <div class="mui-navigate-right">
+          <p>收货人：<span class="deliveryname"></span></p>
+          <p>手机：<span class="deliverymobile"></span></p>
+          <p>地址：<span class="deliveryaddr"></span></p>
+        </div>
+      </div>
+    </div>
+    <div class="goodslist">
+      <ul>
+      </ul>
+    </div>
+    <div class="totaldiv">
+      <p>共计<b class="productNum">0</b>件商品，合计：<b class="productMoney">￥：0.00</b></p>
+      <p>原价：<del class="productOriginalPrice">￥：0.00</del></p>
+      <p class="despatch">邮费：<b class="despatchMoney">￥：0.00</b></p>
+      <p class="big">应付金额：<b class="productTotalMoney">￥：0.00</b></p>
+    </div>
+    <div id="ok" class="box mui-popover mui-popover-action mui-popover-bottom">
+      <p class="ptitle">此商品需要您到店自提，请仔细确认地址！</p>
+      <p class="padd">提货地址：<b>湖南省长沙雨花区同升街道2018号</b></p>
+      <p class="paddn">自提点：同升街道2018店 15389789876</p>
+      <p class="pred">10月05号 16:00 提货</p>
+      <div>
+        <button type="button" class="mui-btn cancel">取消付款</button>
+        <button type="button" class="mui-btn sbmit">确认订单</button>
+      </div>
+    </div>
+  </div>
+  <nav class="mui-bar mui-bar-tab bot " id="nav">
+    <span class="mui-tab-item " id="mean2">
+      <span class="mui-tab-label"> 合计：<b class="red">￥ 0.00</b></span>
+    </span> 
+    <a class="mui-tab-item " id="mean3"> <span class="mui-tab-label">提交订单</span></a>
+  </nav>
+  <script type="text/javascript" src="js/bl/star.common.js"></script>
+  <script type="text/javascript" src="js/bl/submit.js"></script>
+</body>
+</html>

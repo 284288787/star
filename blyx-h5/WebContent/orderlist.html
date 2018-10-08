@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta name="applicable-device" content="mobile">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="format-detection" content="telephone=no,email=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="full-screen" content="yes">
+<meta name="x5-fullscreen" content="true">
+<link rel="stylesheet" href="css/mui.min.css">
+<link rel="stylesheet" type="text/css" href="css/pulltorefresh.css" />
+<link rel="stylesheet" href="css/icons-extra.css">
+<link rel="stylesheet" href="css/common.css?fd">
+<link rel="stylesheet" href="css/order.css">
+<script src="js/jquery.min.js"></script>
+<script src="js/mui.min.js"></script>
+<script src="js/mui.pullToRefresh.js"></script>
+<script src="js/mui.pullToRefresh.material.js"></script>
+<style type="text/css">
+.mui-table-view {
+  margin-top: 0px !important;
+}
+</style>
+<title>我的订单</title>
+</head>
+<body>
+  <header id="header" class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" href="user.html"></a>
+    <h1 class="mui-title">我的订单</h1>
+  </header>
+  <div class="main">
+    <div class="mui-content">
+      <div id="slider" class="mui-slider">
+        <div id="sliderSegmentedControl" class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted mui-segmented-control-negative">
+          <a class="mui-control-item mui-active" href="#item1mobile"> 全部 </a> <a class="mui-control-item" href="#item2mobile"> 未付款 </a> <a class="mui-control-item" href="#item3mobile"> 待提货 </a> <a class="mui-control-item" href="#item4mobile"> 已提货 </a>
+        </div>
+        <div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-3"></div>
+        <div class="mui-slider-group">
+          <div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
+            <div id="scroll1" class="mui-scroll-wrapper">
+              <div class="mui-scroll">
+                <ul class="mui-table-view">
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div id="item2mobile" class="mui-slider-item mui-control-content">
+            <div id="scroll2" class="mui-scroll-wrapper">
+              <div class="mui-scroll">
+                <ul class="mui-table-view">
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div id="item3mobile" class="mui-slider-item mui-control-content">
+            <div id="scroll3" class="mui-scroll-wrapper">
+              <div class="mui-scroll">
+                <ul class="mui-table-view">
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div id="item4mobile" class="mui-slider-item mui-control-content">
+            <div id="scroll4" class="mui-scroll-wrapper">
+              <div class="mui-scroll">
+                <ul class="mui-table-view">
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript" src="js/bl/star.common.js"></script>
+  <script type="text/javascript" src="js/bl/orderlist.js"></script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+  }
+ 
+  * { touch-action: none; }
+.mg10{
+    margin: 10px;
+}
+.mg12{
+    margin: 12px;
+}
+.mg15{
+    margin: 15px;
+}
+.red{
+    color: red;
+}
+.blank{
+    color: #999;
+}
+.salk{
+    color: #333;
+}
+.mui-bar-tab .mui-tab-item.mui-active{
+    color: #55bb22;
+}
+body .bot{
+    -webkit-box-shadow: 0 0 1px rgba(0,0,0,0.15) !important;
+     box-shadow: 0 0 1px rgba(0,0,0,.15) !important;  
+}
+.main{
+    padding-top: 44px;
+
+}
+.mui-bar .mui-icon:active ,.mui-bar a.mui-icon{
+    color: #333 !important ;
+    opacity:0.9 !important;
+}
+.userPage {
+    position: fixed;
+    top: 100px;
+    right: 20px;
+    font-size: 20px;
+    z-index: 1;
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    padding:5px;
+    border-radius: 50%;
+  }
+  .homePage {
+    background-color: rgba(0, 0, 0, 0.6);
+    color: #fff;
+    padding: 5px;
+    border-radius: 50%;
+    position: fixed;
+    top: 100px;
+    left: 20px;
+    font-size: 20px;
+    z-index: 1;
+  }
+
+  #nav1{
+    width: 16% !important;
+  }
+  #nav2{
+    width: 16% !important;
+  }
+  #nav3{
+    width: 34% !important;
+    background-color: #f85;
+    color: #fff;
+    line-height: 50px;
+  }
+  #nav4{
+    width: 34% !important;
+    background-color: #f44;
+    color: #fff;
+    line-height: 50px;
+  }
+  .mui-btn-block{
+      padding: 8px 0px; 
+  }
+.mui-button-login{
+    padding: 10px; 
+}

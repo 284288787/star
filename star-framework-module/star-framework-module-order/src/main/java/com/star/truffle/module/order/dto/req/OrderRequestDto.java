@@ -39,7 +39,7 @@ public class OrderRequestDto extends Order {
     if (null != getOrderId() || null == getDeliveryType() || StringUtils.isBlank(getName()) || StringUtils.isBlank(getMobile())
         || null == getDistributorId()  || null == details || details.isEmpty()
         || (getDeliveryType() == DeliveryTypeEnum.express.type()) && (
-            null == getProvinceId() || null == getCityId() || null == getAreaId() 
+            StringUtils.isBlank(getProvinceName()) || StringUtils.isBlank(getCityName()) || StringUtils.isBlank(getAreaName())
             || StringUtils.isBlank(getDeliveryAddress())
             )
         ) {

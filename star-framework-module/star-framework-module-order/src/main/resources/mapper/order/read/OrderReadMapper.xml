@@ -10,9 +10,9 @@
     <result column="name" property="name" />
     <result column="mobile" property="mobile" />
     <result column="delivery_type" property="deliveryType" />
-    <result column="province_id" property="provinceId" />
-    <result column="city_id" property="cityId" />
-    <result column="area_id" property="areaId" />
+    <result column="province_name" property="provinceName" />
+    <result column="city_name" property="cityName" />
+    <result column="area_name" property="areaName" />
     <result column="delivery_address" property="deliveryAddress" />
     <result column="delivery_name" property="deliveryName" />
     <result column="delivery_mobile" property="deliveryMobile" />
@@ -32,7 +32,7 @@
   </resultMap>
 
   <sql id="sql_column">
-    order_id, order_code, `order`.type, member_id, `order`.open_id, `order`.`name`, `order`.mobile, delivery_type, `order`.province_id, `order`.city_id, `order`.area_id, delivery_address, delivery_name, delivery_mobile, despatch_money, total_money, total_brokerage, `order`.region_id, `order`.distributor_id, `order`.shop_address, `order`.shop_name, `order`.shop_mobile, `order`.state, pickup_code, `order`.create_time
+    order_id, order_code, `order`.type, member_id, `order`.open_id, `order`.`name`, `order`.mobile, delivery_type, `order`.province_name, `order`.city_name, `order`.area_name, delivery_address, delivery_name, delivery_mobile, despatch_money, total_money, total_brokerage, `order`.region_id, `order`.distributor_id, `order`.shop_address, `order`.shop_name, `order`.shop_mobile, `order`.state, pickup_code, `order`.create_time
    	, r.`name` region_name, p.areaId regionProvinceId, p.shortName regionProvinceName, c.areaId regionCityId, c.shortName regionCityName, a.areaId regionAreaId, a.shortName regionAreaName, t.areaId regionTownId, t.shortName regionTownName
 		,	d.`name` distributor_name
   </sql>
@@ -123,7 +123,7 @@
     order by
     <choose>
       <when test="pager != null and pager.orderBy != null and pager.orderBy != ''">${pager.orderBy}</when>
-      <otherwise>order_id</otherwise>
+      <otherwise>`order`.state, `order`.create_time desc</otherwise>
     </choose>
     <if test="pager != null and pager.orderType != null and pager.orderType != ''">${pager.orderType}</if>
     <if test="pager != null and pager.pageSize!=null and pager.startIndex!=null">
