@@ -23,6 +23,8 @@ public class OrderRequestDto extends Order {
   
   private List<OrderDetail> details;
   
+  private String states;
+  
   public boolean checkMemberSave() {
     if (null != getOrderId() || null == getMemberId() || null == getDeliveryType()
         || null == getDistributorId() || null == details || details.isEmpty()

@@ -54,7 +54,7 @@ public class OrderApiController {
   @ApiImplicitParams({
     @ApiImplicitParam(name = "type", value = "订单类型 1自主下单 2代客下单", dataType = "int", required = false, paramType = "query"),
     @ApiImplicitParam(name = "memberId", value = "用户ID", dataType = "Long", required = false, paramType = "query"),
-    @ApiImplicitParam(name = "state", value = "订单状态 1待付款 2待提货 3已提货", dataType = "int", required = false, paramType = "query"),
+    @ApiImplicitParam(name = "states", value = "订单状态 1待付款 2待提货 3已提货, 多个用逗号分隔", dataType = "int", required = false, paramType = "query"),
     @ApiImplicitParam(name = "page.pageNum", value = "页码，页码如果没有则查询满足条件的所有记录", dataType = "int", required = false, paramType = "query"),
     @ApiImplicitParam(name = "page.pageSize", value = "一页最大记录数，当页码有值时，该值没有指定则默认为10", dataType = "int", required = false, paramType = "query"),
   })
@@ -117,7 +117,7 @@ public class OrderApiController {
       return ApiResult.fail(ApiCode.SYSTEM_ERROR);
     }
   }
-
+  
   @RequestMapping(value = "/deleteOrder", method = RequestMethod.POST)
   @ApiOperation(value = "根据主键删除订单", notes = "根据主键删除订单", httpMethod = "POST", response = ApiResult.class)
   @ApiImplicitParams({
@@ -126,6 +126,23 @@ public class OrderApiController {
   public ApiResult<Void> deleteOrder(Long orderId) {
     try {
       orderService.deleteOrder(orderId);
+      return ApiResult.success();
+    } catch (StarServiceException e) {
+      return ApiResult.fail(e.getCode(), e.getMsg());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return ApiResult.fail(ApiCode.SYSTEM_ERROR);
+    }
+  }
+
+  @RequestMapping(value = "/pickupOrder", method = RequestMethod.POST)
+  @ApiOperation(value = "确认提货", notes = "确认提货", httpMethod = "POST", response = ApiResult.class)
+  @ApiImplicitParams({
+    @ApiImplicitParam(name = "orderId", value = "主键", dataType = "Long", required = true, paramType = "query")
+  })
+  public ApiResult<Void> pickupOrder(Long orderId) {
+    try {
+      orderService.pickupOrder(orderId);
       return ApiResult.success();
     } catch (StarServiceException e) {
       return ApiResult.fail(e.getCode(), e.getMsg());

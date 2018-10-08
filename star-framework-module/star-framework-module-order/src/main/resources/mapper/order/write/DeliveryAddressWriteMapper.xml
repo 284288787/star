@@ -17,10 +17,12 @@
   <update id="updateDeliveryAddress" parameterType="com.star.truffle.module.order.dto.req.DeliveryAddressRequestDto">
     update delivery_address
     <trim prefix="set" suffixOverrides=",">
-      <if test="memberId != null">member_id = #{memberId},</if>
       <if test="name != null and name != ''">`name` = #{name},</if>
       <if test="mobile != null and mobile != ''">mobile = #{mobile},</if>
       <if test="address != null and address != ''">address = #{address},</if>
+      <if test="provinceName != null and provinceName != ''">province_name = #{provinceName},</if>
+      <if test="cityName != null and cityName != ''">city_name = #{cityName},</if>
+      <if test="areaName != null and areaName != ''">area_name = #{areaName},</if>
       <if test="def != null">def = #{def},</if>
     </trim>
     where id = #{id}

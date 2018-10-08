@@ -197,7 +197,10 @@ public class OrderService {
     if (null == orderId) {
       throw new StarServiceException(ApiCode.PARAM_ERROR);
     }
-    this.orderCache.deleteOrder(orderId);
+    OrderRequestDto param = new OrderRequestDto();
+    param.setOrderId(orderId);
+    param.setState(OrderStateEnum.delete.state());
+    this.orderCache.updateOrder(param);
   }
 
   public void deleteOrder(String idstr) {
@@ -207,7 +210,11 @@ public class OrderService {
     String[] orderIds = idstr.split(",");
     for (String str : orderIds) {
       Long orderId = Long.parseLong(str);
-      this.orderCache.deleteOrder(orderId);
+//      this.orderCache.deleteOrder(orderId);
+      OrderRequestDto param = new OrderRequestDto();
+      param.setOrderId(orderId);
+      param.setState(OrderStateEnum.delete.state());
+      this.orderCache.updateOrder(param);
     }
   }
 
@@ -233,6 +240,13 @@ public class OrderService {
 
   public Long queryOrderCount(OrderRequestDto orderRequestDto) {
     return this.orderCache.queryOrderCount(orderRequestDto);
+  }
+
+  public void pickupOrder(Long orderId) {
+    OrderRequestDto param = new OrderRequestDto();
+    param.setOrderId(orderId);
+    param.setState(OrderStateEnum.success.state());
+    this.orderCache.updateOrder(param);
   }
 
 }

@@ -87,6 +87,9 @@
       <if test="state != null">
         and `order`.state = #{state}
       </if>
+      <if test="states != null and states != ''">
+        and `order`.state in (${states})
+      </if>
       <if test="pickupCode != null and pickupCode != ''">
         and pickup_code = #{pickupCode}
       </if>

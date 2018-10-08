@@ -66,8 +66,8 @@ public class DeliveryAddressService {
         for (DeliveryAddressResponseDto deliveryAddressResponseDto : list) {
           if (deliveryAddressResponseDto.getId() != deliveryAddressRequestDto.getId()) {
             DeliveryAddressRequestDto deliveryAddress = new DeliveryAddressRequestDto();
-            deliveryAddressRequestDto.setId(deliveryAddressResponseDto.getId());
-            deliveryAddressRequestDto.setDef(0);
+            deliveryAddress.setId(deliveryAddressResponseDto.getId());
+            deliveryAddress.setDef(0);
             this.deliveryAddressCache.updateDeliveryAddress(deliveryAddress);
           }
         }
