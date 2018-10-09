@@ -263,5 +263,4 @@ public class ShoppingCartService {
     EnterOrder enterOrder = new EnterOrder(despatchMoney, Arrays.asList(shoppingCartResponseDto), deliveryAddress);
     return enterOrder;
   }
-
 }

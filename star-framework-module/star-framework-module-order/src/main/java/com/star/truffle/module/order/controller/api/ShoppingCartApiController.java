@@ -48,7 +48,7 @@ public class ShoppingCartApiController {
       return ApiResult.fail(ApiCode.SYSTEM_ERROR);
     }
   }
-
+  
   @RequestMapping(value = "/queryShoppingCartCount", method = RequestMethod.POST)
   @ApiOperation(value = "统计总数", notes = "统计总数", httpMethod = "POST", response = ApiResult.class)
   @ApiImplicitParams({

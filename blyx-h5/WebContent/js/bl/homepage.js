@@ -15,6 +15,7 @@ mui.init({
 var pageNum = 1, pageSize = 10;
 var py = getParam("py");
 var user = getLoginInfo();
+var userCartNum;
 if(py) putLocalData('py', py);
 $(function(){
   initShopInfo();
@@ -134,9 +135,38 @@ function loadData(pageNum, pageSize, title){
           }
           li += '<p class="redp clearfix">￥<big>'+(item.price/100.0).toFixed(2)+'</big> <del>￥'+(item.originalPrice/100.0).toFixed(2)+'</del></p>';
           li += '<b class="like has" data-pid="'+item.productId+'"> <i >关注</i></b>';
-          li += '<a class="addCar'+(item.state>=3 ? ' disable': '')+'" data-pid="'+item.productId+'">加入购物车</a>';
-          li += '</li>';
+          li += '<a class="addCar'+(item.state>=3 ? ' disable': '')+'" data-pid="'+item.productId+'">加入购物车';
+          if(userCartNum && userCartNum[item.productId] && userCartNum[item.productId] > 0){
+            li += '<span class="mui-icon"><span class="mui-badge" style="background:#2fa781">'+userCartNum[item.productId]+'</span></span>';
+          }
+          li += '</a></li>';
           $(".itemlist").append(li);
+        }
+        if(! userCartNum){
+          userCartNum = {};
+          ajax({
+            url: '/api/shoppingCart/queryShoppingCart',
+            data: {'memberId': user.memberId},
+            success: function(items){
+              if(null != items && items.length > 0){
+                for(var o in items){
+                  var item = items[o];
+                  userCartNum[item.productId] = item.num;
+                }
+                $(".itemlist a.addCar:not(.disable)").each(function(){
+                  var thisObj = $(this);
+                  var pid=thisObj.attr("data-pid");
+                  if(userCartNum[pid] && userCartNum[pid] > 0){
+                    if($(".mui-badge", thisObj).length == 1){
+                      $(".mui-badge", thisObj).text(userCartNum[pid]);
+                    }else{
+                      thisObj.html('加入购物车<span class="mui-icon"><span class="mui-badge" style="background:#2fa781">'+userCartNum[pid]+'</span></span>');
+                    }
+                  }
+                });
+              }
+            }
+          });
         }
         syncOtherInfo(productIds);
         
@@ -150,6 +180,11 @@ function loadData(pageNum, pageSize, title){
               data: {'productId': pid, 'memberId': user.memberId, 'num': 1},
               success: function(data){
                 mui.toast("添加购物车成功");
+                if($(".mui-badge", thisObj).length == 1){
+                  $(".mui-badge", thisObj).text($.trim($(".mui-badge", thisObj).text()) * 1 + 1);
+                }else{
+                  thisObj.html('加入购物车<span class="mui-icon"><span class="mui-badge" style="background:#2fa781">1</span></span>');
+                }
                 initCartNum();
               }
             });
@@ -202,6 +237,7 @@ function loadData(pageNum, pageSize, title){
   });
 }
 
+//加入购物车<span class="mui-icon"><span class="mui-badge" style="background:#2fa781">2</span></span>
 function syncOtherInfo(productIds){
   if(islogin()){
     ajax({
