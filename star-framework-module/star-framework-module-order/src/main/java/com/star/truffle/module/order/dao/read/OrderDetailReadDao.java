@@ -15,6 +15,6 @@ public interface OrderDetailReadDao {
 
   public Long getProductNoPayNumber(@Param("productId") Long productId, @Param("state") int state);
 
-  public List<OrderDetailResponseDto> buyRecord(@Param("productId") Long productId, @Param("pager") Page page);
+  public List<OrderDetailResponseDto> buyRecord(@Param("productId") Long productId, @Param("pager") Page pager);
 
 }

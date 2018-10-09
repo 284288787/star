@@ -7,7 +7,7 @@ mui('.mui-scroll-wrapper').scroll({
 $(function() {
   initDetailInfo();
   initCartNum();
-  initBuyRecord
+  initBuyRecord();
   var py = getParam("py");
   $(".homePage").on("tap", function(){
     document.location.href='index.html?py='+py;
@@ -182,7 +182,7 @@ function initBuyRecord(){
     url: '/api/order/buyRecord',
     data: {'productId': pid},
     success: function(items){
-      
+     alert(JSON.stringify(items)) 
     }
   });
 }
