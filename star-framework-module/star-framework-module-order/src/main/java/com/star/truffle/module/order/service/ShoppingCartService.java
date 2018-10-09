@@ -219,6 +219,22 @@ public class ShoppingCartService {
     return enterOrder;
   }
 
+  public void buyNowCheck(Long memberId, Long productId, int num) {
+    ProductResponseDto productResponseDto = this.productService.getProduct(productId);
+    if (null == productResponseDto) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR, "商品不存在");
+    }
+    if (productResponseDto.getState() != ProductEnum.onshelf.state()) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR, "该商品现在不能购买");
+    }
+    if (productResponseDto.getNumberType() == 2) {
+      Long number = orderService.getProductNoPayNumber(productId);
+      if(productResponseDto.getSoldNumber() + num + number > productResponseDto.getNumber()) {
+        throw new StarServiceException(ApiCode.PARAM_ERROR, "商品["+productResponseDto.getTitle()+"]库存不足");
+      }
+    }
+  }
+  
   public EnterOrder buyNow(Long memberId, Long productId, int num) {
     ProductResponseDto productResponseDto = this.productService.getProduct(productId);
     if (null == productResponseDto) {
@@ -226,6 +242,12 @@ public class ShoppingCartService {
     }
     if (productResponseDto.getState() != ProductEnum.onshelf.state()) {
       throw new StarServiceException(ApiCode.PARAM_ERROR, "商品现在已不能购买");
+    }
+    if (productResponseDto.getNumberType() == 2) {
+      Long number = orderService.getProductNoPayNumber(productId);
+      if(productResponseDto.getSoldNumber() + num + number > productResponseDto.getNumber()) {
+        throw new StarServiceException(ApiCode.PARAM_ERROR, "商品["+productResponseDto.getTitle()+"]库存不足");
+      }
     }
     ShoppingCartResponseDto shoppingCartResponseDto = starJson.str2obj(starJson.obj2string(productResponseDto), ShoppingCartResponseDto.class);
     shoppingCartResponseDto.setNum(num);

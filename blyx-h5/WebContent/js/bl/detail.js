@@ -75,14 +75,10 @@ $(function() {
     if(islogin()){
       ajax({
         async: false,
-        url: '/api/product/getProductInfo',
-        data: {'productId': pid},
+        url: '/api/shoppingCart/buyNowCheck',
+        data: {'productId': pid, 'num': num, 'memberId': user.memberId},
         success: function(data){
-          if(data.state!=1){
-            mui.toast("该商品暂时不能购买");
-          }else{
-            document.location.href='buynow.html?pid='+pid+'&num='+num;
-          }
+          document.location.href='buynow.html?pid='+pid+'&num='+num;
         }
       });
     }else{

@@ -141,7 +141,7 @@ public class ShoppingCartApiController {
   }
   
   @RequestMapping(value = "/enterOrderCheck", method = RequestMethod.POST)
-  @ApiOperation(value = "确认订单之前的校验", notes = "确认订单之前的校验 true表示可以下单", httpMethod = "POST", response = ApiResult.class)
+  @ApiOperation(value = "确认订单之前的校验", notes = "确认订单之前的校验 没有异常表示可以下单", httpMethod = "POST", response = ApiResult.class)
   @ApiImplicitParams({
     @ApiImplicitParam(name = "memberId", value = "用户Id", dataType = "Long", required = true, paramType = "query"),
   })
@@ -166,6 +166,25 @@ public class ShoppingCartApiController {
     try {
       EnterOrder enterOrder = shoppingCartService.enterOrder(memberId);
       return ApiResult.success(enterOrder);
+    } catch (StarServiceException e) {
+      return ApiResult.fail(e.getCode(), e.getMsg());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return ApiResult.fail(ApiCode.SYSTEM_ERROR);
+    }
+  }
+  
+  @RequestMapping(value = "/buyNowCheck", method = RequestMethod.POST)
+  @ApiOperation(value = "立即购买之前的校验", notes = "立即购买之前的校验 没有异常表示可以下单", httpMethod = "POST", response = ApiResult.class)
+  @ApiImplicitParams({
+    @ApiImplicitParam(name = "memberId", value = "用户Id", dataType = "Long", required = true, paramType = "query"),
+    @ApiImplicitParam(name = "productId", value = "供应Id", dataType = "Long", required = true, paramType = "query"),
+    @ApiImplicitParam(name = "num", value = "购买数量", dataType = "int", required = true, paramType = "query"),
+  })
+  public ApiResult<Void> buyNowCheck(Long memberId, Long productId, int num) {
+    try {
+      shoppingCartService.buyNowCheck(memberId, productId, num);
+      return ApiResult.success();
     } catch (StarServiceException e) {
       return ApiResult.fail(e.getCode(), e.getMsg());
     } catch (Exception e) {
