@@ -7,6 +7,7 @@ mui('.mui-scroll-wrapper').scroll({
 $(function() {
   initDetailInfo();
   initCartNum();
+  initBuyRecord
   var py = getParam("py");
   $(".homePage").on("tap", function(){
     document.location.href='index.html?py='+py;
@@ -132,7 +133,7 @@ function initDetailInfo(){
         $(".lastimg").before('<div class="mui-slider-item">\
             <a href="#"> <img class="productImg" src="'+IMAGE_PREFIX+pictures[i].url+'">\
             </a>\
-          </div>');
+        </div>');
         $(".point").append('<div class="mui-indicator'+(i==0 ? ' mui-active' : '')+'"></div>');
       }
       var slider = mui("#slider");
@@ -172,6 +173,16 @@ function initDetailInfo(){
       $(".information .specification").text(product.specification);
       $(".information .originPlace").text(product.originPlace);
       $(".productContentBox5 .desc").html(product.description);
+    }
+  });
+}
+
+function initBuyRecord(){
+  ajax({
+    url: '/api/order/buyRecord',
+    data: {'productId': pid},
+    success: function(items){
+      
     }
   });
 }

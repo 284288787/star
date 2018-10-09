@@ -34,4 +34,22 @@
     from order_detail d 
     where d.product_id = #{productId} and exists (select * from `order` o where o.order_id = d.order_id and o.state = #{state})
   </select>
+  
+  <resultMap id="orderDetailResponseResultMap" type="com.star.truffle.module.order.dto.res.OrderDetailResponseDto">
+    <result column="count" property="count" />
+    <result column="create_time" property="createTime" />
+    <result column="member_id" property="memberId" />
+    <result column="head" property="head" />
+    <result column="name" property="name" />
+  </resultMap>
+  
+  <select id="buyRecord" resultMap="orderDetailResponseResultMap">
+    SELECT d.count, o.create_time, o.member_id, m.head, m.`name`
+    from order_detail d 
+    LEFT JOIN `order` o on d.order_id = o.order_id
+    LEFT JOIN member_info m on m.member_id = o.member_id
+    where 
+      o.state in (2,3) and d.product_id = #{productId}
+    limit #{pager.startIndex}, #{pager.pageSize}
+  </select>
 </mapper>

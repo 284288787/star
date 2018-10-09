@@ -27,6 +27,7 @@ import com.star.truffle.module.order.domain.OrderDetail;
 import com.star.truffle.module.order.dto.req.OrderRequestDto;
 import com.star.truffle.module.order.dto.req.ShoppingCartRequestDto;
 import com.star.truffle.module.order.dto.res.DeliveryAddressResponseDto;
+import com.star.truffle.module.order.dto.res.OrderDetailResponseDto;
 import com.star.truffle.module.order.dto.res.OrderResponseDto;
 import com.star.truffle.module.order.dto.res.ShoppingCartResponseDto;
 import com.star.truffle.module.order.properties.OrderProperties;
@@ -282,6 +283,18 @@ public class OrderService {
         break;
       }
     }
+  }
+
+  public List<OrderDetailResponseDto> buyRecord(Long productId, Integer pageNum, Integer pageSize) {
+    if (null == pageNum) {
+      pageNum = 1;
+    }
+    if (null == pageSize) {
+      pageNum = 10;
+    }
+    Page page = new Page(pageNum, pageSize, null, null);
+    List<OrderDetailResponseDto> list = this.orderDetailCache.buyRecord(productId, page);
+    return list;
   }
 
 }

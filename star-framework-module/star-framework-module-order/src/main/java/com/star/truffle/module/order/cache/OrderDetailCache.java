@@ -8,9 +8,11 @@ import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import com.star.truffle.core.jdbc.Page;
 import com.star.truffle.module.order.dao.read.OrderDetailReadDao;
 import com.star.truffle.module.order.dao.write.OrderDetailWriteDao;
 import com.star.truffle.module.order.domain.OrderDetail;
+import com.star.truffle.module.order.dto.res.OrderDetailResponseDto;
 
 @Service
 public class OrderDetailCache {
@@ -34,5 +36,9 @@ public class OrderDetailCache {
 
   public Long getProductNoPayNumber(Long productId, int state) {
     return this.orderDetailReadDao.getProductNoPayNumber(productId, state);
+  }
+
+  public List<OrderDetailResponseDto> buyRecord(Long productId, Page page) {
+    return orderDetailReadDao.buyRecord(productId, page);
   }
 }

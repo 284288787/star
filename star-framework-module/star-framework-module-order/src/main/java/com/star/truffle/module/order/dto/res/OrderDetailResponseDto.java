@@ -9,4 +9,8 @@ import com.star.truffle.module.order.domain.OrderDetail;
 @Setter
 public class OrderDetailResponseDto extends OrderDetail {
 
+  private Long memberId;
+  private String name;
+  private String head;
+  private String createTime;
 }

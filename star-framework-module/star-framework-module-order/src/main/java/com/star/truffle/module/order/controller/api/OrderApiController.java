@@ -13,6 +13,7 @@ import com.star.truffle.core.StarServiceException;
 import com.star.truffle.core.web.ApiCode;
 import com.star.truffle.core.web.ApiResult;
 import com.star.truffle.module.order.dto.req.OrderRequestDto;
+import com.star.truffle.module.order.dto.res.OrderDetailResponseDto;
 import com.star.truffle.module.order.dto.res.OrderResponseDto;
 import com.star.truffle.module.order.service.OrderService;
 
@@ -134,7 +135,7 @@ public class OrderApiController {
       return ApiResult.fail(ApiCode.SYSTEM_ERROR);
     }
   }
-
+  
   @RequestMapping(value = "/pickupOrder", method = RequestMethod.POST)
   @ApiOperation(value = "确认提货", notes = "确认提货", httpMethod = "POST", response = ApiResult.class)
   @ApiImplicitParams({
@@ -144,6 +145,23 @@ public class OrderApiController {
     try {
       orderService.pickupOrder(orderId);
       return ApiResult.success();
+    } catch (StarServiceException e) {
+      return ApiResult.fail(e.getCode(), e.getMsg());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return ApiResult.fail(ApiCode.SYSTEM_ERROR);
+    }
+  }
+
+  @RequestMapping(value = "/buyRecord", method = RequestMethod.POST)
+  @ApiOperation(value = "购买记录", notes = "确认提货", httpMethod = "POST", response = ApiResult.class)
+  @ApiImplicitParams({
+    @ApiImplicitParam(name = "productId", value = "供应", dataType = "Long", required = true, paramType = "query")
+  })
+  public ApiResult<List<OrderDetailResponseDto>> buyRecord(Long productId, Integer pageNum, Integer pageSize) {
+    try {
+      List<OrderDetailResponseDto> list = orderService.buyRecord(productId, pageNum, pageSize);
+      return ApiResult.success(list);
     } catch (StarServiceException e) {
       return ApiResult.fail(e.getCode(), e.getMsg());
     } catch (Exception e) {
