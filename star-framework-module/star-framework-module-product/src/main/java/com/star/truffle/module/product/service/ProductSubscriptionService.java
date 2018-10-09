@@ -18,6 +18,7 @@ import com.star.truffle.module.member.service.MemberService;
 import com.star.truffle.module.product.cache.ProductSubscriptionCache;
 import com.star.truffle.module.product.constant.ProductEnum;
 import com.star.truffle.module.product.domain.ProductSubscription;
+import com.star.truffle.module.product.dto.req.ProductRequestDto;
 import com.star.truffle.module.product.dto.req.ProductSubscriptionRequestDto;
 import com.star.truffle.module.product.dto.res.ProductResponseDto;
 import com.star.truffle.module.product.dto.res.ProductSubscriptionResponseDto;
@@ -86,6 +87,10 @@ public class ProductSubscriptionService {
     productSubscription.setMemberId(member.getMemberId()); 
     productSubscription.setCreateTime(new Date());
     this.productSubscriptionCache.saveProductSubscription(productSubscription);
+    ProductRequestDto param = new ProductRequestDto();
+    param.setProductId(productId);
+    param.setSubscribers(product.getSubscribers() + 1);
+    this.productService.updateProduct(param);
   }
 
   public void unsubscribe(Long productId, String openId) {
@@ -95,6 +100,10 @@ public class ProductSubscriptionService {
     }
     if (member.getState() == LoginStateEnum.logout.getState()) {
       throw new StarServiceException(ApiCode.PARAM_ERROR, "用户未登录");
+    }
+    ProductResponseDto product = productService.getProduct(productId);
+    if (null == product) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR, "供应记录不存在");
     }
     ProductSubscriptionRequestDto productSubscriptionRequestDto = new ProductSubscriptionRequestDto();
     productSubscriptionRequestDto.setMemberId(member.getMemberId());
@@ -106,6 +115,10 @@ public class ProductSubscriptionService {
     for (ProductSubscriptionResponseDto productSubscriptionResponseDto : list) {
       productSubscriptionCache.deleteProductSubscription(productSubscriptionResponseDto.getId());
     }
+    ProductRequestDto param = new ProductRequestDto();
+    param.setProductId(productId);
+    param.setSubscribers(product.getSubscribers() - 1);
+    this.productService.updateProduct(param);
   }
 
   public Map<Long, Boolean> isSubscription(String productIds, String openId) {
