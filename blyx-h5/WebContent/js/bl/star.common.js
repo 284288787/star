@@ -19,7 +19,7 @@ function ajax(options){
     dataType: 'json',
     success: function(res){
       if(res.code==0){
-        options.success(res.data);
+        if(options.success) options.success(res.data);
       }else{
         if(options.othercode){
           options.othercode(res);

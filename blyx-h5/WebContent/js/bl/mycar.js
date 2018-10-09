@@ -41,14 +41,23 @@ function loadCarData(){
               (canBuy ? '' : '<p class="gd red">'+(item.state==3? '已售罄': '预售')+'</p>') +
               '<div class="gn">\
                 <div class="mui-numbox smallbox" data-numbox-min="1" data-numbox-max="100">\
-                  <button class="mui-btn mui-btn-numbox-minus" type="button">-</button>\
-                  <input id="test" class="mui-input-numbox" type="number" value="'+item.num+'" />\
-                  <button class="mui-btn mui-btn-numbox-plus" type="button">+</button>\
+                  <button class="mui-btn mui-btn-numbox-minus" type="button" data-cartid="'+item.cartId+'">-</button>\
+                  <input class="mui-input-numbox" type="number" value="'+item.num+'" />\
+                  <button class="mui-btn mui-btn-numbox-plus" type="button" data-cartid="'+item.cartId+'">+</button>\
                 </div>\
               </div>\
             </div>\
           </li>');
         }
+        mui('.mui-numbox').numbox();
+        $("button.mui-btn-numbox-minus, button.mui-btn-numbox-plus").off().on('tap', function(){
+          var cartId = $(this).attr("data-cartid");
+          var num = $("input.mui-input-numbox", $(this).parent()).val();
+          ajax({
+            url: '/api/shoppingCart/updateShoppingCartNum',
+            data: {'memberId': user.memberId, 'cartId': cartId, 'num': num}
+          });
+        });
         var chkall = $("#selectall");
         chkall.change(function(){
           var checked = this.checked;
@@ -111,7 +120,6 @@ function total(){
       }
     });
   }
-  mui('.mui-numbox').numbox();
 }
 var checks = new Array();
 mui("#header").on("tap", "button", function() {
