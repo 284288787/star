@@ -27,4 +27,11 @@
     where order_id = #{orderId}
     order by id
   </select>
+  
+  <select id="getProductNoPayNumber" resultType="java.lang.Long">
+    select
+    IFNULL(sum(d.count),0)
+    from order_detail d 
+    where d.product_id = #{productId} and exists (select * from `order` o where o.order_id = d.order_id and o.state = #{state})
+  </select>
 </mapper>

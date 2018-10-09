@@ -31,4 +31,8 @@ public class OrderDetailCache {
     List<OrderDetail> details = this.orderDetailReadDao.getOrderDetails(orderId);
     return details;
   }
+
+  public Long getProductNoPayNumber(Long productId, int state) {
+    return this.orderDetailReadDao.getProductNoPayNumber(productId, state);
+  }
 }

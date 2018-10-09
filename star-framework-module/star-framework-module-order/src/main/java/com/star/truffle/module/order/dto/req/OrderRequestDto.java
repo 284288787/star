@@ -25,6 +25,8 @@ public class OrderRequestDto extends Order {
   
   private String states;
   
+  private Integer minutes30;  //是否查询30分以内的订单 1是 0否
+  
   public boolean checkMemberSave() {
     if (null != getOrderId() || null == getMemberId() || null == getDeliveryType()
         || null == getDistributorId() || null == details || details.isEmpty()

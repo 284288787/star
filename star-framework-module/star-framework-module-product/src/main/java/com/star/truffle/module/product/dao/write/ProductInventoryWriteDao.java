@@ -13,4 +13,6 @@ public interface ProductInventoryWriteDao {
 
   public ProductInventory getProductInventoryByProductId(@Param("productId") Long productId, @Param("type") int type);
 
+  public int updateProductInventory(ProductInventory productInventory);
+
 }

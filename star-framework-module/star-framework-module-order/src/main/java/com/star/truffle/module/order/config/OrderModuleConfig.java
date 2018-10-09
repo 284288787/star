@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
     "com.star.truffle.module.order.service",
     "com.star.truffle.module.order.controller",
     "com.star.truffle.module.order.properties",
+    "com.star.truffle.module.order.job",
 })
 public class OrderModuleConfig {
 

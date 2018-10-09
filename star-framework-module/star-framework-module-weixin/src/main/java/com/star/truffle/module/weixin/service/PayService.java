@@ -1,6 +1,7 @@
 /**create by liuhua at 2018年9月25日 下午2:54:04**/
 package com.star.truffle.module.weixin.service;
 
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -16,9 +17,11 @@ import com.star.truffle.module.member.dto.res.MemberResponseDto;
 import com.star.truffle.module.member.service.MemberService;
 import com.star.truffle.module.order.constant.DeliveryTypeEnum;
 import com.star.truffle.module.order.constant.OrderStateEnum;
+import com.star.truffle.module.order.domain.OrderDetail;
 import com.star.truffle.module.order.dto.req.OrderRequestDto;
 import com.star.truffle.module.order.dto.res.OrderResponseDto;
 import com.star.truffle.module.order.service.OrderService;
+import com.star.truffle.module.product.service.ProductService;
 import com.star.truffle.module.weixin.dao.WeiXinApiDao;
 import com.star.truffle.module.weixin.dao.write.PayDetailInfoWriteDao;
 import com.star.truffle.module.weixin.domain.PayDetailInfo;
@@ -35,6 +38,8 @@ public class PayService {
   private OrderService orderService;
   @Autowired
   private MemberService memberService;
+  @Autowired
+  private ProductService productService;
   @Autowired
   private WeiXinApiDao weiXinApiDao;
   @Autowired
@@ -94,6 +99,12 @@ public class PayService {
           orderRequestDto.setPickupCode(SmsUtil.buildCode(4));
         }
         orderService.updateOrder(orderRequestDto);
+        List<OrderDetail> details = order.getDetails();
+        if (null != details && ! details.isEmpty()) {
+          for (OrderDetail orderDetail : details) {
+            productService.updateProductSoldNumber(orderDetail.getProductId(), orderDetail.getCount());
+          }
+        }
       }
     }
     return false;

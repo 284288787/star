@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.star.truffle.core.StarServiceException;
 import com.star.truffle.core.jackson.StarJson;
+import com.star.truffle.core.jdbc.Page;
 import com.star.truffle.core.web.ApiCode;
 import com.star.truffle.module.member.dto.res.DistributorResponseDto;
 import com.star.truffle.module.member.dto.res.MemberResponseDto;
@@ -17,6 +18,7 @@ import com.star.truffle.module.member.service.DistributorService;
 import com.star.truffle.module.member.service.MemberService;
 import com.star.truffle.module.order.cache.OrderCache;
 import com.star.truffle.module.order.cache.OrderDetailCache;
+import com.star.truffle.module.order.constant.DeleteUserTypeEnum;
 import com.star.truffle.module.order.constant.DeliveryTypeEnum;
 import com.star.truffle.module.order.constant.OrderStateEnum;
 import com.star.truffle.module.order.constant.OrderTypeEnum;
@@ -247,6 +249,39 @@ public class OrderService {
     param.setOrderId(orderId);
     param.setState(OrderStateEnum.success.state());
     this.orderCache.updateOrder(param);
+  }
+
+  /**
+   * 查询没有支付的供应的总数量
+   * @param productId
+   * @return
+   */
+  public Long getProductNoPayNumber(Long productId) {
+    return orderDetailCache.getProductNoPayNumber(productId, OrderStateEnum.nopay.state());
+  }
+
+  public void deleteOrderJob() {
+    int pageNum = 1;
+    int pageSize = 50;
+    OrderRequestDto param = new OrderRequestDto();
+    param.setState(OrderStateEnum.nopay.state());
+    param.setMinutes30(0);
+    while(true) {
+      param.setPager(new Page(pageNum, pageSize, null, null));
+      List<OrderResponseDto> orders = this.orderCache.queryOrder(param);
+      pageNum ++;
+      if (null != orders && ! orders.isEmpty()) {
+        for (OrderResponseDto orderResponseDto : orders) {
+          OrderRequestDto orderRequestDto = new OrderRequestDto();
+          orderRequestDto.setOrderId(orderResponseDto.getOrderId());
+          orderRequestDto.setState(OrderStateEnum.delete.state());
+          orderRequestDto.setDeleteUser(DeleteUserTypeEnum.system.getType());
+          this.orderCache.updateOrder(orderRequestDto);
+        }
+      }else {
+        break;
+      }
+    }
   }
 
 }

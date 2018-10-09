@@ -36,4 +36,9 @@ public class ProductInventoryCache {
     ProductInventory productInventory = this.productInventoryReadDao.getProductInventoryByProductId(productId, type);
     return productInventory;
   }
+
+  @CachePut(value = "module-product-productInventory", key = "'productInventory_productId_'+#productInventory.productId+'_type_'+#productInventory.type", condition = "#productInventory != null")
+  public void updateProductInventory(ProductInventory productInventory) {
+    this.productInventoryWriteDao.updateProductInventory(productInventory);
+  }
 }

@@ -29,10 +29,11 @@
     <result column="create_time" property="createTime" />
     <result column="region_name" property="regionName" />
     <result column="distributor_name" property="distributorName" />
+    <result column="delete_user" property="deleteUser" />
   </resultMap>
 
   <sql id="sql_column">
-    order_id, order_code, `order`.type, member_id, `order`.open_id, `order`.`name`, `order`.mobile, delivery_type, `order`.province_name, `order`.city_name, `order`.area_name, delivery_address, delivery_name, delivery_mobile, despatch_money, total_money, total_brokerage, `order`.region_id, `order`.distributor_id, `order`.shop_address, `order`.shop_name, `order`.shop_mobile, `order`.state, pickup_code, `order`.create_time
+    `order`.delete_user, order_id, order_code, `order`.type, member_id, `order`.open_id, `order`.`name`, `order`.mobile, delivery_type, `order`.province_name, `order`.city_name, `order`.area_name, delivery_address, delivery_name, delivery_mobile, despatch_money, total_money, total_brokerage, `order`.region_id, `order`.distributor_id, `order`.shop_address, `order`.shop_name, `order`.shop_mobile, `order`.state, pickup_code, `order`.create_time
    	, r.`name` region_name, p.areaId regionProvinceId, p.shortName regionProvinceName, c.areaId regionCityId, c.shortName regionCityName, a.areaId regionAreaId, a.shortName regionAreaName, t.areaId regionTownId, t.shortName regionTownName
 		,	d.`name` distributor_name
   </sql>
@@ -92,6 +93,14 @@
       </if>
       <if test="pickupCode != null and pickupCode != ''">
         and pickup_code = #{pickupCode}
+      </if>
+      <if test="minutes30 != null">
+        <if test="minutes30 == 0">
+        and `order`.create_time &lt; date_sub(now(), interval 30 minute)
+        </if>
+        <if test="minutes30 == 1">
+        and `order`.create_time &gt;= date_sub(now(), interval 30 minute)
+        </if>
       </if>
     </trim>
   </sql>

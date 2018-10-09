@@ -65,7 +65,7 @@ public class PayApiController {
     @ApiImplicitParam(name = "orderId", value = "主键", dataType = "Long", required = true, paramType = "query")
   })
   public String callback(HttpServletRequest request, HttpServletResponse response) throws Exception {
-    System.out.println(".................微信支付返回");
+    log.info(".................微信支付返回");
     InputStream is = request.getInputStream();
     StringBuffer sBuffer = new StringBuffer();
     byte[] b = new byte[1024];
@@ -75,7 +75,7 @@ public class PayApiController {
     }
     String resXml = sBuffer.toString();
     resXml = resXml.replace("<xml>", "<com.star.truffle.module.weixin.domain.PayDetailInfo>").replace("</xml>", "</com.star.truffle.module.weixin.domain.PayDetailInfo>");
-    System.out.println(resXml);
+    log.info(resXml);
     XStream xStreamForRequestPostData = new XStream(new DomDriver("UTF-8", new XmlFriendlyNameCoder("-_", "_")));
     PayDetailInfo payOrder = (PayDetailInfo) xStreamForRequestPostData.fromXML(resXml);
     boolean bool = payService.payCallback(payOrder);

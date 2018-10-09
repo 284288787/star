@@ -59,6 +59,10 @@ public class ProductApiController {
   })
   public ApiResult<List<ProductResponseDto>> queryProduct(@ApiIgnore ProductRequestDto productRequestDto) {
     try {
+      if (null == productRequestDto) {
+        productRequestDto = new ProductRequestDto();
+      }
+      productRequestDto.setStates("1,2,3");
       List<ProductResponseDto> list = productService.queryProduct(productRequestDto);
       return ApiResult.success(list);
     } catch (StarServiceException e) {
@@ -76,6 +80,10 @@ public class ProductApiController {
   })
   public ApiResult<Long> queryProductCount(@ApiIgnore ProductRequestDto productRequestDto) {
     try {
+      if (null == productRequestDto) {
+        productRequestDto = new ProductRequestDto();
+      }
+      productRequestDto.setStates("1,2,3");
       Long count = productService.queryProductCount(productRequestDto);
       return ApiResult.success(count);
     } catch (StarServiceException e) {

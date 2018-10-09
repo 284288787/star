@@ -119,12 +119,12 @@ public class ProductService {
     this.productCache.updateProduct(product);
     this.productPictureCache.deleteProductPictureByProductId(product.getProductId());
     this.productPictureCache.batchSavePicture(product.getProductId(), pictures);
-    this.productInventoryCache.deleteProductInventoryByProductId(product.getProductId(), ProductInventoryTypeEnum.product.type());
-    ProductInventory productInventory = product.getProductInventory();
-    productInventory.setProductId(product.getProductId());
-    productInventory.setSoldNumber(productResponseDto.getSoldNumber());
-    productInventory.setType(ProductInventoryTypeEnum.product.type());
-    this.productInventoryCache.saveProductInventory(productInventory);
+    
+    ProductInventory productInventory = this.productInventoryCache.getProductInventory(product.getProductId(), ProductInventoryTypeEnum.product.type());
+    if (null != productInventory) {
+      productInventory.setSoldNumber(productResponseDto.getSoldNumber());
+      this.productInventoryCache.updateProductInventory(productInventory);
+    }
   }
 
   public ProductResponseDto getProduct(Long productId) {
@@ -149,11 +149,33 @@ public class ProductService {
     return productResponseDto;
   }
 
+  /**
+   * 更新供应已卖出的数量
+   * @param productId
+   * @param count   本次卖出的数量
+   */
+  public void updateProductSoldNumber(Long productId, Integer count) {
+    if (null == productId || null == count || count < 1) {
+      return;
+    }
+    ProductInventory productInventory = this.productInventoryCache.getProductInventory(productId, ProductInventoryTypeEnum.product.type());
+    if (null == productInventory) {
+      return;
+    }
+    productInventory.setSoldNumber(productInventory.getSoldNumber() + count);
+    this.productInventoryCache.updateProductInventory(productInventory);
+    if (productInventory.getNumberType() == 2 && productInventory.getNumber().intValue() == productInventory.getSoldNumber()) {
+      ProductRequestDto productRequestDto = new ProductRequestDto();
+      productRequestDto.setProductId(productId);
+      productRequestDto.setState(ProductEnum.sellout.state());
+      this.productCache.updateProduct(productRequestDto);
+    }
+  }
+  
   public List<ProductResponseDto> queryProduct(ProductRequestDto productRequestDto) {
     if (null == productRequestDto) {
       productRequestDto = new ProductRequestDto();
     }
-    productRequestDto.setStates("1,2,3");
     if (null == productRequestDto.getPager()) {
       productRequestDto.setPager(new Page(1, 10, "update_time", OrderType.desc));
     }
@@ -164,7 +186,6 @@ public class ProductService {
     if (null == productRequestDto) {
       productRequestDto = new ProductRequestDto();
     }
-    productRequestDto.setStates("1,2,3");
     if (null == productRequestDto.getPager()) {
       productRequestDto.setPager(new Page(1, 10, "update_time", OrderType.desc));
     }

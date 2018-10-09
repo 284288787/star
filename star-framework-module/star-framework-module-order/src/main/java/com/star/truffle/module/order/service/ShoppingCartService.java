@@ -33,6 +33,8 @@ public class ShoppingCartService {
   @Autowired
   private ProductService productService;
   @Autowired
+  private OrderService orderService;
+  @Autowired
   private OrderProperties orderProperties;
   @Autowired
   private DeliveryAddressCache deliveryAddressCache;
@@ -170,6 +172,12 @@ public class ShoppingCartService {
       if (productResponseDto.getState() >= ProductEnum.sellout.state()) {
         throw new StarServiceException(ApiCode.PARAM_ERROR, "商品现在已不能购买");
       }
+      if (productResponseDto.getNumberType() == 2) {
+        Long number = orderService.getProductNoPayNumber(shoppingCartResponseDto.getProductId());
+        if(productResponseDto.getSoldNumber() + shoppingCartRequestDto.getNum() + number > productResponseDto.getNumber()) {
+          throw new StarServiceException(ApiCode.PARAM_ERROR, "商品["+productResponseDto.getTitle()+"]库存不足");
+        }
+      }
       len ++;
     }
     if (len == 0) {
@@ -187,6 +195,12 @@ public class ShoppingCartService {
       if (null == productResponseDto || productResponseDto.getState() >= ProductEnum.sellout.state()) {
         continue;
 //        throw new StarServiceException(ApiCode.PARAM_ERROR, "商品不存在");
+      }
+      if (productResponseDto.getNumberType() == 2) {
+        
+        if(productResponseDto.getSoldNumber() + shoppingCartRequestDto.getNum() > productResponseDto.getNumber()) {
+          throw new StarServiceException(ApiCode.PARAM_ERROR, "商品["+productResponseDto.getTitle()+"]库存不足");
+        }
       }
 //      if (productResponseDto.getState() != ProductEnum.onshelf.state()) {
 //        throw new StarServiceException(ApiCode.PARAM_ERROR, "商品现在已不能购买");
