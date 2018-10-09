@@ -64,7 +64,7 @@ public class ProductService {
     }
     if (null != product.getOffShelfTime() && product.getOffShelfTime().before(now)) {
       product.setState(ProductEnum.offshelf.state());
-    }else {
+    }else if(product.getState() != ProductEnum.presell.state()) {
       product.setState(ProductEnum.onshelf.state());
     }
     if (2 == product.getProductInventory().getNumberType() && product.getProductInventory().getNumber() == 0) { //库存为0 表示售罄
@@ -73,11 +73,6 @@ public class ProductService {
     this.productCache.saveProduct(product);
     Long productId = product.getProductId();
     this.productPictureCache.batchSavePicture(productId, pictures);
-    ProductInventory productInventory = product.getProductInventory();
-    productInventory.setProductId(productId);
-    productInventory.setSoldNumber(0);
-    productInventory.setType(ProductInventoryTypeEnum.product.type());
-    this.productInventoryCache.saveProductInventory(productInventory);
     return productId;
   }
 
@@ -103,7 +98,7 @@ public class ProductService {
     }
     if (null != product.getOffShelfTime() && product.getOffShelfTime().before(now)) {
       product.setState(ProductEnum.offshelf.state());
-    }else {
+    }else if(product.getState() != ProductEnum.presell.state()) {
       product.setState(ProductEnum.onshelf.state());
     }
     if (2 == product.getProductInventory().getNumberType() && product.getProductInventory().getNumber() == 0) { //库存为0 表示售罄
@@ -116,15 +111,17 @@ public class ProductService {
     }
     product.setUpdateUser(updateUser);
     product.setUpdateTime(now);
-    this.productCache.updateProduct(product);
-    this.productPictureCache.deleteProductPictureByProductId(product.getProductId());
-    this.productPictureCache.batchSavePicture(product.getProductId(), pictures);
-    
     ProductInventory productInventory = this.productInventoryCache.getProductInventory(product.getProductId(), ProductInventoryTypeEnum.product.type());
     if (null != productInventory) {
+      productInventory.setNumberType(product.getProductInventory().getNumberType());
+      productInventory.setNumber(product.getProductInventory().getNumber());
       productInventory.setSoldNumber(productResponseDto.getSoldNumber());
       this.productInventoryCache.updateProductInventory(productInventory);
     }
+    
+    this.productCache.updateProduct(product);
+    this.productPictureCache.deleteProductPictureByProductId(product.getProductId());
+    this.productPictureCache.batchSavePicture(product.getProductId(), pictures);
   }
 
   public ProductResponseDto getProduct(Long productId) {
@@ -241,7 +238,7 @@ public class ProductService {
         }
         if (null != product.getOffShelfTime() && product.getOffShelfTime().before(now)) {
           dto.setState(ProductEnum.offshelf.state());
-        }else {
+        }else if(product.getState() != ProductEnum.presell.state()) {
           dto.setState(ProductEnum.onshelf.state());
         }
         if (2 == product.getNumberType() && product.getNumber() == 0) { //库存为0 表示售罄
@@ -275,7 +272,7 @@ public class ProductService {
         }
         if (null != product.getOffShelfTime() && product.getOffShelfTime().before(now)) {
           dto.setState(ProductEnum.offshelf.state());
-        }else {
+        }else if(product.getState() != ProductEnum.presell.state()) {
           dto.setState(ProductEnum.onshelf.state());
         }
         if (2 == product.getNumberType() && product.getNumber() == 0) { //库存为0 表示售罄

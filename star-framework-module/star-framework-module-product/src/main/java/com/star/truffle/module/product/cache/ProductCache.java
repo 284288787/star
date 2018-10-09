@@ -3,15 +3,19 @@ package com.star.truffle.module.product.cache;
 
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+
 import com.star.truffle.core.jackson.StarJson;
+import com.star.truffle.module.product.constant.ProductInventoryTypeEnum;
 import com.star.truffle.module.product.dao.read.ProductReadDao;
+import com.star.truffle.module.product.dao.write.ProductInventoryWriteDao;
 import com.star.truffle.module.product.dao.write.ProductWriteDao;
-import com.star.truffle.module.product.domain.Product;
+import com.star.truffle.module.product.domain.ProductInventory;
 import com.star.truffle.module.product.dto.req.ProductRequestDto;
 import com.star.truffle.module.product.dto.res.ProductResponseDto;
 
@@ -24,11 +28,19 @@ public class ProductCache {
   private ProductWriteDao productWriteDao;
   @Autowired
   private ProductReadDao productReadDao;
-
+  @Autowired
+  private ProductInventoryWriteDao productInventoryWriteDao;
+  
   @CachePut(value = "module-product-product", key = "'product_productId_'+#result.productId", condition = "#result != null and #result.productId != null")
-  public ProductResponseDto saveProduct(Product product){
+  public ProductResponseDto saveProduct(ProductRequestDto product){
     this.productWriteDao.saveProduct(product);
-    ProductResponseDto productResponseDto = this.productWriteDao.getProduct(product.getProductId());
+    Long productId = product.getProductId();
+    ProductInventory productInventory = product.getProductInventory();
+    productInventory.setProductId(productId);
+    productInventory.setSoldNumber(0);
+    productInventory.setType(ProductInventoryTypeEnum.product.type());
+    this.productInventoryWriteDao.saveProductInventory(productInventory);
+    ProductResponseDto productResponseDto = this.productWriteDao.getProduct(productId);
     return productResponseDto;
   }
 

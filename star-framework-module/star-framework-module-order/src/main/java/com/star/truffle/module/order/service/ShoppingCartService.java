@@ -169,12 +169,12 @@ public class ShoppingCartService {
       if (null == productResponseDto) {
         throw new StarServiceException(ApiCode.PARAM_ERROR, "商品不存在");
       }
-      if (productResponseDto.getState() >= ProductEnum.sellout.state()) {
-        throw new StarServiceException(ApiCode.PARAM_ERROR, "商品现在已不能购买");
+      if (productResponseDto.getState() >= ProductEnum.presell.state()) {
+        throw new StarServiceException(ApiCode.PARAM_ERROR, "商品["+productResponseDto.getTitle()+"]现在已不能购买");
       }
       if (productResponseDto.getNumberType() == 2) {
         Long number = orderService.getProductNoPayNumber(shoppingCartResponseDto.getProductId());
-        if(productResponseDto.getSoldNumber() + shoppingCartRequestDto.getNum() + number > productResponseDto.getNumber()) {
+        if(productResponseDto.getSoldNumber() + shoppingCartResponseDto.getNum() + number > productResponseDto.getNumber()) {
           throw new StarServiceException(ApiCode.PARAM_ERROR, "商品["+productResponseDto.getTitle()+"]库存不足");
         }
       }
@@ -192,13 +192,13 @@ public class ShoppingCartService {
     List<ShoppingCartResponseDto> products = this.shoppingCartCache.queryShoppingCart(shoppingCartRequestDto);
     for (ShoppingCartResponseDto shoppingCartResponseDto : products) {
       ProductResponseDto productResponseDto = this.productService.getProduct(shoppingCartResponseDto.getProductId());
-      if (null == productResponseDto || productResponseDto.getState() >= ProductEnum.sellout.state()) {
+      if (null == productResponseDto || productResponseDto.getState() >= ProductEnum.presell.state()) {
         continue;
 //        throw new StarServiceException(ApiCode.PARAM_ERROR, "商品不存在");
       }
       if (productResponseDto.getNumberType() == 2) {
-        
-        if(productResponseDto.getSoldNumber() + shoppingCartRequestDto.getNum() > productResponseDto.getNumber()) {
+        Long number = orderService.getProductNoPayNumber(shoppingCartResponseDto.getProductId());
+        if(productResponseDto.getSoldNumber() + shoppingCartResponseDto.getNum() + number > productResponseDto.getNumber()) {
           throw new StarServiceException(ApiCode.PARAM_ERROR, "商品["+productResponseDto.getTitle()+"]库存不足");
         }
       }
