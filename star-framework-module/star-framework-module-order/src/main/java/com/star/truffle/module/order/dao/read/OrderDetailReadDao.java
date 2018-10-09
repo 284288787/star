@@ -18,6 +18,6 @@ public interface OrderDetailReadDao {
 
   public List<OrderDetailResponseDto> buyRecord(@Param("productId") Long productId, @Param("pager") Page pager);
   
-  public Map<String, Integer> buyRecordTotal();
+  public Map<String, Integer> buyRecordTotal(Long productId);
 
 }

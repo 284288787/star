@@ -43,7 +43,7 @@ public class OrderDetailCache {
     return orderDetailReadDao.buyRecord(productId, page);
   }
 
-  public Map<String, Integer> buyRecordTotal() {
-    return orderDetailReadDao.buyRecordTotal();
+  public Map<String, Integer> buyRecordTotal(Long productId) {
+    return orderDetailReadDao.buyRecordTotal(productId);
   }
 }

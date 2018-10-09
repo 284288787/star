@@ -64,6 +64,6 @@
     LEFT JOIN `order` o on d.order_id = o.order_id
     LEFT JOIN member_info m on m.member_id = o.member_id
     where 
-      o.state in (2,3)
+      o.state in (2,3) and d.product_id = #{productId}
   </select>
 </mapper>

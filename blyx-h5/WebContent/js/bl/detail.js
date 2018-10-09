@@ -198,6 +198,7 @@ function initBuyRecord(){
   });
   ajax({
     url: '/api/order/buyRecordTotal',
+    data: {'productId': pid},
     success: function(items){
       $("p.totle b:first").text(items.members);
       $("p.totle b:last").text(items.counts);

@@ -173,9 +173,12 @@ public class OrderApiController {
 
   @RequestMapping(value = "/buyRecordTotal", method = RequestMethod.POST)
   @ApiOperation(value = "购买记录统计", notes = "购买记录统计", httpMethod = "POST", response = ApiResult.class)
-  public ApiResult<Map<String, Integer>> buyRecordTotal() {
+  @ApiImplicitParams({
+    @ApiImplicitParam(name = "productId", value = "供应id", dataType = "Long", required = true, paramType = "query")
+  })
+  public ApiResult<Map<String, Integer>> buyRecordTotal(Long productId) {
     try {
-      Map<String, Integer> map = orderService.buyRecordTotal();
+      Map<String, Integer> map = orderService.buyRecordTotal(productId);
       return ApiResult.success(map);
     } catch (StarServiceException e) {
       return ApiResult.fail(e.getCode(), e.getMsg());

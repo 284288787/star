@@ -298,8 +298,8 @@ public class OrderService {
     return list;
   }
 
-  public Map<String, Integer> buyRecordTotal() {
-    return this.orderDetailCache.buyRecordTotal();
+  public Map<String, Integer> buyRecordTotal(Long productId) {
+    return this.orderDetailCache.buyRecordTotal(productId);
   }
 
 }
