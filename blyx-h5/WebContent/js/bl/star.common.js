@@ -84,12 +84,34 @@ mui('body').on('tap', 'a', function() {
   document.location.href = this.href;
 });
 
-String.prototype.formatDate = function (fmt) {
+String.prototype.gapSeconds = function (g) {
+  if(!this) return '';
+  var tem = this.substring(0,19);
+  tem = tem.replace(/-/g,'/'); 
+  var t1 = new Date().getTime();
+  var t2 = new Date(tem).getTime();
+  var t = g - (t1 - t2) / 1000;
+  return t.toFixed(0);
+}
+
+String.prototype.before = function (time) {
   if(!this) return '';
   var tem = this.substring(0,19);    
   tem = tem.replace(/-/g,'/'); 
-  return (new Date(tem)).format(fmt);
- }
+  var date = new Date(tem);
+  return date > time;
+}
+
+String.prototype.formatDate = function (fmt, addSeconds) {
+  if(!this) return '';
+  var tem = this.substring(0,19);    
+  tem = tem.replace(/-/g,'/'); 
+  var date = new Date(tem);
+  if(addSeconds){
+    date = new Date(date.getTime() + addSeconds * 1000);
+  }
+  return date.format(fmt);
+}
 
 //对Date的扩展，将 Date 转化为指定格式的String
 //月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符， 

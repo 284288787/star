@@ -120,7 +120,7 @@ function loadData(pageNum, pageSize, title){
             <p class="goodtitle">'+item.title+'</p>\
             <p class="gooddes">'+item.specification+'</p></a>\
             <p class="goodtime clearfix">'
-          if(item.presellTime){
+          if(item.presellTime && item.presellTime.before(new Date())){
             li +='预售时间：' + item.presellTime.formatDate('M月d日 h点');
           }
           li +='<span>已售 <b >'+item.soldNumber+'</b> 份';

@@ -81,7 +81,9 @@ function initOrderDetail(){
         $(".totaldiv .despatchMoney").parent().remove();
         $("#item2").append('<p>取件人：'+ data.name + '</p>');
         $("#item2").append('<p>取件电话：'+ data.mobile + '</p>');
-        $("#item2").append('<p>取货码：'+ data.pickupCode + '</p>');
+        if(data.state > 1){
+          $("#item2").append('<p>取货码：'+ data.pickupCode + '</p>');
+        }
         $("#item2").append('<p>取件地址：'+ data.regionProvinceName + data.regionCityName + data.regionAreaName + data.shopAddress + '</p>');
         $("#item2").append('<p>店铺名称：'+ data.shopName + '</p>');
       }

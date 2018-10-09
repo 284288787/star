@@ -65,6 +65,9 @@ public class PayService {
     if (order.getMemberId() != memberId.longValue()) {
       throw new StarServiceException(ApiCode.PARAM_ERROR, "订单和会员不匹配");
     }
+    if (order.getState() != OrderStateEnum.nopay.state()) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR, "该订单不能支付，可能已支付或已过期");
+    }
 
     String outTradeNo = UUID.randomUUID().toString().replace("-", "");
     Integer money = order.getTotalMoney() + (null == order.getDespatchMoney() ? 0 : order.getDespatchMoney());

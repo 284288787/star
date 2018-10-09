@@ -130,7 +130,7 @@ function initDetailInfo(){
       $(".lastimg img").attr("src", IMAGE_PREFIX + pictures[0].url);
       for(var i in pictures){
         $(".lastimg").before('<div class="mui-slider-item">\
-            <a href="#"> <img src="'+IMAGE_PREFIX+pictures[i].url+'">\
+            <a href="#"> <img class="productImg" src="'+IMAGE_PREFIX+pictures[i].url+'">\
             </a>\
           </div>');
         $(".point").append('<div class="mui-indicator'+(i==0 ? ' mui-active' : '')+'"></div>');
@@ -144,8 +144,15 @@ function initDetailInfo(){
       $(".title").text(product.title);
       $(".subTitle .l").text(product.specification);
       $(".rinkpeople span").text(product.subscribers);
+      if(product.offShelfTime){
+        var t = product.offShelfTime.gapSeconds(0);
+        console.log(t)
+        countdown(t);// 倒计时还有多少秒 单位秒 时间差500000秒
+      }else{
+        $(".offShelf1, .offShelf2").remove();
+      }
       var flag = true;
-      if(product.presellTime){
+      if(product.presellTime && product.presellTime.before(new Date())){
         $(".pickUpTime").append('<p class="red">预售时间：'+product.presellTime.formatDate('M月d日 h点')+'</p>');
         flag = false;
       }
@@ -169,47 +176,45 @@ function initDetailInfo(){
   });
 }
 
+var inter;
 function countdown(sec) {
-  setTimeout(
-      function() {
-        var hour = 0;
-        var minute = 0;
-        var second = 0;
-        var day = 0;
-        setInterval(
-            function() {
-              if (sec >= 60) {
-                minute = Math.floor(sec / 60);
-                second = Math.floor(sec % 60);
-                if (minute >= 60) {
-                  hour = Math.floor(minute / 60);
-                  minute = minute % 60;
-                  // if(hour>=24){
-                  // day = Math.floor(hour / 24)
-                  // hour = hour % 24
-                  // }
-                } else {
-                  hour = 0;
-                }
-              } else {
-                second = sec;
-                hour = 0;
-                minute = 0;
-              }
-
-              hour = hour * 1 < 10 && hour * 1 > 0 ? "0" + hour : hour;
-              minute = minute * 1 < 10 && minute * 1 > 0 ? "0" + minute
-                  : minute;
-              second = second * 1 < 10 && second * 1 > 0 ? "0" + second
-                  : second;
-              var countdownStr = hour + "：" + minute + "：" + second;
-              document.getElementById("product-sec-countdown").innerHTML = countdownStr;
-              // this.timeD=countdownStr
-              sec--;
-              if (sec <= 0) {
-                window.location.reload();
-              }
-            }, 1000);
-      }, 1000);
+  countDown2(sec);
+  inter = setInterval(function(){
+    countDown2(sec --);
+  }, 1000);
 }
-countdown("500000")// 倒计时还有多少秒 单位秒 时间差500000秒
+function countDown2(sec) {
+  var hour = 0;
+  var minute = 0;
+  var second = 0;
+  var day = 0;
+  if (sec >= 60) {
+    minute = Math.floor(sec / 60);
+    second = Math.floor(sec % 60);
+    if (minute >= 60) {
+      hour = Math.floor(minute / 60);
+      minute = minute % 60;
+      if(hour>=24){
+        day = Math.floor(hour / 24)
+        hour = hour % 24
+      }
+    } else {
+      hour = 0;
+    }
+  } else {
+    second = sec;
+    hour = 0;
+    minute = 0;
+    day = 0;
+  }
+  var h = hour * 1 < 10 ? "0" + hour : hour;
+  var m = minute * 1 < 10 ? "0" + minute : minute;
+  var s = second * 1 < 10 ? "0" + second : second;
+  var countdownStr = day + "天" + h + "小时" + m + "分" + s + "秒";
+  $("#product-sec-countdown").text(countdownStr);
+  if (sec <= 0) {
+    clearInterval(inter);
+    $(".offShelf1").hide();
+    $(".offShelf2").show();
+  }
+}

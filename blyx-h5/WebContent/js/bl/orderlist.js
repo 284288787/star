@@ -98,7 +98,7 @@ function loadData(self, pageNum, pageSize, state){
               ele +='<button data-orderId="'+item.orderId+'" class="fl mui-btn mui-btn-outlined deleteorder" size="small" plain>删除</button>';
             }
           }else{
-            ele +='<button data-orderId="'+item.orderId+'" class="fl mui-btn mui-btn-danger mui-btn-outlined topay" size="small" type="danger" plain>去付款</button>';
+            ele +=item.createTime.formatDate("h点m分", 30*60)+'，订单将失效！</span><button data-orderId="'+item.orderId+'" class="fl mui-btn mui-btn-danger mui-btn-outlined topay" size="small" type="danger" plain>去付款</button>';
           }
           ele+='</p>\
             </div>\
