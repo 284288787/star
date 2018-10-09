@@ -15,6 +15,7 @@ import com.star.truffle.core.web.ApiCode;
 import com.star.truffle.module.member.constant.LoginStateEnum;
 import com.star.truffle.module.member.dto.res.MemberResponseDto;
 import com.star.truffle.module.member.service.MemberService;
+import com.star.truffle.module.product.cache.ProductCache;
 import com.star.truffle.module.product.cache.ProductSubscriptionCache;
 import com.star.truffle.module.product.constant.ProductEnum;
 import com.star.truffle.module.product.domain.ProductSubscription;
@@ -29,7 +30,7 @@ public class ProductSubscriptionService {
   @Autowired
   private ProductSubscriptionCache productSubscriptionCache;
   @Autowired
-  private ProductService productService;
+  private ProductCache productCache;
   @Autowired
   private MemberService memberService;
 
@@ -78,7 +79,7 @@ public class ProductSubscriptionService {
     if (member.getState() == LoginStateEnum.logout.getState()) {
       throw new StarServiceException(ApiCode.PARAM_ERROR, "用户未登录");
     }
-    ProductResponseDto product = productService.getProduct(productId);
+    ProductResponseDto product = productCache.getProduct(productId);
     if (null == product || product.getState() == ProductEnum.deleted.state()) {
       throw new StarServiceException(ApiCode.PARAM_ERROR, "供应记录不存在");
     }
@@ -90,7 +91,7 @@ public class ProductSubscriptionService {
     ProductRequestDto param = new ProductRequestDto();
     param.setProductId(productId);
     param.setSubscribers(product.getSubscribers() + 1);
-    this.productService.updateProduct(param);
+    this.productCache.updateProduct(param);
   }
 
   public void unsubscribe(Long productId, String openId) {
@@ -101,7 +102,7 @@ public class ProductSubscriptionService {
     if (member.getState() == LoginStateEnum.logout.getState()) {
       throw new StarServiceException(ApiCode.PARAM_ERROR, "用户未登录");
     }
-    ProductResponseDto product = productService.getProduct(productId);
+    ProductResponseDto product = productCache.getProduct(productId);
     if (null == product) {
       throw new StarServiceException(ApiCode.PARAM_ERROR, "供应记录不存在");
     }
@@ -118,7 +119,7 @@ public class ProductSubscriptionService {
     ProductRequestDto param = new ProductRequestDto();
     param.setProductId(productId);
     param.setSubscribers(product.getSubscribers() - 1);
-    this.productService.updateProduct(param);
+    this.productCache.updateProduct(param);
   }
 
   public Map<Long, Boolean> isSubscription(String productIds, String openId) {
