@@ -57,17 +57,18 @@ public class ProductService {
     product.setCreateUser(createUser);
     product.setUpdateUser(createUser);
     product.setSubscribers(0);
-    if (null == product.getPresellTime()) {
+    if (null == product.getPresellTime() || now.after(product.getPresellTime())) {
       product.setState(ProductEnum.onshelf.state());
     } else if (now.before(product.getPresellTime())) {    //当前时间在预售时间的前面，表示预售
       product.setState(ProductEnum.presell.state());
-    } else if (null != product.getOffShelfTime() && product.getOffShelfTime().before(now)) {  //当前时间在预售时间的后面，并 当前时间在下架时间的前面， 表示在售
-      product.setState(ProductEnum.onshelf.state());
-      if (null != product.getProductInventory().getNumber() && product.getProductInventory().getNumber() == 0) { //库存为0 表示售罄
-        product.setState(ProductEnum.sellout.state());
-      }
-    } else {  //当前时间在预售时间的后面，并 当前时间在下架时间的后面， 表示下架
+    }
+    if (null != product.getOffShelfTime() && product.getOffShelfTime().before(now)) {
       product.setState(ProductEnum.offshelf.state());
+    }else {
+      product.setState(ProductEnum.onshelf.state());
+    }
+    if (2 == product.getProductInventory().getNumberType() && product.getProductInventory().getNumber() == 0) { //库存为0 表示售罄
+      product.setState(ProductEnum.sellout.state());
     }
     this.productCache.saveProduct(product);
     Long productId = product.getProductId();
@@ -94,6 +95,27 @@ public class ProductService {
     if (null == productResponseDto) {
       throw new StarServiceException(ApiCode.PARAM_ERROR, "供应不存在");
     }
+    Date now = new Date();
+    if (null == product.getPresellTime() || now.after(product.getPresellTime())) {
+      product.setState(ProductEnum.onshelf.state());
+    } else if (now.before(product.getPresellTime())) {    //当前时间在预售时间的前面，表示预售
+      product.setState(ProductEnum.presell.state());
+    }
+    if (null != product.getOffShelfTime() && product.getOffShelfTime().before(now)) {
+      product.setState(ProductEnum.offshelf.state());
+    }else {
+      product.setState(ProductEnum.onshelf.state());
+    }
+    if (2 == product.getProductInventory().getNumberType() && product.getProductInventory().getNumber() == 0) { //库存为0 表示售罄
+      product.setState(ProductEnum.sellout.state());
+    }
+    String updateUser = "无登录测试";
+    Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+    if (null != auth) {
+      updateUser = auth.getName();
+    }
+    product.setUpdateUser(updateUser);
+    product.setUpdateTime(now);
     this.productCache.updateProduct(product);
     this.productPictureCache.deleteProductPictureByProductId(product.getProductId());
     this.productPictureCache.batchSavePicture(product.getProductId(), pictures);
@@ -191,17 +213,52 @@ public class ProductService {
         ProductRequestDto dto = new ProductRequestDto();
         dto.setProductId(productId);
         Date now = new Date();
-        if (null == product.getPresellTime()) {
+        if (null == product.getPresellTime() || now.after(product.getPresellTime())) {
           dto.setState(ProductEnum.onshelf.state());
         } else if (now.before(product.getPresellTime())) {    //当前时间在预售时间的前面，表示预售
           dto.setState(ProductEnum.presell.state());
-        } else if (null != product.getOffShelfTime() && product.getOffShelfTime().before(now)) {  //当前时间在预售时间的后面，并 当前时间在下架时间的前面， 表示在售
-          dto.setState(ProductEnum.onshelf.state());
-          if (null != product.getNumber() && product.getNumber() == 0) { //库存为0 表示售罄
-            dto.setState(ProductEnum.sellout.state());
-          }
-        } else {  //当前时间在预售时间的后面，并 当前时间在下架时间的后面， 表示下架
+        }
+        if (null != product.getOffShelfTime() && product.getOffShelfTime().before(now)) {
           dto.setState(ProductEnum.offshelf.state());
+        }else {
+          dto.setState(ProductEnum.onshelf.state());
+        }
+        if (2 == product.getNumberType() && product.getNumber() == 0) { //库存为0 表示售罄
+          dto.setState(ProductEnum.sellout.state());
+        }
+        this.productCache.updateProduct(dto);
+      }
+    }
+  }
+
+  public void syncProductState() {
+    int pageNum = 1;
+    int pageSize = 50;
+    ProductRequestDto productRequestDto = new ProductRequestDto();
+    productRequestDto.setStates("1234");
+    while(true) {
+      productRequestDto.setPager(new Page(pageNum, pageSize, "update_time", OrderType.desc));
+      List<ProductResponseDto> list = this.productCache.queryProduct(productRequestDto);
+      pageNum ++;
+      if (null == list || list.isEmpty()) {
+        break;
+      }
+      for (ProductResponseDto product : list) {
+        ProductRequestDto dto = new ProductRequestDto();
+        dto.setProductId(product.getProductId());
+        Date now = new Date();
+        if (null == product.getPresellTime() || now.after(product.getPresellTime())) {
+          dto.setState(ProductEnum.onshelf.state());
+        } else if (now.before(product.getPresellTime())) {    //当前时间在预售时间的前面，表示预售
+          dto.setState(ProductEnum.presell.state());
+        }
+        if (null != product.getOffShelfTime() && product.getOffShelfTime().before(now)) {
+          dto.setState(ProductEnum.offshelf.state());
+        }else {
+          dto.setState(ProductEnum.onshelf.state());
+        }
+        if (2 == product.getNumberType() && product.getNumber() == 0) { //库存为0 表示售罄
+          dto.setState(ProductEnum.sellout.state());
         }
         this.productCache.updateProduct(dto);
       }

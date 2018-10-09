@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
     "com.star.truffle.module.product.service",
     "com.star.truffle.module.product.controller",
     "com.star.truffle.module.product.properties",
+    "com.star.truffle.module.product.job",
 })
 public class ProductModuleConfig {
 

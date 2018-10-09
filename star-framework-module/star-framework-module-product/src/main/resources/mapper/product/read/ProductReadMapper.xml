@@ -47,6 +47,9 @@
       <if test="state != null">
         and state = #{state}
       </if>
+      <if test="states != null and states != ''">
+        and state in (${states})
+      </if>
       <if test="brokerageType != null">
         and brokerage_type = #{brokerageType}
       </if>
