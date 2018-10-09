@@ -69,7 +69,7 @@ function initShopInfo(){
       var distributor = data.distributor;
       setShopInfo(distributor);
       document.title = distributor.shopName + " - 贝拉优选";
-      $('.userimg').attr("src", IMAGE_PREFIX + distributor.head);
+      $('.userimg').attr("src", distributor.head);
       $('.shopcode').text(distributor.shopCode);
       $('.shopname').text(distributor.shopName);
       $('.shopaddress').text(distributor.address);

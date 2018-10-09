@@ -57,7 +57,7 @@
       if(! user){
         document.location.href='login.html?redirect_url=user.html';
       }
-      $(".head").attr("src", IMAGE_PREFIX + user.head);
+      $(".head").attr("src", user.head);
       $(".bigp").text(user.name);
       $(".mobile").text(user.mobile);
       $(".logoutbtn").on("tap", function(){

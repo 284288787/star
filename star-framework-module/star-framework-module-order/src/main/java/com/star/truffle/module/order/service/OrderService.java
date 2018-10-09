@@ -3,6 +3,7 @@ package com.star.truffle.module.order.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -290,11 +291,15 @@ public class OrderService {
       pageNum = 1;
     }
     if (null == pageSize) {
-      pageNum = 10;
+      pageSize = 10;
     }
     Page page = new Page(pageNum, pageSize, null, null);
     List<OrderDetailResponseDto> list = this.orderDetailCache.buyRecord(productId, page);
     return list;
+  }
+
+  public Map<String, Integer> buyRecordTotal() {
+    return this.orderDetailCache.buyRecordTotal();
   }
 
 }

@@ -182,7 +182,25 @@ function initBuyRecord(){
     url: '/api/order/buyRecord',
     data: {'productId': pid},
     success: function(items){
-     alert(JSON.stringify(items)) 
+      if(items && items.length > 0){
+        for(var i in items){
+          var item=items[i];
+          $("ul.ullist").append('<li>\
+              <img src="'+item.head+'"> \
+              <span class="c1">'+item.name+'</span> \
+              <span class="c2"><b>'+item.count+'</b>份</span> \
+              <span class="c3">'+item.createTime+'</span>\
+          </li>');
+        }
+        
+      }
+    }
+  });
+  ajax({
+    url: '/api/order/buyRecordTotal',
+    success: function(items){
+      $("p.totle b:first").text(items.members);
+      $("p.totle b:last").text(items.counts);
     }
   });
 }

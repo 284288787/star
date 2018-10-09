@@ -2,6 +2,7 @@
 package com.star.truffle.module.order.controller.api;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -152,16 +153,30 @@ public class OrderApiController {
       return ApiResult.fail(ApiCode.SYSTEM_ERROR);
     }
   }
-
+  
   @RequestMapping(value = "/buyRecord", method = RequestMethod.POST)
-  @ApiOperation(value = "购买记录", notes = "确认提货", httpMethod = "POST", response = ApiResult.class)
+  @ApiOperation(value = "购买记录", notes = "购买记录", httpMethod = "POST", response = ApiResult.class)
   @ApiImplicitParams({
-    @ApiImplicitParam(name = "productId", value = "供应", dataType = "Long", required = true, paramType = "query")
+    @ApiImplicitParam(name = "productId", value = "供应id", dataType = "Long", required = true, paramType = "query")
   })
   public ApiResult<List<OrderDetailResponseDto>> buyRecord(Long productId, Integer pageNum, Integer pageSize) {
     try {
       List<OrderDetailResponseDto> list = orderService.buyRecord(productId, pageNum, pageSize);
       return ApiResult.success(list);
+    } catch (StarServiceException e) {
+      return ApiResult.fail(e.getCode(), e.getMsg());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return ApiResult.fail(ApiCode.SYSTEM_ERROR);
+    }
+  }
+
+  @RequestMapping(value = "/buyRecordTotal", method = RequestMethod.POST)
+  @ApiOperation(value = "购买记录统计", notes = "购买记录统计", httpMethod = "POST", response = ApiResult.class)
+  public ApiResult<Map<String, Integer>> buyRecordTotal() {
+    try {
+      Map<String, Integer> map = orderService.buyRecordTotal();
+      return ApiResult.success(map);
     } catch (StarServiceException e) {
       return ApiResult.fail(e.getCode(), e.getMsg());
     } catch (Exception e) {

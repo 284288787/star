@@ -2,6 +2,7 @@
 package com.star.truffle.module.order.cache;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CachePut;
@@ -40,5 +41,9 @@ public class OrderDetailCache {
 
   public List<OrderDetailResponseDto> buyRecord(Long productId, Page page) {
     return orderDetailReadDao.buyRecord(productId, page);
+  }
+
+  public Map<String, Integer> buyRecordTotal() {
+    return orderDetailReadDao.buyRecordTotal();
   }
 }

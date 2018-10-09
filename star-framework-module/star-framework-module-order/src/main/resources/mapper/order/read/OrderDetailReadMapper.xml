@@ -44,12 +44,26 @@
   </resultMap>
   
   <select id="buyRecord" resultMap="orderDetailResponseResultMap">
-    SELECT d.count, o.create_time, o.member_id, m.head, m.`name`
+    SELECT d.count, o.create_time, o.member_id, m.head, CONCAT(left(m.`name`, 1), '***') `name`
     from order_detail d 
     LEFT JOIN `order` o on d.order_id = o.order_id
     LEFT JOIN member_info m on m.member_id = o.member_id
     where 
       o.state in (2,3) and d.product_id = #{productId}
     limit #{pager.startIndex}, #{pager.pageSize}
+  </select>
+  
+  <resultMap id="buyRecordTotalResult" type="HashMap">  
+		<result column="members" property="members"/>  
+    <result column="counts" property="counts" />
+	</resultMap>
+
+  <select id="buyRecordTotal" resultMap="buyRecordTotalResult">
+    SELECT count(DISTINCT m.member_id) members, SUM(d.count) counts
+    from order_detail d 
+    LEFT JOIN `order` o on d.order_id = o.order_id
+    LEFT JOIN member_info m on m.member_id = o.member_id
+    where 
+      o.state in (2,3)
   </select>
 </mapper>

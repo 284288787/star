@@ -2,6 +2,7 @@
 package com.star.truffle.module.order.dao.read;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -16,5 +17,7 @@ public interface OrderDetailReadDao {
   public Long getProductNoPayNumber(@Param("productId") Long productId, @Param("state") int state);
 
   public List<OrderDetailResponseDto> buyRecord(@Param("productId") Long productId, @Param("pager") Page pager);
+  
+  public Map<String, Integer> buyRecordTotal();
 
 }

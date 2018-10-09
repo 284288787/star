@@ -117,6 +117,7 @@
      border-radius: 8px;
       width: 100%;
       display: block;
+      min-height: 255px;
   }
   .pos1 {
     position: absolute;
