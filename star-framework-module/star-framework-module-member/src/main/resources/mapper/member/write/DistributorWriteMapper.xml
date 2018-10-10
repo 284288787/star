@@ -35,6 +35,21 @@
     where distributor_id = #{distributorId}
   </update>
 
+  <update id="addDistributorNum">
+    update distributor
+    <trim prefix="set" suffixOverrides=",">
+      <if test="type != null and type != ''">
+      	<if test="type == 'soldNum'">
+      		sold_num = sold_num + #{num},
+      	</if>
+      	<if test="type == 'fansNum'">
+      		fans_num = fans_num + #{num},
+      	</if>
+      </if>
+    </trim>
+    where distributor_id = #{distributorId}
+  </update>
+
   <delete id="deleteDistributor" parameterType="java.lang.Long">
     delete from distributor where distributor_id = #{distributorId}
   </delete>

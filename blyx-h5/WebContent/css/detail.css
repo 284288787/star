@@ -279,6 +279,7 @@
     background: url(../images/product.jpg);
     background-size: cover;
     position: relative;
+    background-position:center;
   }
   .productcontentBox2 .realPrice {
     position: absolute;
@@ -548,3 +549,6 @@
   b {
     color: #ff0000;
   }
+  .mui-segmented-control.mui-segmented-control-inverted~.mui-slider-progress-bar{background-color: #f44 !important;}
+  
+  .mui-slider .mui-segmented-control.mui-segmented-control-inverted~.mui-slider-group .mui-slider-item{border-top: none !important;    border-bottom: none !important;}

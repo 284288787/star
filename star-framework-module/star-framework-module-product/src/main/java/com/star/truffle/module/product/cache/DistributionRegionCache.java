@@ -81,4 +81,19 @@ public class DistributionRegionCache {
     return this.distributionRegionReadDao.queryDistributionRegionCount(conditions);
   }
 
+  @Caching(
+    put = {
+      @CachePut(value = "module-product-distributionRegion", key = "'distributionRegion_regionId_'+#result.regionId", condition = "#result != null and #result.regionId != null"),
+      @CachePut(value = "module-product-distributionRegion", key = "'distributionRegion_regionId_'+#result.py", condition = "#result != null and #result.py != null"),
+    }
+  )
+  public DistributionRegionResponseDto addDistributionRegionNum(String type, Long regionId, int num) {
+    DistributionRegionResponseDto dto = getDistributionRegion(regionId);
+    if (null == dto) {
+      return null;
+    }
+    distributionRegionWriteDao.addDistributionRegionNum(regionId, type, num);
+    DistributionRegionResponseDto distributionRegionResponseDto = this.distributionRegionWriteDao.getDistributionRegion(regionId);
+    return distributionRegionResponseDto;
+  }
 }

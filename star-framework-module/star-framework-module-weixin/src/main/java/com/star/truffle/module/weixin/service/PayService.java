@@ -13,6 +13,7 @@ import com.star.truffle.core.StarServiceException;
 import com.star.truffle.core.jackson.StarJson;
 import com.star.truffle.core.web.ApiCode;
 import com.star.truffle.module.alibaba.service.SmsUtil;
+import com.star.truffle.module.member.cache.DistributorCache;
 import com.star.truffle.module.member.dto.res.MemberResponseDto;
 import com.star.truffle.module.member.service.MemberService;
 import com.star.truffle.module.order.constant.DeliveryTypeEnum;
@@ -21,6 +22,7 @@ import com.star.truffle.module.order.domain.OrderDetail;
 import com.star.truffle.module.order.dto.req.OrderRequestDto;
 import com.star.truffle.module.order.dto.res.OrderResponseDto;
 import com.star.truffle.module.order.service.OrderService;
+import com.star.truffle.module.product.cache.DistributionRegionCache;
 import com.star.truffle.module.product.service.ProductService;
 import com.star.truffle.module.weixin.dao.WeiXinApiDao;
 import com.star.truffle.module.weixin.dao.write.PayDetailInfoWriteDao;
@@ -40,6 +42,10 @@ public class PayService {
   private MemberService memberService;
   @Autowired
   private ProductService productService;
+  @Autowired
+  private DistributorCache distributorCache;
+  @Autowired
+  private DistributionRegionCache distributionRegionCache;
   @Autowired
   private WeiXinApiDao weiXinApiDao;
   @Autowired
@@ -103,10 +109,28 @@ public class PayService {
         }
         orderService.updateOrder(orderRequestDto);
         List<OrderDetail> details = order.getDetails();
+        int count = 0;
         if (null != details && ! details.isEmpty()) {
           for (OrderDetail orderDetail : details) {
+            count += orderDetail.getCount();
             productService.updateProductSoldNumber(orderDetail.getProductId(), orderDetail.getCount());
           }
+        }
+        distributionRegionCache.addDistributionRegionNum("soldNum", order.getRegionId(), count);
+        distributorCache.addDistributorNum("soldNum", order.getDistributorId(), count);
+        OrderRequestDto orderParam = new OrderRequestDto();
+        orderParam.setMemberId(order.getMemberId());
+        orderParam.setRegionId(order.getRegionId());
+        Long num = orderService.queryOrderCount(orderParam);
+        if (num == 1) {
+          distributionRegionCache.addDistributionRegionNum("fansNum", order.getRegionId(), 1);
+        }
+        OrderRequestDto order2Param = new OrderRequestDto();
+        order2Param.setMemberId(order.getMemberId());
+        order2Param.setDistributorId(order.getDistributorId());
+        num = orderService.queryOrderCount(order2Param);
+        if (num == 1) {
+          distributorCache.addDistributorNum("fansNum", order.getDistributorId(), 1);
         }
       }
     }

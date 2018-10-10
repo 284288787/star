@@ -94,4 +94,19 @@ public class DistributorCache {
     Map<String, Object> conditions = starJson.bean2Map(distributorRequestDto);
     return this.distributorReadDao.queryDistributorCount(conditions);
   }
+
+  @Caching(put = {
+      @CachePut(value = "module-member-distributor", key = "'distributor_distributorId_'+#result.distributorId", condition = "#result != null and #result.distributorId != null"),
+      @CachePut(value = "module-member-distributor", key = "'distributor_mobile_'+#result.mobile", condition = "#result != null"),
+      @CachePut(value = "module-member-distributor", key = "'distributor_openId_'+#result.openId", condition = "#result != null and #result.openId != null")
+  })
+  public DistributorResponseDto addDistributorNum(String type, Long distributorId, int count) {
+    DistributorResponseDto dto = getDistributor(distributorId);
+    if (null == dto) {
+      return null;
+    }
+    distributorWriteDao.addDistributorNum(distributorId, type, count);
+    DistributorResponseDto distributorResponseDto = this.distributorWriteDao.getDistributor(distributorId);
+    return distributorResponseDto;
+  }
 }

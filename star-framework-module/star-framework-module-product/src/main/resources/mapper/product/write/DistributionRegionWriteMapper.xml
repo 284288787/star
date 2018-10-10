@@ -31,6 +31,21 @@
     where region_id = #{regionId}
   </update>
 
+  <update id="addDistributionRegionNum">
+    update distribution_region
+    <trim prefix="set" suffixOverrides=",">
+      <if test="type != null and type != ''">
+	      <if test="type == 'soldNum'">
+	      	sold_num = sold_num + #{num},
+	      </if>
+      	<if test="type == 'fansNum'">
+	      	fans_num = fans_num + #{num},
+	      </if>
+      </if>
+    </trim>
+    where region_id = #{regionId}
+  </update>
+
   <delete id="deleteDistributionRegion" parameterType="java.lang.Long">
     delete from distribution_region where region_id = #{regionId}
   </delete>

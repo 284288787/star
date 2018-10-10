@@ -23,6 +23,11 @@ $(function(){
   $("#search").on("input", function(){
     pulldownRefresh();
   });
+  $("#search").keyup(function(e){
+    if(e.keyCode == 13){
+      pulldownRefresh();
+    }
+  });
   $(".mui-icon-clear").on("tap click mousedown", function(){
     pulldownRefresh();
   });
