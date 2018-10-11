@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.star.truffle.common.constants.DeletedEnum;
 import com.star.truffle.core.StarServiceException;
 import com.star.truffle.core.jackson.StarJson;
 import com.star.truffle.core.jdbc.Page;
@@ -203,7 +204,7 @@ public class OrderService {
     }
     OrderRequestDto param = new OrderRequestDto();
     param.setOrderId(orderId);
-    param.setState(OrderStateEnum.delete.state());
+    param.setDeleted(DeletedEnum.delete.val());
     this.orderCache.updateOrder(param);
   }
 
@@ -217,7 +218,7 @@ public class OrderService {
 //      this.orderCache.deleteOrder(orderId);
       OrderRequestDto param = new OrderRequestDto();
       param.setOrderId(orderId);
-      param.setState(OrderStateEnum.delete.state());
+      param.setDeleted(DeletedEnum.delete.val());
       this.orderCache.updateOrder(param);
     }
   }
@@ -276,7 +277,7 @@ public class OrderService {
         for (OrderResponseDto orderResponseDto : orders) {
           OrderRequestDto orderRequestDto = new OrderRequestDto();
           orderRequestDto.setOrderId(orderResponseDto.getOrderId());
-          orderRequestDto.setState(OrderStateEnum.delete.state());
+          orderRequestDto.setDeleted(DeletedEnum.delete.val());
           orderRequestDto.setDeleteUser(DeleteUserTypeEnum.system.getType());
           this.orderCache.updateOrder(orderRequestDto);
         }

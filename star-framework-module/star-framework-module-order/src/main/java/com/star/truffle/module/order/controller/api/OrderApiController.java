@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.star.truffle.common.constants.DeletedEnum;
 import com.star.truffle.core.StarServiceException;
 import com.star.truffle.core.web.ApiCode;
 import com.star.truffle.core.web.ApiResult;
@@ -62,6 +63,7 @@ public class OrderApiController {
   })
   public ApiResult<List<OrderResponseDto>> queryOrder(@ApiIgnore OrderRequestDto orderRequestDto) {
     try {
+      orderRequestDto.setDeleted(DeletedEnum.notdelete.val());
       List<OrderResponseDto> list = orderService.queryOrder(orderRequestDto);
       return ApiResult.success(list);
     } catch (StarServiceException e) {

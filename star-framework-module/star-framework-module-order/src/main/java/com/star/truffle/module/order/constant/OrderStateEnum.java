@@ -3,7 +3,7 @@ package com.star.truffle.module.order.constant;
 
 public enum OrderStateEnum { 
 
-  nopay(1, "待付款"), nosend(2, "待提货"), success(3, "已提货"), back(4, "已退货"), delete(5, "已删除");
+  nopay(1, "待付款"), nosend(2, "待提货"), success(3, "已提货"), back(4, "已退货");
 
   private int state;
   private String caption;

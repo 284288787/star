@@ -25,6 +25,7 @@
     <result column="shop_name" property="shopName" />
     <result column="shop_mobile" property="shopMobile" />
     <result column="state" property="state" />
+    <result column="deleted" property="deleted" />
     <result column="pickup_code" property="pickupCode" />
     <result column="create_time" property="createTime" />
     <result column="region_name" property="regionName" />
@@ -33,7 +34,7 @@
   </resultMap>
 
   <sql id="sql_column">
-    `order`.delete_user, order_id, order_code, `order`.type, member_id, `order`.open_id, `order`.`name`, `order`.mobile, delivery_type, `order`.province_name, `order`.city_name, `order`.area_name, delivery_address, delivery_name, delivery_mobile, despatch_money, total_money, total_brokerage, `order`.region_id, `order`.distributor_id, `order`.shop_address, `order`.shop_name, `order`.shop_mobile, `order`.state, pickup_code, `order`.create_time
+    `order`.deleted, `order`.delete_user, order_id, order_code, `order`.type, member_id, `order`.open_id, `order`.`name`, `order`.mobile, delivery_type, `order`.province_name, `order`.city_name, `order`.area_name, delivery_address, delivery_name, delivery_mobile, despatch_money, total_money, total_brokerage, `order`.region_id, `order`.distributor_id, `order`.shop_address, `order`.shop_name, `order`.shop_mobile, `order`.state, pickup_code, `order`.create_time
    	, r.`name` region_name, p.areaId regionProvinceId, p.shortName regionProvinceName, c.areaId regionCityId, c.shortName regionCityName, a.areaId regionAreaId, a.shortName regionAreaName, t.areaId regionTownId, t.shortName regionTownName
 		,	d.`name` distributor_name
   </sql>
@@ -87,6 +88,9 @@
       </if>
       <if test="state != null">
         and `order`.state = #{state}
+      </if>
+      <if test="deleted != null">
+        and `order`.deleted = #{deleted}
       </if>
       <if test="states != null and states != ''">
         and `order`.state in (${states})

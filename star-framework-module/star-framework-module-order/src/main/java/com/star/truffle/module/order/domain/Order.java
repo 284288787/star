@@ -53,8 +53,10 @@ public class Order {
   private String shopName;
   // 店铺电话
   private String shopMobile;
-  // 订单状态 1待付款 2待提货 3已提货 4已退货 5已删除
+  // 订单状态 1待付款 2待提货 3已提货 4已退货
   private Integer state;
+  // 是否删除 1是 0否
+  private Integer deleted;
   // 提货码
   private String pickupCode;
   // 创建日期

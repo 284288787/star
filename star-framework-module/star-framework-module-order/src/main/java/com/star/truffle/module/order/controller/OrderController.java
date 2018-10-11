@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.star.truffle.common.constants.DeletedEnum;
 import com.star.truffle.core.StarServiceException;
 import com.star.truffle.core.jdbc.Page;
 import com.star.truffle.core.jdbc.Page.OrderType;
@@ -49,6 +51,7 @@ public class OrderController {
   public Map<String, Object> list(OrderRequestDto orderRequestDto, Integer page, Integer rows, String sord, String sidx) {
     Page pager = new Page(page, rows, sidx, OrderType.desc.name().equals(sord) ? OrderType.desc : OrderType.asc);
     orderRequestDto.setPager(pager);
+    orderRequestDto.setDeleted(DeletedEnum.notdelete.val());
     List<OrderResponseDto> list = orderService.queryOrder(orderRequestDto);
     Long count = orderService.queryOrderCount(orderRequestDto);
     
