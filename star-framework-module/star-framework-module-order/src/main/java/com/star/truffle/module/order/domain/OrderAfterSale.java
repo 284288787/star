@@ -25,7 +25,7 @@ public class OrderAfterSale {
   private Integer totalMoney;
   // 申请备注
   private String remark;
-  // 售后状态
+  // 售后状态 1待处理 2通过 3不通过 4已取消 5已删除
   private Integer state;
   // openid
   private String reason;

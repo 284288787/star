@@ -180,8 +180,7 @@ public class DistributorService implements ChooseDataIntf{
 
   public DistributorResponseDto login(DistributorRequestDto distributorRequestDto) {
     if (null == distributorRequestDto || StringUtils.isBlank(distributorRequestDto.getMobile()) 
-        || StringUtils.isBlank(distributorRequestDto.getCode()) || null == distributorRequestDto.getTag()
-        || StringUtils.isBlank(distributorRequestDto.getOpenId())) {
+        || StringUtils.isBlank(distributorRequestDto.getCode()) || null == distributorRequestDto.getTag()) {
       throw new StarServiceException(ApiCode.PARAM_ERROR);
     }
     smsIdentityService.verify(distributorRequestDto.getMobile(), distributorRequestDto.getTag(), distributorRequestDto.getCode());
@@ -191,6 +190,9 @@ public class DistributorService implements ChooseDataIntf{
     }
     if (null == dto) {
       throw new StarServiceException(ApiCode.PARAM_ERROR, "用户不存在");
+    }
+    if (dto.getEnabled() == EnabledEnum.disabled.val()) {
+      throw new StarServiceException(ApiCode.NO_LOGIN, "已被取消分销商身份");
     }
     boolean update = false;
     DistributorRequestDto distributor = new DistributorRequestDto();
@@ -227,6 +229,16 @@ public class DistributorService implements ChooseDataIntf{
   }
 
   public DistributorResponseDto getDistributorByOpenId(String openId) {
-    return distributorCache.getDistributorByOpenId(openId);
+    DistributorResponseDto distributorResponseDto = distributorCache.getDistributorByOpenId(openId);
+    if (null == distributorResponseDto) {
+      throw new StarServiceException(ApiCode.NO_EXISTS);
+    }
+    if (distributorResponseDto.getEnabled() == EnabledEnum.disabled.val()) {
+      throw new StarServiceException(ApiCode.NO_LOGIN, "已被取消分销商身份");
+    }
+    if (distributorResponseDto.getState() == LoginStateEnum.logout.getState()) {
+      throw new StarServiceException(ApiCode.NO_LOGIN);
+    }
+    return distributorResponseDto;
   }
 }

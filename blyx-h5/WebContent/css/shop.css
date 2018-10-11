@@ -186,15 +186,24 @@ h5:first-child {
   
 }
 .mui-table-view{
-  background: #efeff4 !important;
+  background: #fff !important;
 }
 .mui-table-view-cell{
   padding: 0px 0px 0 0 !important;
   background-color: #fff;
-  border-top: 10px solid #efeff4;
+  
 }
 li.mui-table-view-cell:after{
   background-color:#fff;
+}
+.mui-scroll-wrapper .mui-table-view{
+  background: #efefef !important;
+}
+.mui-scroll-wrapper .mui-table-view-cell{
+  padding: 0px 0px 0 0 !important;
+  background-color: #fff;
+  border-top: 10px solid #efefef;
+  
 }
 .pbox span {
   font-size: 14px;
@@ -269,4 +278,7 @@ li.mui-table-view-cell:after{
 }
 body{
   overflow: hidden;
+}
+.mui-grid-view.mui-grid-9 .mui-media .mui-icon{
+  font-size: 2rem;
 }
