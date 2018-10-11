@@ -10,4 +10,10 @@ import com.star.truffle.module.order.domain.KickbackDetail;
 public class KickbackDetailResponseDto extends KickbackDetail {
 
   private String distributorName;
+  private String distributorMobile;
+  private String provinceName;
+  private String cityName;
+  private String areaName;
+  private String townName;
+  private String regionName;
 }

@@ -145,7 +145,9 @@ function ListHandle(options, funcs) {
 		});
 		if (!options.subGrid) {
 			jQuery(options.tableId).jqGrid('navGrid', options.pagerId, {edit: false, add: false, del: false, search: false});
-			var h = handle.getScreenHeight() - 150 - $(".search-container").height() - $(".btnGroup").height();
+			var h = handle.getScreenHeight() - 150;
+			if($(".search-container").length>0) h -= $(".search-container").height();
+			if($(".btnGroup").length>0) h -= $(".btnGroup").height();
 			jQuery(options.tableId).setGridHeight(config.height || h);
 		}
 	}

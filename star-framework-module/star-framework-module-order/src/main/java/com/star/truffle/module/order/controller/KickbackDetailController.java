@@ -4,24 +4,25 @@ package com.star.truffle.module.order.controller;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import com.star.truffle.core.StarServiceException;
 import com.star.truffle.core.jdbc.Page;
-import com.star.truffle.core.jdbc.Page.OrderType;
 import com.star.truffle.core.web.ApiCode;
 import com.star.truffle.core.web.ApiResult;
-import lombok.extern.slf4j.Slf4j;
-import com.star.truffle.module.order.domain.KickbackDetail;
-import com.star.truffle.module.order.service.KickbackDetailService;
+import com.star.truffle.module.order.constant.KickbackStateEnum;
 import com.star.truffle.module.order.dto.req.KickbackDetailRequestDto;
 import com.star.truffle.module.order.dto.res.KickbackDetailResponseDto;
+import com.star.truffle.module.order.dto.res.OrderResponseDto;
+import com.star.truffle.module.order.service.KickbackDetailService;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Controller
@@ -30,23 +31,31 @@ public class KickbackDetailController {
 
   @Autowired
   private KickbackDetailService kickbackDetailService;
-
+  
   @RequestMapping(value = "/lists", method = RequestMethod.GET)
   public String list() {
     return "mgr/kickbackDetail/list";
   }
 
-  @RequestMapping(value = "/editBefore/{id}", method = RequestMethod.GET)
-  public String editBefore(@PathVariable Long id, Model model) {
-    KickbackDetailResponseDto kickbackDetailResponseDto = this.kickbackDetailService.getKickbackDetail(id);
-    model.addAttribute("kickbackDetailResponseDto", kickbackDetailResponseDto);
-    return "mgr/kickbackDetail/editKickbackDetail";
+  @ResponseBody
+  @RequestMapping(value = "/detail/{id}", method = {RequestMethod.POST, RequestMethod.GET})
+  public Map<String, Object> detail(@PathVariable Long id, Integer page, Integer rows, String sord, String sidx) {
+    Page pager = new Page(page, rows, sidx, null);
+    List<OrderResponseDto> list = kickbackDetailService.detail(id, pager);
+    Long count = kickbackDetailService.detailCount(id, pager);
+
+    Map<String, Object> map = new HashMap<>();
+    map.put("page", pager.getPageNum());
+    map.put("total", count % pager.getPageSize() == 0 ? count / pager.getPageSize() : count / pager.getPageSize() + 1);
+    map.put("records", count);
+    map.put("rows", list);
+    return map;
   }
 
   @ResponseBody
   @RequestMapping(value = "/list", method = {RequestMethod.POST, RequestMethod.GET})
   public Map<String, Object> list(KickbackDetailRequestDto kickbackDetailRequestDto, Integer page, Integer rows, String sord, String sidx) {
-    Page pager = new Page(page, rows, sidx, OrderType.desc.name().equals(sord) ? OrderType.desc : OrderType.asc);
+    Page pager = new Page(page, rows, sidx, null);
     kickbackDetailRequestDto.setPager(pager);
     List<KickbackDetailResponseDto> list = kickbackDetailService.queryKickbackDetail(kickbackDetailRequestDto);
     Long count = kickbackDetailService.queryKickbackDetailCount(kickbackDetailRequestDto);
@@ -58,13 +67,13 @@ public class KickbackDetailController {
     map.put("rows", list);
     return map;
   }
-
+  
   @ResponseBody
-  @RequestMapping(value = "/add", method = RequestMethod.POST)
-  public ApiResult<Long> add(@RequestBody KickbackDetail kickbackDetail) {
+  @RequestMapping(value = "/pass/{id}", method = RequestMethod.POST)
+  public ApiResult<Void> pass(@PathVariable Long id) {
     try {
-      Long id = kickbackDetailService.saveKickbackDetail(kickbackDetail);
-      return ApiResult.success(id);
+      kickbackDetailService.changeState(id, KickbackStateEnum.remittance.state(), null);
+      return ApiResult.success();
     } catch (StarServiceException e) {
       return ApiResult.fail(e.getCode(), e.getMsg());
     } catch (Exception e) {
@@ -72,12 +81,12 @@ public class KickbackDetailController {
       return ApiResult.fail(ApiCode.SYSTEM_ERROR);
     }
   }
-
+  
   @ResponseBody
-  @RequestMapping(value = "/edit", method = RequestMethod.POST)
-  public ApiResult<Void> edit(@RequestBody KickbackDetailRequestDto kickbackDetailRequestDto) {
+  @RequestMapping(value = "/nopass/{id}", method = RequestMethod.POST)
+  public ApiResult<Void> nopass(@PathVariable Long id, String reject) {
     try {
-      kickbackDetailService.updateKickbackDetail(kickbackDetailRequestDto);
+      kickbackDetailService.changeState(id, KickbackStateEnum.nopass.state(), reject);
       return ApiResult.success();
     } catch (StarServiceException e) {
       return ApiResult.fail(e.getCode(), e.getMsg());
@@ -88,10 +97,10 @@ public class KickbackDetailController {
   }
 
   @ResponseBody
-  @RequestMapping(value = "/deleted", method = RequestMethod.POST)
-  public ApiResult<Void> delete(String ids) {
+  @RequestMapping(value = "/finish/{id}", method = RequestMethod.POST)
+  public ApiResult<Void> finish(@PathVariable Long id, String reject) {
     try {
-      kickbackDetailService.deleteKickbackDetail(ids);
+      kickbackDetailService.changeState(id, KickbackStateEnum.finish.state(), null);
       return ApiResult.success();
     } catch (StarServiceException e) {
       return ApiResult.fail(e.getCode(), e.getMsg());

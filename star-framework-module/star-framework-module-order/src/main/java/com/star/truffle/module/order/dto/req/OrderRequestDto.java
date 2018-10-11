@@ -1,6 +1,7 @@
 /**create by framework at 2018年09月21日 15:21:35**/
 package com.star.truffle.module.order.dto.req;
 
+import java.util.Date;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -26,6 +27,10 @@ public class OrderRequestDto extends Order {
   private String states;
   
   private Integer minutes30;  //是否查询30分以内的订单 1是 0否
+  private Integer brokerage0; //是否查询提成为0的记录 1是 0否
+  
+  private Date beginCreateTime;
+  private Date endCreateTime;
   
   public boolean checkMemberSave() {
     if (null != getOrderId() || null == getMemberId() || null == getDeliveryType()

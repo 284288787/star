@@ -1,6 +1,7 @@
 /**create by framework at 2018年10月11日 11:07:21**/
 package com.star.truffle.module.order.cache;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,7 @@ public class KickbackDetailCache {
 
   @CachePut(value = "module-order-kickbackDetail", key = "'kickbackDetail_id_'+#result.id", condition = "#result != null and #result.id != null")
   public KickbackDetailResponseDto updateKickbackDetail(KickbackDetailRequestDto kickbackDetailRequestDto){
+    kickbackDetailRequestDto.setUpdateTime(new Date());
     this.kickbackDetailWriteDao.updateKickbackDetail(kickbackDetailRequestDto);
     KickbackDetailResponseDto kickbackDetailResponseDto = this.kickbackDetailWriteDao.getKickbackDetail(kickbackDetailRequestDto.getId());
     return kickbackDetailResponseDto;

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:star="http://star">
 <head>
-<title>提成明细列表</title>
+<title>提成列表</title>
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jquery-ui/jquery-ui.min.css}" />
@@ -23,7 +23,7 @@
         <span>分销商：
           <input type="text" name="distributorId" placeholder="分销商"/>
         </span> 
-        <span>订单状态：
+        <span>状态：
           <select name="state">
             <option value="">全部</option>
             <option value="1">审核中</option>
@@ -38,26 +38,20 @@
         </span>
       </form>
     </div>
-    <div class="btnGroup">
-      <a star:authorize-uri="/kickbackDetail/add" onclick="kickbackDetailHandle.addNew()" class="button grey">新增</a>
-      <a star:authorize-uri="/kickbackDetail/enabled" onclick="kickbackDetailHandle.enabled()" class="button blue">启用</a>
-      <a star:authorize-uri="/kickbackDetail/disabled" onclick="kickbackDetailHandle.disabled()" class="button yellow">禁用</a>
-      <a star:authorize-uri="/kickbackDetail/deleted" onclick="kickbackDetailHandle.remove()" class="button red">删除</a> 
-    </div>
     <div class="data-container">
       <table id="grid-table"></table>
       <div id="grid-pager"></div>
     </div>
   </div>
   <script type="text/javascript" th:src="@{/webjars/star/js/star.authorize.js}"></script>
-  <script type="text/javascript" th:inline="javascript" star:authorize-uri="/kickbackDetail/editBefore/*">
-  addAuthorize("kickbackDetail-editBefore", true);
+  <script type="text/javascript" th:inline="javascript" star:authorize-uri="/kickbackDetail/pass/*">
+  addAuthorize("kickbackDetail-pass", true);
   </script>
-  <script type="text/javascript" th:inline="javascript" star:authorize-uri="/kickbackDetail/disabled">
-  addAuthorize("kickbackDetail-disabled", true);
+  <script type="text/javascript" th:inline="javascript" star:authorize-uri="/kickbackDetail/nopass/*">
+  addAuthorize("kickbackDetail-nopass", true);
   </script>
-  <script type="text/javascript" th:inline="javascript" star:authorize-uri="/kickbackDetail/enabled">
-  addAuthorize("kickbackDetail-enabled", true);
+  <script type="text/javascript" th:inline="javascript" star:authorize-uri="/kickbackDetail/finish/*">
+  addAuthorize("kickbackDetail-finish", true);
   </script>
   <script type="text/javascript" th:src="@{/webjars/star/js/star.list.comm.js}"></script>
   <script type="text/javascript" th:inline="javascript" th:src="@{/js/mgr/kickbackDetail/list.js}"></script>

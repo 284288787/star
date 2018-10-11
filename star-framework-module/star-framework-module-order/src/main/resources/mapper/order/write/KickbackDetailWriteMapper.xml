@@ -2,26 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.star.truffle.module.order.dao.write.KickbackDetailWriteDao">
   <insert id="saveKickbackDetail" useGeneratedKeys="true" keyProperty="id" parameterType="com.star.truffle.module.order.domain.KickbackDetail">
-    insert into kickback_detail(id, distributor_id, point_time, total_money, create_time, state, reject)
-    values(#{id}, #{distributorId}, #{pointTime}, #{totalMoney}, #{createTime}, #{state}, #{reject})
+    insert into kickback_detail(id, distributor_id, point_begin_time, point_end_time, total_money, create_time, state, reject, update_time)
+    values(#{id}, #{distributorId}, #{pointBeginTime}, #{pointEndTime}, #{totalMoney}, #{createTime}, #{state}, #{reject}, #{updateTime})
   </insert>
 
   <insert id="batchSaveKickbackDetail" parameterType="java.util.List">
-    insert into kickback_detail(id, distributor_id, point_time, total_money, create_time, state, reject)
+    insert into kickback_detail(id, distributor_id, point_begin_time, point_end_time, total_money, create_time, state, reject, update_time)
     values
     <foreach collection="list" item="item" index="index" separator=",">
-      (#{item.id}, #{item.distributorId}, #{item.pointTime}, #{item.totalMoney}, #{item.createTime}, #{item.state}, #{item.reject})
+      (#{item.id}, #{item.distributorId}, #{item.pointBeginTime}, #{item.pointEndTime}, #{item.totalMoney}, #{item.createTime}, #{item.state}, #{item.reject}, #{updateTime})
     </foreach>
   </insert>
 
   <update id="updateKickbackDetail" parameterType="com.star.truffle.module.order.dto.req.KickbackDetailRequestDto">
     update kickback_detail
     <trim prefix="set" suffixOverrides=",">
-      <if test="distributorId != null">distributor_id = #{distributorId},</if>
-      <if test="pointTime != null">point_time = #{pointTime},</if>
-      <if test="totalMoney != null">total_money = #{totalMoney},</if>
-      <if test="createTime != null">create_time = #{createTime},</if>
       <if test="state != null">state = #{state},</if>
+      <if test="updateTime != null">update_time = #{updateTime},</if>
       <if test="reject != null and reject != ''">reject = #{reject},</if>
     </trim>
     where id = #{id}
@@ -39,16 +36,34 @@
     <result column="create_time" property="createTime" />
     <result column="state" property="state" />
     <result column="reject" property="reject" />
+    <result column="distributor_name" property="distributorName" />
+    <result column="distributor_mobile" property="distributorMobile" />
+    <result column="province_name" property="provinceName" />
+    <result column="city_name" property="cityName" />
+    <result column="area_name" property="areaName" />
+    <result column="town_name" property="townName" />
+    <result column="region_name" property="regionName" />
+    <result column="update_time" property="updateTime" />
   </resultMap>
 
   <sql id="sql_column">
-    id, distributor_id, point_time, total_money, create_time, state, reject
+    kickback_detail.id, kickback_detail.distributor_id, point_begin_time, point_end_time, kickback_detail.total_money, 
+    kickback_detail.create_time, kickback_detail.update_time, kickback_detail.state, 
+    kickback_detail.reject, d.`name` distributor_name, d.mobile distributor_mobile, 
+    r.`name` region_name, p.areaName province_name, c.areaName city_name,
+    a.areaName area_name, t.areaName town_name
   </sql>
 
   <select id="getKickbackDetail" resultType="com.star.truffle.module.order.dto.res.KickbackDetailResponseDto">
     select
     <include refid="sql_column" />
     from kickback_detail
+    LEFT JOIN distributor d on d.distributor_id = kickback_detail.distributor_id
+    LEFT JOIN distribution_region r on r.region_id = d.region_id
+    LEFT JOIN sys_area p on p.areaId = r.province_id
+    LEFT JOIN sys_area c on c.areaId = r.city_id
+    LEFT JOIN sys_area a on a.areaId = r.area_id
+    LEFT JOIN sys_area t on t.areaId = r.town_id
     where id = #{id}
   </select>
 

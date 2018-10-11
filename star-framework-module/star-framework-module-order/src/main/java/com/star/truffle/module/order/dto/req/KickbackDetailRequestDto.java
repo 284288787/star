@@ -11,4 +11,11 @@ import com.star.truffle.module.order.domain.KickbackDetail;
 public class KickbackDetailRequestDto extends KickbackDetail {
 
   private Page pager;
+  
+  private String distributorMobile;
+  private Long provinceId;
+  private Long cityId;
+  private Long areaId;
+  private Long townId;
+  private Long regionId;
 }

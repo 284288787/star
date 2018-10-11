@@ -106,6 +106,15 @@
         and `order`.create_time &gt;= date_sub(now(), interval 30 minute)
         </if>
       </if>
+      <if test="beginCreateTime != null">
+        and `order`.create_time &gt;= #{beginCreateTime}
+      </if>
+      <if test="endCreateTime != null">
+        and `order`.create_time &lt;= #{endCreateTime}
+      </if>
+      <if test="brokerage0 != null and brokerage0 == 0">
+        and `order`.total_brokerage &gt; 0
+      </if>
     </trim>
   </sql>
 

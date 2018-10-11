@@ -13,8 +13,10 @@ public class KickbackDetail {
   private Long id;
   // 分销商
   private Long distributorId;
-  // 日期节点
-  private Date pointTime;
+  // 日期节点 起
+  private Date pointBeginTime;
+  // 日期节点 止
+  private Date pointEndTime;
   // 总金额
   private Integer totalMoney;
   // 创建日期
@@ -23,4 +25,6 @@ public class KickbackDetail {
   private Integer state;
   // 未通过原因
   private String reject;
+  // 最后更新日期
+  private Date updateTime;
 }
