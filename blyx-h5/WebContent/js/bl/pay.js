@@ -37,7 +37,11 @@ $(function() {
       var money = order.totalMoney;
       if(order.despatchMoney) money += order.despatchMoney;
       $("p.num b").text((money / 100.0).toFixed(2));
-      $("p.info span").text((order.createTime.gapSeconds(30 * 60) / 60).toFixed(0));
+      var m = (order.createTime.gapSeconds(30 * 60) / 60).toFixed(0);
+      if(m <= 0)
+        $("p.info").text("订单已失效");
+      else
+        $("p.info span").text(m);
       $("button.mui-btn-block").on('tap', function(){
         ajax({
           url: "/weixin/pay/unifiedOrder",
@@ -70,7 +74,7 @@ $(function() {
           }
         });
       });
-      if(order.state != 1){
+      if(order.state != 1 || order.deleted == 1){
         $("button.mui-btn-block").css({"background": "#b3a5a5", "border": "1px solid #b3a5a5"});
         $("button.mui-btn-block").off().text(states[order.state] + "订单，不能支付");
       }

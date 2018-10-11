@@ -268,6 +268,7 @@ public class OrderService {
     int pageSize = 50;
     OrderRequestDto param = new OrderRequestDto();
     param.setState(OrderStateEnum.nopay.state());
+    param.setDeleted(DeletedEnum.notdelete.val());
     param.setMinutes30(0);
     while(true) {
       param.setPager(new Page(pageNum, pageSize, null, null));

@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.star.truffle.common.constants.DeletedEnum;
 import com.star.truffle.core.StarServiceException;
 import com.star.truffle.core.jackson.StarJson;
 import com.star.truffle.core.web.ApiCode;
@@ -71,8 +72,11 @@ public class PayService {
     if (order.getMemberId() != memberId.longValue()) {
       throw new StarServiceException(ApiCode.PARAM_ERROR, "订单和会员不匹配");
     }
+    if (order.getDeleted() == DeletedEnum.delete.val()) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR, "该订单不能支付，已失效");
+    }
     if (order.getState() != OrderStateEnum.nopay.state()) {
-      throw new StarServiceException(ApiCode.PARAM_ERROR, "该订单不能支付，可能已支付或已过期");
+      throw new StarServiceException(ApiCode.PARAM_ERROR, "该订单不能支付，可能已支付");
     }
 
     String outTradeNo = UUID.randomUUID().toString().replace("-", "");

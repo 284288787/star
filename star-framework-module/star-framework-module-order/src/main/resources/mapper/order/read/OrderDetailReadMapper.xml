@@ -32,7 +32,7 @@
     select
     IFNULL(sum(d.count),0)
     from order_detail d 
-    where d.product_id = #{productId} and exists (select * from `order` o where o.order_id = d.order_id and o.state = #{state})
+    where d.product_id = #{productId} and exists (select * from `order` o where o.order_id = d.order_id and o.state = #{state} and o.deleted = 0)
   </select>
   
   <resultMap id="orderDetailResponseResultMap" type="com.star.truffle.module.order.dto.res.OrderDetailResponseDto">

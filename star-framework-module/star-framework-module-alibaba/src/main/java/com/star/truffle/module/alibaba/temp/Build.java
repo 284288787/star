@@ -11,7 +11,7 @@ import com.star.truffle.module.build.service.BuildFiles;
 public class Build {
 
   public static void main(String[] args) throws JsonParseException, JsonMappingException, IOException {
-    Project project = new Project("F:/newframework/star-framework-module", "F:/newframework/star-framework-module", "alibaba", 12354, "0.0.4-MODULE");
+    Project project = new Project("D:/work/git-star/star/star-framework-module", "D:/work/git-star/star/star-framework-module", "alibaba", 12354, "0.0.4-MODULE");
     String classpath = "com.star.truffle.module.memeber.temp.Member";
     BuildFiles.build(false, project, classpath);
   }

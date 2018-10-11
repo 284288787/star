@@ -16,7 +16,7 @@ public class Run {
 
   public static void main(String[] args) {
     
-    Project project = new Project("F:/newframework/star-framework-module", "F:/newframework/star-framework-module", "test", 12399, "0.0.1-SNAPSHOT");
+    Project project = new Project("D:/work/git-star/star/star-framework-module", "D:/work/git-star/star/star-framework-module", "test", 12399, "0.0.1-SNAPSHOT");
     
     Entity entity = Entity.of("教练信息", "Coach", "t_coach", 1, 2, "480px", "400px", true, true);
     entity.setBtnAdd(true);
