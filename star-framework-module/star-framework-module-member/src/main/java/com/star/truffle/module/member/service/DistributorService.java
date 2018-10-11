@@ -65,12 +65,20 @@ public class DistributorService implements ChooseDataIntf{
     if (null != dto) {
       throw new StarServiceException(ApiCode.PARAM_ERROR, "该手机号用户已经是分销商");
     }
+    DistributorRequestDto distributorRequestDto = new DistributorRequestDto();
+    distributorRequestDto.setRegionId(distributor.getRegionId());
+    distributorRequestDto.setEnabled(EnabledEnum.enabled.val());
+    Long count = distributorCache.queryDistributorCount(distributorRequestDto);
+    if (count > 0) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR, "该区域下已经存在分销商，若还是需要添加，请先禁用老分销商");
+    }
     distributor.setShopCode("");
     distributor.setEnabled(EnabledEnum.enabled.val());
     distributor.setCreateTime(new Date());
     distributor.setUpdateTime(distributor.getCreateTime());
     distributor.setFansNum(0);
     distributor.setSoldNum(0);
+    distributor.setState(1);
     this.distributorCache.saveDistributor(distributor);
     distributor.setShopCode(String.valueOf(distributor.getDistributorId() + 500000));
     this.distributorCache.updateDistributor(distributor);
@@ -171,6 +179,17 @@ public class DistributorService implements ChooseDataIntf{
     String[] distributorIds = idstr.split(",");
     for (String str : distributorIds) {
       Long distributorId = Long.parseLong(str);
+      DistributorResponseDto distributor = this.distributorCache.getDistributor(distributorId);
+      if (null == distributor) {
+        continue;
+      }
+      DistributorRequestDto distributorRequestDto = new DistributorRequestDto();
+      distributorRequestDto.setRegionId(distributor.getRegionId());
+      distributorRequestDto.setEnabled(EnabledEnum.enabled.val());
+      Long count = distributorCache.queryDistributorCount(distributorRequestDto);
+      if (count > 0) {
+        throw new StarServiceException(ApiCode.PARAM_ERROR, "该区域下已经存在分销商，若还是需要启用，请先禁用老分销商");
+      }
       DistributorRequestDto dto = new DistributorRequestDto();
       dto.setDistributorId(distributorId);
       dto.setEnabled(EnabledEnum.enabled.val());
@@ -179,15 +198,12 @@ public class DistributorService implements ChooseDataIntf{
   }
 
   public DistributorResponseDto login(DistributorRequestDto distributorRequestDto) {
-    if (null == distributorRequestDto || StringUtils.isBlank(distributorRequestDto.getMobile()) 
-        || StringUtils.isBlank(distributorRequestDto.getCode()) || null == distributorRequestDto.getTag()) {
+    if (null == distributorRequestDto || StringUtils.isBlank(distributorRequestDto.getMobile()) || StringUtils.isBlank(distributorRequestDto.getOpenId()) 
+        || StringUtils.isBlank(distributorRequestDto.getCode()) || null == distributorRequestDto.getTag() || StringUtils.isBlank(distributorRequestDto.getName()) ) {
       throw new StarServiceException(ApiCode.PARAM_ERROR);
     }
     smsIdentityService.verify(distributorRequestDto.getMobile(), distributorRequestDto.getTag(), distributorRequestDto.getCode());
-    DistributorResponseDto dto = distributorCache.getDistributorByOpenId(distributorRequestDto.getOpenId());
-    if (null == dto) {
-      dto = distributorCache.getDistributorByMobile(distributorRequestDto.getMobile());
-    }
+    DistributorResponseDto dto = distributorCache.getDistributorByMobile(distributorRequestDto.getMobile());
     if (null == dto) {
       throw new StarServiceException(ApiCode.PARAM_ERROR, "用户不存在");
     }

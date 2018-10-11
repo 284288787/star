@@ -46,6 +46,7 @@ public class DistributorApiController {
   @ApiOperation(value = "登录", notes = "登录<br>1.前端本地没有用户信息，则调出登录界面<br>2.输入手机号，获取验证码，正确后，获取微信用户信息<br>3.调用该接口，会返回登录后的用户信息", httpMethod = "POST", response = ApiResult.class)
   @ApiImplicitParams({
     @ApiImplicitParam(name = "head", value = "头像链接", dataType = "String", required = true, paramType = "query"),
+    @ApiImplicitParam(name = "name", value = "昵称", dataType = "String", required = true, paramType = "query"),
     @ApiImplicitParam(name = "mobile", value = "手机号", dataType = "String", required = true, paramType = "query"),
     @ApiImplicitParam(name = "openId", value = "openId", dataType = "String", required = true, paramType = "query"),
     @ApiImplicitParam(name = "code", value = "验证码", paramType = "query", required = true, dataType = "String"),

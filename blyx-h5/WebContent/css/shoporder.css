@@ -199,7 +199,12 @@ li.mui-table-view-cell:after{
 .mui-scroll-wrapper .mui-table-view{
   background: #FFF !important;
 }
-    
+.mui-scroll-wrapper .mui-table-view-cell{
+  padding: 0px 0px 0 0 !important;
+  background-color: #fff;
+  border-top: 10px solid #efefef;
+  
+}
 .pbox span {
   font-size: 14px;
   float: right;
