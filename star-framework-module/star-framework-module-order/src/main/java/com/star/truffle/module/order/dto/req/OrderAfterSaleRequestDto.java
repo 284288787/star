@@ -11,4 +11,7 @@ import com.star.truffle.module.order.domain.OrderAfterSale;
 public class OrderAfterSaleRequestDto extends OrderAfterSale {
 
   private Page pager;
+
+  // 分销商id
+  private Long distributorId;
 }

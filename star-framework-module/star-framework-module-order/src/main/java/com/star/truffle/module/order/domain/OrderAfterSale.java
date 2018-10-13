@@ -15,14 +15,6 @@ public class OrderAfterSale {
   private Long orderId;
   // 售后单号
   private Long afterCode;
-  // openid
-  private String openId;
-  // 分销商姓名
-  private String name;
-  // 分销商手机号
-  private String mobile;
-  // 总金额
-  private Integer totalMoney;
   // 申请备注
   private String remark;
   // 售后状态 1待处理 2通过 3不通过 4已取消 5已删除

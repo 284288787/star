@@ -17,6 +17,7 @@
 <script src="../js/jquery.min.js"></script>
 <script src="../js/mui.min.js"></script>
 <script src="../js/di/star.common.js"></script>
+<script src="../js/di/index.js"></script>
 <script src="../js/echarts-all.js"></script>
 <title>商家首页</title>
 </head>
@@ -32,88 +33,48 @@
           <img src="images/logo.jpg" alt=""> 点击修改头像
         </div>
         <div class="fright">
-          <p>(00198658)长沙五一广场2号店</p>
+          <p>(00000)</p>
         </div>
       </div>
       <div class="totle">
         <div class="title">
-          <h1>今日贝贝姆拉订单数</h1>
-          <p>
-            订单总比：<span>12.5%</span>
-          </p>
-          <p>
-            订单排名：<span>第18名</span>
-          </p>
+          <h1>今日贝拉优选订单数</h1>
+          <p>订单总比：<span class="orderNumRate">12.5%</span></p>
+          <p>订单排名：<span class="ranking">第18名</span></p>
           <button type="button" class="mui-btn mui-btn-warning mui-btn-outlined fl">查看排行</button>
         </div>
         <div class="point">
           <div class="chart" id="pieChart"></div>
         </div>
         <div class="result">
-          <p>
-            今日收益（元）<span>46.5</span>
-          </p>
-          <p>
-            累计收益（元）<span>5782.62</span>
-          </p>
-
+          <p>今日收益（元）<span class="todayMoneyOfToday">46.5</span></p>
+          <p>累计收益（元）<span class="todayMoney">5782.62</span></p>
         </div>
       </div>
       <ul class="mui-table-view mui-grid-view mui-grid-9 menu">
-        <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><a href="#"> <span class="mui-icon mui-icon-redo c1"></span>
-            <div class="mui-media-body">商品分享</div>
+        <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><a href="#" class="share"> <span class="mui-icon mui-icon-redo c1"></span>
+            <span class="mui-media-body">店铺分享</span>
         </a></li>
         <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><a href="#"> <span class="mui-icon mui-icon-download c2"> </span>
-            <div class="mui-media-body">代客下单</div>
+            <span class="mui-media-body">代客下单</span>
         </a></li>
-        <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><a href="#"> <span class="mui-icon  mui-icon-reload c3"></span>
-            <div class="mui-media-body">退货售后</div>
+        <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><a href="saleafter.html"> <span class="mui-icon  mui-icon-reload c3"></span>
+            <span class="mui-media-body">退货售后</span>
         </a></li>
         <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><a href="#"> <span class="mui-icon mui-icon-extra mui-icon-extra-trend c4"></span>
-            <div class="mui-media-body">我的提成</div>
+            <span class="mui-media-body">我的提成</span>
         </a></li>
         <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><a href="#"> <span class="mui-icon mui-icon-settings c5"></span>
-            <div class="mui-media-body">提现记录</div>
+            <span class="mui-media-body">提现记录</span>
         </a></li>
         <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><a href="#"> <span class="mui-icon mui-icon-bars c6"></span>
-            <div class="mui-media-body">订单管理</div>
+            <span class="mui-media-body">订单管理</span>
         </a></li>
         <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><a href="#"> <span class="mui-icon mui-icon-extra mui-icon-extra-peoples c7"></span>
-            <div class="mui-media-body">查看会员</div>
+            <span class="mui-media-body">查看会员</span>
         </a></li>
       </ul>
     </div>
   </div>
-  <script type="text/javascript">
-  mui('.mui-scroll-wrapper').scroll({
-    deceleration: 0.0005
-  });
-      var getOption = function(chartType) {
-        var chartOption = {
-          calculable : false,
-          series : [ {
-            name : '订单数量',
-            type : 'pie',
-            radius : '60%',
-            center : [ '50%', '50%' ],
-            data : [ {
-              value : 310,
-              name : '您的订单数(310)'
-            }, {
-              value : 996,
-              name : '总订单数(996)'
-            } ]
-          } ]
-        }
-        return chartOption;
-      };
-      var byId = function(id) {
-        return document.getElementById(id);
-      };
-
-      var pieChart = echarts.init(byId('pieChart'));
-      pieChart.setOption(getOption('pie'));
-    </script>
 </body>
-
 </html>

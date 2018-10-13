@@ -28,7 +28,7 @@
 .mui-table-view-cell{
   padding: 0px 0px 0 0 !important;
   background-color: #fff;
-  border-top: 10px solid #efeff4;
+  border-bottom: 5px solid #efeff4;
 }
 li.mui-table-view-cell:after{
   background-color:#fff;

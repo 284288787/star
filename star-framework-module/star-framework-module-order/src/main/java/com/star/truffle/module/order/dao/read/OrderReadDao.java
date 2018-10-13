@@ -4,7 +4,10 @@ package com.star.truffle.module.order.dao.read;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.star.truffle.module.order.dto.res.OrderResponseDto;
+import com.star.truffle.module.order.dto.res.OrderTotal;
 
 public interface OrderReadDao {
 
@@ -14,4 +17,14 @@ public interface OrderReadDao {
 
   public Long queryOrderCount(Map<String, Object> conditions);
 
+  public List<OrderTotal> orderIndexToday(@Param("distributorId") Long distributorId, @Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize);
+
+  /**
+   * 累计收益
+   * @param distributorId
+   * @return
+   */
+  public Long totalMoney(Long distributorId);
+
+  public Long totalOrderNumOfToday();
 }

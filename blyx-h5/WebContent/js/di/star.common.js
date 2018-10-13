@@ -43,7 +43,7 @@ function getLoginInfo(){
 function islogin(){
   if(!localStorage.login_distributor_user) return false;
   var user = JSON.parse(localStorage.login_distributor_user);
-  return user.memberId > 0;
+  return user.distributorId > 0;
 }
 
 if(! islogin()){

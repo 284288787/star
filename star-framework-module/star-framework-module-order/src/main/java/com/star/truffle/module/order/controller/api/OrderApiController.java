@@ -17,6 +17,7 @@ import com.star.truffle.core.web.ApiResult;
 import com.star.truffle.module.order.dto.req.OrderRequestDto;
 import com.star.truffle.module.order.dto.res.OrderDetailResponseDto;
 import com.star.truffle.module.order.dto.res.OrderResponseDto;
+import com.star.truffle.module.order.dto.res.OrderTotal;
 import com.star.truffle.module.order.service.OrderService;
 
 import io.swagger.annotations.Api;
@@ -34,6 +35,41 @@ public class OrderApiController {
 
   @Autowired
   private OrderService orderService;
+  
+  @RequestMapping(value = "/shopIndex", method = RequestMethod.POST)
+  @ApiOperation(value = "分销商首页信息", notes = "分销商首页信息", httpMethod = "POST", response = OrderResponseDto.class)
+  @ApiImplicitParams({
+    @ApiImplicitParam(name = "distributorId", value = "分销商id", dataType = "Long", required = true, paramType = "query")
+  })
+  public ApiResult<Map<String, Object>> shopIndex(Long distributorId) {
+    try {
+      Map<String, Object> map = orderService.shopIndex(distributorId);
+      return ApiResult.success(map);
+    } catch (StarServiceException e) {
+      return ApiResult.fail(e.getCode(), e.getMsg());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return ApiResult.fail(ApiCode.SYSTEM_ERROR);
+    }
+  }
+  
+  @RequestMapping(value = "/orderNumRanking", method = RequestMethod.POST)
+  @ApiOperation(value = "订单量排名", notes = "订单量排名", httpMethod = "POST", response = OrderResponseDto.class)
+  @ApiImplicitParams({
+    @ApiImplicitParam(name = "pageNum", value = "默认1", dataType = "int", required = false, paramType = "query"),
+    @ApiImplicitParam(name = "pageSize", value = "默认10", dataType = "int", required = false, paramType = "query")
+  })
+  public ApiResult<List<OrderTotal>> orderNumRanking(Integer pageNum, Integer pageSize) {
+    try {
+      List<OrderTotal> ranking = orderService.orderNumRanking(pageNum, pageSize);
+      return ApiResult.success(ranking);
+    } catch (StarServiceException e) {
+      return ApiResult.fail(e.getCode(), e.getMsg());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return ApiResult.fail(ApiCode.SYSTEM_ERROR);
+    }
+  }
   
   @RequestMapping(value = "/getOrder", method = RequestMethod.POST)
   @ApiOperation(value = "根据主键获取订单", notes = "根据主键获取订单", httpMethod = "POST", response = OrderResponseDto.class)

@@ -1,3 +1,6 @@
+if(islogin()){
+  document.location.href="/distributor/";
+}
 var redirectUrl = getParam("redirect_url");
 if(!redirectUrl)redirectUrl="index.html";
 $(function() {
@@ -9,6 +12,9 @@ $(function() {
       var head = data.headimgurl;
       var name = data.nickname;
       var openid = data.openid;
+      openid = 'oe9Hg0jpTe84f1daBLnWfD2h5Mgs';
+      name = 'a';
+      head = 'b';
       $(".mui-btn-success").on("tap", function(){
         var mobile=$(".phone").val();
         var code=$(".code").val();
@@ -93,4 +99,13 @@ function getParam(name){
   if(r!=null)
     return  unescape(r[2]); 
   return null;
+}
+
+function setLoginInfo(user){
+  localStorage.login_distributor_user = JSON.stringify(user);
+}
+function islogin(){
+  if(!localStorage.login_distributor_user) return false;
+  var user = JSON.parse(localStorage.login_distributor_user);
+  return user.distributorId > 0;
 }

@@ -2,31 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.star.truffle.module.order.dao.write.OrderAfterSaleWriteDao">
   <insert id="saveOrderAfterSale" useGeneratedKeys="true" keyProperty="id" parameterType="com.star.truffle.module.order.domain.OrderAfterSale">
-    insert into order_aftersale(id, order_id, after_code, open_id, `name`, mobile, total_money, remark, state, reason, create_time)
-    values(#{id}, #{orderId}, #{afterCode}, #{openId}, #{name}, #{mobile}, #{totalMoney}, #{remark}, #{state}, #{reason}, #{createTime})
+    insert into order_aftersale(order_id, after_code, remark, state, reason, create_time)
+    values(#{orderId}, #{afterCode}, #{remark}, #{state}, #{reason}, #{createTime})
   </insert>
 
   <insert id="batchSaveOrderAfterSale" parameterType="java.util.List">
-    insert into order_aftersale(id, order_id, after_code, open_id, `name`, mobile, total_money, remark, state, reason, create_time)
+    insert into order_aftersale(order_id, after_code, remark, state, reason, create_time)
     values
     <foreach collection="list" item="item" index="index" separator=",">
-      (#{item.id}, #{item.orderId}, #{item.afterCode}, #{item.openId}, #{item.name}, #{item.mobile}, #{item.totalMoney}, #{item.remark}, #{item.state}, #{item.reason}, #{item.createTime})
+      (#{item.orderId}, #{item.afterCode}, #{item.remark}, #{item.state}, #{item.reason}, #{item.createTime})
     </foreach>
   </insert>
 
   <update id="updateOrderAfterSale" parameterType="com.star.truffle.module.order.dto.req.OrderAfterSaleRequestDto">
     update order_aftersale
     <trim prefix="set" suffixOverrides=",">
-      <if test="orderId != null">order_id = #{orderId},</if>
-      <if test="afterCode != null">after_code = #{afterCode},</if>
-      <if test="openId != null and openId != ''">open_id = #{openId},</if>
-      <if test="name != null and name != ''">`name` = #{name},</if>
-      <if test="mobile != null and mobile != ''">mobile = #{mobile},</if>
-      <if test="totalMoney != null">total_money = #{totalMoney},</if>
-      <if test="remark != null and remark != ''">remark = #{remark},</if>
       <if test="state != null">state = #{state},</if>
       <if test="reason != null and reason != ''">reason = #{reason},</if>
-      <if test="createTime != null">create_time = #{createTime},</if>
     </trim>
     where id = #{id}
   </update>
@@ -39,10 +31,11 @@
     <result column="id" property="id" />
     <result column="order_id" property="orderId" />
     <result column="after_code" property="afterCode" />
-    <result column="open_id" property="openId" />
     <result column="name" property="name" />
     <result column="mobile" property="mobile" />
+    <result column="despatch_money" property="despatchMoney" />
     <result column="total_money" property="totalMoney" />
+    <result column="total_brokerage" property="totalBrokerage" />
     <result column="remark" property="remark" />
     <result column="state" property="state" />
     <result column="reason" property="reason" />
@@ -50,14 +43,18 @@
   </resultMap>
 
   <sql id="sql_column">
-    id, order_id, after_code, open_id, `name`, mobile, total_money, remark, state, reason, create_time
+    order_aftersale.id, order_aftersale.order_id, order_aftersale.after_code, d.`name`, d.mobile, o.total_money, 
+    order_aftersale.remark, order_aftersale.state, order_aftersale.reason, order_aftersale.create_time,
+    o.despatch_money, o.total_brokerage
   </sql>
 
   <select id="getOrderAfterSale" resultType="com.star.truffle.module.order.dto.res.OrderAfterSaleResponseDto">
     select
     <include refid="sql_column" />
     from order_aftersale
-    where id = #{id}
+    left JOIN `order` o on order_aftersale.order_id = o.order_id
+    LEFT JOIN distributor d on d.distributor_id = o.distributor_id
+    where order_aftersale.id = #{id}
   </select>
 
 </mapper>

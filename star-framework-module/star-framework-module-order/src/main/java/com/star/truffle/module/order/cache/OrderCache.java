@@ -16,6 +16,7 @@ import com.star.truffle.module.order.dao.write.OrderWriteDao;
 import com.star.truffle.module.order.domain.Order;
 import com.star.truffle.module.order.dto.req.OrderRequestDto;
 import com.star.truffle.module.order.dto.res.OrderResponseDto;
+import com.star.truffle.module.order.dto.res.OrderTotal;
 
 @Service
 public class OrderCache {
@@ -60,6 +61,19 @@ public class OrderCache {
   public Long queryOrderCount(OrderRequestDto orderRequestDto){
     Map<String, Object> conditions = starJson.bean2Map(orderRequestDto);
     return this.orderReadDao.queryOrderCount(conditions);
+  }
+
+  public List<OrderTotal> orderIndexToday(Long distributorId, Integer startIndex, Integer pageSize) {
+    List<OrderTotal> list = orderReadDao.orderIndexToday(distributorId, startIndex, pageSize);
+    return list;
+  }
+
+  public Long totalMoney(Long distributorId) {
+    return orderReadDao.totalMoney(distributorId);
+  }
+
+  public Long totalOrderNumOfToday() {
+    return orderReadDao.totalOrderNumOfToday();
   }
 
 }

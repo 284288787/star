@@ -9,4 +9,14 @@ import com.star.truffle.module.order.domain.OrderAfterSale;
 @Setter
 public class OrderAfterSaleResponseDto extends OrderAfterSale {
 
+  // 分销商姓名
+  private String name;
+  // 分销商手机号
+  private String mobile;
+  // 快递费 单位分
+  private Integer despatchMoney;
+  // 总金额 不包含运费
+  private Integer totalMoney;
+  // 总提成
+  private Integer totalBrokerage;
 }

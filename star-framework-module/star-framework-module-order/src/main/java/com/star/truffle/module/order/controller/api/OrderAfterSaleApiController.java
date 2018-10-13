@@ -2,23 +2,25 @@
 package com.star.truffle.module.order.controller.api;
 
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.star.truffle.core.StarServiceException;
-import com.star.truffle.core.web.ApiResult;
 import com.star.truffle.core.web.ApiCode;
+import com.star.truffle.core.web.ApiResult;
+import com.star.truffle.module.order.dto.req.OrderAfterSaleRequestDto;
+import com.star.truffle.module.order.dto.res.OrderAfterSaleResponseDto;
+import com.star.truffle.module.order.service.OrderAfterSaleService;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import springfox.documentation.annotations.ApiIgnore;
 import lombok.extern.slf4j.Slf4j;
-import com.star.truffle.module.order.domain.OrderAfterSale;
-import com.star.truffle.module.order.service.OrderAfterSaleService;
-import com.star.truffle.module.order.dto.req.OrderAfterSaleRequestDto;
-import com.star.truffle.module.order.dto.res.OrderAfterSaleResponseDto;
+import springfox.documentation.annotations.ApiIgnore;
 
 @Slf4j
 @RestController
@@ -95,8 +97,11 @@ public class OrderAfterSaleApiController {
   @RequestMapping(value = "/saveOrderAfterSale", method = RequestMethod.POST)
   @ApiOperation(value = "新增订单售后", notes = "新增订单售后", httpMethod = "POST", response = ApiResult.class)
   @ApiImplicitParams({
+    @ApiImplicitParam(name = "orderId", value = "订单ID", dataType = "Long", required = true, paramType = "query"),
+    @ApiImplicitParam(name = "distributorId", value = "分销商id", dataType = "Long", required = true, paramType = "query"),
+    @ApiImplicitParam(name = "remark", value = "申请售后说明", dataType = "String", required = true, paramType = "query"),
   })
-  public ApiResult<Long> saveOrderAfterSale(@ApiIgnore OrderAfterSale orderAfterSale) {
+  public ApiResult<Long> saveOrderAfterSale(@ApiIgnore OrderAfterSaleRequestDto orderAfterSale) {
     try {
       Long id = orderAfterSaleService.saveOrderAfterSale(orderAfterSale);
       return ApiResult.success(id);

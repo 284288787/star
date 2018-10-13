@@ -2,6 +2,7 @@
 package com.star.truffle.module.order.service;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,6 +32,7 @@ import com.star.truffle.module.order.dto.req.ShoppingCartRequestDto;
 import com.star.truffle.module.order.dto.res.DeliveryAddressResponseDto;
 import com.star.truffle.module.order.dto.res.OrderDetailResponseDto;
 import com.star.truffle.module.order.dto.res.OrderResponseDto;
+import com.star.truffle.module.order.dto.res.OrderTotal;
 import com.star.truffle.module.order.dto.res.ShoppingCartResponseDto;
 import com.star.truffle.module.order.properties.OrderProperties;
 import com.star.truffle.module.product.constant.BrokerageTypeEnum;
@@ -302,6 +304,49 @@ public class OrderService {
 
   public Map<String, Integer> buyRecordTotal(Long productId) {
     return this.orderDetailCache.buyRecordTotal(productId);
+  }
+
+  /**
+   * 订单总比
+   * 订单排名
+   * 今日收益
+   * 累计收益
+   * @param distributorId
+   * @return
+   */
+  public Map<String, Object> shopIndex(Long distributorId) {
+    Long totalOrderNumOfToday = orderCache.totalOrderNumOfToday();
+    
+    Map<String, Object> map = new HashMap<>();
+    map.put("totalOrderNumOfToday", totalOrderNumOfToday);
+    map.put("totalMoney", orderCache.totalMoney(distributorId));
+    
+    List<OrderTotal> orderIndex = orderCache.orderIndexToday(distributorId, null, null);
+    if (null == orderIndex || orderIndex.isEmpty()) {
+      map.put("orderNum", 0);
+      map.put("orderNumRate", 0);
+      map.put("ranking", 0);
+      map.put("totalMoneyOfToday", 0);
+    }else {
+      OrderTotal orderTotal = orderIndex.get(0);
+      map.put("orderNumOfToday", orderTotal.getTotalOrderNum());
+      map.put("orderNumRateOfToday", orderTotal.getTotalOrderNum() / (totalOrderNumOfToday * 1.0));
+      map.put("rankingOfToday", orderTotal.getIdx());
+      map.put("totalMoneyOfToday", orderTotal.getTotalOrderMoney());
+    }
+    return map;
+  }
+
+  public List<OrderTotal> orderNumRanking(Integer pageNum, Integer pageSize) {
+    if (null == pageNum) {
+      pageNum = 1;
+    }
+    if (null == pageSize) {
+      pageSize = 10;
+    }
+    Integer startIndex = (pageNum - 1) * pageSize;
+    List<OrderTotal> list = orderCache.orderIndexToday(null, startIndex, pageSize);
+    return list;
   }
 
 }

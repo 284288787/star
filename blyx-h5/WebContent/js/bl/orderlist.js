@@ -116,8 +116,8 @@ function loadData(self, pageNum, pageSize, state){
             }
           });
         };
-        $(".deleteorder").on('tap', deleteOrder);
-        $(".enterorder").on('tap', function(){
+        $(".deleteorder").off().on('tap', deleteOrder);
+        $(".enterorder").off().on('tap', function(){
           var obj = $(this);
           var orderId = $(this).attr("data-orderId");
           ajax({
@@ -129,12 +129,12 @@ function loadData(self, pageNum, pageSize, state){
             }
           });
         });
-        $(".topay").on('tap', function(){
+        $(".topay").off().on('tap', function(){
           var orderId = $(this).attr("data-orderId");
           putLocalData("pay_orderId", orderId);
           document.location.href='pay.html';
         });
-        $(".viewdetail").on('tap', function(){
+        $(".viewdetail").off().on('tap', function(){
           var orderId = $(this).attr("data-orderId");
           document.location.href='orderdetail.html?orderId='+orderId;
         });

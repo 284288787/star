@@ -165,4 +165,47 @@
 		LEFT JOIN sys_area t on t.areaId = r.town_id
     <include refid="sql_where" />
   </select>
+
+  <resultMap id="orderIndexMap" type="com.star.truffle.module.order.dto.res.OrderTotal">
+    <result column="idx" property="idx" />
+    <result column="distributor_id" property="distributorId" />
+    <result column="totalOrderNum" property="totalOrderNum" />
+    <result column="totalOrderMoney" property="totalOrderMoney" />
+    <result column="totalOrderBrokerage" property="totalOrderBrokerage" />
+    <result column="totalDespatchMoney" property="totalDespatchMoney" />
+    <result column="fans_num" property="fansNum" />
+    <result column="sold_num" property="soldNum" />
+    <result column="shop_code" property="shopCode" />
+    <result column="shop_name" property="shopName" />
+    <result column="name" property="name" />
+  </resultMap>
+
+  <select id="orderIndexToday" resultMap="orderIndexMap">
+    select * from (
+      SELECT (@i:=@i+1) idx, t.distributor_id, t.totalOrderNum, t.totalOrderMoney, t.totalOrderBrokerage, t.totalDespatchMoney, t.fans_num, t.sold_num, t.shop_code, t.shop_name, t.address, t.`name` from (
+      select 
+        b.distributor_id, b.totalOrderNum, b.totalOrderMoney, b.totalOrderBrokerage, b.totalDespatchMoney, d.fans_num, d.sold_num, d.shop_code, d.shop_name, d.address, d.`name`
+      from (
+        select 
+        o.distributor_id, count(1) totalOrderNum, IFNULL(SUM(o.total_money),0) totalOrderMoney, IFNULL(SUM(o.total_brokerage),0) totalOrderBrokerage, IFNULL(SUM(o.despatch_money),0) totalDespatchMoney
+        from `order` o where o.state in (2, 3) and to_days(o.create_time) = to_days(now()) GROUP BY o.distributor_id
+      ) b
+      LEFT JOIN distributor d on d.distributor_id = b.distributor_id order by totalOrderNum desc
+      ) t, (select @i:=0) t2
+    ) z
+    <if test="distributorId != null">
+     where z.distributor_id = #{distributorId}
+    </if>
+    <if test="pageSize != null and startIndex != null">
+    LIMIT #{startIndex}, #{pageSize}
+    </if>
+  </select>
+
+  <select id="totalMoney" resultType="java.lang.Long">
+    select IFNULL(SUM(o.total_brokerage), 1) from `order` o where o.distributor_id = 1 and o.state in (2,3)
+  </select>
+
+  <select id="totalOrderNumOfToday" resultType="java.lang.Long">
+    select count(1) from `order` o where to_days(o.create_time) = to_days(now()) and o.state in (2,3)
+  </select>
 </mapper>

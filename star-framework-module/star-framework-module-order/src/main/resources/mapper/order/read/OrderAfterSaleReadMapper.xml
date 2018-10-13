@@ -16,25 +16,27 @@
   </resultMap>
 
   <sql id="sql_column">
-    id, order_id, after_code, open_id, `name`, mobile, total_money, remark, state, reason, create_time
+    order_aftersale.id, order_aftersale.order_id, order_aftersale.after_code, d.`name`, d.mobile, o.total_money, 
+    order_aftersale.remark, order_aftersale.state, order_aftersale.reason, order_aftersale.create_time,
+    o.despatch_money, o.total_brokerage
   </sql>
 
   <sql id="sql_where">
     <trim prefix="WHERE" prefixOverrides="AND | OR">
       <if test="id != null">
-        and id = #{id}
+        and order_aftersale.id = #{id}
       </if>
       <if test="orderId != null">
-        and order_id = #{orderId}
+        and order_aftersale.order_id = #{orderId}
       </if>
       <if test="afterCode != null">
-        and after_code = #{afterCode}
+        and order_aftersale.after_code = #{afterCode}
       </if>
       <if test="mobile != null and mobile != ''">
-        and mobile = #{mobile}
+        and d.mobile = #{mobile}
       </if>
       <if test="state != null">
-        and state = #{state}
+        and order_aftersale.state = #{state}
       </if>
     </trim>
   </sql>
@@ -43,13 +45,17 @@
     select
     <include refid="sql_column" />
     from order_aftersale
-    where id = #{id}
+    left JOIN `order` o on order_aftersale.order_id = o.order_id
+    LEFT JOIN distributor d on d.distributor_id = o.distributor_id
+    where order_aftersale.id = #{id}
   </select>
 
   <select id="queryOrderAfterSale" resultMap="orderAfterSaleResponseDtoResultMap">
     select
     <include refid="sql_column" />
     from order_aftersale
+    left JOIN `order` o on order_aftersale.order_id = o.order_id
+    LEFT JOIN distributor d on d.distributor_id = o.distributor_id
     <include refid="sql_where" />
     order by
     <choose>
@@ -66,6 +72,8 @@
     select
     count(1)
     from order_aftersale
+    left JOIN `order` o on order_aftersale.order_id = o.order_id
+    LEFT JOIN distributor d on d.distributor_id = o.distributor_id
     <include refid="sql_where" />
   </select>
 </mapper>
