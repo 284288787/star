@@ -60,20 +60,6 @@ public class OrderAfterSaleController {
   }
 
   @ResponseBody
-  @RequestMapping(value = "/add", method = RequestMethod.POST)
-  public ApiResult<Long> add(@RequestBody OrderAfterSale orderAfterSale) {
-    try {
-      Long id = orderAfterSaleService.saveOrderAfterSale(orderAfterSale);
-      return ApiResult.success(id);
-    } catch (StarServiceException e) {
-      return ApiResult.fail(e.getCode(), e.getMsg());
-    } catch (Exception e) {
-      log.error(e.getMessage(), e);
-      return ApiResult.fail(ApiCode.SYSTEM_ERROR);
-    }
-  }
-
-  @ResponseBody
   @RequestMapping(value = "/edit", method = RequestMethod.POST)
   public ApiResult<Void> edit(@RequestBody OrderAfterSaleRequestDto orderAfterSaleRequestDto) {
     try {
