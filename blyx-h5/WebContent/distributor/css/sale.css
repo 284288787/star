@@ -1,0 +1,123 @@
+
+
+.mui-control-content{
+  height: calc(100vh - 84px) !important;     
+}
+#sliderSegmentedControl,#slider{
+  background-color: #fff;
+}
+
+
+.goodsicon {
+  width: 40px !important;
+  height: 40px !important;
+  float: left;
+  
+}
+.pbox {
+  padding: 12px 16px;
+  border-top: 1px solid #dddddd;
+  border-bottom: 1px solid #dddddd;
+ 
+  font-size: 12px;
+  
+}
+.mui-table-view{
+  background: #efeff4 !important;
+}
+.mui-table-view-cell{
+  padding: 0px 0px 0 0 !important;
+  background-color: #fff;
+  border-bottom: 5px solid #efeff4;
+}
+li.mui-table-view-cell:after{
+  background-color:#fff;
+}
+.pbox span {
+  font-size: 14px;
+  float: right;
+}
+.pbox .red {
+  color: red;
+}
+.pbox .blank {
+  color: #333;
+}
+.price {
+  padding: 12px 16px;
+  border-top: 1px solid #dddddd;
+
+  background: #ffffff;
+  font-size: 12px;
+  
+}
+.price span {
+  font-size: 12px;
+  font-weight: bold;
+  float: right;
+}
+.price b {
+  color: red;
+  font-size: 14px;
+}
+.imgbox{
+  padding: 10px;
+  position: relative;
+  line-height: 0;
+}
+.imgbox p {
+  padding-left: 8px;
+  font-size: 12px;
+  line-height: 18px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #333;
+}
+.mui-table-view-cell.mui-active{
+  background-color: #fff !important;
+}
+.mui-btn, button{
+  padding: 2px 10px !important;
+}
+.pbox em{
+  font-style: normal;
+}
+.pbox .pl{
+  float: right;
+  margin-top: -10px;
+  margin-left: 5px;
+}
+.nocontent{
+  text-align: center;
+  font-size: 12px;
+  color: #999;
+  padding: 100px 0 0 0;
+  line-height: 30px;
+}
+.nocontent span{
+  font-size: 60px;
+  color: #e1e1e1;
+  background-color: #f5f5f5;
+  padding: 35px;
+  border-radius: 50%;
+}
+.sbox{
+  padding: 10px;
+}
+.sbox input[type=search]{
+  margin-bottom: 0px;
+}
+.mui-search:before {
+  margin-top: -10px;
+}
+
+body{
+  overflow: hidden;
+}
+.online{
+  background: #fae8c4;
+  font-size: 12px;
+  padding: 10px;
+  color: #333;
+}

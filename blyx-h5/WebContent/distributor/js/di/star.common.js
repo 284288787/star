@@ -48,7 +48,7 @@ function islogin(){
 
 if(! islogin()){
   var href = encodeURIComponent(document.location.href);
-  var url = location.protocol + '//'+ location.hostname + '/distributor/login.html?redirect_url=' + href;
+  var url = 'http://fxs.hnkbmd.com/login.html?redirect_url=' + href;
   url = encodeURI(url);
   var state = 'yx';
   var wx = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx43fd4135600dcee3&redirect_uri="+url+"&response_type=code&scope=snsapi_userinfo&state="+state+"#wechat_redirect";

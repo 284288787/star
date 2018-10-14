@@ -1,0 +1,101 @@
+.logo{
+    width: 40px;
+    height: auto;
+    vertical-align: middle;
+}
+.header{
+    background: #167108;
+    line-height: 44px;
+}
+.logofont{
+    width: auto;
+    height: 16px;
+    vertical-align: bottom;
+    margin-bottom: 10px;
+    margin-left: 25px;
+}
+.main{
+    padding-top: 44px;
+
+}
+
+.mui-bar .mui-btn-link.mui-active, .mui-bar .mui-btn-link:active,.mui-bar .mui-btn-link{
+  color: #333333 !important;
+  border: none !important;
+}
+.odcenter{
+  background-color: #fff;
+  padding: 30px 0px;
+  text-align: center;
+  border-bottom: 1px solid #dddddd;
+}
+.jb{
+  display: block;
+  margin: 10px auto;
+  width: 100px;
+  height: 100px;
+}
+.small{
+  font-size: 12px;
+  color: #888;
+  text-align: center;
+}
+.bdor{
+  margin-top: 10px;
+  border-top: 1px solid #dddddd;
+  border-bottom: 1px solid #dddddd;
+  background-color: #fff;
+  padding: 10px 0px;
+  margin-bottom: 0px;
+}
+.rbm{
+      font-size: 16px;
+      
+}
+.rbm b{
+  font-size: 32px;
+  color: #333;
+}
+.rbminfo{
+  background-color: #fff;
+  padding: 15px 0px;
+  border-bottom: 1px solid #dddddd;
+}
+
+.p1{
+      font-size: 12px;
+      color: #888;
+      padding-right: 5px;
+  }
+  .center{
+      text-align: center;
+      display: inline-block;
+      width: 49%;
+     
+  }
+  .center p{
+    margin-bottom: 0px;
+  }
+  .bdf{
+      border-left: 1px solid #dddddd;
+  }
+  .p3{
+      font-size: 14px;
+      color: #333;
+      padding-right: 5px;
+  }
+  .bton{
+    background-color: #fff;
+    padding: 12px;
+}
+.mui-btn-block{
+  margin-bottom: 0 !important;
+}
+.lists{
+  font-size: 12px;
+}
+.lists span{
+  vertical-align: middle;
+  font-size: 14px;
+  color: #f6922b
+}

@@ -1,0 +1,109 @@
+.sendcode{
+  color: #ffffff;
+  background: #5b2;
+  border-radius: 4px;
+  padding: 2px 5px;
+  position: absolute;
+  right: 10px;
+  top: 8px;
+  font-size: 12px;
+}
+.sendcode:active{
+  color: #eeeeee;
+}
+.useimg{
+  text-align: center;
+  position: relative;
+  padding: 15px 10px
+}
+.useimg img{
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+}
+.useimg p{
+  margin: 0px;
+  font-size: 12px;
+}
+.files{
+  display: block;
+  width: 100px;
+  height: 100px;
+  position: absolute;
+  background: #eee;
+  top: 15px;
+  left: 50%;
+  margin-left: -50px;
+  opacity: 0;
+}
+.disabled{
+  background: #ccc;
+} 
+.bgw{ 
+  background: #ffffff !important;
+}
+.color1{
+  color: #666;
+  font-size: 16px;
+}
+.color2{
+  color: #ff0000;
+  font-size: 16px;
+}
+.color3{
+  color: #f7c712;
+  font-size: 16px;
+}
+.color4{
+  color: #55bb22;
+  font-size: 16px;
+}
+.color5{
+  color: #333;
+  font-size: 16px;
+}
+.navlist li{
+  color: #666;
+}
+.infomation{
+  background: #fff;
+  padding: 10px;
+  margin-bottom: 10px;
+  position: relative;
+  font-size: 14px;
+}
+.infomation img {
+      width:60px;
+      height: 60px;
+      border-radius: 50%;
+      float: left;
+  }
+  
+ 
+  .infomation p{
+    padding-left: 70px;
+    padding-top: 5px;
+font-size: 12px;
+    color:#999;
+    margin-bottom: 0;
+   
+}
+.infomation p.bigp{
+    color: #333;
+    font-size: 14px;
+}   
+.infomation span{
+    text-align: right;
+    position: absolute;
+    right: 15px;
+    top: 30px;
+    color:#999;
+    font-size: 20px;
+}
+
+.mui-control-content{
+  height: calc(100vh - 80px) !important;     
+}
+#sliderSegmentedControl,#slider{
+  background-color: #fff;
+}
