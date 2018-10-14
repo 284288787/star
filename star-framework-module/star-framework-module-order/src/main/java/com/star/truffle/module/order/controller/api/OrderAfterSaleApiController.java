@@ -30,28 +30,11 @@ public class OrderAfterSaleApiController {
 
   @Autowired
   private OrderAfterSaleService orderAfterSaleService;
-
-  @RequestMapping(value = "/getOrderAfterSale", method = RequestMethod.POST)
-  @ApiOperation(value = "根据主键获取订单售后", notes = "根据主键获取订单售后", httpMethod = "POST", response = OrderAfterSaleResponseDto.class)
-  @ApiImplicitParams({
-    @ApiImplicitParam(name = "id", value = "主键", dataType = "Long", required = true, paramType = "query")
-  })
-  public ApiResult<OrderAfterSaleResponseDto> getOrderAfterSale(Long id) {
-    try {
-      OrderAfterSaleResponseDto orderAfterSaleResponseDto = orderAfterSaleService.getOrderAfterSale(id);
-      return ApiResult.success(orderAfterSaleResponseDto);
-    } catch (StarServiceException e) {
-      return ApiResult.fail(e.getCode(), e.getMsg());
-    } catch (Exception e) {
-      log.error(e.getMessage(), e);
-      return ApiResult.fail(ApiCode.SYSTEM_ERROR);
-    }
-  }
-
+  
   @RequestMapping(value = "/queryOrderAfterSale", method = RequestMethod.POST)
   @ApiOperation(value = "根据条件获取订单售后列表", notes = "根据条件获取订单售后列表", httpMethod = "POST", response = ApiResult.class)
   @ApiImplicitParams({
-    @ApiImplicitParam(name = "id", value = "主键", dataType = "Long", required = false, paramType = "query"),
+    @ApiImplicitParam(name = "distributorId", value = "分销商ID", dataType = "Long", required = true, paramType = "query"),
     @ApiImplicitParam(name = "orderId", value = "订单ID", dataType = "Long", required = false, paramType = "query"),
     @ApiImplicitParam(name = "afterCode", value = "售后单号", dataType = "Long", required = false, paramType = "query"),
     @ApiImplicitParam(name = "mobile", value = "分销商手机号", dataType = "String", required = false, paramType = "query"),
@@ -112,14 +95,16 @@ public class OrderAfterSaleApiController {
       return ApiResult.fail(ApiCode.SYSTEM_ERROR);
     }
   }
-
-  @RequestMapping(value = "/updateOrderAfterSale", method = RequestMethod.POST)
-  @ApiOperation(value = "编辑订单售后", notes = "编辑订单售后", httpMethod = "POST", response = ApiResult.class)
+  
+  @RequestMapping(value = "/cancelOrderAfterSale", method = RequestMethod.POST)
+  @ApiOperation(value = "根据主键取消订单售后", notes = "根据主键取消订单售后", httpMethod = "POST", response = ApiResult.class)
   @ApiImplicitParams({
+    @ApiImplicitParam(name = "id", value = "售后id", dataType = "Long", required = true, paramType = "query"),
+    @ApiImplicitParam(name = "distributorId", value = "分销商id", dataType = "Long", required = true, paramType = "query")
   })
-  public ApiResult<Void> updateOrderAfterSale(@ApiIgnore OrderAfterSaleRequestDto orderAfterSaleRequestDto) {
+  public ApiResult<Void> cancelOrderAfterSale(Long id, Long distributorId) {
     try {
-      orderAfterSaleService.updateOrderAfterSale(orderAfterSaleRequestDto);
+      orderAfterSaleService.cancelOrderAfterSale(id, distributorId);
       return ApiResult.success();
     } catch (StarServiceException e) {
       return ApiResult.fail(e.getCode(), e.getMsg());

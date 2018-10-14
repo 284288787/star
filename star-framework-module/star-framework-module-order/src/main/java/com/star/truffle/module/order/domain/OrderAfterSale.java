@@ -23,4 +23,7 @@ public class OrderAfterSale {
   private String reason;
   // 创建日期
   private Date createTime;
+  // 更新日期
+  private Date updateTime;
+  
 }

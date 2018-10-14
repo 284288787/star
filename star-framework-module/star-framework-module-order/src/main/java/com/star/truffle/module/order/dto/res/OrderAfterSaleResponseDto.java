@@ -3,7 +3,11 @@ package com.star.truffle.module.order.dto.res;
 
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
+
 import com.star.truffle.module.order.domain.OrderAfterSale;
+import com.star.truffle.module.order.domain.OrderDetail;
 
 @Getter
 @Setter
@@ -19,4 +23,6 @@ public class OrderAfterSaleResponseDto extends OrderAfterSale {
   private Integer totalMoney;
   // 总提成
   private Integer totalBrokerage;
+  
+  private List<OrderDetail> details;
 }

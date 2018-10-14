@@ -11,8 +11,11 @@ import org.springframework.stereotype.Service;
 import com.star.truffle.core.StarServiceException;
 import com.star.truffle.core.web.ApiCode;
 import com.star.truffle.module.order.cache.OrderAfterSaleCache;
+import com.star.truffle.module.order.cache.OrderCache;
+import com.star.truffle.module.order.cache.OrderDetailCache;
 import com.star.truffle.module.order.constant.AfterSaleEnum;
 import com.star.truffle.module.order.constant.OrderStateEnum;
+import com.star.truffle.module.order.domain.OrderDetail;
 import com.star.truffle.module.order.dto.req.OrderAfterSaleRequestDto;
 import com.star.truffle.module.order.dto.res.OrderAfterSaleResponseDto;
 import com.star.truffle.module.order.dto.res.OrderResponseDto;
@@ -23,14 +26,16 @@ public class OrderAfterSaleService {
   @Autowired
   private OrderAfterSaleCache orderAfterSaleCache;
   @Autowired
-  private OrderService orderService;
+  private OrderCache orderCache;
+  @Autowired
+  private OrderDetailCache orderDetailCache;
 
   public Long saveOrderAfterSale(OrderAfterSaleRequestDto orderAfterSale) {
     if (null == orderAfterSale || null == orderAfterSale.getOrderId() 
         || null == orderAfterSale.getDistributorId() || StringUtils.isBlank(orderAfterSale.getRemark())) {
       throw new StarServiceException(ApiCode.PARAM_ERROR);
     }
-    OrderResponseDto order = orderService.getOrder(orderAfterSale.getOrderId());
+    OrderResponseDto order = orderCache.getOrder(orderAfterSale.getOrderId());
     if (null == order || order.getState() == OrderStateEnum.nopay.state() || order.getState() == OrderStateEnum.back.state()) {
       throw new StarServiceException(ApiCode.PARAM_ERROR, "订单不存在或未付款或已退货");
     }
@@ -69,11 +74,37 @@ public class OrderAfterSaleService {
   }
 
   public List<OrderAfterSaleResponseDto> queryOrderAfterSale(OrderAfterSaleRequestDto orderAfterSaleRequestDto) {
-    return this.orderAfterSaleCache.queryOrderAfterSale(orderAfterSaleRequestDto);
+    List<OrderAfterSaleResponseDto> list = this.orderAfterSaleCache.queryOrderAfterSale(orderAfterSaleRequestDto);
+    if (null != list && ! list.isEmpty()) {
+      for (OrderAfterSaleResponseDto orderResponseDto : list) {
+        List<OrderDetail> details = orderDetailCache.getOrderDetails(orderResponseDto.getOrderId());
+        orderResponseDto.setDetails(details);
+      }
+    }
+    return list;
   }
 
   public Long queryOrderAfterSaleCount(OrderAfterSaleRequestDto orderAfterSaleRequestDto) {
     return this.orderAfterSaleCache.queryOrderAfterSaleCount(orderAfterSaleRequestDto);
+  }
+
+  public void cancelOrderAfterSale(Long id, Long distributorId) {
+    if (null == id || null == distributorId) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR);
+    }
+    OrderAfterSaleResponseDto afterSale = orderAfterSaleCache.getOrderAfterSale(id);
+    if (null == afterSale || afterSale.getState() != AfterSaleEnum.pending.state()) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR, "只有待处理的售后申请才可以取消");
+    }
+    OrderResponseDto order = orderCache.getOrder(afterSale.getOrderId());
+    if (order.getDistributorId().longValue() != distributorId) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR, "不是自己下面的订单不能操作申请售后");
+    }
+    OrderAfterSaleRequestDto orderAfterSaleRequestDto = new OrderAfterSaleRequestDto();
+    orderAfterSaleRequestDto.setId(id);
+    orderAfterSaleRequestDto.setState(AfterSaleEnum.cancel.state());
+    orderAfterSaleRequestDto.setUpdateTime(new Date());
+    this.orderAfterSaleCache.updateOrderAfterSale(orderAfterSaleRequestDto);
   }
 
 }

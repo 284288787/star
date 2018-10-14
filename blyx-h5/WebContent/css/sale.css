@@ -86,6 +86,7 @@ li.mui-table-view-cell:after{
 .pbox .pl{
   float: right;
   margin-top: -10px;
+  margin-left: 5px;
 }
 .nocontent{
   text-align: center;
