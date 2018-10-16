@@ -319,7 +319,7 @@ public class OrderService {
     
     Map<String, Object> map = new HashMap<>();
     map.put("totalOrderNumOfToday", totalOrderNumOfToday);
-    map.put("totalMoney", orderCache.totalMoney(distributorId));
+    map.put("totalMoney", orderCache.totalMoney(distributorId, null));
     
     List<OrderTotal> orderIndex = orderCache.orderIndexToday(distributorId, null, null);
     if (null == orderIndex || orderIndex.isEmpty()) {

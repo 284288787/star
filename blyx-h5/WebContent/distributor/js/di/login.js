@@ -12,9 +12,9 @@ $(function() {
       var head = data.headimgurl;
       var name = data.nickname;
       var openid = data.openid;
-//      openid = 'oe9Hg0jpTe84f1daBLnWfD2h5Mgs';
-//      name = 'a';
-//      head = 'b';
+      openid = 'oe9Hg0jpTe84f1daBLnWfD2h5Mgs';
+      name = 'a';
+      head = 'b';
       $(".mui-btn-success").on("tap", function(){
         var mobile=$(".phone").val();
         var code=$(".code").val();

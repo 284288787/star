@@ -1,6 +1,7 @@
 /**create by framework at 2018年09月21日 15:21:35**/
 package com.star.truffle.module.order.cache;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -68,8 +69,8 @@ public class OrderCache {
     return list;
   }
 
-  public Long totalMoney(Long distributorId) {
-    return orderReadDao.totalMoney(distributorId);
+  public Map<String, Object> totalMoney(Long distributorId, Date beginTime) {
+    return orderReadDao.totalMoney(distributorId, beginTime);
   }
 
   public Long totalOrderNumOfToday() {

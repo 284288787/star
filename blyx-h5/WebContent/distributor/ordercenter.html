@@ -2,70 +2,55 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta name="applicable-device" content="mobile">
-    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-    <meta name="format-detection" content="telephone=no,email=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="full-screen" content="yes">
-    <meta name="x5-fullscreen" content="true">
-    <link rel="stylesheet" href="css/mui.min.css">
-    <link rel="stylesheet" href="css/icons-extra.css">
-    <link rel="stylesheet" href="css/common.css">
-    <link rel="stylesheet" href="css/center.css">
-    <script src="js/jquery.min.js"></script>
-    <script src="js/mui.min.js"></script>
-    <title>结算中心</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta name="applicable-device" content="mobile">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="format-detection" content="telephone=no,email=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="full-screen" content="yes">
+<meta name="x5-fullscreen" content="true">
+<link rel="stylesheet" href="css/mui.min.css">
+<link rel="stylesheet" href="css/icons-extra.css">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/center.css">
+<script src="js/jquery.min.js"></script>
+<script src="js/mui.min.js"></script>
+<script src="js/di/star.common.js"></script>
+<title>结算中心</title>
 </head>
-
 <body>
-    <header id="header" class="mui-bar mui-bar-nav">
-        <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-        <h1 class="mui-title">结算中心</h1>
-        <button class="mui-btn mui-btn-blue mui-btn-link mui-pull-right" >明细</button>
-    </header>
-    <div class="main">
-            <div class="odcenter">
-                    <img src="images/timg.jpg" alt="" class="jb">
-                    <p class="small">可提现金额（元）</p>
-                    <p class="rbm"> ￥<b>1245.8</b> </p>
-                    
-                </div>
-                <p class="small bdor">可提现金额 = 总金额 - 审核中的金额</p>
-                <div class="rbminfo">
-                   
-                                <div  class="center">
-                                    <p class="p1">总金额（元）</p>
-                                    
-                                    <p class="p3">1245.8</p>
-                                </div>
-                                <div class="center bdf">
-                                    <p class="p1">审核中的金额（元）</p>
-                                  
-                                    <p class="p3">0</p>
-                                </div>
-                               
-                            
-                </div>
-                <div class="bton">
-                        <button type="button" class="mui-btn mui-btn-success mui-btn-block">申请提现</button>
-                       
-                </div>
-                <ul class="mui-table-view lists">
-                    <li class="mui-table-view-cell">
-                        <a class="mui-navigate-right" href="record.html">
-                                <span class="mui-icon mui-icon-extra mui-icon-extra-order"></span> 提现记录
-                        </a>
-                    </li> 
-                </ul>
+  <header id="header" class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">结算中心</h1>
+    <button class="mui-btn mui-btn-blue mui-btn-link mui-pull-right">明细</button>
+  </header>
+  <div class="main">
+    <div class="odcenter">
+      <img src="images/timg.jpg" alt="" class="jb">
+      <p class="small">可提现金额（元）</p>
+      <p class="rbm">￥<b>0.00</b></p>
     </div>
-
-
-    <script type="text/javascript">
-
-    </script>
+    <p class="small bdor">可提现金额 = 总金额 - 审核中的金额</p>
+    <div class="rbminfo">
+      <div class="center">
+        <p class="p1">总金额（元）</p>
+        <p class="p3 total">0.00</p>
+      </div>
+      <div class="center bdf">
+        <p class="p1">审核中的金额（元）</p>
+        <p class="p3 auditing">0.00</p>
+      </div>
+    </div>
+    <div class="bton">
+      <button type="button" class="mui-btn mui-btn-success mui-btn-block">申请提现</button>
+    </div>
+    <ul class="mui-table-view lists">
+      <li class="mui-table-view-cell"><a class="mui-navigate-right" href="record.html"> <span class="mui-icon mui-icon-extra mui-icon-extra-order"></span> 提现记录
+      </a></li>
+    </ul>
+  </div>
+  <script src="js/di/ordercenter.js"></script>
 </body>
-
 </html>

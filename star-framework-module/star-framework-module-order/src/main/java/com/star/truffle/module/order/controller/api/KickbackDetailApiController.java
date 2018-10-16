@@ -2,28 +2,31 @@
 package com.star.truffle.module.order.controller.api;
 
 import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
 import com.star.truffle.core.StarServiceException;
-import com.star.truffle.core.web.ApiResult;
 import com.star.truffle.core.web.ApiCode;
+import com.star.truffle.core.web.ApiResult;
+import com.star.truffle.module.order.dto.req.KickbackDetailRequestDto;
+import com.star.truffle.module.order.dto.res.KickbackDetailResponseDto;
+import com.star.truffle.module.order.service.KickbackDetailService;
+
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import springfox.documentation.annotations.ApiIgnore;
 import lombok.extern.slf4j.Slf4j;
-import com.star.truffle.module.order.domain.KickbackDetail;
-import com.star.truffle.module.order.service.KickbackDetailService;
-import com.star.truffle.module.order.dto.req.KickbackDetailRequestDto;
-import com.star.truffle.module.order.dto.res.KickbackDetailResponseDto;
+import springfox.documentation.annotations.ApiIgnore;
 
 @Slf4j
 @RestController
 @RequestMapping("/api/kickbackDetail")
-@Api(tags = "KickbackDetailApiController")
+@Api(tags = "提成")
 public class KickbackDetailApiController {
 
   @Autowired
@@ -88,14 +91,15 @@ public class KickbackDetailApiController {
     }
   }
 
-  @RequestMapping(value = "/saveKickbackDetail", method = RequestMethod.POST)
-  @ApiOperation(value = "新增提成明细", notes = "新增提成明细", httpMethod = "POST", response = ApiResult.class)
+  @RequestMapping(value = "/apply", method = RequestMethod.POST)
+  @ApiOperation(value = "申请提现", notes = "申请提现", httpMethod = "POST", response = ApiResult.class)
   @ApiImplicitParams({
+    @ApiImplicitParam(name = "distributorId", value = "分销商id", dataType = "Long", required = true, paramType = "query")
   })
-  public ApiResult<Long> saveKickbackDetail(@ApiIgnore KickbackDetail kickbackDetail) {
+  public ApiResult<Void> apply(Long distributorId) {
     try {
-      Long id = kickbackDetailService.saveKickbackDetail(kickbackDetail);
-      return ApiResult.success(id);
+      kickbackDetailService.apply(distributorId);
+      return ApiResult.success();
     } catch (StarServiceException e) {
       return ApiResult.fail(e.getCode(), e.getMsg());
     } catch (Exception e) {
@@ -137,4 +141,20 @@ public class KickbackDetailApiController {
     }
   }
 
+  @RequestMapping(value = "/getDistributorMoney", method = RequestMethod.POST)
+  @ApiOperation(value = "获取可提现金额", notes = "获取可提现金额", httpMethod = "POST", response = ApiResult.class)
+  @ApiImplicitParams({
+    @ApiImplicitParam(name = "distributorId", value = "分销商id", dataType = "Long", required = true, paramType = "query")
+  })
+  public ApiResult<Map<String, Object>> getDistributorMoney(Long distributorId) {
+    try {
+      Map<String, Object> map = kickbackDetailService.getDistributorMoney(distributorId);
+      return ApiResult.success(map);
+    } catch (StarServiceException e) {
+      return ApiResult.fail(e.getCode(), e.getMsg());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return ApiResult.fail(ApiCode.SYSTEM_ERROR);
+    }
+  }
 }

@@ -73,6 +73,15 @@
     where id = #{id}
   </select>
 
+  <select id="getLatestKickbackDetail" resultType="com.star.truffle.module.order.dto.res.KickbackDetailResponseDto">
+    select
+    point_begin_time, point_end_time, total_money, state, create_time
+    from kickback_detail 
+    where distributor_id = #{distributorId}
+    order by create_time desc
+    limit 1;
+  </select>
+
   <select id="queryKickbackDetail" resultMap="kickbackDetailResponseDtoResultMap">
     select
     <include refid="sql_column" />

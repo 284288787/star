@@ -80,7 +80,7 @@ public class RequestInfoAspect {
     }
     Map<String, Object> context = new LinkedHashMap<>();
     for (int i = 0; i < names.length; i++) {
-      if (args[i] instanceof HttpServletRequest || args[i] instanceof HttpServletResponse) {
+      if ("binder".equals(names[i]) || args[i] instanceof HttpServletRequest || args[i] instanceof HttpServletResponse) {
         continue;
       }
       context.put(names[i], args[i]);// paramNames即参数名

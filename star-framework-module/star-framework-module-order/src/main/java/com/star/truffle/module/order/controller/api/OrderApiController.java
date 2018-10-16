@@ -1,10 +1,15 @@
 /**create by framework at 2018年09月21日 15:21:35**/
 package com.star.truffle.module.order.controller.api;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -35,12 +40,17 @@ public class OrderApiController {
 
   @Autowired
   private OrderService orderService;
-  
+
+  @InitBinder
+  public void initBinder(WebDataBinder binder) {
+    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    dateFormat.setLenient(false);
+    binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));//true:允许为空, false:不允许为空
+  }
+
   @RequestMapping(value = "/shopIndex", method = RequestMethod.POST)
   @ApiOperation(value = "分销商首页信息", notes = "分销商首页信息", httpMethod = "POST", response = OrderResponseDto.class)
-  @ApiImplicitParams({
-    @ApiImplicitParam(name = "distributorId", value = "分销商id", dataType = "Long", required = true, paramType = "query")
-  })
+  @ApiImplicitParams({ @ApiImplicitParam(name = "distributorId", value = "分销商id", dataType = "Long", required = true, paramType = "query") })
   public ApiResult<Map<String, Object>> shopIndex(Long distributorId) {
     try {
       Map<String, Object> map = orderService.shopIndex(distributorId);
@@ -52,13 +62,10 @@ public class OrderApiController {
       return ApiResult.fail(ApiCode.SYSTEM_ERROR);
     }
   }
-  
+
   @RequestMapping(value = "/orderNumRanking", method = RequestMethod.POST)
   @ApiOperation(value = "订单量排名", notes = "订单量排名", httpMethod = "POST", response = OrderResponseDto.class)
-  @ApiImplicitParams({
-    @ApiImplicitParam(name = "pageNum", value = "默认1", dataType = "int", required = false, paramType = "query"),
-    @ApiImplicitParam(name = "pageSize", value = "默认10", dataType = "int", required = false, paramType = "query")
-  })
+  @ApiImplicitParams({ @ApiImplicitParam(name = "pageNum", value = "默认1", dataType = "int", required = false, paramType = "query"), @ApiImplicitParam(name = "pageSize", value = "默认10", dataType = "int", required = false, paramType = "query") })
   public ApiResult<List<OrderTotal>> orderNumRanking(Integer pageNum, Integer pageSize) {
     try {
       List<OrderTotal> ranking = orderService.orderNumRanking(pageNum, pageSize);
@@ -70,12 +77,10 @@ public class OrderApiController {
       return ApiResult.fail(ApiCode.SYSTEM_ERROR);
     }
   }
-  
+
   @RequestMapping(value = "/getOrder", method = RequestMethod.POST)
   @ApiOperation(value = "根据主键获取订单", notes = "根据主键获取订单", httpMethod = "POST", response = OrderResponseDto.class)
-  @ApiImplicitParams({
-    @ApiImplicitParam(name = "orderId", value = "主键", dataType = "Long", required = true, paramType = "query")
-  })
+  @ApiImplicitParams({ @ApiImplicitParam(name = "orderId", value = "主键", dataType = "Long", required = true, paramType = "query") })
   public ApiResult<OrderResponseDto> getOrder(Long orderId) {
     try {
       OrderResponseDto orderResponseDto = orderService.getOrder(orderId);
@@ -90,13 +95,8 @@ public class OrderApiController {
 
   @RequestMapping(value = "/queryOrder", method = RequestMethod.POST)
   @ApiOperation(value = "根据条件获取订单列表", notes = "根据条件获取订单列表", httpMethod = "POST", response = ApiResult.class)
-  @ApiImplicitParams({
-    @ApiImplicitParam(name = "type", value = "订单类型 1自主下单 2代客下单", dataType = "int", required = false, paramType = "query"),
-    @ApiImplicitParam(name = "memberId", value = "用户ID", dataType = "Long", required = false, paramType = "query"),
-    @ApiImplicitParam(name = "states", value = "订单状态 1待付款 2待提货 3已提货, 多个用逗号分隔", dataType = "int", required = false, paramType = "query"),
-    @ApiImplicitParam(name = "page.pageNum", value = "页码，页码如果没有则查询满足条件的所有记录", dataType = "int", required = false, paramType = "query"),
-    @ApiImplicitParam(name = "page.pageSize", value = "一页最大记录数，当页码有值时，该值没有指定则默认为10", dataType = "int", required = false, paramType = "query"),
-  })
+  @ApiImplicitParams({ @ApiImplicitParam(name = "type", value = "订单类型 1自主下单 2代客下单", dataType = "int", required = false, paramType = "query"), @ApiImplicitParam(name = "memberId", value = "用户ID", dataType = "Long", required = false, paramType = "query"), @ApiImplicitParam(name = "states", value = "订单状态 1待付款 2待提货 3已提货, 多个用逗号分隔", dataType = "int", required = false, paramType = "query"),
+      @ApiImplicitParam(name = "page.pageNum", value = "页码，页码如果没有则查询满足条件的所有记录", dataType = "int", required = false, paramType = "query"), @ApiImplicitParam(name = "page.pageSize", value = "一页最大记录数，当页码有值时，该值没有指定则默认为10", dataType = "int", required = false, paramType = "query"), })
   public ApiResult<List<OrderResponseDto>> queryOrder(@ApiIgnore OrderRequestDto orderRequestDto) {
     try {
       orderRequestDto.setDeleted(DeletedEnum.notdelete.val());
@@ -109,18 +109,11 @@ public class OrderApiController {
       return ApiResult.fail(ApiCode.SYSTEM_ERROR);
     }
   }
-  
+
   @RequestMapping(value = "/saveMemberOrder", method = RequestMethod.POST)
   @ApiOperation(value = "用户新增订单", notes = "用户新增订单", httpMethod = "POST", response = ApiResult.class)
-  @ApiImplicitParams({
-    @ApiImplicitParam(name = "memberId", value = "用户ID", dataType = "Long", required = true, paramType = "query"),
-    @ApiImplicitParam(name = "distributorId", value = "分销商ID", dataType = "Long", required = true, paramType = "query"),
-    @ApiImplicitParam(name = "deliveryType", value = "收货类型 1自提 2快递, 如果快递则需要传省市区、详细地址", dataType = "int", required = true, paramType = "query"),
-    @ApiImplicitParam(name = "name", value = "用户姓名", dataType = "String", required = false, paramType = "query"),
-    @ApiImplicitParam(name = "mobile", value = "用户手机号", dataType = "String", required = false, paramType = "query"),
-    @ApiImplicitParam(name = "deliveryId", value = "收货地址id", dataType = "String", required = false, paramType = "query"),
-    @ApiImplicitParam(name = "details", value = "详细 [{productId:1,count:2},{productId:2,count:1}]", dataType = "json", required = true, paramType = "query"),
-  })
+  @ApiImplicitParams({ @ApiImplicitParam(name = "memberId", value = "用户ID", dataType = "Long", required = true, paramType = "query"), @ApiImplicitParam(name = "distributorId", value = "分销商ID", dataType = "Long", required = true, paramType = "query"), @ApiImplicitParam(name = "deliveryType", value = "收货类型 1自提 2快递, 如果快递则需要传省市区、详细地址", dataType = "int", required = true, paramType = "query"), @ApiImplicitParam(name = "name", value = "用户姓名", dataType = "String", required = false, paramType = "query"),
+      @ApiImplicitParam(name = "mobile", value = "用户手机号", dataType = "String", required = false, paramType = "query"), @ApiImplicitParam(name = "deliveryId", value = "收货地址id", dataType = "String", required = false, paramType = "query"), @ApiImplicitParam(name = "details", value = "详细 [{productId:1,count:2},{productId:2,count:1}]", dataType = "json", required = true, paramType = "query"), })
   public ApiResult<Long> saveMemberOrder(@ApiIgnore @RequestBody OrderRequestDto orderRequestDto) {
     try {
       Long id = orderService.saveMemberOrder(orderRequestDto);
@@ -135,17 +128,9 @@ public class OrderApiController {
 
   @RequestMapping(value = "/saveDistributorOrder", method = RequestMethod.POST)
   @ApiOperation(value = "代客下单", notes = "代客下单", httpMethod = "POST", response = ApiResult.class)
-  @ApiImplicitParams({
-    @ApiImplicitParam(name = "distributorId", value = "分销商ID", dataType = "Long", required = true, paramType = "query"),
-    @ApiImplicitParam(name = "deliveryType", value = "收货类型 1自提 2快递, 如果快递则需要传省市区、详细地址", dataType = "int", required = true, paramType = "query"),
-    @ApiImplicitParam(name = "name", value = "用户姓名", dataType = "String", required = true, paramType = "query"),
-    @ApiImplicitParam(name = "mobile", value = "用户手机号", dataType = "String", required = true, paramType = "query"),
-    @ApiImplicitParam(name = "provinceId", value = "快递 省", dataType = "String", required = false, paramType = "query"),
-    @ApiImplicitParam(name = "cityId", value = "快递 市", dataType = "String", required = false, paramType = "query"),
-    @ApiImplicitParam(name = "areaId", value = "快递 区县", dataType = "String", required = false, paramType = "query"),
-    @ApiImplicitParam(name = "deliveryAddress", value = "快递 详细地址", dataType = "String", required = false, paramType = "query"),
-    @ApiImplicitParam(name = "details", value = "详细 [{productId:1,count:2},{productId:2,count:1}]", dataType = "json", required = true, paramType = "query"),
-  })
+  @ApiImplicitParams({ @ApiImplicitParam(name = "distributorId", value = "分销商ID", dataType = "Long", required = true, paramType = "query"), @ApiImplicitParam(name = "deliveryType", value = "收货类型 1自提 2快递, 如果快递则需要传省市区、详细地址", dataType = "int", required = true, paramType = "query"), @ApiImplicitParam(name = "name", value = "用户姓名", dataType = "String", required = true, paramType = "query"), @ApiImplicitParam(name = "mobile", value = "用户手机号", dataType = "String", required = true, paramType = "query"),
+      @ApiImplicitParam(name = "provinceId", value = "快递 省", dataType = "String", required = false, paramType = "query"), @ApiImplicitParam(name = "cityId", value = "快递 市", dataType = "String", required = false, paramType = "query"), @ApiImplicitParam(name = "areaId", value = "快递 区县", dataType = "String", required = false, paramType = "query"), @ApiImplicitParam(name = "deliveryAddress", value = "快递 详细地址", dataType = "String", required = false, paramType = "query"),
+      @ApiImplicitParam(name = "details", value = "详细 [{productId:1,count:2},{productId:2,count:1}]", dataType = "json", required = true, paramType = "query"), })
   public ApiResult<Long> saveDistributorOrder(@ApiIgnore @RequestBody OrderRequestDto orderRequestDto) {
     try {
       Long id = orderService.saveDistributorOrder(orderRequestDto);
@@ -157,12 +142,10 @@ public class OrderApiController {
       return ApiResult.fail(ApiCode.SYSTEM_ERROR);
     }
   }
-  
+
   @RequestMapping(value = "/deleteOrder", method = RequestMethod.POST)
   @ApiOperation(value = "根据主键删除订单", notes = "根据主键删除订单", httpMethod = "POST", response = ApiResult.class)
-  @ApiImplicitParams({
-    @ApiImplicitParam(name = "orderId", value = "主键", dataType = "Long", required = true, paramType = "query")
-  })
+  @ApiImplicitParams({ @ApiImplicitParam(name = "orderId", value = "主键", dataType = "Long", required = true, paramType = "query") })
   public ApiResult<Void> deleteOrder(Long orderId) {
     try {
       orderService.deleteOrder(orderId);
@@ -174,12 +157,10 @@ public class OrderApiController {
       return ApiResult.fail(ApiCode.SYSTEM_ERROR);
     }
   }
-  
+
   @RequestMapping(value = "/pickupOrder", method = RequestMethod.POST)
   @ApiOperation(value = "确认提货", notes = "确认提货", httpMethod = "POST", response = ApiResult.class)
-  @ApiImplicitParams({
-    @ApiImplicitParam(name = "orderId", value = "主键", dataType = "Long", required = true, paramType = "query")
-  })
+  @ApiImplicitParams({ @ApiImplicitParam(name = "orderId", value = "主键", dataType = "Long", required = true, paramType = "query") })
   public ApiResult<Void> pickupOrder(Long orderId) {
     try {
       orderService.pickupOrder(orderId);
@@ -191,12 +172,10 @@ public class OrderApiController {
       return ApiResult.fail(ApiCode.SYSTEM_ERROR);
     }
   }
-  
+
   @RequestMapping(value = "/buyRecord", method = RequestMethod.POST)
   @ApiOperation(value = "购买记录", notes = "购买记录", httpMethod = "POST", response = ApiResult.class)
-  @ApiImplicitParams({
-    @ApiImplicitParam(name = "productId", value = "供应id", dataType = "Long", required = true, paramType = "query")
-  })
+  @ApiImplicitParams({ @ApiImplicitParam(name = "productId", value = "供应id", dataType = "Long", required = true, paramType = "query") })
   public ApiResult<List<OrderDetailResponseDto>> buyRecord(Long productId, Integer pageNum, Integer pageSize) {
     try {
       List<OrderDetailResponseDto> list = orderService.buyRecord(productId, pageNum, pageSize);
@@ -211,9 +190,7 @@ public class OrderApiController {
 
   @RequestMapping(value = "/buyRecordTotal", method = RequestMethod.POST)
   @ApiOperation(value = "购买记录统计", notes = "购买记录统计", httpMethod = "POST", response = ApiResult.class)
-  @ApiImplicitParams({
-    @ApiImplicitParam(name = "productId", value = "供应id", dataType = "Long", required = true, paramType = "query")
-  })
+  @ApiImplicitParams({ @ApiImplicitParam(name = "productId", value = "供应id", dataType = "Long", required = true, paramType = "query") })
   public ApiResult<Map<String, Integer>> buyRecordTotal(Long productId) {
     try {
       Map<String, Integer> map = orderService.buyRecordTotal(productId);

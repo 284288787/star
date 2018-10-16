@@ -13,4 +13,6 @@ public interface KickbackDetailReadDao {
 
   public Long queryKickbackDetailCount(Map<String, Object> conditions);
 
+  public KickbackDetailResponseDto getLatestKickbackDetail(Long distributorId);
+
 }

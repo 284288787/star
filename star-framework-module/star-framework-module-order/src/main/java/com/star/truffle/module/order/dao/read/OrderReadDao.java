@@ -1,6 +1,7 @@
 /**create by framework at 2018年09月21日 15:21:35**/
 package com.star.truffle.module.order.dao.read;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -24,7 +25,7 @@ public interface OrderReadDao {
    * @param distributorId
    * @return
    */
-  public Long totalMoney(Long distributorId);
+  public Map<String, Object> totalMoney(@Param("distributorId") Long distributorId, @Param("beginTime") Date beginTime);
 
   public Long totalOrderNumOfToday();
 }

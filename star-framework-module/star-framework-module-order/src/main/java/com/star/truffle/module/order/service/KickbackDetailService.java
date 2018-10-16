@@ -1,7 +1,10 @@
 /**create by framework at 2018年10月11日 11:07:21**/
 package com.star.truffle.module.order.service;
 
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +12,10 @@ import org.springframework.stereotype.Service;
 
 import com.star.truffle.core.StarServiceException;
 import com.star.truffle.core.jdbc.Page;
+import com.star.truffle.core.util.DateUtils;
 import com.star.truffle.core.web.ApiCode;
 import com.star.truffle.module.order.cache.KickbackDetailCache;
+import com.star.truffle.module.order.cache.OrderCache;
 import com.star.truffle.module.order.constant.KickbackStateEnum;
 import com.star.truffle.module.order.constant.OrderStateEnum;
 import com.star.truffle.module.order.domain.KickbackDetail;
@@ -25,11 +30,33 @@ public class KickbackDetailService {
   @Autowired
   private KickbackDetailCache kickbackDetailCache;
   @Autowired
-  private OrderService orderService;
+  private OrderCache orderCache;
 
-  public Long saveKickbackDetail(KickbackDetail kickbackDetail) {
+  public void apply(Long distributorId) {
+    Date beginTime = null;
+    KickbackDetailResponseDto last = this.kickbackDetailCache.getLatestKickbackDetail(distributorId);
+    if (null != last) {
+      beginTime = last.getPointEndTime();
+      if (last.getState() == KickbackStateEnum.auditing.state()) {
+        throw new StarServiceException(ApiCode.PARAM_ERROR, "已有一笔提现申请正在处理");
+      }else if (last.getState() == KickbackStateEnum.nopass.state()) {
+        beginTime = last.getPointBeginTime();
+      }
+    }else {
+      beginTime = DateUtils.toDateYmd("2018-10-10"); //这个时间项目还没上线
+    }
+    Map<String, Object> map = orderCache.totalMoney(distributorId, beginTime);
+    Integer totalMoney = Integer.parseInt(map.get("totalMoney").toString());
+    Date pointEndTime = DateUtils.toDateYmdHms(map.get("time").toString());
+    KickbackDetail kickbackDetail = new KickbackDetail();
+    kickbackDetail.setDistributorId(distributorId);
+    kickbackDetail.setPointBeginTime(beginTime);
+    kickbackDetail.setPointEndTime(pointEndTime);
+    kickbackDetail.setTotalMoney(totalMoney);
+    kickbackDetail.setState(KickbackStateEnum.auditing.state());
+    kickbackDetail.setCreateTime(new Date());
+    kickbackDetail.setUpdateTime(kickbackDetail.getCreateTime());
     this.kickbackDetailCache.saveKickbackDetail(kickbackDetail);
-    return kickbackDetail.getId();
   }
 
   public void updateKickbackDetail(KickbackDetailRequestDto kickbackDetailRequestDto) {
@@ -94,7 +121,7 @@ public class KickbackDetailService {
     orderRequestDto.setBeginCreateTime(responseDto.getPointBeginTime());
     orderRequestDto.setEndCreateTime(responseDto.getPointEndTime());
     orderRequestDto.setBrokerage0(0);
-    List<OrderResponseDto> orders = orderService.queryOrder(orderRequestDto);
+    List<OrderResponseDto> orders = orderCache.queryOrder(orderRequestDto);
     return orders;
   }
 
@@ -112,8 +139,36 @@ public class KickbackDetailService {
     orderRequestDto.setDistributorId(responseDto.getDistributorId());
     orderRequestDto.setBeginCreateTime(responseDto.getPointBeginTime());
     orderRequestDto.setEndCreateTime(responseDto.getPointEndTime());
-    Long count = orderService.queryOrderCount(orderRequestDto);
+    Long count = orderCache.queryOrderCount(orderRequestDto);
     return count;
+  }
+
+  public Map<String, Object> getDistributorMoney(Long distributorId) {
+    Map<String, Object> map = new HashMap<>();
+    //1.获取他最后的一条记录，根据状态计算
+    //2.从上面得到最近时间，然后从订单里统计到现在的回扣和
+    //3.返回起止时间、审核中的金额、
+    Integer auditingMoney = 0;
+    Date beginTime = null;
+    Integer state = 0;
+    KickbackDetailResponseDto last = this.kickbackDetailCache.getLatestKickbackDetail(distributorId);
+    if (null != last) {
+      beginTime = last.getPointEndTime();
+      if (last.getState() == KickbackStateEnum.auditing.state()) {
+        auditingMoney = last.getTotalMoney();
+      }else if (last.getState() == KickbackStateEnum.nopass.state()) {
+        beginTime = last.getPointBeginTime();
+      }
+      state = last.getState();
+    }else {
+      beginTime = DateUtils.toDateYmd("2018-10-10"); //这个时间项目还没上线
+    }
+    Map<String, Object> totalMoney = orderCache.totalMoney(distributorId, beginTime);
+    map.put("auditingMoney", auditingMoney);
+    map.put("beginTime", beginTime);
+    map.put("totalMoeny", totalMoney.get("totalMoney"));
+    map.put("state", state);
+    return map;
   }
 
 }

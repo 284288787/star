@@ -1,245 +1,73 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta name="applicable-device" content="mobile">
-    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-    <meta name="format-detection" content="telephone=no,email=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="full-screen" content="yes">
-    <meta name="x5-fullscreen" content="true">
-    <link rel="stylesheet" href="css/mui.min.css">
-    <link rel="stylesheet" href="css/icons-extra.css">
-    <link rel="stylesheet" href="css/common.css?fd">
-    <link rel="stylesheet" href="css/shoporder.css">
-    <script src="js/jquery.min.js"></script>
-    <script src="js/mui.min.js"></script>
-    <title>订单管理</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta name="applicable-device" content="mobile">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="format-detection" content="telephone=no,email=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="full-screen" content="yes">
+<meta name="x5-fullscreen" content="true">
+<link rel="stylesheet" href="css/mui.min.css">
+<link rel="stylesheet" type="text/css" href="css/pulltorefresh.css" />
+<link rel="stylesheet" href="css/icons-extra.css">
+<link rel="stylesheet" href="css/common.css?fd">
+<link rel="stylesheet" href="css/order.css">
+<script src="js/jquery.min.js"></script>
+<script src="js/mui.min.js"></script>
+<script src="js/mui.pullToRefresh.js"></script>
+<script src="js/mui.pullToRefresh.material.js"></script>
+<style type="text/css">
+.mui-table-view {
+  margin-top: 0px !important;
+}
+</style>
+<title>订单管理</title>
 </head>
-
 <body>
-    <header id="header" class="mui-bar mui-bar-nav">
-        <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-        <h1 class="mui-title">订单管理</h1>
-
-    </header>
-    <div class="main">
-            
-        <div class="mui-content">
-                
-            <div id="slider" class="mui-slider">
-                <div class="sbox">
-                    <div class="mui-input-row mui-search">
-                            <input type="search" class="mui-input-clear" placeholder="提货单号、手机号、收货人、微信昵称查询">
-                    </div>
-                </div>
-                <div id="sliderSegmentedControl" class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted mui-segmented-control-negative">
-                    <a class="mui-control-item mui-active" href="#item1mobile">
-                            消费者订单
-                    </a>
-                    <a class="mui-control-item" href="#item2mobile">
-                            代客下单
-                    </a>
-                    <a class="mui-control-item" href="#item3mobile">
-                            待提货
-                    </a>
-                    
-                </div>
-                <div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-4"></div>
-                <div class="mui-slider-group">
-                    <div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
-                        <div id="scroll1" class="mui-scroll-wrapper">
-                            <div class="mui-scroll">
-                                <ul class="mui-table-view">
-                                    <li class="mui-table-view-cell">
-                                        <div class="oitem">
-                                            <p class="pbox">订单编号：800006
-                                                <span class="red">待付款</span>
-                                            </p>
-
-                                            <div class="imgbox mui-navigate-right">
-                                                <img src="images/qq.png" alt="" class="goodsicon">
-                                                <img src="images/qq.png" alt="" class="goodsicon">
-
-                                            </div>
-
-                                            <p class="price">2018-10-01 17:25:15
-                                                <span>共1件商品
-                                                    <b>￥5.9</b>
-                                                </span>
-                                            </p>
-                                            <p class="pbox clearfix">
-                                                <b>张学友</b><br />
-                                                <em>提货单号：12345678900987654321</em>
-                                                <button class="pl mui-btn mui-btn-danger mui-btn-outlined" size="small" type="danger" plain>去付款</button>
-                                                <!-- <button class="pl mui-btn mui-btn-danger mui-btn-outlined" size="small" plain>确认提货</button>
-                                                    <button class="fl mui-btn   mui-btn-outlined" size="small"   plain>删除</button> -->
-                                            </p>
-
-                                        </div>
-                                    </li>
-                                    <li class="mui-table-view-cell">
-                                        <div class="oitem">
-                                            <p class="pbox">订单编号：800006
-                                                <span class="red">待付款</span>
-                                            </p>
-
-                                            <div class="imgbox mui-navigate-right">
-                                                <img src="images/qq.png" alt="" class="goodsicon">
-                                                <img src="images/qq.png" alt="" class="goodsicon">
-
-                                            </div>
-
-                                            <p class="price">2018-10-01 17:25:15
-                                                <span>共1件商品
-                                                    <b>￥5.9</b>
-                                                </span>
-                                            </p>
-                                            <p class="pbox clearfix">
-                                                    <b>张学友</b><br />
-                                                <em>提货单号：12345678900987654321</em>
-                                                <!--  <button class="pl mui-btn mui-btn-danger mui-btn-outlined" size="small" type="danger" plain>去付款</button>
-                                                     <button class="pl mui-btn mui-btn-danger mui-btn-outlined" size="small" plain>确认提货</button>-->
-                                                <button class="pl mui-btn   mui-btn-outlined" size="small" plain>删除</button>
-                                            </p>
-
-                                        </div>
-                                    </li>
-                                    <li class="mui-table-view-cell">
-                                        <div class="oitem">
-                                            <p class="pbox">订单编号：800006
-                                                <span class="red">待付款</span>
-                                            </p>
-
-                                            <div class="imgbox mui-navigate-right">
-                                                <img src="images/qq.png" alt="" class="goodsicon">
-                                                <img src="images/qq.png" alt="" class="goodsicon">
-
-                                            </div>
-
-                                            <p class="price">2018-10-01 17:25:15
-                                                <span>共1件商品
-                                                    <b>￥5.9</b>
-                                                </span>
-                                            </p>
-                                            <p class="pbox clearfix">
-                                                    <b>张学友</b><br />
-                                                <em>提货单号：12345678900987654321</em>
-
-                                                <button class="pl mui-btn mui-btn-danger mui-btn-outlined" size="small" plain>确认提货</button>
-
-                                            </p>
-
-                                        </div>
-                                    </li>
-
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="item2mobile" class="mui-slider-item mui-control-content">
-                        <div id="scroll2" class="mui-scroll-wrapper">
-                            <div class="mui-scroll">
-                                <div class="mui-loading">
-                                    <div class="mui-spinner">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div id="item3mobile" class="mui-slider-item mui-control-content">
-                        <div id="scroll3" class="mui-scroll-wrapper">
-                            <div class="mui-scroll">
-                                <div class="mui-loading">
-                                    <div class="mui-spinner">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                  
-                </div>
-            </div>
+  <header id="header" class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left" href="user.html"></a>
+    <h1 class="mui-title">订单管理</h1>
+  </header>
+  <div class="main">
+    <div class="mui-content">
+      <div id="slider" class="mui-slider">
+        <div id="sliderSegmentedControl" class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted mui-segmented-control-negative">
+          <a class="mui-control-item mui-active" href="#item1mobile">会员订单</a> <a class="mui-control-item" href="#item2mobile">代客下单</a> <a class="mui-control-item" href="#item3mobile">待提货订单</a>
         </div>
+        <div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-4"></div>
+        <div class="mui-slider-group">
+          <div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
+            <div id="scroll1" class="mui-scroll-wrapper">
+              <div class="mui-scroll">
+                <ul class="mui-table-view">
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div id="item2mobile" class="mui-slider-item mui-control-content">
+            <div id="scroll2" class="mui-scroll-wrapper">
+              <div class="mui-scroll">
+                <ul class="mui-table-view">
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div id="item3mobile" class="mui-slider-item mui-control-content">
+            <div id="scroll3" class="mui-scroll-wrapper">
+              <div class="mui-scroll">
+                <ul class="mui-table-view">
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-
-    <script type="text/javascript">
-
-        (function ($) {
-            $('.mui-scroll-wrapper').scroll({
-                indicators: true //是否显示滚动条
-            });
-            var html2 = '<ul class="mui-table-view"><li class="mui-table-view-cell">\
-                                                <div class="oitem">\
-                                                    <p class="pbox">订单编号：800006\
-                                                        <span class="red">待付款</span>\
-                                                    </p>\
-                                                    <div class="imgbox mui-navigate-right">\
-                                                        <img src="images/qq.png" alt="" class="goodsicon">\
-                                                        <img src="images/qq.png" alt="" class="goodsicon">\
-                                                    </div>\
-                                                    <p class="price">2018-10-01 17:25:15\
-                                                        <span>共1件商品\
-                                                            <b>￥5.9</b>\
-                                                        </span>\
-                                                    </p>\
-                                                    <p class="pbox clearfix">\
-                                                        <em>提货单号：12345678900987654321</em>\
-                                                         <button class="pl mui-btn mui-btn-danger \mui-btn-outlined" size="small" plain>确认提货</button>\
-                                                    </p>\
-                                                </div>\
-                                            </li></ul>';
-            var html3 = '<ul class="mui-table-view"><li class="mui-table-view-cell">\
-                                                <div class="oitem">\
-                                                    <p class="pbox">订单编号：800006\
-                                                        <span class="red">待付款</span>\
-                                                    </p>\
-                                                    <div class="imgbox mui-navigate-right">\
-                                                        <img src="images/qq.png" alt="" class="goodsicon">\
-                                                        <img src="images/qq.png" alt="" class="goodsicon">\
-                                                    </div>\
-                                                    <p class="price">2018-10-01 17:25:15\
-                                                        <span>共1件商品\
-                                                            <b>￥5.9</b>\
-                                                        </span>\
-                                                    </p>\
-                                                    <p class="pbox clearfix">\
-                                                        <em>提货单号：12345678900987654321</em>\
-                                                         <button class="pl mui-btn mui-btn-danger \mui-btn-outlined" size="small" plain>确认提货</button>\
-                                                    </p>\
-                                                </div>\
-                                            </li></ul>';
-            //var html4 = '<ul class="mui-table-view"><li class="mui-table-view-cell">第三个选项卡子项-1</li><li class="mui-table-view-cell">第三个选项卡子项-2</li><li class="mui-table-view-cell">第三个选项卡子项-3</li><li class="mui-table-view-cell">第三个选项卡子项-4</li><li class="mui-table-view-cell">第三个选项卡子项-5</li></ul>';
-            var item2 = document.getElementById('item2mobile');
-            var item3 = document.getElementById('item3mobile');
-          
-            document.getElementById('slider').addEventListener('slide', function (e) {
-                
-                if (e.detail.slideNumber === 1) {
-                    if (item2.querySelector('.mui-loading')) {
-                        setTimeout(function () {
-                            item2.querySelector('.mui-scroll').innerHTML = html2;
-                        }, 500);
-                    }
-                } else if (e.detail.slideNumber === 2) {
-                    if (item3.querySelector('.mui-loading')) {
-                        setTimeout(function () {
-                            item3.querySelector('.mui-scroll').innerHTML = html3;
-                        }, 500);
-                    }
-                } 
-            });
-
-        })(mui);
-
-
-
-    </script>
+  </div>
+  <script type="text/javascript" src="js/di/star.common.js"></script>
+  <script type="text/javascript" src="js/di/shoporder.js"></script>
 </body>
-
 </html>

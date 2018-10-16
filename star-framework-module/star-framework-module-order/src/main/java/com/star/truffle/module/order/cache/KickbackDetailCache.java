@@ -62,4 +62,8 @@ public class KickbackDetailCache {
     return this.kickbackDetailReadDao.queryKickbackDetailCount(conditions);
   }
 
+  public KickbackDetailResponseDto getLatestKickbackDetail(Long distributorId) {
+    return kickbackDetailReadDao.getLatestKickbackDetail(distributorId);
+  }
+
 }

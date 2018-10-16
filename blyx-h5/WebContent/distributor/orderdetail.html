@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta name="applicable-device" content="mobile">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="format-detection" content="telephone=no,email=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="full-screen" content="yes">
+<meta name="x5-fullscreen" content="true">
+<link rel="stylesheet" href="css/mui.min.css">
+<link rel="stylesheet" href="css/icons-extra.css">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/submit.css">
+<script src="js/jquery.min.js"></script>
+<script src="js/mui.min.js"></script>
+<title>订单详情</title>
+</head>
+<body>
+  <header id="header" class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">订单详情</h1>
+  </header>
+  <div class="main mui-scroll-wrapper">
+    <div class="mui-scroll">
+    <div class="address">
+      <p class="detailtitle red">
+        <span class="mui-icon mui-icon-extra mui-icon-extra-order"></span> <span class="orderstate"></span>
+      </p>
+    </div>
+    <div class="van-contact-card">
+      <div id="item2" class="mui-control-content pading mui-active mui-hidden">
+      </div>
+    </div>
+    <div class="goodslist">
+      <ul>
+      </ul>
+    </div>
+    <div class="totaldiv">
+      <p>共计<b class="productNum">2</b>件商品 合计：<b class="productMoney">￥：0.00</b></p>
+      <p>原价：<del class="productOriginalPrice">￥：0.00</del></p>
+      <p> 邮费：<b class="despatchMoney">￥：0.00</b></p>
+      <p class="big">应付金额：<b class="productTotalMoney">￥：0.00</b></p>
+    </div>
+    <div class="totaldiv">
+      <p class="detailorder ordercode">订单号：<span>1464613213</span></p>
+      <p class="detailorder ordertime">下单时间：<span>2018-10-08 20:15:22</span></p>
+    </div>
+  </div>
+  </div>
+  <nav class="mui-bar mui-bar-tab bot " id="nav">
+    <span class="mui-tab-item " id="mean2"> </span> <a class="mui-tab-item topay" id="mean3"> <span class="mui-tab-label">去支付</span>
+    </a>
+  </nav>
+  <script type="text/javascript" src="js/di/star.common.js"></script>
+  <script type="text/javascript" src="js/di/orderdetail.js"></script>
+</body>
+</html>
