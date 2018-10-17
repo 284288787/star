@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
@@ -13,10 +12,18 @@
 <meta name="x5-fullscreen" content="true">
 <link rel="stylesheet" href="css/mui.min.css">
 <link rel="stylesheet" href="css/icons-extra.css">
+<link rel="stylesheet" type="text/css" href="css/pulltorefresh.css" />
 <link rel="stylesheet" href="css/common.css">
 <link rel="stylesheet" href="css/myres.css">
 <script src="js/jquery.min.js"></script>
 <script src="js/mui.min.js"></script>
+<script src="js/mui.pullToRefresh.js"></script>
+<script src="js/mui.pullToRefresh.material.js"></script>
+<style type="text/css">
+.mui-table-view {
+  margin-top: 0px !important;
+}
+</style>
 <title>我的提成</title>
 </head>
 <body>
@@ -32,193 +39,48 @@
             class="mui-control-item" href="#item4mobile"> 累计 </a>
         </div>
         <div id="sliderProgressBar" class="mui-slider-progress-bar mui-col-xs-3"></div>
-        <div class="totel">
-          ￥ <b>58.5</b>
-        </div>
         <div class="mui-slider-group">
-
           <div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
             <div id="scroll1" class="mui-scroll-wrapper">
               <div class="mui-scroll">
+                <div class="totel">￥ <b>0.00</b></div>
                 <div class="infoma">提成明细</div>
-                <ul class="mui-table-view">
-                  <li class="mui-table-view-cell">
-                    <div class="itemO clearfix">
-
-                      <div class="w10">
-                        <p class="p1">日期：2018-09-05</p>
-
-                        <p class="p3">洁柔百花无香抽纸 120抽/包 2160张 6</p>
-                      </div>
-                      <div class="w5 center">
-                        <p class="p1">提成单位</p>
-                        <p class="p2">0.8</p>
-                        <p class="p3">元/份</p>
-                      </div>
-                      <div class="w5 center">
-                        <p class="p1">销售数量</p>
-                        <p class="p2">4</p>
-                        <p class="p3">&nbsp;</p>
-                      </div>
-                      <div class="w4 center">
-                        <p class="p1">提成</p>
-                        <p class="p2">1.8</p>
-                        <p class="p3">&nbsp;</p>
-
-                      </div>
-                    </div>
-
-
-                  </li>
-                  <li class="mui-table-view-cell">
-                    <div class="itemO clearfix">
-                      <div class="w10">
-                        <p class="p1">日期：2018-09-05</p>
-                        <p class="p3">洁柔百花无香抽纸 120抽/包 2160张 6</p>
-                      </div>
-                      <div class="w5 center">
-                        <p class="p1">提成单位</p>
-                        <p class="p2">0.8</p>
-                        <p class="p3">元/份</p>
-                      </div>
-                      <div class="w5 center">
-                        <p class="p1">销售数量</p>
-                        <p class="p2">4</p>
-                        <p class="p3">&nbsp;</p>
-                      </div>
-                      <div class="w4 center">
-                        <p class="p1">提成</p>
-                        <p class="p2">1.8</p>
-                        <p class="p3">&nbsp;</p>
-                      </div>
-                    </div>
-
-                  </li>
-
-
-
-                </ul>
+                <ul class="mui-table-view"></ul>
               </div>
             </div>
           </div>
           <div id="item2mobile" class="mui-slider-item mui-control-content">
             <div id="scroll2" class="mui-scroll-wrapper">
               <div class="mui-scroll">
-                <div class="mui-loading">
-                  <div class="mui-spinner"></div>
-                </div>
+                <div class="totel">￥ <b>0.00</b></div>
+                <div class="infoma">提成明细</div>
+                <ul class="mui-table-view"></ul>
               </div>
             </div>
-
           </div>
           <div id="item3mobile" class="mui-slider-item mui-control-content">
             <div id="scroll3" class="mui-scroll-wrapper">
               <div class="mui-scroll">
-                <div class="mui-loading">
-                  <div class="mui-spinner"></div>
-                </div>
+                <div class="totel">￥ <b>0.00</b></div>
+                <div class="infoma">提成明细</div>
+                <ul class="mui-table-view"></ul>
               </div>
             </div>
-
           </div>
           <div id="item4mobile" class="mui-slider-item mui-control-content">
             <div id="scroll4" class="mui-scroll-wrapper">
               <div class="mui-scroll">
-                <div class="nocontent">
-                  <span class="mui-icon mui-icon-extra mui-icon-extra-order"></span>
-                  <p>您目前还没有提成...</p>
-                </div>
+                <div class="totel">￥ <b>0.00</b></div>
+                <div class="infoma">提成明细</div>
+                <ul class="mui-table-view"></ul>
               </div>
             </div>
-
           </div>
         </div>
       </div>
     </div>
   </div>
-
-  <script type="text/javascript">
-      (function($) {
-        $('.mui-scroll-wrapper').scroll({
-          indicators : true
-        //是否显示滚动条
-        });
-        var html2 = '<div class="infoma">提成明细</div><ul class="mui-table-view"> <li class="mui-table-view-cell">\
-                                        <div class="itemO clearfix">\
-                                            <div class="w10">\
-                                                <p class="p1">日期：2018-09-05</p>\
-                                                <p class="p3">洁柔百花无香抽纸 120抽/包 2160张 6</p>\
-                                            </div>\
-                                            <div class="w5 center">\
-                                                <p class="p1">提成单位</p>\
-                                                <p class="p2">0.8</p>\
-                                                <p class="p3">元/份</p>\
-                                            </div>\
-                                            <div class="w5 center">\
-                                                <p class="p1">销售数量</p>\
-                                                <p class="p2">4</p>\
-                                                <p class="p3">&nbsp;</p>\
-                                            </div>\
-                                            <div class="w4 center">\
-                                                <p class="p1">提成</p>\
-                                                <p class="p2">1.8</p>\
-                                                <p class="p3">&nbsp;</p>\
-                                            </div>\
-                                            </div>\
-                                    </li></ul>';
-        var html3 = '<div class="infoma">提成明细</div><ul class="mui-table-view"> <li class="mui-table-view-cell">\
-                                        <div class="itemO clearfix">\
-                                            <div class="w10">\
-                                                <p class="p1">日期：2018-09-05</p>\
-                                                <p class="p3">洁柔百花无香抽纸 120抽/包 2160张 6</p>\
-                                            </div>\
-                                            <div class="w5 center">\
-                                                <p class="p1">提成单位</p>\
-                                                <p class="p2">0.8</p>\
-                                                <p class="p3">元/份</p>\
-                                            </div>\
-                                            <div class="w5 center">\
-                                                <p class="p1">销售数量</p>\
-                                                <p class="p2">4</p>\
-                                                <p class="p3">&nbsp;</p>\
-                                            </div>\
-                                            <div class="w4 center">\
-                                                <p class="p1">提成</p>\
-                                                <p class="p2">1.8</p>\
-                                                <p class="p3">&nbsp;</p>\
-                                            </div>\
-                                            </div>\
-                                    </li></ul>';
-
-        var item2 = document.getElementById('item2mobile');
-        var item3 = document.getElementById('item3mobile');
-        var item4 = document.getElementById('item4mobile');
-        document.getElementById('slider').addEventListener('slide',
-            function(e) {
-
-              if (e.detail.slideNumber === 1) {
-                if (item2.querySelector('.mui-loading')) {
-                  setTimeout(function() {
-                    item2.querySelector('.mui-scroll').innerHTML = html2;
-                  }, 500);
-                }
-              } else if (e.detail.slideNumber === 2) {
-                if (item3.querySelector('.mui-loading')) {
-                  setTimeout(function() {
-                    item3.querySelector('.mui-scroll').innerHTML = html3;
-                  }, 500);
-                }
-              } else if (e.detail.slideNumber === 3) {
-                if (item4.querySelector('.mui-loading')) {
-                  setTimeout(function() {
-                    // item4.querySelector('.mui-scroll').innerHTML = html4;
-                  }, 500);
-                }
-              }
-            });
-
-      })(mui);
-    </script>
+  <script type="text/javascript" src="js/di/star.common.js"></script>
+  <script type="text/javascript" src="js/di/myres.js"></script>
 </body>
-
 </html>

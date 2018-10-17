@@ -3,14 +3,38 @@ package com.star.truffle.core.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class DateUtils {
 
+  
+  
+  /**
+   * 得到本周周一
+   */
+  public static Date getMondayOfThisWeek() {
+    Calendar c = Calendar.getInstance();
+    int week = c.get(Calendar.DAY_OF_WEEK) - 1;
+    if (week == 0) week = 7;
+    c.add(Calendar.DATE, -week + 1);
+    return c.getTime();
+  }
+  
+  /**
+   * 获取本月第一天
+   * @return
+   */
+  public static Date getFirstOfThisMonth() {
+    Calendar c = Calendar.getInstance();
+    c.set(Calendar.DATE, 1);
+    return c.getTime();
+  }
+
   public static String formatTodayDate() {
     return formatDate(new Date(), "yyyy-MM-dd");
   }
-  
+
   public static String formatTodayDateTime() {
     return formatDate(new Date(), "yyyy-MM-dd HH:mm:ss");
   }
@@ -18,16 +42,16 @@ public class DateUtils {
   public static String formatDate(Date date) {
     return formatDate(date, "yyyy-MM-dd");
   }
-  
+
   public static String formatDateTime(Date date) {
     return formatDate(date, "yyyy-MM-dd HH:mm:ss");
   }
-  
+
   public static String formatDate(Date date, String pattern) {
     SimpleDateFormat sdf = new SimpleDateFormat(pattern);
     return sdf.format(date);
   }
-  
+
   public static String formatNow(String pattern) {
     return formatDate(new Date(), pattern);
   }

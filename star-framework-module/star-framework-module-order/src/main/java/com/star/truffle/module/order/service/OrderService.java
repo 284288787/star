@@ -1,6 +1,10 @@
 /**create by framework at 2018年09月21日 15:21:35**/
 package com.star.truffle.module.order.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneOffset;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +18,7 @@ import com.star.truffle.common.constants.DeletedEnum;
 import com.star.truffle.core.StarServiceException;
 import com.star.truffle.core.jackson.StarJson;
 import com.star.truffle.core.jdbc.Page;
+import com.star.truffle.core.util.DateUtils;
 import com.star.truffle.core.web.ApiCode;
 import com.star.truffle.module.member.dto.res.DistributorResponseDto;
 import com.star.truffle.module.member.dto.res.MemberResponseDto;
@@ -235,6 +240,25 @@ public class OrderService {
   }
 
   public List<OrderResponseDto> queryOrder(OrderRequestDto orderRequestDto) {
+    if (null != orderRequestDto.getTime()) {
+      orderRequestDto.setBeginCreateTime(null);
+      orderRequestDto.setEndCreateTime(null);
+      switch (orderRequestDto.getTime()) {
+      case 0: //今天
+        orderRequestDto.setBeginCreateTime(new Date(LocalDateTime.of(LocalDate.now(), LocalTime.ofNanoOfDay(0)).toInstant(ZoneOffset.of("+8")).toEpochMilli()));
+        break;
+      case 1: //本周
+        Date date = DateUtils.getMondayOfThisWeek();
+        orderRequestDto.setBeginCreateTime(new Date(LocalDateTime.of(date.toInstant().atOffset(ZoneOffset.of("+8")).toLocalDate(), LocalTime.ofNanoOfDay(0)).toInstant(ZoneOffset.of("+8")).toEpochMilli()));
+        break;
+      case 2: //本月
+        Date date2 = DateUtils.getFirstOfThisMonth();
+        orderRequestDto.setBeginCreateTime(new Date(LocalDateTime.of(date2.toInstant().atOffset(ZoneOffset.of("+8")).toLocalDate(), LocalTime.ofNanoOfDay(0)).toInstant(ZoneOffset.of("+8")).toEpochMilli()));
+        break;
+      default: //全部
+        break;
+      }
+    }
     List<OrderResponseDto> orders = this.orderCache.queryOrder(orderRequestDto);
     if (null != orders && ! orders.isEmpty()) {
       for (OrderResponseDto orderResponseDto : orders) {
@@ -347,6 +371,30 @@ public class OrderService {
     Integer startIndex = (pageNum - 1) * pageSize;
     List<OrderTotal> list = orderCache.orderIndexToday(null, startIndex, pageSize);
     return list;
+  }
+
+  public Long sumBrokerage(OrderRequestDto orderRequestDto) {
+    if (null != orderRequestDto.getTime()) {
+      orderRequestDto.setBeginCreateTime(null);
+      orderRequestDto.setEndCreateTime(null);
+      switch (orderRequestDto.getTime()) {
+      case 0: //今天
+        orderRequestDto.setBeginCreateTime(new Date(LocalDateTime.of(LocalDate.now(), LocalTime.ofNanoOfDay(0)).toInstant(ZoneOffset.of("+8")).toEpochMilli()));
+        break;
+      case 1: //本周
+        Date date = DateUtils.getMondayOfThisWeek();
+        orderRequestDto.setBeginCreateTime(new Date(LocalDateTime.of(date.toInstant().atOffset(ZoneOffset.of("+8")).toLocalDate(), LocalTime.ofNanoOfDay(0)).toInstant(ZoneOffset.of("+8")).toEpochMilli()));
+        break;
+      case 2: //本月
+        Date date2 = DateUtils.getFirstOfThisMonth();
+        orderRequestDto.setBeginCreateTime(new Date(LocalDateTime.of(date2.toInstant().atOffset(ZoneOffset.of("+8")).toLocalDate(), LocalTime.ofNanoOfDay(0)).toInstant(ZoneOffset.of("+8")).toEpochMilli()));
+        break;
+      default: //全部
+        break;
+      }
+    }
+    Long sum = this.orderCache.sumBrokerage(orderRequestDto);
+    return sum;
   }
 
 }

@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.star.truffle.common.constants.DeletedEnum;
 import com.star.truffle.core.StarServiceException;
 import com.star.truffle.core.web.ApiCode;
 import com.star.truffle.core.web.ApiResult;
@@ -92,16 +91,31 @@ public class OrderApiController {
       return ApiResult.fail(ApiCode.SYSTEM_ERROR);
     }
   }
-
+  
   @RequestMapping(value = "/queryOrder", method = RequestMethod.POST)
   @ApiOperation(value = "根据条件获取订单列表", notes = "根据条件获取订单列表", httpMethod = "POST", response = ApiResult.class)
   @ApiImplicitParams({ @ApiImplicitParam(name = "type", value = "订单类型 1自主下单 2代客下单", dataType = "int", required = false, paramType = "query"), @ApiImplicitParam(name = "memberId", value = "用户ID", dataType = "Long", required = false, paramType = "query"), @ApiImplicitParam(name = "states", value = "订单状态 1待付款 2待提货 3已提货, 多个用逗号分隔", dataType = "int", required = false, paramType = "query"),
-      @ApiImplicitParam(name = "page.pageNum", value = "页码，页码如果没有则查询满足条件的所有记录", dataType = "int", required = false, paramType = "query"), @ApiImplicitParam(name = "page.pageSize", value = "一页最大记录数，当页码有值时，该值没有指定则默认为10", dataType = "int", required = false, paramType = "query"), })
+    @ApiImplicitParam(name = "page.pageNum", value = "页码，页码如果没有则查询满足条件的所有记录", dataType = "int", required = false, paramType = "query"), @ApiImplicitParam(name = "page.pageSize", value = "一页最大记录数，当页码有值时，该值没有指定则默认为10", dataType = "int", required = false, paramType = "query"), })
   public ApiResult<List<OrderResponseDto>> queryOrder(@ApiIgnore OrderRequestDto orderRequestDto) {
     try {
-      orderRequestDto.setDeleted(DeletedEnum.notdelete.val());
       List<OrderResponseDto> list = orderService.queryOrder(orderRequestDto);
       return ApiResult.success(list);
+    } catch (StarServiceException e) {
+      return ApiResult.fail(e.getCode(), e.getMsg());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return ApiResult.fail(ApiCode.SYSTEM_ERROR);
+    }
+  }
+
+  @RequestMapping(value = "/sumBrokerage", method = RequestMethod.POST)
+  @ApiOperation(value = "根据条件获取订单列表", notes = "根据条件获取订单列表", httpMethod = "POST", response = ApiResult.class)
+  @ApiImplicitParams({ @ApiImplicitParam(name = "type", value = "订单类型 1自主下单 2代客下单", dataType = "int", required = false, paramType = "query"), @ApiImplicitParam(name = "memberId", value = "用户ID", dataType = "Long", required = false, paramType = "query"), @ApiImplicitParam(name = "states", value = "订单状态 1待付款 2待提货 3已提货, 多个用逗号分隔", dataType = "int", required = false, paramType = "query"),
+      @ApiImplicitParam(name = "page.pageNum", value = "页码，页码如果没有则查询满足条件的所有记录", dataType = "int", required = false, paramType = "query"), @ApiImplicitParam(name = "page.pageSize", value = "一页最大记录数，当页码有值时，该值没有指定则默认为10", dataType = "int", required = false, paramType = "query"), })
+  public ApiResult<Long> sumBrokerage(@ApiIgnore OrderRequestDto orderRequestDto) {
+    try {
+      Long sum = orderService.sumBrokerage(orderRequestDto);
+      return ApiResult.success(sum);
     } catch (StarServiceException e) {
       return ApiResult.fail(e.getCode(), e.getMsg());
     } catch (Exception e) {

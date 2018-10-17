@@ -154,6 +154,19 @@
     </if>
   </select>
 
+  <select id="sumBrokerage" resultType="java.lang.Long">
+    select
+      ifNull(sum(`order`.total_brokerage), 0)
+    from `order`
+		INNER JOIN distributor d on d.distributor_id = `order`.distributor_id
+		INNER JOIN distribution_region r on `order`.region_id = r.region_id
+		INNER JOIN sys_area p on p.areaId = r.province_id
+		LEFT JOIN sys_area c on c.areaId = r.city_id
+		LEFT JOIN sys_area a on a.areaId = r.area_id
+		LEFT JOIN sys_area t on t.areaId = r.town_id
+    <include refid="sql_where" />
+  </select>
+
   <select id="queryOrderCount" resultType="java.lang.Long">
     select
     count(1)

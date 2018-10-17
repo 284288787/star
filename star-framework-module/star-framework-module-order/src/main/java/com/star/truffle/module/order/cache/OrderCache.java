@@ -77,4 +77,8 @@ public class OrderCache {
     return orderReadDao.totalOrderNumOfToday();
   }
 
+  public Long sumBrokerage(OrderRequestDto orderRequestDto) {
+    return orderReadDao.sumBrokerage(orderRequestDto);
+  }
+
 }

@@ -25,12 +25,17 @@ public class OrderRequestDto extends Order {
   private List<OrderDetail> details;
   
   private String states;
+  private Long regionProvinceId;
+  private Long regionCityId;
+  private Long regionAreaId;
+  private Long regionTownId;
   
   private Integer minutes30;  //是否查询30分以内的订单 1是 0否
   private Integer brokerage0; //是否查询提成为0的记录 1是 0否
   
   private Date beginCreateTime;
   private Date endCreateTime;
+  private Integer time;       //0今天 1本周 2本月 3全部
   
   public boolean checkMemberSave() {
     if (null != getOrderId() || null == getMemberId() || null == getDeliveryType()

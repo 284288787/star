@@ -57,7 +57,7 @@ $(function(){
 var states={1: '待付款', 2: '待提货', 3: '已提货'}
 
 function loadData(self, pageNum, pageSize, state){
-  var param = {memberId: user.memberId, 'pager.pageNum': pageNum, 'pager.pageSize': pageSize};
+  var param = {'deleted': 0, memberId: user.memberId, 'pager.pageNum': pageNum, 'pager.pageSize': pageSize};
   if(state > 0) param['states'] = state;
   else param['states'] = "1,2,3";
   ajax({

@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.star.truffle.module.order.dto.req.OrderRequestDto;
 import com.star.truffle.module.order.dto.res.OrderResponseDto;
 import com.star.truffle.module.order.dto.res.OrderTotal;
 
@@ -28,4 +29,6 @@ public interface OrderReadDao {
   public Map<String, Object> totalMoney(@Param("distributorId") Long distributorId, @Param("beginTime") Date beginTime);
 
   public Long totalOrderNumOfToday();
+
+  public Long sumBrokerage(OrderRequestDto orderRequestDto);
 }
