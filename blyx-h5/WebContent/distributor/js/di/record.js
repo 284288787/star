@@ -31,17 +31,18 @@ function pullupRefresh() {
     pageNum++;
   }, 10);
 }
+var states={1:"审核中", 2:"汇款中", 3:"未通过", 4:"已完成"};
 function loadData(pageNum, pageSize, beginTime){
   ajax({
-    url: '/api/order/queryOrder',
-    data: {'distributorId': user.distributorId, 'beginCreateTime': beginTime, 'states': '2,3', 'pager.pageNum': pageNum, 'pager.pageSize': pageSize},
+    url: '/api/kickbackDetail/queryKickbackDetail',
+    data: {'distributorId': user.distributorId, 'pager.pageNum': pageNum, 'pager.pageSize': pageSize},
     success: function(items){
       if(null != items && items.length > 0){
         mui('#pullrefresh').pullRefresh().endPullupToRefresh(false);
         var productIds = "";
         for(var o in items){
           var item = items[o];
-          var li = '<li class="mui-table-view-cell"><span class="p1">'+item.createTime.formatDate('d号h点m分')+'</span> <span class="p2">'+item.orderCode+'</span> <span class="p3">￥'+(item.totalMoney / 100.0).toFixed(2)+'</span><span class="p4">￥'+(item.totalBrokerage / 100.0).toFixed(2)+'</span></li>';
+          var li = '<li class="mui-table-view-cell"><span class="p1">'+item.createTime.formatDate('d号h点m分')+'</span> <span class="p2">起：'+item.pointBeginTime.formatDate('d号h点m分')+'<br>止：'+item.pointEndTime.formatDate('d号h点m分')+'</span> <span class="p3">￥'+(item.totalMoney / 100.0).toFixed(2)+'</span><span class="p4">'+(item.state!=3 ? states[item.state]:item.reject)+'</span></li>';
           $(".mui-table-view").append(li);
         }
       }else{
