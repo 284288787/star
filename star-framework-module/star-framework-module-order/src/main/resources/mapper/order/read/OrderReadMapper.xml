@@ -230,4 +230,29 @@
   <select id="totalOrderNumOfToday" resultType="java.lang.Long">
     select count(1) from `order` o where to_days(o.create_time) = to_days(now()) and o.state in (2,3)
   </select>
+  
+  <resultMap id="seeUserMap" type="HashMap">
+    <result column="mobile" property="mobile" />
+    <result column="name" property="name" />
+    <result column="orderNum" property="orderNum" />
+    <result column="totalMoney" property="totalMoney" />
+    <result column="totalBrokergae" property="totalBrokergae" />
+  </resultMap>
+
+  <select id="seeUser" resultMap="seeUserMap">
+    select 
+      m.mobile, m.`name`, a.orderNum, a.totalMoney, a.totalBrokergae
+    from
+      (SELECT o.member_id, count(1) orderNum, SUM(o.total_money) totalMoney, SUM(o.total_brokerage) totalBrokergae 
+        FROM `order` o where o.distributor_id = #{distributorId} GROUP BY o.member_id
+      ) a
+       , member_info m where m.member_id = a.member_id
+    <if test="keyword != null and keyword != ''">
+     and (m.mobile = #{keyword} or m.`name` = #{keyword})
+    </if>
+    order by a.totalMoney desc
+    <if test="pager != null and pager.pageSize!=null and pager.startIndex!=null">
+      limit #{pager.startIndex}, #{pager.pageSize}
+    </if>
+  </select>
 </mapper>

@@ -46,6 +46,26 @@ public class OrderApiController {
     dateFormat.setLenient(false);
     binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));//true:允许为空, false:不允许为空
   }
+  
+  @RequestMapping(value = "/seeUser", method = RequestMethod.POST)
+  @ApiOperation(value = "分销商的所有会员", notes = "分销商的所有会员", httpMethod = "POST", response = OrderResponseDto.class)
+  @ApiImplicitParams({ 
+    @ApiImplicitParam(name = "distributorId", value = "分销商id", dataType = "Long", required = true, paramType = "query"), 
+    @ApiImplicitParam(name = "keyword", value = "查询条件 可以是昵称和手机号", dataType = "String", required = false, paramType = "query"), 
+    @ApiImplicitParam(name = "pageNum", value = "默认1", dataType = "int", required = false, paramType = "query"), 
+    @ApiImplicitParam(name = "pageSize", value = "默认10", dataType = "int", required = false, paramType = "query")
+  })
+  public ApiResult<List<Map<String, Object>>> seeUser(Long distributorId, String keyword, Integer pageNum, Integer pageSize) {
+    try {
+      List<Map<String, Object>> list = orderService.seeUser(distributorId, keyword, pageNum, pageSize);
+      return ApiResult.success(list);
+    } catch (StarServiceException e) {
+      return ApiResult.fail(e.getCode(), e.getMsg());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return ApiResult.fail(ApiCode.SYSTEM_ERROR);
+    }
+  }
 
   @RequestMapping(value = "/shopIndex", method = RequestMethod.POST)
   @ApiOperation(value = "分销商首页信息", notes = "分销商首页信息", httpMethod = "POST", response = OrderResponseDto.class)
@@ -64,7 +84,10 @@ public class OrderApiController {
 
   @RequestMapping(value = "/orderNumRanking", method = RequestMethod.POST)
   @ApiOperation(value = "订单量排名", notes = "订单量排名", httpMethod = "POST", response = OrderResponseDto.class)
-  @ApiImplicitParams({ @ApiImplicitParam(name = "pageNum", value = "默认1", dataType = "int", required = false, paramType = "query"), @ApiImplicitParam(name = "pageSize", value = "默认10", dataType = "int", required = false, paramType = "query") })
+  @ApiImplicitParams({ 
+    @ApiImplicitParam(name = "pageNum", value = "默认1", dataType = "int", required = false, paramType = "query"), 
+    @ApiImplicitParam(name = "pageSize", value = "默认10", dataType = "int", required = false, paramType = "query") 
+  })
   public ApiResult<List<OrderTotal>> orderNumRanking(Integer pageNum, Integer pageSize) {
     try {
       List<OrderTotal> ranking = orderService.orderNumRanking(pageNum, pageSize);

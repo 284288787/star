@@ -397,4 +397,9 @@ public class OrderService {
     return sum;
   }
 
+  public List<Map<String, Object>> seeUser(Long distributorId, String keyword, Integer pageNum, Integer pageSize) {
+    Page pager = new Page(null == pageNum ? 1 : pageNum, pageSize, null, null);
+    return this.orderCache.seeUser(distributorId, keyword, pager);
+  }
+
 }

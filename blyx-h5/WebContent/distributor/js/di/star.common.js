@@ -87,6 +87,16 @@ mui('body').on('tap', 'a', function() {
   document.location.href = this.href;
 });
 
+String.prototype.toMoney = function () {
+  if(!this) return '0.00';
+  return (this / 100.0).toFixed(2);
+}
+
+Number.prototype.toMoney = function () {
+  if(!this) return 0.00;
+  return (this / 100.0).toFixed(2);
+}
+
 String.prototype.gapSeconds = function (g) {
   if(!this) return '';
   var tem = this.substring(0,19);

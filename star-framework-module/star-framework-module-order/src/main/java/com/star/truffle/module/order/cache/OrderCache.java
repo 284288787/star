@@ -12,6 +12,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import com.star.truffle.core.jackson.StarJson;
+import com.star.truffle.core.jdbc.Page;
 import com.star.truffle.module.order.dao.read.OrderReadDao;
 import com.star.truffle.module.order.dao.write.OrderWriteDao;
 import com.star.truffle.module.order.domain.Order;
@@ -79,6 +80,10 @@ public class OrderCache {
 
   public Long sumBrokerage(OrderRequestDto orderRequestDto) {
     return orderReadDao.sumBrokerage(orderRequestDto);
+  }
+
+  public List<Map<String, Object>> seeUser(Long distributorId, String keyword, Page pager) {
+    return orderReadDao.seeUser(distributorId, keyword, pager);
   }
 
 }

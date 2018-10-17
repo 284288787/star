@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Param;
 
+import com.star.truffle.core.jdbc.Page;
 import com.star.truffle.module.order.dto.req.OrderRequestDto;
 import com.star.truffle.module.order.dto.res.OrderResponseDto;
 import com.star.truffle.module.order.dto.res.OrderTotal;
@@ -31,4 +32,6 @@ public interface OrderReadDao {
   public Long totalOrderNumOfToday();
 
   public Long sumBrokerage(OrderRequestDto orderRequestDto);
+
+  public List<Map<String, Object>> seeUser(@Param("distributorId") Long distributorId, @Param("keyword") String keyword, @Param("pager") Page pager);
 }
