@@ -100,6 +100,8 @@ function loadData(self, pageNum, pageSize, state){
             if(item.state==1 && item.deleted == 1){
               ele +='<button data-orderId="'+item.orderId+'" class="fl mui-btn mui-btn-outlined deleteorder" size="small" plain>删除</button>';
             }
+          }else if(state == 1){
+            ele +='<button data-orderId="'+item.orderId+'" class="fl mui-btn mui-btn-danger mui-btn-outlined topay" size="small" plain>去付款</button>';
           }
           ele+='</p>\
             </div>\
@@ -129,6 +131,12 @@ function loadData(self, pageNum, pageSize, state){
               obj.text("删除");
             }
           });
+        });
+        $(".topay").off().on('tap', function(){
+          var orderId = $(this).attr("data-orderId");
+          putLocalData("pay_orderId", orderId);
+          putLocalData("pay_orderId_from", "distributor");
+          document.location.href='http://yx.hnkbmd.com/pay.html';
         });
         $(".viewdetail").off().on('tap', function(){
           var orderId = $(this).attr("data-orderId");

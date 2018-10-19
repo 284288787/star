@@ -1,4 +1,7 @@
-var user = getLoginInfo();
+var user = getDistributorLoginInfo();
+if(! user){
+  user = getLoginInfo();
+}
 if(! user){
   document.location.href='login.html?redirect_url=pay.html';
 }
@@ -58,6 +61,7 @@ $(function() {
               'signType': 'MD5', 
               'paySign': data.sign, 
               'success': function(res1) {
+                delLocalData("pay_orderId");
                 document.location.href='paysuccess.html';
               },
               'cancel': function(res2) {

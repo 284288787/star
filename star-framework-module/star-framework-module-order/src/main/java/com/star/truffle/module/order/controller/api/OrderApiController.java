@@ -165,9 +165,15 @@ public class OrderApiController {
 
   @RequestMapping(value = "/saveDistributorOrder", method = RequestMethod.POST)
   @ApiOperation(value = "代客下单", notes = "代客下单", httpMethod = "POST", response = ApiResult.class)
-  @ApiImplicitParams({ @ApiImplicitParam(name = "distributorId", value = "分销商ID", dataType = "Long", required = true, paramType = "query"), @ApiImplicitParam(name = "deliveryType", value = "收货类型 1自提 2快递, 如果快递则需要传省市区、详细地址", dataType = "int", required = true, paramType = "query"), @ApiImplicitParam(name = "name", value = "用户姓名", dataType = "String", required = true, paramType = "query"), @ApiImplicitParam(name = "mobile", value = "用户手机号", dataType = "String", required = true, paramType = "query"),
-      @ApiImplicitParam(name = "provinceId", value = "快递 省", dataType = "String", required = false, paramType = "query"), @ApiImplicitParam(name = "cityId", value = "快递 市", dataType = "String", required = false, paramType = "query"), @ApiImplicitParam(name = "areaId", value = "快递 区县", dataType = "String", required = false, paramType = "query"), @ApiImplicitParam(name = "deliveryAddress", value = "快递 详细地址", dataType = "String", required = false, paramType = "query"),
-      @ApiImplicitParam(name = "details", value = "详细 [{productId:1,count:2},{productId:2,count:1}]", dataType = "json", required = true, paramType = "query"), })
+  @ApiImplicitParams({ 
+    @ApiImplicitParam(name = "distributorId", value = "分销商ID", dataType = "Long", required = true, paramType = "query"), 
+    @ApiImplicitParam(name = "deliveryType", value = "收货类型 1自提 2快递, 如果快递则需要传省市区、详细地址", dataType = "int", required = true, paramType = "query"), 
+    @ApiImplicitParam(name = "name", value = "用户姓名", dataType = "String", required = true, paramType = "query"), @ApiImplicitParam(name = "mobile", value = "用户手机号", dataType = "String", required = true, paramType = "query"),
+    @ApiImplicitParam(name = "provinceName", value = "快递 省", dataType = "String", required = false, paramType = "query"), 
+    @ApiImplicitParam(name = "cityName", value = "快递 市", dataType = "String", required = false, paramType = "query"), 
+    @ApiImplicitParam(name = "areaName", value = "快递 区县", dataType = "String", required = false, paramType = "query"), 
+    @ApiImplicitParam(name = "deliveryAddress", value = "快递 详细地址", dataType = "String", required = false, paramType = "query"),
+    @ApiImplicitParam(name = "details", value = "详细 [{productId:1,count:2},{productId:2,count:1}]", dataType = "json", required = true, paramType = "query"), })
   public ApiResult<Long> saveDistributorOrder(@ApiIgnore @RequestBody OrderRequestDto orderRequestDto) {
     try {
       Long id = orderService.saveDistributorOrder(orderRequestDto);

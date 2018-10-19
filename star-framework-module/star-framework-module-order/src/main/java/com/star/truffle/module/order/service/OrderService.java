@@ -168,6 +168,8 @@ public class OrderService {
       orderRequestDto.setDeliveryMobile(orderRequestDto.getMobile());
       orderRequestDto.setDespatchMoney(orderProperties.getDespatchMoney());
     }
+    Integer totalMoney = 0;
+    Integer totalBrokerage = 0;
     List<OrderDetail> details = orderRequestDto.getDetails();
     for (OrderDetail detail : details) {
       ProductResponseDto product = this.productService.getProduct(detail.getProductId());
@@ -182,21 +184,28 @@ public class OrderService {
       detail.setPickupTime(product.getPickupTime());
       detail.setSpecification(product.getSpecification());
       detail.setProductInfo(starJson.obj2string(product));
+      totalMoney += detail.getPrice() * detail.getCount();
+      totalBrokerage += detail.getBrokerage() * detail.getCount();
     }
+    orderRequestDto.setTotalMoney(totalMoney);
+    orderRequestDto.setTotalBrokerage(totalBrokerage);
     orderRequestDto.setRegionId(distributor.getRegionId());
     orderRequestDto.setShopAddress(distributor.getAddress());
     orderRequestDto.setShopName(distributor.getShopName());
     orderRequestDto.setShopMobile(distributor.getMobile());
-    orderRequestDto.setState(OrderStateEnum.nosend.state());
+    orderRequestDto.setState(OrderStateEnum.nopay.state());
     orderRequestDto.setType(OrderTypeEnum.behalf.type());
     orderRequestDto.setCreateTime(new Date());
     OrderResponseDto orderResponseDto = this.orderCache.saveOrder(orderRequestDto);
     Long orderId = orderResponseDto.getOrderId();
+    for (OrderDetail orderDetail : details) {
+      orderDetail.setOrderId(orderId);
+    }
     this.orderDetailCache.saveOrderDetail(orderId, details);
     
     OrderRequestDto param = new OrderRequestDto();
     param.setOrderId(orderId);
-    param.setOrderCode(8000000 + orderId);
+    param.setOrderCode(1000000 + orderId);
     this.orderCache.updateOrder(param);
     return orderId;
   }

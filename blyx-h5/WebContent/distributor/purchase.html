@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta name="applicable-device" content="mobile">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="format-detection" content="telephone=no,email=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="full-screen" content="yes">
+<meta name="x5-fullscreen" content="true">
+<link rel="stylesheet" href="css/mui.min.css">
+<link rel="stylesheet" href="css/icons-extra.css">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/purchase.css">
+<link rel="stylesheet" href="css/address.css">
+<script src="js/jquery.min.js"></script>
+<script src="js/mui.min.js"></script>
+<script src="js/city.data-3.js"></script>
+<script src="js/area.js"></script>
+<title>代客下单</title>
+<style type="text/css">
+#mainScroll{
+  padding-bottom: 50px;
+}
+#pullrefresh{
+  margin-top: 100px;
+}
+.buttons{
+  text-align: left;
+  height: 45px;
+  line-height:45px;
+  font-size:18px;
+}
+.enterBtn{
+  margin-bottom:10px;
+  float: right;
+  font-size: 14px;
+}
+</style>
+</head>
+<body>
+  <header id="header" class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">代客下单</h1>
+  </header>
+  <div class="main mui-scroll-wrapper">
+    <div class="mui-scroll" id="mainScroll">
+    <div class="address">
+      <div id="segmentedControl" class="mui-segmented-control mui-segmented-control-negative">
+        <a class="mui-control-item mui-active " href="#item1">自提</a> <a class="mui-control-item" href="#item2">快递</a>
+      </div>
+    </div>
+    <div class="van-contact-card">
+      <div id="item1" class="mui-control-content mui-active ">
+        <div class="myself">
+          提货人： <input type="text" placeholder="提货人姓名" name="name"/> <input type="text" placeholder="提货人电话" name="mobile"/>
+        </div>
+        <p class="blank">提货地址：</p>
+        <p class="red">自提点：</p>
+      </div>
+      <div id="item2" class="mui-control-content pading">
+        <div class="myself">
+          收货人： <input type="text" placeholder="收货人姓名" name="name"/> <input type="text" placeholder="收货人联系电话" name="mobile"/>
+        </div>
+        <div id="choseaddress">
+          <p class="blank">
+            收货地址： <span id="address"><label style="color:lightgray">选择地区</label></span>
+            <input type="hidden" id="provinceName">
+            <input type="hidden" id="cityName">
+            <input type="hidden" id="areaName">
+          </p>
+        </div>
+        <div class="myself">
+          <input type="text" placeholder="详细地址" class="fulladdress" name="deliveryAddress"/>
+        </div>
+      </div>
+    </div>
+    <ul class="mui-table-view mui-table-view-chevron mtop">
+      <li class="mui-table-view-cell"><a href="#goods">添加商品</a></li>
+    </ul>
+    <div class="goodslist">
+      <ul>
+      </ul>
+    </div>
+    <div class="totaldiv">
+      <p>共计<b class="number">0</b>件商品 合计：<b class="money">￥：0.00</b></p>
+      <p style="display:none">邮费：<b class="youfei">0.00</b></p>
+      <p class="big">应付金额：<b>￥：0.00</b></p>
+    </div>
+  </div>
+  </div>
+  <nav class="mui-bar mui-bar-tab bot " id="nav">
+    <span class="mui-tab-item " id="mean2"> <span class="mui-tab-label"> 合计：<b class="red">￥ 0.00</b>
+    </span>
+    </span> <a class="mui-tab-item " id="mean3" href="#ok"> <span class="mui-tab-label">提交订单</span>
+    </a>
+  </nav>
+  <div id="goods" class="box mui-popover mui-popover-action mui-popover-bottom" style="height: 500px;">
+  <div class="buttons">
+    请选择商品
+    <button class="enterBtn">确定添加</button>
+  </div>
+    <div class="mui-input-row mui-search"><input type="search" id="search" placeholder="请输入搜索关键词"></div>
+    <div id="pullrefresh" class="mui-scroll-wrapper">
+      <div class="mui-scroll">
+        <ul class="mui-table-view itemlist">
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div id="addSelect" class="mui-popover mui-popover-bottom mui-popover-action">
+    <div id="slider" class="mui-slider">
+      <div id="sliderSegmentedControl" class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+        <div class="select-head">
+          <ul class="select-nav mui-clearfix" id="selectNav">
+            <li>请选择</li>
+            <li class="mui-hidden">请选择</li>
+            <li class="mui-hidden">请选择</li>
+          </ul>
+          <a id="addressBtn">确定</a>
+        </div>
+      </div>
+      <div class="mui-slider-group select-con" id="selectCon">
+        <div id="item1" class="mui-slider-item mui-control-content mui-active">
+          <div id="scroll1" class="mui-scroll-wrapper">
+            <div class="mui-scroll">
+              <ul id="select-con-1">
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div id="item2" class="mui-slider-item mui-control-content">
+          <div id="scroll2" class="mui-scroll-wrapper">
+            <div class="mui-scroll">
+              <ul id="select-con-2">
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div id="item3" class="mui-slider-item mui-control-content">
+          <div id="scroll3" class="mui-scroll-wrapper">
+            <div class="mui-scroll">
+              <ul id="select-con-3">
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript" src="js/di/star.common.js"></script>
+  <script type="text/javascript" src="js/di/purchase.js"></script>
+</body>
+</html>

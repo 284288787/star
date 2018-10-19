@@ -147,7 +147,7 @@ function loadData(pageNum, pageSize, title){
           li += '</a></li>';
           $(".itemlist").append(li);
         }
-        if(! userCartNum && ! user){
+        if(! userCartNum && user){
           userCartNum = {};
           ajax({
             url: '/api/shoppingCart/queryShoppingCart',

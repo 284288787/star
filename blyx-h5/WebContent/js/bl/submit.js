@@ -55,15 +55,15 @@ $(function() {
       var name = $("input[name=name]").val();
       var mobile = $("input[name=mobile]").val();
       if(!name){
-        mui.toast("请填写收货人姓名");
+        mui.toast("请填写提货人姓名");
         return false;
       }
       if(!mobile){
-        mui.toast("请填写收货人手机号码");
+        mui.toast("请填写提货人手机号码");
         return false;
       }
       if (!/^1[34578]\d{9}$/.test(mobile)) {
-        mui.toast("收货人手机号码错误");
+        mui.toast("提货人手机号码错误");
         return false;
       }
       param['name'] = name;

@@ -3,11 +3,11 @@
   color: #655e5e;
   font-size: 20px;
 }
-.mui-checkbox{
+#addSelect .mui-checkbox{
   width:35px;
   overflow: hidden;
 }
-.mui-checkbox.mui-left label, .mui-radio.mui-left label{
+#addSelect .mui-checkbox.mui-left label, .mui-radio.mui-left label{
   padding-right: 0px;
   padding-left: 0px;
   display: block;
@@ -44,9 +44,7 @@
 }
 
 ul,li{
-  margin: 0;
-  padding: 0;
-  list-style: none;
+  
 }
 
 .mui-popover{
@@ -78,9 +76,15 @@ ul,li{
   transform: scaleY(.5);
 }
 .select-head ul{
+  margin: 0;
+  padding: 0;
+  list-style: none;
   flex: 1;
 }
 .select-head ul li{
+  margin: 0;
+  padding: 0;
+  list-style: none;
   position: relative;
   float: left;
   margin-right: 15px;

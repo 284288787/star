@@ -40,6 +40,12 @@ function getLoginInfo(){
   return user;
 }
 
+function getDistributorLoginInfo(){
+  if(!localStorage.login_distributor_user) return null;
+  var user = JSON.parse(localStorage.login_distributor_user);
+  return user;
+}
+
 function getShopInfo(){
   if(!localStorage.distributor) return null;
   var distributor = JSON.parse(localStorage.distributor);

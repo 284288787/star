@@ -57,6 +57,7 @@ function loadCarData(){
             url: '/api/shoppingCart/updateShoppingCartNum',
             data: {'memberId': user.memberId, 'cartId': cartId, 'num': num}
           });
+          total();
         });
         var chkall = $("#selectall");
         chkall.change(function(){
