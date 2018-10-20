@@ -76,7 +76,7 @@ $(function(){
   });
   
   $("a.share").on("tap", function(){
-    mui.alert("<div style='text-align:left'>1.点击右上角菜单(即，三个圆点)，<br>2.选择发送给朋友完成分享</div>", " ");
+    mui.alert("<div style='text-align:left'>1.点击右上角菜单(即，三个圆点)，<br>2.选择'发送给朋友'，完成分享</div>", " ");
     return false;
   });
   
