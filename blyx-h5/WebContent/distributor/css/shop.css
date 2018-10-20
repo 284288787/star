@@ -275,3 +275,10 @@ body{
 .mui-grid-view.mui-grid-9 .mui-media .mui-icon{
   font-size: 2rem;
 }
+.mui-icon-upload{
+  transform:rotate(90deg);
+  -ms-transform:rotate(90deg);  
+  -moz-transform:rotate(90deg); 
+  -webkit-transform:rotate(90deg); 
+  -o-transform:rotate(90deg);   
+}
