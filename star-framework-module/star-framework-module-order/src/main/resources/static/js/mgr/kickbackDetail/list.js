@@ -98,7 +98,7 @@ $(function(){
       if(rowObject.state==3) return cellvalue;
       return "";
     }}, 
-    {align: "center", editable: false, width: 100, sortable: false, formatter: function(cellvalue, options, rowObject){
+    {align: "center", editable: false, width: 130, sortable: false, formatter: function(cellvalue, options, rowObject){
       var temp = '';
       temp += '<a class="linetaga" href="javascript: kickbackDetailHandle.detail(\'' + rowObject.id.toFixed(0) + '\');" >查看明细</a>';
       if(hasAuthorize('kickbackDetail-pass')){

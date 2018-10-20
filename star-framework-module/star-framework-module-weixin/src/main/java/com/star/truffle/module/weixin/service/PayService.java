@@ -133,18 +133,23 @@ public class PayService {
         }
         distributionRegionCache.addDistributionRegionNum("soldNum", order.getRegionId(), count);
         distributorCache.addDistributorNum("soldNum", order.getDistributorId(), count);
-        OrderRequestDto orderParam = new OrderRequestDto();
-        orderParam.setMemberId(order.getMemberId());
-        orderParam.setRegionId(order.getRegionId());
-        Long num = orderService.queryOrderCount(orderParam);
-        if (num == 1) {
+        Long num = 0L;
+        if (order.getMemberId() > 0) {
+          OrderRequestDto orderParam = new OrderRequestDto();
+          orderParam.setMemberId(order.getMemberId());
+          orderParam.setRegionId(order.getRegionId());
+          num = orderService.queryOrderCount(orderParam);
+        }
+        if (num == 1 || order.getMemberId() < 0) {
           distributionRegionCache.addDistributionRegionNum("fansNum", order.getRegionId(), 1);
         }
-        OrderRequestDto order2Param = new OrderRequestDto();
-        order2Param.setMemberId(order.getMemberId());
-        order2Param.setDistributorId(order.getDistributorId());
-        num = orderService.queryOrderCount(order2Param);
-        if (num == 1) {
+        if (order.getMemberId() > 0) {
+          OrderRequestDto order2Param = new OrderRequestDto();
+          order2Param.setMemberId(order.getMemberId());
+          order2Param.setDistributorId(order.getDistributorId());
+          num = orderService.queryOrderCount(order2Param);
+        }
+        if (num == 1 || order.getMemberId() < 0) {
           distributorCache.addDistributorNum("fansNum", order.getDistributorId(), 1);
         }
       }

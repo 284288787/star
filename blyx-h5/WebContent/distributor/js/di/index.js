@@ -28,7 +28,7 @@ $(function(){
               name : '您的订单数('+data.orderNumOfToday+')'
             }, {
               value : data.totalOrderNumOfToday - data.orderNumOfToday,
-              name : '总订单数('+(data.totalOrderNumOfToday - data.orderNumOfToday)+')'
+              name : '其他总订单数('+(data.totalOrderNumOfToday - data.orderNumOfToday)+')'
             } ]
           } ]
         }
