@@ -355,7 +355,7 @@ public class OrderService {
     map.put("totalOrderNumOfToday", totalOrderNumOfToday);
     map.put("totalMoney", orderCache.totalMoney(distributorId, null));
     
-    List<OrderTotal> orderIndex = orderCache.orderIndexToday(distributorId, null, null);
+    List<OrderTotal> orderIndex = orderCache.orderIndexToday(distributorId, null, null, null);
     if (null == orderIndex || orderIndex.isEmpty()) {
       map.put("orderNumOfToday", 0);
       map.put("orderNumRateOfToday", 0);
@@ -379,7 +379,7 @@ public class OrderService {
       pageSize = 10;
     }
     Integer startIndex = (pageNum - 1) * pageSize;
-    List<OrderTotal> list = orderCache.orderIndexToday(null, startIndex, pageSize);
+    List<OrderTotal> list = orderCache.orderIndexToday(null, startIndex, pageSize, null);
     return list;
   }
 
@@ -410,6 +410,18 @@ public class OrderService {
   public List<Map<String, Object>> seeUser(Long distributorId, String keyword, Integer pageNum, Integer pageSize) {
     Page pager = new Page(null == pageNum ? 1 : pageNum, pageSize, null, null);
     return this.orderCache.seeUser(distributorId, keyword, pager);
+  }
+
+  public List<OrderTotal> ranking(Integer pageNum, Integer pageSize, String keyword) {
+    if (null == pageNum) {
+      pageNum = 1;
+    }
+    if (null == pageSize) {
+      pageSize = 10;
+    }
+    int startIndex = (pageNum - 1) * pageSize;
+    List<OrderTotal> list = this.orderCache.orderIndexToday(null, startIndex, pageSize, keyword);
+    return list;
   }
 
 }

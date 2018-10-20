@@ -20,7 +20,7 @@ public interface OrderReadDao {
 
   public Long queryOrderCount(Map<String, Object> conditions);
 
-  public List<OrderTotal> orderIndexToday(@Param("distributorId") Long distributorId, @Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize);
+  public List<OrderTotal> orderIndexToday(@Param("distributorId") Long distributorId, @Param("startIndex") Integer startIndex, @Param("pageSize") Integer pageSize, @Param("keyword") String keyword);
 
   /**
    * 累计收益

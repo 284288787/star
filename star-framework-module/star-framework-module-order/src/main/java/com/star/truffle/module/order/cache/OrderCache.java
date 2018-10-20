@@ -65,8 +65,8 @@ public class OrderCache {
     return this.orderReadDao.queryOrderCount(conditions);
   }
 
-  public List<OrderTotal> orderIndexToday(Long distributorId, Integer startIndex, Integer pageSize) {
-    List<OrderTotal> list = orderReadDao.orderIndexToday(distributorId, startIndex, pageSize);
+  public List<OrderTotal> orderIndexToday(Long distributorId, Integer startIndex, Integer pageSize, String keyword) {
+    List<OrderTotal> list = orderReadDao.orderIndexToday(distributorId, startIndex, pageSize, keyword);
     return list;
   }
 

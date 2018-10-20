@@ -107,4 +107,23 @@ public class OrderAfterSaleService {
     this.orderAfterSaleCache.updateOrderAfterSale(orderAfterSaleRequestDto);
   }
 
+  public void changeState(Long id, int state, String reject) {
+    if (null == id || (state == AfterSaleEnum.nopass.state() && StringUtils.isBlank(reject))) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR);
+    }
+    OrderAfterSaleResponseDto responseDto = orderAfterSaleCache.getOrderAfterSale(id);
+    if (null == responseDto) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR, "记录不存在");
+    }
+    if (responseDto.getState() == AfterSaleEnum.pending.state() || responseDto.getState() == AfterSaleEnum.pass.state() || responseDto.getState() == AfterSaleEnum.nopass.state()) {
+      OrderAfterSaleRequestDto orderAfterSaleRequestDto = new OrderAfterSaleRequestDto();
+      orderAfterSaleRequestDto.setId(id);
+      orderAfterSaleRequestDto.setState(state);
+      orderAfterSaleRequestDto.setReason(reject);
+      this.orderAfterSaleCache.updateOrderAfterSale(orderAfterSaleRequestDto);
+    }else {
+      throw new StarServiceException(ApiCode.PARAM_ERROR, "该记录已被处理，请刷新页面");
+    }
+  }
+
 }

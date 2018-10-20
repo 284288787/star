@@ -16,7 +16,41 @@ var orderAfterSaleHandle = new ListHandle({
     disabled: basePath+'orderAfterSale/disabled',
     deleted: basePath+'orderAfterSale/deleted',
   }
-},{});
+},{
+  pass: function(id){
+    artDialog.confirm("确认审核通过？", function() {
+      orderAfterSaleHandle.ajax({
+        url : '/orderAfterSale/pass/'+id,
+        success : function(res) {
+          if (res.code == 0) {
+            orderAfterSaleHandle.query();
+          } else {
+            artDialog.alert(res.msg)
+          }
+        }
+      });
+    });
+  },
+  nopass: function(id){
+    artDialog.prompt("审核未通过原因：", function(reject) {
+      if(! reject){
+        artDialog.alert("原因必填");
+        return false;
+      }
+      orderAfterSaleHandle.ajax({
+        url : '/orderAfterSale/nopass/'+id,
+        data: {reject: reject},
+        success : function(res) {
+          if (res.code == 0) {
+            orderAfterSaleHandle.query();
+          } else {
+            artDialog.alert(res.msg)
+          }
+        }
+      });
+    });
+  }
+});
 $(function(){
   var colNames = ['主键', '订单ID', '售后单号', 'openid', '分销商姓名', '分销商手机号', '总金额', '申请备注', '售后状态', '创建日期', '操作'];
   var colModel = [
@@ -34,8 +68,11 @@ $(function(){
     {name: 'createTime', index: 'create_time', width: 50, align: "center", formatter:'date', formatoptions: {newformat:'Y-m-d H:i:s'}}, 
     {align: "center", editable: false, sortable: false, formatter: function(cellvalue, options, rowObject){
       var temp = '';
-      if(hasAuthorize('orderAfterSale-editBefore')){
-        temp += '<a class="linetaga" href="javascript: orderAfterSaleHandle.edit(\'' + rowObject.id.toFixed(0) + '\');" >编辑</a>';
+      if(hasAuthorize('orderAfterSale-pass')){
+        temp += '<a class="linetaga" href="javascript: orderAfterSaleHandle.pass(\'' + rowObject.id.toFixed(0) + '\');" >通过</a>';
+      }
+      if(hasAuthorize('orderAfterSale-nopass')){
+        temp += '<a class="linetaga" href="javascript: orderAfterSaleHandle.nopass(\'' + rowObject.id.toFixed(0) + '\');" >不通过</a>';
       }
       return temp;
     }}

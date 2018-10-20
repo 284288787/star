@@ -36,6 +36,9 @@
       <if test="mobile != null and mobile != ''">
         and d.mobile = #{mobile}
       </if>
+      <if test="states != null and states != ''">
+        and order_aftersale.state in (${states})
+      </if>
       <if test="state != null">
         and order_aftersale.state = #{state}
       </if>

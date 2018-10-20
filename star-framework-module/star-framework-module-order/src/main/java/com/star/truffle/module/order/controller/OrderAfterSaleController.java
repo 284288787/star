@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,6 +18,7 @@ import com.star.truffle.core.jdbc.Page;
 import com.star.truffle.core.jdbc.Page.OrderType;
 import com.star.truffle.core.web.ApiCode;
 import com.star.truffle.core.web.ApiResult;
+import com.star.truffle.module.order.constant.AfterSaleEnum;
 import com.star.truffle.module.order.dto.req.OrderAfterSaleRequestDto;
 import com.star.truffle.module.order.dto.res.OrderAfterSaleResponseDto;
 import com.star.truffle.module.order.service.OrderAfterSaleService;
@@ -50,6 +50,7 @@ public class OrderAfterSaleController {
   public Map<String, Object> list(OrderAfterSaleRequestDto orderAfterSaleRequestDto, Integer page, Integer rows, String sord, String sidx) {
     Page pager = new Page(page, rows, sidx, OrderType.desc.name().equals(sord) ? OrderType.desc : OrderType.asc);
     orderAfterSaleRequestDto.setPager(pager);
+    orderAfterSaleRequestDto.setStates("1,2,3");
     List<OrderAfterSaleResponseDto> list = orderAfterSaleService.queryOrderAfterSale(orderAfterSaleRequestDto);
     Long count = orderAfterSaleService.queryOrderAfterSaleCount(orderAfterSaleRequestDto);
 
@@ -62,10 +63,10 @@ public class OrderAfterSaleController {
   }
 
   @ResponseBody
-  @RequestMapping(value = "/edit", method = RequestMethod.POST)
-  public ApiResult<Void> edit(@RequestBody OrderAfterSaleRequestDto orderAfterSaleRequestDto) {
+  @RequestMapping(value = "/pass/{id}", method = RequestMethod.POST)
+  public ApiResult<Void> pass(@PathVariable Long id) {
     try {
-      orderAfterSaleService.updateOrderAfterSale(orderAfterSaleRequestDto);
+      orderAfterSaleService.changeState(id, AfterSaleEnum.pass.state(), null);
       return ApiResult.success();
     } catch (StarServiceException e) {
       return ApiResult.fail(e.getCode(), e.getMsg());
@@ -74,7 +75,21 @@ public class OrderAfterSaleController {
       return ApiResult.fail(ApiCode.SYSTEM_ERROR);
     }
   }
-
+  
+  @ResponseBody
+  @RequestMapping(value = "/nopass/{id}", method = RequestMethod.POST)
+  public ApiResult<Void> nopass(@PathVariable Long id, String reject) {
+    try {
+      orderAfterSaleService.changeState(id, AfterSaleEnum.nopass.state(), reject);
+      return ApiResult.success();
+    } catch (StarServiceException e) {
+      return ApiResult.fail(e.getCode(), e.getMsg());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return ApiResult.fail(ApiCode.SYSTEM_ERROR);
+    }
+  }
+  
   @ResponseBody
   @RequestMapping(value = "/deleted", method = RequestMethod.POST)
   public ApiResult<Void> delete(String ids) {

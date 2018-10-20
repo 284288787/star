@@ -3,7 +3,7 @@
 <mapper namespace="com.star.truffle.module.order.dao.write.OrderAfterSaleWriteDao">
   <insert id="saveOrderAfterSale" useGeneratedKeys="true" keyProperty="id" parameterType="com.star.truffle.module.order.domain.OrderAfterSale">
     insert into order_aftersale(order_id, after_code, remark, state, reason, create_time, update_time)
-    values(#{orderId}, #{afterCode}, #{remark}, #{state}, #{reason}, #{createTime}, #{item.createTime})
+    values(#{orderId}, #{afterCode}, #{remark}, #{state}, #{reason}, #{createTime}, #{createTime})
   </insert>
 
   <insert id="batchSaveOrderAfterSale" parameterType="java.util.List">

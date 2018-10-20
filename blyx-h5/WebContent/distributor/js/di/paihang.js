@@ -43,8 +43,8 @@ function pullupRefresh() {
 }
 function loadData(pageNum, pageSize, keyword){
   ajax({
-    url: '/api/order/seeUser',
-    data: {'distributorId': user.distributorId, 'keyword': keyword, 'pageNum': pageNum, 'pageSize': pageSize},
+    url: '/api/order/ranking',
+    data: {'keyword': keyword, 'pageNum': pageNum, 'pageSize': pageSize},
     success: function(items){
       if(null != items && items.length > 0){
         mui('#pullrefresh').pullRefresh().endPullupToRefresh(false);
@@ -52,19 +52,21 @@ function loadData(pageNum, pageSize, keyword){
           var item = items[o];
           var li = '<li class="mui-table-view-cell">\
                 <div class="itemO clearfix">\
-              <div class="w10">\
-                <p class="p1">'+item.mobile+'</p>\
+              <div class="w5">\
+                <p class="p3">排名</p>\
+                <p class="p2">'+item.idx+'</p>\
+              </div>\
+              <div class="w10 center">\
+                <p class="p3">店铺名称</p>\
+                <p class="p2">'+item.shopName+'</p>\
               </div>\
               <div class="w5 center">\
-                <p class="p1">'+item.name+'</p>\
-              </div>\
-              <div class="w5 center">\
-                <p class="p3">订单数量</p>\
-                <p class="p2">'+item.orderNum+'</p>\
+                <p class="p3">粉丝数量</p>\
+                <p class="p2">'+item.fansNum+'</p>\
               </div>\
               <div class="w4 center">\
-                <p class="p3">订单金额</p>\
-                <p class="p2">'+item.totalMoney.toMoney()+'</p>\
+                <p class="p3">销售指数</p>\
+                <p class="p2">'+item.soldNum+'</p>\
               </div>\
             </div>\
           </li>';

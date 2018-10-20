@@ -1,6 +1,7 @@
 /**create by framework at 2018年09月21日 15:21:35**/
 package com.star.truffle.module.order.cache;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,7 @@ public class OrderAfterSaleCache {
 
   @CachePut(value = "module-order-orderAfterSale", key = "'orderAfterSale_id_'+#result.id", condition = "#result != null and #result.id != null")
   public OrderAfterSaleResponseDto updateOrderAfterSale(OrderAfterSaleRequestDto orderAfterSaleRequestDto){
+    orderAfterSaleRequestDto.setUpdateTime(new Date());
     this.orderAfterSaleWriteDao.updateOrderAfterSale(orderAfterSaleRequestDto);
     OrderAfterSaleResponseDto orderAfterSaleResponseDto = this.orderAfterSaleWriteDao.getOrderAfterSale(orderAfterSaleRequestDto.getId());
     return orderAfterSaleResponseDto;

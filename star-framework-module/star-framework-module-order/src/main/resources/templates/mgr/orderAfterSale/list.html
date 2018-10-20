@@ -35,8 +35,6 @@
             <option value="1">待处理</option>
             <option value="2">通过</option>
             <option value="3">不通过</option>
-            <option value="4">已取消</option>
-            <option value="5">已删除</option>
           </select>
         </span> 
         <span> 
@@ -54,14 +52,11 @@
     </div>
   </div>
   <script type="text/javascript" th:src="@{/webjars/star/js/star.authorize.js}"></script>
-  <script type="text/javascript" th:inline="javascript" star:authorize-uri="/orderAfterSale/editBefore/*">
-  addAuthorize("orderAfterSale-editBefore", true);
+  <script type="text/javascript" th:inline="javascript" star:authorize-uri="/orderAfterSale/pass/*">
+  addAuthorize("orderAfterSale-pass", true);
   </script>
-  <script type="text/javascript" th:inline="javascript" star:authorize-uri="/orderAfterSale/disabled">
-  addAuthorize("orderAfterSale-disabled", true);
-  </script>
-  <script type="text/javascript" th:inline="javascript" star:authorize-uri="/orderAfterSale/enabled">
-  addAuthorize("orderAfterSale-enabled", true);
+  <script type="text/javascript" th:inline="javascript" star:authorize-uri="/orderAfterSale/nopass/*">
+  addAuthorize("orderAfterSale-nopass", true);
   </script>
   <script type="text/javascript" th:src="@{/webjars/star/js/star.list.comm.js}"></script>
   <script type="text/javascript" th:inline="javascript" th:src="@{/js/mgr/orderAfterSale/list.js}"></script>

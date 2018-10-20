@@ -66,6 +66,25 @@ public class OrderApiController {
       return ApiResult.fail(ApiCode.SYSTEM_ERROR);
     }
   }
+  
+  @RequestMapping(value = "/ranking", method = RequestMethod.POST)
+  @ApiOperation(value = "分销商排名", notes = "分销商排名", httpMethod = "POST", response = OrderResponseDto.class)
+  @ApiImplicitParams({ 
+    @ApiImplicitParam(name = "keyword", value = "查询条件 可以是昵称和手机号", dataType = "String", required = false, paramType = "query"), 
+    @ApiImplicitParam(name = "pageNum", value = "页码", dataType = "int", required = false, paramType = "query"),
+    @ApiImplicitParam(name = "pageSize", value = "一页最大记录数 默认10", dataType = "int", required = false, paramType = "query") 
+  })
+  public ApiResult<List<OrderTotal>> ranking(Integer pageNum, Integer pageSize, String keyword) {
+    try {
+      List<OrderTotal> list = orderService.ranking(pageNum, pageSize, keyword);
+      return ApiResult.success(list);
+    } catch (StarServiceException e) {
+      return ApiResult.fail(e.getCode(), e.getMsg());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return ApiResult.fail(ApiCode.SYSTEM_ERROR);
+    }
+  }
 
   @RequestMapping(value = "/shopIndex", method = RequestMethod.POST)
   @ApiOperation(value = "分销商首页信息", notes = "分销商首页信息", httpMethod = "POST", response = OrderResponseDto.class)

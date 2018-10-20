@@ -210,6 +210,9 @@
     <if test="distributorId != null">
      where z.distributor_id = #{distributorId}
     </if>
+    <if test="keyword != null and keyword != ''">
+     where z.shop_name like "%"#{keyword}"%"
+    </if>
     <if test="pageSize != null and startIndex != null">
     LIMIT #{startIndex}, #{pageSize}
     </if>

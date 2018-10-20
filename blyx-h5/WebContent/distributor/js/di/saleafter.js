@@ -24,8 +24,13 @@ $(function(){
               var ul = self.element.querySelector('.mui-table-view');
               ul.innerHTML = "";
               pageNum = 1;
-              loadData(self, pageNum, 10, index);
-              pageNum++;
+              if(index == 0){
+                loadOrderData(self, pageNum, 10);
+                pageNum++;
+              } else {
+                loadSaleAfterData(self, pageNum, 10);
+                pageNum++;
+              }
               self.endPullDownToRefresh();
             }, 200);
           }

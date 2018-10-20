@@ -14,4 +14,6 @@ public class OrderAfterSaleRequestDto extends OrderAfterSale {
 
   // 分销商id
   private Long distributorId;
+  
+  private String states;
 }
