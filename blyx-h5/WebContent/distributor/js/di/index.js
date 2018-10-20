@@ -26,7 +26,7 @@ $(function(){
     wx.updateAppMessageShareData({
       title: "("+user.shopCode+")" + user.shopName,
       desc: '欢迎光临！',
-      link: 'http://yx.hnkbmd.com/index.html?py=wygc',
+      link: 'http://yx.hnkbmd.com/index.html?py='+user.py,
       imgUrl: 'http://mgr.hnkbmd.com/photo/image/f96100c66c17455ba58099ba79edbbd3m.gif',
     }, function(res){
       alert(JSON.stringify(res))

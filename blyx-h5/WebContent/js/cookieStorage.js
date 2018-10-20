@@ -69,12 +69,12 @@ window.cookieStorage = (new (function(){
         }
         this.length--;
  
-        document.cookie = key + "=; max-age=0";
+        document.cookie = key + "=; max-age=0; domain=hnkbmd.com";
     };
  
     this.clear = function(){
         for(var i=0; i<keys.length; i++)
-            document.cookie = keys[i] + "; max-age=0";
+            document.cookie = keys[i] + "; max-age=0; domain=hnkbmd.com";
         cookie = {};
         keys = [];
         this.length = 0;

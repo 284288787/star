@@ -1,5 +1,5 @@
 if(islogin()){
-  document.location.href="/distributor/";
+  document.location.href="/";
 }
 var redirectUrl = getParam("redirect_url");
 if(!redirectUrl)redirectUrl="index.html";
