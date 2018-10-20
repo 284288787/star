@@ -32,7 +32,8 @@
     enabled, distributor.create_time, distributor.update_time, open_id, distributor.fans_num, 
     distributor.sold_num, r.`name` regionName, r.`name` regionName, p.shortName provinceName , 
     c.shortName cityName, a.shortName areaName, t.shortName townName,
-    p.areaId provinceId , c.areaId cityId, a.areaId areaId, t.areaId townId
+    p.areaId provinceId , c.areaId cityId, a.areaId areaId, t.areaId townId,
+    r.py
   </sql>
 
   <sql id="sql_where">

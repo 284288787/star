@@ -62,7 +62,7 @@ $(function(){
 var states={1: '待付款', 2: '待提货', 3: '已提货'};
 var saleAfterStates={1: "处理中", 2: "已通过", 3: "不通过", 4: "已取消", 5: "已删除"};
 function loadSaleAfterData(self, pageNum, pageSize){
-  var param = {'distributorId': distributor.distributorId, 'pager.pageNum': pageNum, 'pager.pageSize': pageSize};
+  var param = {'distributorId': distributor.distributorId, 'pager.pageNum': pageNum, 'pager.pageSize': pageSize, 'pager.orderType': 'desc'};
   ajax({
     url: '/api/orderAfterSale/queryOrderAfterSale',
     data: param,
@@ -94,8 +94,11 @@ function loadSaleAfterData(self, pageNum, pageSize){
           if(item.state < 4){
             if(item.state == 1){
               ele += '<button data-saleAfterId="'+item.id+'" class="pl mui-btn mui-btn-danger mui-btn-outlined cancelBtn" size="small" type="danger" plain>取消</button>';
+            } else if(item.state == 3){
+              ele += '<span class="pl mui-btn-outlined">未通过，'+item.reason+'</span>';
+            }else{
+              ele += '<button class="pl mui-btn mui-btn-danger mui-btn-outlined mui-disabled saleafterBtn" size="small" type="danger" plain>'+(item.state ? saleAfterStates[item.state] : '')+'</button>';
             }
-            ele += '<button class="pl mui-btn mui-btn-danger mui-btn-outlined mui-disabled saleafterBtn" size="small" type="danger" plain>'+(item.state ? saleAfterStates[item.state] : '')+'</button>';
           }else{
             ele += '<span class="pl mui-btn-outlined">已取消</span>';
           }

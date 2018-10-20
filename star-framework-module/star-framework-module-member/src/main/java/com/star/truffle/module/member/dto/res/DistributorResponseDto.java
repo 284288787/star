@@ -18,6 +18,7 @@ public class DistributorResponseDto extends Distributor {
   private String areaName;
   private Long townId;
   private String townName;
+  private String py;
   
   private String fullAreaName;
   private String fullAreaJson;
