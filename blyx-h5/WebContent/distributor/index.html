@@ -16,6 +16,7 @@
 <link rel="stylesheet" href="css/shop.css">
 <script src="js/jquery.min.js"></script>
 <script src="js/mui.min.js"></script>
+<script src="js/di/cookieStorage.js"></script>
 <script src="js/di/star.common.js"></script>
 <script src="js/di/index.js"></script>
 <script src="js/echarts-all.js"></script>
@@ -39,16 +40,16 @@
       <div class="totle">
         <div class="title">
           <h1>今日贝拉优选订单数</h1>
-          <p>订单总比：<span class="orderNumRate">12.5%</span></p>
-          <p>订单排名：<span class="ranking">第18名</span></p>
+          <p>订单总比：<span class="orderNumRate">0.0%</span></p>
+          <p>订单排名：<span class="ranking">第1名</span></p>
           <button type="button" class="mui-btn mui-btn-warning mui-btn-outlined fl">查看排行</button>
         </div>
         <div class="point">
           <div class="chart" id="pieChart"></div>
         </div>
         <div class="result">
-          <p>今日收益（元）<span class="todayMoneyOfToday">46.5</span></p>
-          <p>累计收益（元）<span class="todayMoney">5782.62</span></p>
+          <p>今日收益（元）<span class="todayMoneyOfToday">0.00</span></p>
+          <p>累计收益（元）<span class="todayMoney">0.00</span></p>
         </div>
       </div>
       <ul class="mui-table-view mui-grid-view mui-grid-9 menu">
@@ -72,6 +73,9 @@
         </a></li>
         <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><a href="seeuser.html"> <span class="mui-icon mui-icon-extra mui-icon-extra-peoples c7"></span>
             <span class="mui-media-body">查看会员</span>
+        </a></li>
+        <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3 "><a class="logout" href="#"> <span class="mui-icon mui-icon-extra mui-icon-extra-peoples c7"></span>
+            <span class="mui-media-body">退出登录</span>
         </a></li>
       </ul>
     </div>

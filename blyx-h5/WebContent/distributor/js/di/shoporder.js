@@ -53,7 +53,7 @@ $(function(){
 var states={1: '待付款', 2: '待提货', 3: '已提货'}
 
 function loadData(self, pageNum, pageSize, state){
-  var param = {distributorId: distributor.distributorId, 'pager.pageNum': pageNum, 'pager.pageSize': pageSize};
+  var param = {'deleted': 0, 'distributorId': distributor.distributorId, 'pager.pageNum': pageNum, 'pager.pageSize': pageSize};
   if(state == 0) {
     param['states'] = "1,2,3,4";
     param['type'] = "1";
@@ -134,9 +134,9 @@ function loadData(self, pageNum, pageSize, state){
         });
         $(".topay").off().on('tap', function(){
           var orderId = $(this).attr("data-orderId");
-          putLocalData("pay_orderId", orderId);
-          putLocalData("pay_orderId_from", "distributor");
-          document.location.href='http://yx.hnkbmd.com/pay.html';
+//          putLocalData("pay_orderId", orderId);
+//          putLocalData("pay_orderId_from", "distributor");
+          document.location.href='http://yx.hnkbmd.com/pay.html?oid='+orderId;
         });
         $(".viewdetail").off().on('tap', function(){
           var orderId = $(this).attr("data-orderId");

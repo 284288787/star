@@ -35,14 +35,16 @@ function ajax(options){
 }
 
 function getLoginInfo(){
-  if(!localStorage.login_distributor_user) return null;
-  var user = JSON.parse(localStorage.login_distributor_user);
+  var tem = cookieStorage.getItem("login_distributor_user");
+  if(!tem) return null;
+  var user = JSON.parse(tem);
   return user;
 }
 
 function islogin(){
-  if(!localStorage.login_distributor_user) return false;
-  var user = JSON.parse(localStorage.login_distributor_user);
+  var tem = cookieStorage.getItem("login_distributor_user");
+  if(!tem) return false;
+  var user = JSON.parse(tem);
   return user.distributorId > 0;
 }
 
@@ -56,15 +58,11 @@ if(! islogin()){
 }
 
 function setLoginInfo(user){
-  localStorage.login_distributor_user = JSON.stringify(user);
-}
-
-function setShopInfo(distributor){
-  localStorage.distributor = JSON.stringify(distributor);
+  cookieStorage.setItem('login_distributor_user', JSON.stringify(user));
 }
 
 function logout(){
-  localStorage.removeItem('login_distributor_user');
+  cookieStorage.removeItem('login_distributor_user');
 }
 
 function putLocalData(key, value){

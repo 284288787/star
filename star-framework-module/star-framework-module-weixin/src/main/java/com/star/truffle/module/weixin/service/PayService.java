@@ -15,6 +15,7 @@ import com.star.truffle.core.jackson.StarJson;
 import com.star.truffle.core.web.ApiCode;
 import com.star.truffle.module.alibaba.service.SmsUtil;
 import com.star.truffle.module.member.cache.DistributorCache;
+import com.star.truffle.module.member.dto.res.DistributorResponseDto;
 import com.star.truffle.module.member.dto.res.MemberResponseDto;
 import com.star.truffle.module.member.service.MemberService;
 import com.star.truffle.module.order.constant.DeliveryTypeEnum;
@@ -58,19 +59,9 @@ public class PayService {
     if (null == memberId || StringUtils.isBlank(openId) || null == orderId) {
       throw new StarServiceException(ApiCode.PARAM_ERROR);
     }
-    MemberResponseDto member = memberService.getMember(memberId);
-    if (null == member) {
-      throw new StarServiceException(ApiCode.PARAM_ERROR, "会员不存在");
-    }
-    if (!openId.equals(member.getOpenId())) {
-      throw new StarServiceException(ApiCode.PARAM_ERROR, "会员Id和openId不匹配");
-    }
     OrderResponseDto order = orderService.getOrder(orderId);
     if (null == order) {
       throw new StarServiceException(ApiCode.PARAM_ERROR, "订单不存在");
-    }
-    if (order.getMemberId() != memberId.longValue()) {
-      throw new StarServiceException(ApiCode.PARAM_ERROR, "订单和会员不匹配");
     }
     if (order.getDeleted() == DeletedEnum.delete.val()) {
       throw new StarServiceException(ApiCode.PARAM_ERROR, "该订单不能支付，已失效");
@@ -78,7 +69,27 @@ public class PayService {
     if (order.getState() != OrderStateEnum.nopay.state()) {
       throw new StarServiceException(ApiCode.PARAM_ERROR, "该订单不能支付，可能已支付");
     }
-
+    if (order.getMemberId() == -1) { //分销商 代客下单
+      DistributorResponseDto distributor = distributorCache.getDistributor(memberId);
+      if (null == distributor) {
+        throw new StarServiceException(ApiCode.PARAM_ERROR, "分销商不存在");
+      }
+      if (!openId.equals(distributor.getOpenId())) {
+        throw new StarServiceException(ApiCode.PARAM_ERROR, "分销商与openId不匹配");
+      }
+    }else {
+      if (order.getMemberId() != memberId.longValue()) {
+        throw new StarServiceException(ApiCode.PARAM_ERROR, "订单和会员不匹配");
+      }
+      MemberResponseDto member = memberService.getMember(memberId);
+      if (null == member) {
+        throw new StarServiceException(ApiCode.PARAM_ERROR, "会员不存在");
+      }
+      if (!openId.equals(member.getOpenId())) {
+        throw new StarServiceException(ApiCode.PARAM_ERROR, "会员与openId不匹配");
+      }
+    }
+    
     String outTradeNo = UUID.randomUUID().toString().replace("-", "");
     Integer money = order.getTotalMoney() + (null == order.getDespatchMoney() ? 0 : order.getDespatchMoney());
     PayReqData prd = new PayReqData(order.getShopName(), order.getOrderId().toString(), outTradeNo, money, order.getCreateTime(), weixinConfig.getAppId(), weixinConfig.getKey(), weixinConfig.getMchId(), weixinConfig.getNotifyUrl(), ip, weixinConfig.getTradeType(), order.getOpenId());

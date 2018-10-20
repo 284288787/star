@@ -5,7 +5,10 @@ if(! user){
 if(! user){
   document.location.href='login.html?redirect_url=pay.html';
 }
-var orderId = getLocalData("pay_orderId");
+var to = "";
+var orderId = getParam("oid");
+if(!orderId) orderId = getLocalData("pay_orderId");
+else to = "distributor";
 if(! orderId){
   mui.alert("此次支付已经失效，请重新选择订单进行支付");
   document.location.href='orderlist.html';
@@ -49,7 +52,7 @@ $(function() {
         ajax({
           url: "/weixin/pay/unifiedOrder",
           data: {
-            memberId: user.memberId,
+            memberId: user.memberId ? user.memberId : user.distributorId,
             openId: user.openId,
             orderId: orderId
           },
@@ -62,6 +65,7 @@ $(function() {
               'paySign': data.sign, 
               'success': function(res1) {
                 delLocalData("pay_orderId");
+                if(to) putLocalData("pay_orderId_from", "distributor");
                 document.location.href='paysuccess.html';
               },
               'cancel': function(res2) {

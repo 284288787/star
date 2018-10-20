@@ -99,8 +99,7 @@ $(function(){
       url: '/api/order/saveDistributorOrder',
       data: JSON.stringify(param),
       success: function(orderId){
-        putLocalData("pay_orderId", orderId);
-        document.location.href='http://yx.hnkbmd.com/pay.html';
+        document.location.href='http://yx.hnkbmd.com/pay.html?oid='+orderId;
       }
     });
     return false;

@@ -41,8 +41,9 @@ function getLoginInfo(){
 }
 
 function getDistributorLoginInfo(){
-  if(!localStorage.login_distributor_user) return null;
-  var user = JSON.parse(localStorage.login_distributor_user);
+  var tem = cookieStorage.getItem("login_distributor_user");
+  if(!tem) return null;
+  var user = JSON.parse(tem);
   return user;
 }
 

@@ -10,10 +10,10 @@ $(function(){
     url: '/api/order/shopIndex',
     data: {'distributorId': user.distributorId},
     success: function(data){
-      $(".orderNumRate").text(data.orderNumRate.toFixed(2) + "%");
-      $(".ranking").text(data.ranking == 0 ? "未上榜" : "第" + data.ranking + "名");
+      $(".orderNumRate").text((data.orderNumRateOfToday * 100).toFixed(2) + "%");
+      $(".ranking").text(data.rankingOfToday == 0 ? "未上榜" : "第" + data.rankingOfToday + "名");
       $(".todayMoneyOfToday").text((data.totalMoneyOfToday / 100.0).toFixed(2));
-      $(".todayMoney").text((data.totalMoney / 100.0).toFixed(2));
+      $(".todayMoney").text((data.totalMoney.totalMoney / 100.0).toFixed(2));
       
       var getOption = function(chartType) {
         var chartOption = {
@@ -24,11 +24,11 @@ $(function(){
             radius : '60%',
             center : [ '50%', '50%' ],
             data : [ {
-              value : data.orderNum,
-              name : '您的订单数('+data.orderNum+')'
+              value : data.orderNumOfToday,
+              name : '您的订单数('+data.orderNumOfToday+')'
             }, {
-              value : data.totalOrderNumOfToday,
-              name : '总订单数('+data.totalOrderNumOfToday+')'
+              value : data.totalOrderNumOfToday - data.orderNumOfToday,
+              name : '总订单数('+(data.totalOrderNumOfToday - data.orderNumOfToday)+')'
             } ]
           } ]
         }
@@ -45,6 +45,12 @@ $(function(){
   
   $("a.share").on("tap", function(){
     mui.alert("<div style='text-align:left'>1.点击右上角菜单(即，三个圆点)，<br>2.选择发送给朋友完成分享</div>", " ");
+    return false;
+  });
+  
+  $("a.logout").on("tap", function(){
+    logout();
+    document.location.href="login.html";
     return false;
   });
 });

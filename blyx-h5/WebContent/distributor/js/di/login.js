@@ -102,10 +102,12 @@ function getParam(name){
 }
 
 function setLoginInfo(user){
-  localStorage.login_distributor_user = JSON.stringify(user);
+  cookieStorage.setItem('login_distributor_user', JSON.stringify(user));
 }
 function islogin(){
-  if(!localStorage.login_distributor_user) return false;
-  var user = JSON.parse(localStorage.login_distributor_user);
+  debugger;
+  var tem = cookieStorage.getItem("login_distributor_user");
+  if(!tem) return false;
+  var user = JSON.parse(tem);
   return user.distributorId > 0;
 }

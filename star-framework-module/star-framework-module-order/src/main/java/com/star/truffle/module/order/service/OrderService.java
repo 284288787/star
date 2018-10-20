@@ -193,6 +193,7 @@ public class OrderService {
     orderRequestDto.setShopAddress(distributor.getAddress());
     orderRequestDto.setShopName(distributor.getShopName());
     orderRequestDto.setShopMobile(distributor.getMobile());
+    orderRequestDto.setOpenId(distributor.getOpenId());
     orderRequestDto.setState(OrderStateEnum.nopay.state());
     orderRequestDto.setType(OrderTypeEnum.behalf.type());
     orderRequestDto.setCreateTime(new Date());
@@ -356,9 +357,9 @@ public class OrderService {
     
     List<OrderTotal> orderIndex = orderCache.orderIndexToday(distributorId, null, null);
     if (null == orderIndex || orderIndex.isEmpty()) {
-      map.put("orderNum", 0);
-      map.put("orderNumRate", 0);
-      map.put("ranking", 0);
+      map.put("orderNumOfToday", 0);
+      map.put("orderNumRateOfToday", 0);
+      map.put("rankingOfToday", 0);
       map.put("totalMoneyOfToday", 0);
     }else {
       OrderTotal orderTotal = orderIndex.get(0);
