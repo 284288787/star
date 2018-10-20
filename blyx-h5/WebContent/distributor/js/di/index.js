@@ -57,10 +57,10 @@ $(function(){
             center : [ '50%', '50%' ],
             data : [ {
               value : data.orderNumOfToday,
-              name : '您的订单数('+data.orderNumOfToday+')'
+              name : '我的订单数('+data.orderNumOfToday+')'
             }, {
               value : data.totalOrderNumOfToday - data.orderNumOfToday,
-              name : '其他总订单数('+(data.totalOrderNumOfToday - data.orderNumOfToday)+')'
+              name : '其他商家订单数总和('+(data.totalOrderNumOfToday - data.orderNumOfToday)+')'
             } ]
           } ]
         }
