@@ -146,9 +146,12 @@
     order by
     <choose>
       <when test="pager != null and pager.orderBy != null and pager.orderBy != ''">${pager.orderBy}</when>
-      <otherwise>`order`.state, `order`.create_time desc</otherwise>
+      <otherwise>`order`.state, `order`.create_time </otherwise>
     </choose>
-    <if test="pager != null and pager.orderType != null and pager.orderType != ''">${pager.orderType}</if>
+    <choose>
+      <when test="pager != null and pager.orderType != null and pager.orderType != ''">${pager.orderType} </when>
+      <otherwise>desc </otherwise>
+    </choose>
     <if test="pager != null and pager.pageSize!=null and pager.startIndex!=null">
       limit #{pager.startIndex}, #{pager.pageSize}
     </if>
