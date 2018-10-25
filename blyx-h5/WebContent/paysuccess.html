@@ -19,13 +19,52 @@
 <script type="text/javascript" src="js/bl/star.common.js"></script>
 <script type="text/javascript">
 $(function(){
+  var oid = getParam("oid");
+  var user = getLoginInfo();
+  ajax({
+    url: '/weixin/ticket/jssdk',
+    data: {
+      url: document.location.href
+    },
+    success: function(data) {
+      wx.config({
+        debug: false,
+        appId: 'wx43fd4135600dcee3',
+        timestamp: data.timestamp,
+        nonceStr: data.nonceStr,
+        signature: data.signature,
+        jsApiList: [
+          'onMenuShareTimeline',
+          'onMenuShareAppMessage',
+          'onMenuShareQQ',
+          'updateAppMessageShareData'
+        ]
+      });
+    }
+  });
+  wx.ready(function(){
+    wx.updateAppMessageShareData({
+      title: "老板，我是"+user.name+"，刚在店铺下单商品请接单！",
+      desc: '【五杂优选】：小伙伴们都买了，再不下手就晚了，赶紧抢购！',
+      link: 'http://yx.hnkbmd.com/order.html?orderId='+oid,
+      imgUrl: 'http://yx.hnkbmd.com/photo/member.jpg',
+    }, function(res){
+      alert(JSON.stringify(res))
+    });
+    
+  });
   var to = getLocalData("pay_orderId_from");
   if(to){
+    $(".share").hide();
     $(".goChoping").text("返回");
     $(".goChoping").attr("href", "http://fxs.hnkbmd.com/shoporder.html");
   }else {
     $(".goChoping").text("继续购物");
     $(".goChoping").attr("href", "index.html");
+    $("a.share").on("tap", function(){
+      mui.alert("<div style='text-align:left'>1.点击右上角菜单(即，三个圆点)，<br>2.选择'发送给朋友'，完成分享</div>", " ");
+      return false;
+    });
   }
 });
 </script>
@@ -45,6 +84,7 @@ $(function(){
       </p>
       <p class="info">
         <a class="mui-btn mui-btn-success goChoping" href="index.html">继续购物 </a>
+        <a class="mui-btn mui-btn-success share" href="#">告知老板 </a>
       </p>
     </div>
   </div>

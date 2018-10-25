@@ -1,5 +1,4 @@
 var user = getLoginInfo();
-
 $(function(){
   ajax({
     url: '/weixin/ticket/jssdk',
@@ -24,10 +23,10 @@ $(function(){
   });
   wx.ready(function(){
     wx.updateAppMessageShareData({
-      title: "("+user.shopCode+")" + user.shopName,
-      desc: '欢迎光临！',
+      title: "五杂优选（今日爆品），" + user.shopName,
+      desc: '亲，所有单品高性价比，正品保证，售后无忧！',
       link: 'http://yx.hnkbmd.com/index.html?py='+user.py,
-      imgUrl: 'http://mgr.hnkbmd.com/photo/image/f96100c66c17455ba58099ba79edbbd3m.gif',
+      imgUrl: 'http://yx.hnkbmd.com/photo/shop.jpg',
     }, function(res){
       alert(JSON.stringify(res))
     });

@@ -55,6 +55,24 @@ if(! islogin()){
   var state = 'yx';
   var wx = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx43fd4135600dcee3&redirect_uri="+url+"&response_type=code&scope=snsapi_userinfo&state="+state+"#wechat_redirect";
   document.location.href=wx;
+}else{
+	var user = getLoginInfo();
+	ajax({
+		url: '/api/distributor/getDistributorByOpenId',
+		data: {'openId': user.openId},
+		success: function(data){
+		  setLoginInfo(data);
+		},
+		othercode: function(res){
+			if(res.code == 2){
+				mui.toast(res.msg);
+				setTimeout(function(){
+					logout();
+					document.location.href='http://fxs.hnkbmd.com/login.html';
+				}, 1000);
+			}
+		}
+	});
 }
 
 function setLoginInfo(user){

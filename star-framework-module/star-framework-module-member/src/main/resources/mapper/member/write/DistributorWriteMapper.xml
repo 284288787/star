@@ -70,7 +70,6 @@
     <result column="open_id" property="openId" />
     <result column="fans_num" property="fansNum" />
     <result column="sold_num" property="soldNum" />
-    <result column="provinceId" property="provinceId" />
     <result column="provinceName" property="provinceName" />
     <result column="cityId" property="cityId" />
     <result column="cityName" property="cityName" />
@@ -79,14 +78,16 @@
     <result column="townId" property="townId" />
     <result column="townName" property="townName" />
     <result column="state" property="state" />
+    <result column="py" property="py" />
   </resultMap>
 
   <sql id="sql_column">
     distributor_id, head, distributor.`name`, shop_name, shop_code, mobile, distributor.region_id, address, distributor.state, 
     enabled, distributor.create_time, distributor.update_time, open_id, distributor.fans_num, 
     distributor.sold_num, r.`name` regionName, p.shortName provinceName , c.shortName cityName, 
-    a.shortName areaName, t.shortName townName,
-    p.areaId provinceId , c.areaId cityId, a.areaId areaId, t.areaId townId
+    ifnull(a.shortName, a.areaName) areaName, ifnull(t.shortName, t.areaName) townName,
+    p.areaId provinceId , c.areaId cityId, a.areaId areaId, t.areaId townId,
+    r.py
   </sql>
 
   <select id="getDistributor" resultType="com.star.truffle.module.member.dto.res.DistributorResponseDto">
