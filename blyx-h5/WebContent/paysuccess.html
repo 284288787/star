@@ -17,10 +17,9 @@
 <script src="js/jquery.min.js"></script>
 <script src="js/mui.min.js"></script>
 <script type="text/javascript" src="js/bl/star.common.js"></script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
 <script type="text/javascript">
 $(function(){
-  var oid = getParam("oid");
-  var user = getLoginInfo();
   ajax({
     url: '/weixin/ticket/jssdk',
     data: {
@@ -51,12 +50,14 @@ $(function(){
     }, function(res){
       alert(JSON.stringify(res))
     });
-    
   });
+  var oid = getParam("oid");
+  var user = getLoginInfo();
   var to = getLocalData("pay_orderId_from");
   if(to){
     $(".share").hide();
     $(".goChoping").text("返回");
+    delLocalData("pay_orderId_from");
     $(".goChoping").attr("href", "http://fxs.hnkbmd.com/shoporder.html");
   }else {
     $(".goChoping").text("继续购物");

@@ -66,7 +66,7 @@ $(function() {
               'success': function(res1) {
                 delLocalData("pay_orderId");
                 if(to) putLocalData("pay_orderId_from", "distributor");
-                document.location.href='paysuccess.html';
+                document.location.href='paysuccess.html?oid='+orderId;
               },
               'cancel': function(res2) {
                 //取消支付
