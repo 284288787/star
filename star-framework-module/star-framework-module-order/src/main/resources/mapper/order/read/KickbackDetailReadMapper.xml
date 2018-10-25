@@ -24,8 +24,8 @@
     kickback_detail.id, kickback_detail.distributor_id, point_begin_time, point_end_time, kickback_detail.total_money, 
     kickback_detail.create_time, kickback_detail.update_time, kickback_detail.state, 
     kickback_detail.reject, d.`name` distributor_name, d.mobile distributor_mobile, 
-    r.`name` region_name, p.areaName province_name, c.areaName city_name,
-    a.areaName area_name, t.areaName town_name
+    r.`name` region_name, ifnull(p.shortName, p.areaName) province_name, ifnull(c.shortName, c.areaName) city_name,
+    ifnull(a.shortName, a.areaName) area_name, ifnull(t.shortName, t.areaName) town_name
   </sql>
 
   <sql id="sql_where">

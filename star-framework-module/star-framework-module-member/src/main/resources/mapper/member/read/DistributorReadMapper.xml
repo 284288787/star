@@ -31,8 +31,8 @@
   <sql id="sql_column">
     distributor_id, head, distributor.`name`, shop_name, shop_code, mobile, distributor.region_id, address, distributor.state, 
     enabled, distributor.create_time, distributor.update_time, open_id, distributor.fans_num, 
-    distributor.sold_num, r.`name` regionName, r.`name` regionName, p.shortName provinceName , 
-    c.shortName cityName, ifnull(a.shortName, a.areaName) areaName, ifnull(t.shortName, t.areaName) townName,
+    distributor.sold_num, r.`name` regionName, r.`name` regionName, ifnull(p.shortName, p.areaName) provinceName , 
+    ifnull(c.shortName, c.areaName) cityName, ifnull(a.shortName, a.areaName) areaName, ifnull(t.shortName, t.areaName) townName,
     p.areaId provinceId , c.areaId cityId, a.areaId areaId, t.areaId townId,
     r.py
   </sql>

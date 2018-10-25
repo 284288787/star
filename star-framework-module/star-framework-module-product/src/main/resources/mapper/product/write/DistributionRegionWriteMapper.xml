@@ -71,10 +71,10 @@
 
   <sql id="sql_column">
     region_id, py, `name`, province_id, city_id, area_id, town_id, state, create_time, update_time, fans_num, sold_num,
-    (select a.areaName from sys_area a where a.areaId = distribution_region.province_id) provinceName,
-    (select a.areaName from sys_area a where a.areaId = distribution_region.city_id) cityName,
-    (select a.areaName from sys_area a where a.areaId = distribution_region.area_id) areaName,
-    (select a.areaName from sys_area a where a.areaId = distribution_region.town_id) townName
+    (select ifnull(a.shortName, a.areaName) from sys_area a where a.areaId = distribution_region.province_id) provinceName,
+    (select ifnull(a.shortName, a.areaName) from sys_area a where a.areaId = distribution_region.city_id) cityName,
+    (select ifnull(a.shortName, a.areaName) from sys_area a where a.areaId = distribution_region.area_id) areaName,
+    (select ifnull(a.shortName, a.areaName) from sys_area a where a.areaId = distribution_region.town_id) townName
   </sql>
 
   <select id="getDistributionRegion" resultType="com.star.truffle.module.product.dto.res.DistributionRegionResponseDto">
