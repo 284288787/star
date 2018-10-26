@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.member.dao.write.DistributorApplyWriteDao">
+  <insert id="saveDistributorApply" useGeneratedKeys="true" keyProperty="id" parameterType="com.star.truffle.module.member.domain.DistributorApply">
+    insert into distributor_apply(id, mobile, name, shop_name, id_card_pic1, id_card_pic2, shop_pic, weixin_pic, province_id, province_name, city_id, city_name, area_id, area_name, address, business_license, business_license_pic, food_allowance_license, food_allowance_license_pic, acreage, bank_name, bank_address, bank_card_name, bank_card_no, create_time, open_id)
+    values(#{id}, #{mobile}, #{name}, #{shopName}, #{idCardPic1}, #{idCardPic2}, #{shopPic}, #{weixinPic}, #{provinceId}, #{provinceName}, #{cityId}, #{cityName}, #{areaId}, #{areaName}, #{address}, #{businessLicense}, #{businessLicensePic}, #{foodAllowanceLicense}, #{foodAllowanceLicensePic}, #{acreage}, #{bankName}, #{bankAddress}, #{bankCardName}, #{bankCardNo}, #{createTime}, #{openId})
+  </insert>
+
+  <insert id="batchSaveDistributorApply" parameterType="java.util.List">
+    insert into distributor_apply(id, mobile, name, shop_name, id_card_pic1, id_card_pic2, shop_pic, weixin_pic, province_id, province_name, city_id, city_name, area_id, area_name, address, business_license, business_license_pic, food_allowance_license, food_allowance_license_pic, acreage, bank_name, bank_address, bank_card_name, bank_card_no, create_time, open_id)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.id}, #{item.mobile}, #{item.name}, #{item.shopName}, #{item.idCardPic1}, #{item.idCardPic2}, #{item.shopPic}, #{item.weixinPic}, #{item.provinceId}, #{item.provinceName}, #{item.cityId}, #{item.cityName}, #{item.areaId}, #{item.areaName}, #{item.address}, #{item.businessLicense}, #{item.businessLicensePic}, #{item.foodAllowanceLicense}, #{item.foodAllowanceLicensePic}, #{item.acreage}, #{item.bankName}, #{item.bankAddress}, #{item.bankCardName}, #{item.bankCardNo}, #{item.createTime}, #{item.openId})
+    </foreach>
+  </insert>
+
+  <update id="updateDistributorApply" parameterType="com.star.truffle.module.member.dto.req.DistributorApplyRequestDto">
+    update distributor_apply
+    <trim prefix="set" suffixOverrides=",">
+      <if test="mobile != null and mobile != ''">mobile = #{mobile},</if>
+      <if test="name != null and name != ''">name = #{name},</if>
+      <if test="shopName != null and shopName != ''">shop_name = #{shopName},</if>
+      <if test="idCardPic1 != null and idCardPic1 != ''">id_card_pic1 = #{idCardPic1},</if>
+      <if test="idCardPic2 != null and idCardPic2 != ''">id_card_pic2 = #{idCardPic2},</if>
+      <if test="shopPic != null and shopPic != ''">shop_pic = #{shopPic},</if>
+      <if test="weixinPic != null and weixinPic != ''">weixin_pic = #{weixinPic},</if>
+      <if test="provinceId != null">province_id = #{provinceId},</if>
+      <if test="provinceName != null and provinceName != ''">province_name = #{provinceName},</if>
+      <if test="cityId != null">city_id = #{cityId},</if>
+      <if test="cityName != null and cityName != ''">city_name = #{cityName},</if>
+      <if test="areaId != null">area_id = #{areaId},</if>
+      <if test="areaName != null and areaName != ''">area_name = #{areaName},</if>
+      <if test="address != null and address != ''">address = #{address},</if>
+      <if test="businessLicense != null and businessLicense != ''">business_license = #{businessLicense},</if>
+      <if test="businessLicensePic != null and businessLicensePic != ''">business_license_pic = #{businessLicensePic},</if>
+      <if test="foodAllowanceLicense != null and foodAllowanceLicense != ''">food_allowance_license = #{foodAllowanceLicense},</if>
+      <if test="foodAllowanceLicensePic != null and foodAllowanceLicensePic != ''">food_allowance_license_pic = #{foodAllowanceLicensePic},</if>
+      <if test="acreage != null and acreage != ''">acreage = #{acreage},</if>
+      <if test="bankName != null and bankName != ''">bank_name = #{bankName},</if>
+      <if test="bankAddress != null and bankAddress != ''">bank_address = #{bankAddress},</if>
+      <if test="bankCardName != null and bankCardName != ''">bank_card_name = #{bankCardName},</if>
+      <if test="bankCardNo != null and bankCardNo != ''">bank_card_no = #{bankCardNo},</if>
+      <if test="createTime != null">create_time = #{createTime},</if>
+      <if test="openId != null and openId != ''">open_id = #{openId},</if>
+    </trim>
+    where id = #{id}
+  </update>
+
+  <delete id="deleteDistributorApply" parameterType="java.lang.Long">
+    delete from distributor_apply where id = #{id}
+  </delete>
+
+  <resultMap id="distributorApplyResponseDtoResultMap" type="com.star.truffle.module.member.dto.res.DistributorApplyResponseDto">
+    <result column="id" property="id" />
+    <result column="mobile" property="mobile" />
+    <result column="name" property="name" />
+    <result column="shop_name" property="shopName" />
+    <result column="id_card_pic1" property="idCardPic1" />
+    <result column="id_card_pic2" property="idCardPic2" />
+    <result column="shop_pic" property="shopPic" />
+    <result column="weixin_pic" property="weixinPic" />
+    <result column="province_id" property="provinceId" />
+    <result column="province_name" property="provinceName" />
+    <result column="city_id" property="cityId" />
+    <result column="city_name" property="cityName" />
+    <result column="area_id" property="areaId" />
+    <result column="area_name" property="areaName" />
+    <result column="address" property="address" />
+    <result column="business_license" property="businessLicense" />
+    <result column="business_license_pic" property="businessLicensePic" />
+    <result column="food_allowance_license" property="foodAllowanceLicense" />
+    <result column="food_allowance_license_pic" property="foodAllowanceLicensePic" />
+    <result column="acreage" property="acreage" />
+    <result column="bank_name" property="bankName" />
+    <result column="bank_address" property="bankAddress" />
+    <result column="bank_card_name" property="bankCardName" />
+    <result column="bank_card_no" property="bankCardNo" />
+    <result column="create_time" property="createTime" />
+    <result column="open_id" property="openId" />
+  </resultMap>
+
+  <sql id="sql_column">
+    id, mobile, name, shop_name, id_card_pic1, id_card_pic2, shop_pic, weixin_pic, province_id, province_name, city_id, city_name, area_id, area_name, address, business_license, business_license_pic, food_allowance_license, food_allowance_license_pic, acreage, bank_name, bank_address, bank_card_name, bank_card_no, create_time, open_id
+  </sql>
+
+  <select id="getDistributorApply" resultType="com.star.truffle.module.member.dto.res.DistributorApplyResponseDto">
+    select
+    <include refid="sql_column" />
+    from distributor_apply
+    where id = #{id}
+  </select>
+
+</mapper>

@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+<meta name="applicable-device" content="mobile" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+<meta name="format-detection" content="telephone=no,email=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="full-screen" content="yes" />
+<meta name="x5-fullscreen" content="true" />
+<link rel="stylesheet" href="css/mui.min.css" />
+<link rel="stylesheet" href="css/icons-extra.css" />
+<link rel="stylesheet" href="css/common.css" />
+<link rel="stylesheet" href="css/apply.css" />
+<script src="js/jquery.min.js"></script>
+<script src="js/mui.min.js"></script>
+<script src="js/city.data-3.js"></script>
+<script src="js/area.js"></script>
+<title>门店报名</title>
+</head>
+<body>
+  <header id="header" class="mui-bar mui-bar-nav">
+    <h1 class="mui-title">门店报名</h1>
+  </header>
+  <div class="mui-content">
+    <div class="mui-content-padded">
+      <div class="main">
+        <h2>门店报名</h2>
+        <div class="form-description col-md-12">
+          <p>如不会填写，请加微信18073104751，帮您上传报名。</p>
+          <p>资料提交成功，公司审核通过后，7个工作日工作人员会联系您去兴盛优选总部面签，之后开通上线。</p>
+        </div>
+        <div class="form-group">
+          <div class="field-label-container" onclick="">
+            <label class="field-label" for="entry_field_3"> 一、加微信18073104751 </label>
+          </div>
+          <div class="field-content">
+            <div class="field-description clearfix">
+              <p>推送新店老板二维码名片（方便公司门店对接），发送新店地址定位（方便司机送货定位）。</p>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="field-label-container" onclick="">
+            <label class="field-label" for="entry_field_4"> 贝拉优选 胡书华 </label>
+          </div>
+          <div class="field-content">
+            <div class="choices image-choices">
+              <label onclick="" class="radio">
+                <div class="image-center">
+                  <a class="lightbox-image-link" data-title="长按二维码加微信" title="长按二维码加微信"> <img src="https://pub-files.jinshuju.net/ic/20180423115602_49e274@iclarge" class="erm" /></a>
+                </div>
+                <div class="text-wrapper">
+                  <div class="choice-description">长按二维码加微信</div>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="field-label-container">
+            <label class="field-label" for="entry_field_5"> 二、新门店基本资料 </label>
+          </div>
+          <div class="field-content"></div>
+        </div>
+        <div class="form-group">
+          <div class="field-label-container">
+            <label class="field-label" for="entry_field_6"> 新门店老板姓名：<i class="red">*</i>
+            </label>
+          </div>
+          <div class="gd-input-container">
+            <input class="input-with-icon enhanced-input error" name="name" type="text" /> <label class="errorinfo">请填写姓名</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="field-label-container">
+            <label class="field-label" for="entry_field_6"> 身份证正面照片：<i class="red">*</i>
+            </label>
+          </div>
+          <div class="gd-input-container">
+            <input type="file" class="filebox" name="idCardPic1">
+            <div class="select-text-wrapper plus">
+              <div class="select-text">+点此选择上传文件、限制每个5.0MB以内。仅支持：jpg、jpeg、png、gif、bmp、psd、tif。</div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="field-label-container">
+            <label class="field-label" for="entry_field_6"> 身份证反面照片：<i class="red">*</i>
+            </label>
+          </div>
+          <div class="gd-input-container">
+            <input type="file" class="filebox" name="idCardPic2">
+            <div class="select-text-wrapper plus">
+              <div class="select-text">+点此选择上传文件、限制每个5.0MB以内。仅支持：jpg、jpeg、png、gif、bmp、psd、tif。</div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="field-label-container">
+            <label class="field-label" for="entry_field_6"> 新店门店名称（写门店招牌上的名称）：<i class="red">*</i>
+            </label>
+          </div>
+          <div class="gd-input-container">
+            <input class="input-with-icon enhanced-input" name="shopName" type="text" /> <label class="errorinfo">请输入正确信息</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="field-label-container">
+            <label class="field-label" for="entry_field_6"> 店面+招牌照片：<i class="red">*</i>
+            </label>
+          </div>
+          <div class="gd-input-container">
+            <input type="file" class="filebox" name="shopPic">
+            <div class="select-text-wrapper plus">
+              <div class="select-text">+点此选择上传文件、限制每个5.0MB以内。仅支持：jpg、jpeg、png、gif、bmp、psd、tif。</div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="field-label-container">
+            <label class="field-label" for="entry_field_6"> 常用微信支付手机号（可支付）：<i class="red">*</i>
+            </label>
+          </div>
+          <div class="gd-input-container">
+            <input class="input-with-icon enhanced-input" name="mobile" type="number" /> <label class="errorinfo">请输入正确信息</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="field-label-container">
+            <label class="field-label" for="entry_field_6"> 微信二维码：<i class="red">*</i>
+            </label>
+            <p>微信二维码截图</p>
+          </div>
+          <div class="gd-input-container">
+            <input type="file" class="filebox" name="weixinPic">
+            <div class="select-text-wrapper plus">
+              <div class="select-text">+点此选择上传文件、限制每个5.0MB以内。仅支持：jpg、jpeg、png、gif、bmp、psd、tif。</div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="field-label-container">
+            <label class="field-label" for="entry_field_6"> 门店详细地址：<i class="red">*</i>
+            </label>
+            <p>门店详细地址：XX省XX市XX区，+详细地址（营业执照地址与门店定位必须一致）</p>
+          </div>
+          <div id="address" class="chooseadress">点击请选择地址</div>
+          <div class="gd-input-container">
+            <input class="input-with-icon enhanced-input" name="address" type="text" placeholder="详细地址" /> <label class="errorinfo">请输入正确信息</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="field-label-container">
+            <label class="field-label" for="entry_field_6"> 营业执照名称和编码：<i class="red">*</i>
+            </label>
+            <p>营业执照名称和编码都必须写上</p>
+          </div>
+          <div class="gd-input-container">
+            <input class="input-with-icon enhanced-input" name="businessLicense" type="text" /> <label class="errorinfo">请输入正确信息</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="field-label-container">
+            <label class="field-label" for="entry_field_6"> 营业执照照片：<i class="red">*</i>
+            </label>
+            <p>照片必须清晰</p>
+          </div>
+          <div class="gd-input-container">
+            <input type="file" class="filebox" name="businessLicensePic">
+            <div class="select-text-wrapper plus">
+              <div class="select-text">+点此选择上传文件、限制每个5.0MB以内。仅支持：jpg、jpeg、png、gif、bmp、psd、tif。</div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="field-label-container">
+            <label class="field-label" for="entry_field_6"> 食品流通许可证和编码：<i class="red">*</i>
+            </label>
+            <p>食品流通许可证和编码都必须写上</p>
+          </div>
+          <div class="gd-input-container">
+            <input class="input-with-icon enhanced-input" name="foodAllowanceLicense" type="text" /> <label class="errorinfo">请输入正确信息</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="field-label-container">
+            <label class="field-label" for="entry_field_6"> 微食品流通许可证照片：<i class="red">*</i>
+            </label>
+            <p>照片必须清晰</p>
+          </div>
+          <div class="gd-input-container">
+            <input type="file" class="filebox" name="foodAllowanceLicensePic">
+            <div class="select-text-wrapper plus">
+              <div class="select-text">+点此选择上传文件、限制每个5.0MB以内。仅支持：jpg、jpeg、png、gif、bmp、psd、tif。</div>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="field-label-container">
+            <label class="field-label" for="entry_field_6"> 营业面积：（ ）平方米<i class="red">*</i>
+            </label>
+          </div>
+          <div class="gd-input-container">
+            <input class="input-with-icon enhanced-input" name="acreage" type="text" /> <label class="errorinfo">请输入正确信息</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="field-label-container" onclick="">
+            <label class="field-label" for="entry_field_15"> 三、银行卡信息（工行或建行） </label>
+          </div>
+          <div class="field-content">
+            <div class="field-description clearfix">
+              <p>说明：1、个人及银行卡信息收集仅用于本公司经营需要。2、最好开新的空卡，自己或家人的名字均可，同时开通手机短信。</p>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="field-label-container">
+            <label class="field-label" for="entry_field_6"> 开户名：<i class="red">*</i>
+            </label>
+          </div>
+          <div class="gd-input-container">
+            <input class="input-with-icon enhanced-input" name="bankCardName" type="text" /> <label class="errorinfo">请输入正确信息</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="field-label-container">
+            <label class="field-label" for="entry_field_6"> 银行账户：<i class="red">*</i>
+            </label>
+          </div>
+          <div class="gd-input-container">
+            <input class="input-with-icon enhanced-input" name="bankCardNo" type="text" /> <label class="errorinfo">请输入正确信息</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="field-label-container">
+            <label class="field-label" for="entry_field_6"> 开户行：中国建设银行股份有限公司XX市XX支行 ：<i class="red">*</i>
+            </label>
+            <p>关注 建行客服 公众号，开户行查询可以查到</p>
+          </div>
+          <div class="gd-input-container">
+            <input class="input-with-icon enhanced-input" name="bankAddress" type="text" /> <label class="errorinfo">请输入正确信息</label>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="field-label-container">
+            <label class="field-label" for="entry_field_6"> 开户行行号：<i class="red">*</i>
+            </label>
+            <p>关注 建行客服 公众号，开户行查询可以查到，是12位数字</p>
+          </div>
+          <div class="gd-input-container">
+            <input class="input-with-icon enhanced-input" type="text" /> <label class="errorinfo">请输入正确信息</label>
+          </div>
+        </div>
+        <button type="button" class="mui-btn mui-btn-warning mui-btn-block">提 交</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="addSelect" class="mui-popover mui-popover-bottom mui-popover-action">
+    <div id="slider" class="mui-slider">
+      <div id="sliderSegmentedControl" class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+        <div class="select-head">
+          <ul class="select-nav mui-clearfix" id="selectNav">
+            <li>请选择</li>
+            <li class="mui-hidden">请选择</li>
+            <li class="mui-hidden">请选择</li>
+          </ul>
+          <a id="addressBtn">确定</a>
+        </div>
+      </div>
+      <div class="mui-slider-group select-con" id="selectCon">
+        <div id="item1" class="mui-slider-item mui-control-content mui-active">
+          <div id="scroll1" class="mui-scroll-wrapper">
+            <div class="mui-scroll">
+              <ul id="select-con-1">
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div id="item2" class="mui-slider-item mui-control-content">
+          <div id="scroll2" class="mui-scroll-wrapper">
+            <div class="mui-scroll">
+              <ul id="select-con-2">
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div id="item3" class="mui-slider-item mui-control-content">
+          <div id="scroll3" class="mui-scroll-wrapper">
+            <div class="mui-scroll">
+              <ul id="select-con-3">
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="text/javascript">
+      mui('.mui-scroll-wrapper').scroll();
+      var p = ''; //文字
+      var num = ''; //value值
+
+      var address = document.getElementById('address')
+      address.addEventListener('tap', function() {
+        mui('#addSelect').popover('show');
+        addS();
+      })
+      function giveValue() {
+        address.innerHTML = p;
+        mui('#addSelect').popover('hide');
+        console.log(p);
+        console.log(num);
+      }
+    </script>
+</body>
+</html>

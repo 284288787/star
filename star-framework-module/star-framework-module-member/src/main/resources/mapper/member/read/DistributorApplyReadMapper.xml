@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.member.dao.read.DistributorApplyReadDao">
+  <resultMap id="distributorApplyResponseDtoResultMap" type="com.star.truffle.module.member.dto.res.DistributorApplyResponseDto">
+    <result column="id" property="id" />
+    <result column="mobile" property="mobile" />
+    <result column="name" property="name" />
+    <result column="shop_name" property="shopName" />
+    <result column="id_card_pic1" property="idCardPic1" />
+    <result column="id_card_pic2" property="idCardPic2" />
+    <result column="shop_pic" property="shopPic" />
+    <result column="weixin_pic" property="weixinPic" />
+    <result column="province_id" property="provinceId" />
+    <result column="province_name" property="provinceName" />
+    <result column="city_id" property="cityId" />
+    <result column="city_name" property="cityName" />
+    <result column="area_id" property="areaId" />
+    <result column="area_name" property="areaName" />
+    <result column="address" property="address" />
+    <result column="business_license" property="businessLicense" />
+    <result column="business_license_pic" property="businessLicensePic" />
+    <result column="food_allowance_license" property="foodAllowanceLicense" />
+    <result column="food_allowance_license_pic" property="foodAllowanceLicensePic" />
+    <result column="acreage" property="acreage" />
+    <result column="bank_name" property="bankName" />
+    <result column="bank_address" property="bankAddress" />
+    <result column="bank_card_name" property="bankCardName" />
+    <result column="bank_card_no" property="bankCardNo" />
+    <result column="create_time" property="createTime" />
+    <result column="open_id" property="openId" />
+  </resultMap>
+
+  <sql id="sql_column">
+    id, mobile, name, shop_name, id_card_pic1, id_card_pic2, shop_pic, weixin_pic, province_id, province_name, city_id, city_name, area_id, area_name, address, business_license, business_license_pic, food_allowance_license, food_allowance_license_pic, acreage, bank_name, bank_address, bank_card_name, bank_card_no, create_time, open_id
+  </sql>
+
+  <sql id="sql_where">
+    <trim prefix="WHERE" prefixOverrides="AND | OR">
+      <if test="id != null">
+        and id = #{id}
+      </if>
+      <if test="mobile != null and mobile != ''">
+        and mobile = #{mobile}
+      </if>
+      <if test="name != null and name != ''">
+        and name = #{name}
+      </if>
+    </trim>
+  </sql>
+
+  <select id="getDistributorApply" resultType="com.star.truffle.module.member.dto.res.DistributorApplyResponseDto">
+    select
+    <include refid="sql_column" />
+    from distributor_apply
+    where id = #{id}
+  </select>
+
+  <select id="queryDistributorApply" resultMap="distributorApplyResponseDtoResultMap">
+    select
+    <include refid="sql_column" />
+    from distributor_apply
+    <include refid="sql_where" />
+    order by
+    <choose>
+      <when test="pager != null and pager.orderBy != null and pager.orderBy != ''">${pager.orderBy}</when>
+      <otherwise>id</otherwise>
+    </choose>
+    <if test="pager != null and pager.orderType != null and pager.orderType != ''">${pager.orderType}</if>
+    <if test="pager != null and pager.pageSize!=null and pager.startIndex!=null">
+      limit #{pager.startIndex}, #{pager.pageSize}
+    </if>
+  </select>
+
+  <select id="queryDistributorApplyCount" resultType="java.lang.Long">
+    select
+    count(1)
+    from distributor_apply
+    <include refid="sql_where" />
+  </select>
+</mapper>
