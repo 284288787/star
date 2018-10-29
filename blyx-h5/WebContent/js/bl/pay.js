@@ -70,7 +70,7 @@ $(function() {
               },
               'cancel': function(res2) {
                 //取消支付
-                //alert(JSON.stringify(res2))
+                mui.alert("您取消了本次支付，可前往我的订单继续支付，订单有效期为30分钟。");
               },
               'fail': function(res3) {
                 //支付失败

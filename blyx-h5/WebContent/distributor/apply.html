@@ -16,25 +16,23 @@
 <link rel="stylesheet" href="css/apply.css" />
 <script src="js/jquery.min.js"></script>
 <script src="js/mui.min.js"></script>
-<script src="js/city.data-3.js"></script>
-<script src="js/area.js"></script>
 <title>门店报名</title>
 </head>
 <body>
   <header id="header" class="mui-bar mui-bar-nav">
     <h1 class="mui-title">门店报名</h1>
   </header>
-  <div class="mui-content">
+  <div class="mui-content mui-scroll-wrapper">
+      <div class="mui-scroll">
     <div class="mui-content-padded">
-      <div class="main">
-        <h2>门店报名</h2>
+      <div class="main ">
         <div class="form-description col-md-12">
-          <p>如不会填写，请加微信18073104751，帮您上传报名。</p>
-          <p>资料提交成功，公司审核通过后，7个工作日工作人员会联系您去兴盛优选总部面签，之后开通上线。</p>
+          <p>如不会填写，请加微信15307311301，帮您上传报名。</p>
+          <p>资料提交成功，公司审核通过后，7个工作日工作人员会联系您去五杂优选总部面签，之后开通上线。</p>
         </div>
         <div class="form-group">
           <div class="field-label-container" onclick="">
-            <label class="field-label" for="entry_field_3"> 一、加微信18073104751 </label>
+            <label class="field-label" for="entry_field_3"> 一、加微信15307311301 </label>
           </div>
           <div class="field-content">
             <div class="field-description clearfix">
@@ -44,7 +42,7 @@
         </div>
         <div class="form-group">
           <div class="field-label-container" onclick="">
-            <label class="field-label" for="entry_field_4"> 贝拉优选 胡书华 </label>
+            <label class="field-label" for="entry_field_4"> 五杂优选 程存 </label>
           </div>
           <div class="field-content">
             <div class="choices image-choices">
@@ -71,7 +69,7 @@
             </label>
           </div>
           <div class="gd-input-container">
-            <input class="input-with-icon enhanced-input error" name="name" type="text" /> <label class="errorinfo">请填写姓名</label>
+            <input class="input-with-icon enhanced-input" name="name" type="text" /> <label class="errorinfo">请填写姓名</label>
           </div>
         </div>
         <div class="form-group">
@@ -80,8 +78,7 @@
             </label>
           </div>
           <div class="gd-input-container">
-            <input type="file" class="filebox" name="idCardPic1">
-            <div class="select-text-wrapper plus">
+            <div class="select-text-wrapper plus idCardPic1">
               <div class="select-text">+点此选择上传文件、限制每个5.0MB以内。仅支持：jpg、jpeg、png、gif、bmp、psd、tif。</div>
             </div>
           </div>
@@ -92,8 +89,7 @@
             </label>
           </div>
           <div class="gd-input-container">
-            <input type="file" class="filebox" name="idCardPic2">
-            <div class="select-text-wrapper plus">
+            <div class="select-text-wrapper plus idCardPic2">
               <div class="select-text">+点此选择上传文件、限制每个5.0MB以内。仅支持：jpg、jpeg、png、gif、bmp、psd、tif。</div>
             </div>
           </div>
@@ -113,8 +109,7 @@
             </label>
           </div>
           <div class="gd-input-container">
-            <input type="file" class="filebox" name="shopPic">
-            <div class="select-text-wrapper plus">
+            <div class="select-text-wrapper plus shopPic">
               <div class="select-text">+点此选择上传文件、限制每个5.0MB以内。仅支持：jpg、jpeg、png、gif、bmp、psd、tif。</div>
             </div>
           </div>
@@ -135,8 +130,7 @@
             <p>微信二维码截图</p>
           </div>
           <div class="gd-input-container">
-            <input type="file" class="filebox" name="weixinPic">
-            <div class="select-text-wrapper plus">
+            <div class="select-text-wrapper plus weixinPic">
               <div class="select-text">+点此选择上传文件、限制每个5.0MB以内。仅支持：jpg、jpeg、png、gif、bmp、psd、tif。</div>
             </div>
           </div>
@@ -147,8 +141,19 @@
             </label>
             <p>门店详细地址：XX省XX市XX区，+详细地址（营业执照地址与门店定位必须一致）</p>
           </div>
-          <div id="address" class="chooseadress">点击请选择地址</div>
           <div class="gd-input-container">
+            <select class="provinceId">
+              <option value="">直辖市，省</option>
+            </select>
+            <label class="errorinfo">请选择直辖市，省</label>
+            <select class="cityId mui-hidden">
+              <option value="">市</option>
+            </select>
+            <label class="errorinfo">请选择市</label>
+            <select class="areaId mui-hidden">
+              <option value="">区/县</option>
+            </select>
+            <label class="errorinfo">请选择区/县</label>
             <input class="input-with-icon enhanced-input" name="address" type="text" placeholder="详细地址" /> <label class="errorinfo">请输入正确信息</label>
           </div>
         </div>
@@ -169,8 +174,7 @@
             <p>照片必须清晰</p>
           </div>
           <div class="gd-input-container">
-            <input type="file" class="filebox" name="businessLicensePic">
-            <div class="select-text-wrapper plus">
+            <div class="select-text-wrapper plus businessLicensePic">
               <div class="select-text">+点此选择上传文件、限制每个5.0MB以内。仅支持：jpg、jpeg、png、gif、bmp、psd、tif。</div>
             </div>
           </div>
@@ -192,8 +196,7 @@
             <p>照片必须清晰</p>
           </div>
           <div class="gd-input-container">
-            <input type="file" class="filebox" name="foodAllowanceLicensePic">
-            <div class="select-text-wrapper plus">
+            <div class="select-text-wrapper plus foodAllowanceLicensePic">
               <div class="select-text">+点此选择上传文件、限制每个5.0MB以内。仅支持：jpg、jpeg、png、gif、bmp、psd、tif。</div>
             </div>
           </div>
@@ -245,7 +248,7 @@
             <input class="input-with-icon enhanced-input" name="bankAddress" type="text" /> <label class="errorinfo">请输入正确信息</label>
           </div>
         </div>
-        <div class="form-group">
+        <!-- <div class="form-group">
           <div class="field-label-container">
             <label class="field-label" for="entry_field_6"> 开户行行号：<i class="red">*</i>
             </label>
@@ -254,68 +257,14 @@
           <div class="gd-input-container">
             <input class="input-with-icon enhanced-input" type="text" /> <label class="errorinfo">请输入正确信息</label>
           </div>
-        </div>
-        <button type="button" class="mui-btn mui-btn-warning mui-btn-block">提 交</button>
+        </div> -->
+        <button type="button" class="mui-btn mui-btn-warning mui-btn-block enterBtn">提 交</button>
       </div>
     </div>
   </div>
-
-  <div id="addSelect" class="mui-popover mui-popover-bottom mui-popover-action">
-    <div id="slider" class="mui-slider">
-      <div id="sliderSegmentedControl" class="mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
-        <div class="select-head">
-          <ul class="select-nav mui-clearfix" id="selectNav">
-            <li>请选择</li>
-            <li class="mui-hidden">请选择</li>
-            <li class="mui-hidden">请选择</li>
-          </ul>
-          <a id="addressBtn">确定</a>
-        </div>
-      </div>
-      <div class="mui-slider-group select-con" id="selectCon">
-        <div id="item1" class="mui-slider-item mui-control-content mui-active">
-          <div id="scroll1" class="mui-scroll-wrapper">
-            <div class="mui-scroll">
-              <ul id="select-con-1">
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div id="item2" class="mui-slider-item mui-control-content">
-          <div id="scroll2" class="mui-scroll-wrapper">
-            <div class="mui-scroll">
-              <ul id="select-con-2">
-              </ul>
-            </div>
-          </div>
-        </div>
-        <div id="item3" class="mui-slider-item mui-control-content">
-          <div id="scroll3" class="mui-scroll-wrapper">
-            <div class="mui-scroll">
-              <ul id="select-con-3">
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
   </div>
-  <script type="text/javascript">
-      mui('.mui-scroll-wrapper').scroll();
-      var p = ''; //文字
-      var num = ''; //value值
 
-      var address = document.getElementById('address')
-      address.addEventListener('tap', function() {
-        mui('#addSelect').popover('show');
-        addS();
-      })
-      function giveValue() {
-        address.innerHTML = p;
-        mui('#addSelect').popover('hide');
-        console.log(p);
-        console.log(num);
-      }
-    </script>
+  <script type="text/javascript" src="js/di/upload.js"></script>
+  <script type="text/javascript" src="js/di/apply.js"></script>
 </body>
 </html>

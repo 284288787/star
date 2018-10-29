@@ -1,13 +1,13 @@
 /**create by framework at 2018年10月26日 09:40:50**/
 package com.star.truffle.module.member.cache;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+
 import com.star.truffle.core.jackson.StarJson;
 import com.star.truffle.module.member.dao.read.DistributorApplyReadDao;
 import com.star.truffle.module.member.dao.write.DistributorApplyWriteDao;
@@ -25,26 +25,27 @@ public class DistributorApplyCache {
   @Autowired
   private DistributorApplyReadDao distributorApplyReadDao;
 
-  @CachePut(value = "module-member-distributorApply", key = "'distributorApply_id_'+#result.id", condition = "#result != null and #result.id != null")
+//  @CachePut(value = "module-member-distributorApply", key = "'distributorApply_id_'+#result.id", condition = "#result != null and #result.id != null")
   public DistributorApplyResponseDto saveDistributorApply(DistributorApply distributorApply){
+    distributorApply.setCreateTime(new Date());
     this.distributorApplyWriteDao.saveDistributorApply(distributorApply);
     DistributorApplyResponseDto distributorApplyResponseDto = this.distributorApplyWriteDao.getDistributorApply(distributorApply.getId());
     return distributorApplyResponseDto;
   }
 
-  @CachePut(value = "module-member-distributorApply", key = "'distributorApply_id_'+#result.id", condition = "#result != null and #result.id != null")
+//  @CachePut(value = "module-member-distributorApply", key = "'distributorApply_id_'+#result.id", condition = "#result != null and #result.id != null")
   public DistributorApplyResponseDto updateDistributorApply(DistributorApplyRequestDto distributorApplyRequestDto){
     this.distributorApplyWriteDao.updateDistributorApply(distributorApplyRequestDto);
     DistributorApplyResponseDto distributorApplyResponseDto = this.distributorApplyWriteDao.getDistributorApply(distributorApplyRequestDto.getId());
     return distributorApplyResponseDto;
   }
 
-  @CacheEvict(value = "module-member-distributorApply", key = "'distributorApply_id_'+#id", condition = "#id != null")
+//  @CacheEvict(value = "module-member-distributorApply", key = "'distributorApply_id_'+#id", condition = "#id != null")
   public int deleteDistributorApply(Long id){
     return this.distributorApplyWriteDao.deleteDistributorApply(id);
   }
 
-  @Cacheable(value = "module-member-distributorApply", key = "'distributorApply_id_'+#id", condition = "#id != null")
+//  @Cacheable(value = "module-member-distributorApply", key = "'distributorApply_id_'+#id", condition = "#id != null")
   public DistributorApplyResponseDto getDistributorApply(Long id){
     DistributorApplyResponseDto distributorApplyResponseDto = this.distributorApplyReadDao.getDistributorApply(id);
     return distributorApplyResponseDto;
