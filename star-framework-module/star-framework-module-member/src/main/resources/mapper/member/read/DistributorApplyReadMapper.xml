@@ -31,7 +31,9 @@
   </resultMap>
 
   <sql id="sql_column">
-    id, mobile, name, shop_name, id_card_pic1, id_card_pic2, shop_pic, weixin_pic, province_id, province_name, city_id, city_name, area_id, area_name, address, business_license, business_license_pic, food_allowance_license, food_allowance_license_pic, acreage, bank_name, bank_address, bank_card_name, bank_card_no, create_time, open_id
+    id, mobile, name, shop_name, id_card_pic1, id_card_pic2, shop_pic, weixin_pic, province_id, province_name, city_id, city_name, area_id, 
+    area_name, address, business_license, business_license_pic, food_allowance_license, food_allowance_license_pic, acreage, bank_name, 
+    bank_address, bank_card_name, bank_card_no, create_time, open_id, state, reject, update_time
   </sql>
 
   <sql id="sql_where">
@@ -44,6 +46,9 @@
       </if>
       <if test="name != null and name != ''">
         and name = #{name}
+      </if>
+      <if test="state">
+        and state12 = #{state}
       </if>
     </trim>
   </sql>

@@ -61,4 +61,9 @@ public class DistributorApply {
   private Date createTime;
   // openId
   private String openId;
+  // 状态 1待审核 2通过 3不通过 4删除
+  private Integer state;
+  // 不通过原因
+  private String reject;
+  private Date updateTime;
 }

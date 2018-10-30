@@ -2,15 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.star.truffle.module.member.dao.write.DistributorWriteDao">
   <insert id="saveDistributor" useGeneratedKeys="true" keyProperty="distributorId" parameterType="com.star.truffle.module.member.domain.Distributor">
-    insert into distributor(state, head, name, shop_name, shop_code, mobile, region_id, address, enabled, create_time, update_time, open_id, fans_num, sold_num)
-    values(#{state}, #{head}, #{name}, #{shopName}, #{shopCode}, #{mobile}, #{regionId}, #{address}, #{enabled}, #{createTime}, #{updateTime}, #{openId}, #{fansNum}, #{soldNum})
+    insert into distributor(state, head, name, shop_name, shop_code, mobile, region_id, address, enabled, create_time, update_time, open_id, 
+    fans_num, sold_num, business_license, business_license_pic, food_allowance_license, food_allowance_license_pic, acreage, bank_address, 
+    bank_card_name, bank_card_no, apply_id)
+    values(#{state}, #{head}, #{name}, #{shopName}, #{shopCode}, #{mobile}, #{regionId}, #{address}, #{enabled}, 
+    #{createTime}, #{updateTime}, #{openId}, #{fansNum}, #{soldNum}, #{businessLicense}, #{businessLicensePic}, 
+    #{foodAllowanceLicense}, #{foodAllowanceLicensePic}, #{acreage}, #{bankAddress}, #{bankCardName}, #{bankCardNo}, #{applyId})
   </insert>
 
   <insert id="batchSaveDistributor" parameterType="java.util.List">
-    insert into distributor(state, head, name, shop_name, shop_code, mobile, region_id, address, enabled, create_time, update_time, open_id, fans_num, sold_num)
+    insert into distributor(state, head, name, shop_name, shop_code, mobile, region_id, address, enabled, create_time, update_time, open_id, 
+    fans_num, sold_num, business_license, business_license_pic, food_allowance_license, food_allowance_license_pic, acreage, bank_address, 
+    bank_card_name, bank_card_no, apply_id)
     values
     <foreach collection="list" item="item" index="index" separator=",">
-      (#{item.state}, #{item.head}, #{item.name}, #{item.shopName}, #{item.shopCode}, #{item.mobile}, #{item.regionId}, #{item.address}, #{item.enabled}, #{item.createTime}, #{item.updateTime}, #{item.openId}, #{item.fansNum}, #{item.soldNum})
+      (#{item.state}, #{item.head}, #{item.name}, #{item.shopName}, #{item.shopCode}, #{item.mobile}, #{item.regionId}, #{item.address}, 
+      #{item.enabled}, #{item.createTime}, #{item.updateTime}, #{item.openId}, #{item.fansNum}, #{item.soldNum}, #{item.businessLicense}, 
+      #{item.businessLicensePic}, #{item.foodAllowanceLicense}, #{item.foodAllowanceLicensePic}, #{item.acreage}, #{item.bankAddress}, 
+      #{item.bankCardName}, #{item.bankCardNo}, #{item.applyId})
     </foreach>
   </insert>
 
@@ -31,6 +40,14 @@
       <if test="fansNum != null">fans_num = #{fansNum},</if>
       <if test="soldNum != null">sold_num = #{soldNum},</if>
       <if test="state != null">state = #{state},</if>
+      <if test="businessLicense != null and businessLicense != ''">business_license = #{businessLicense},</if>
+      <if test="businessLicensePic != null and businessLicensePic != ''">business_license_pic = #{businessLicensePic},</if>
+      <if test="foodAllowanceLicense != null and foodAllowanceLicense != ''">food_allowance_license = #{foodAllowanceLicense},</if>
+      <if test="foodAllowanceLicensePic != null and foodAllowanceLicensePic != ''">food_allowance_license_pic = #{foodAllowanceLicensePic},</if>
+      <if test="acreage != null and acreage != ''">acreage = #{acreage},</if>
+      <if test="bankAddress != null and bankAddress != ''">bank_address = #{bankAddress},</if>
+      <if test="bankCardName != null and bankCardName != ''">bank_card_name = #{bankCardName},</if>
+      <if test="bankCardNo != null and bankCardNo != ''">bank_card_no = #{bankCardNo},</if>
     </trim>
     where distributor_id = #{distributorId}
   </update>
@@ -79,6 +96,14 @@
     <result column="townName" property="townName" />
     <result column="state" property="state" />
     <result column="py" property="py" />
+    <result column="business_license" property="businessLicense" />
+    <result column="business_license_pic" property="businessLicensePic" />
+    <result column="food_allowance_license" property="foodAllowanceLicense" />
+    <result column="food_allowance_license_pic" property="foodAllowanceLicensePic" />
+    <result column="acreage" property="acreage" />
+    <result column="bank_address" property="bankAddress" />
+    <result column="bank_card_name" property="bankCardName" />
+    <result column="bank_card_no" property="bankCardNo" />
   </resultMap>
 
   <sql id="sql_column">
@@ -87,7 +112,8 @@
     distributor.sold_num, r.`name` regionName, r.`name` regionName, ifnull(p.shortName, p.areaName) provinceName , 
     ifnull(c.shortName, c.areaName) cityName, ifnull(a.shortName, a.areaName) areaName, ifnull(t.shortName, t.areaName) townName,
     p.areaId provinceId , c.areaId cityId, a.areaId areaId, t.areaId townId,
-    r.py
+    r.py, business_license, business_license_pic, food_allowance_license, food_allowance_license_pic, acreage, bank_address, 
+    bank_card_name, bank_card_no, apply_id
   </sql>
 
   <select id="getDistributor" resultType="com.star.truffle.module.member.dto.res.DistributorResponseDto">

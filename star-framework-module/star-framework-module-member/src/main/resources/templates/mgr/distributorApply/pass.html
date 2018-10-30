@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>开通 分销商</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jquery-ui/jquery-ui.min.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jqGrid/css/ui.jqgrid.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/artDialog/skins/simple-star.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/buttons.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/editEntityTable.css}" />
+</head>
+<body>
+  <div class="edit-container">
+    <form action="" id="editDistributorForm">
+      <table class="gy_table">
+        <tr>
+          <td class="titleTd100"><strong>选择分销区域：</strong></td>
+          <td>
+            <input type="text" name="regionName" placeholder="分销区域">
+            <input type="hidden" name="regionId">
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <div class="btnGroup">
+              <input type="button" value="开通" class="button blue" id="saveBtn"> <input type="button" value="取消" class="button grey" onclick="art.dialog.close();">
+            </div>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </div>
+  <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/artDialog/js/jquery.artDialog.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/artDialog/js/iframeTools.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/jquery-validation/dist/jquery.validate.min.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/jquery-validation/dist/additional-methods-local.js}"></script>
+  <script type="text/javascript" th:src="@{/webjars/star/js/star.utils.js}"></script>
+  <script type="text/javascript">
+  var id = artDialog.data("id");
+  var distributorApplyHandle = artDialog.data("distributorApplyHandle");
+  $(function(){
+    new UtilsHandle({
+      basePath: "/",
+      choose: [
+        {
+          object: $("input[name=regionName]"),
+          service: "distributionRegionService",
+          title: "选择分销区域",
+          width: "800px",
+          height: "500px",
+          callback: function(rowObject){
+            $("input[name=regionName]").val(rowObject.name);
+            $("input[name=regionId]").val(rowObject.regionId);
+          }
+        }
+      ]
+    },{});
+    $("#saveBtn").click(function(){
+      var regionId = $("input[name=regionId]").val();
+      if(! regionId){
+        artDialog.alert("请选择分销区域");
+        return false;
+      }
+      distributorApplyHandle.ajax({
+        url : '/distributorApply/pass/'+id,
+        data: {'regionId': regionId},
+        success : function(res) {
+          if (res.code == 0) {
+            distributorApplyHandle.query();
+            artDialog.alert("分销开通成功");
+            art.dialog.close();
+          } else {
+            artDialog.alert(res.msg)
+          }
+        }
+      });
+    });
+  });
+  </script>
+</body>
+</html>

@@ -75,7 +75,7 @@ new UtilsHandle({
   ]
 },{});
 $(function(){
-  var colNames = ['distributorId', '姓名', '店铺名称', '店铺编码', '手机号', '分销区域', '街道地址', '是否可用', '更新日期', 'openid', '粉丝数', '已售件数', '操作'];
+  var colNames = ['distributorId', '姓名', '店铺名称', '店铺编码', '手机号', '分销区域', '街道地址', '是否可用', '更新日期', 'openid', '粉丝数', '已售件数', '营业执照', '食品流通许可证', '营业面积', '开户行', '开户名', '银行卡号', '操作'];
   var colModel = [
     {name: 'distributorId', index: 'distributor_id', width: 40, align: "center", formatter: function(cellvalue, options, rowObject){
       return cellvalue.toFixed(0);
@@ -102,6 +102,24 @@ $(function(){
     }}, 
     {name: 'fansNum', index: 'fans_num', width: 50, align: "center"}, 
     {name: 'soldNum', index: 'sold_num', width: 50, align: "center"}, 
+    {editable: false, sortable: false, width: 50, align: "center", formatter: function(cellvalue, options, rowObject){
+      var temp = '<span style="word-wrap: break-word;word-break: break-all;white-space: pre-wrap !important;">'+rowObject.businessLicense+'</span><img class="dataImg" src="'+rowObject.businessLicensePic+'" height="60px;">';
+      return temp;
+    }}, 
+    {editable: false, sortable: false, width: 50, align: "center", formatter: function(cellvalue, options, rowObject){
+      var temp = '<span style="word-wrap: break-word;word-break: break-all;white-space: pre-wrap !important;">'+rowObject.foodAllowanceLicense+'</span><img class="dataImg" src="'+rowObject.foodAllowanceLicensePic+'" height="60px;">';
+      return temp;
+    }}, 
+    {name: 'acreage', index: 'acreage', width: 40, align: "center"}, 
+    {name: 'bankAddress', index: 'bank_address', width: 100, align: "center", formatter: function(cellvalue, options, rowObject){
+      var temp = '<span style="word-wrap: break-word;word-break: break-all;white-space: pre-wrap !important;">'+cellvalue+'</span>';
+      return temp;
+    }}, 
+    {name: 'bankCardName', index: 'bank_card_name', width: 50, align: "center"}, 
+    {name: 'bankCardNo', index: 'bank_card_no', width: 50, align: "center", formatter: function(cellvalue, options, rowObject){
+      var temp = '<span style="word-wrap: break-word;word-break: break-all;white-space: pre-wrap !important;">'+cellvalue+'</span>';
+      return temp;
+    }}, 
     {align: "center", editable: false, sortable: false, formatter: function(cellvalue, options, rowObject){
       var temp = '';
       if(hasAuthorize('distributor-editBefore')){

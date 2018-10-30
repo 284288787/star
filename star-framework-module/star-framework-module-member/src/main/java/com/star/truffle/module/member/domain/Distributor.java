@@ -39,4 +39,22 @@ public class Distributor {
   private Integer soldNum;
   // 状态 1未登录 2已登录
   private Integer state;
+  // 营业执照
+  private String businessLicense;
+  // 营业执照
+  private String businessLicensePic;
+  // 食品流通许可证
+  private String foodAllowanceLicense;
+  // 食品流通许可证
+  private String foodAllowanceLicensePic;
+  // 营业面积
+  private String acreage;
+  // 开户行
+  private String bankAddress;
+  // 开户名
+  private String bankCardName;
+  // 银行卡号
+  private String bankCardNo;
+  // 申请的Id
+  private Long applyId;
 }

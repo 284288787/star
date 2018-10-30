@@ -26,6 +26,14 @@
     <result column="townName" property="townName" />
     <result column="state" property="state" />
     <result column="py" property="py" />
+    <result column="business_license" property="businessLicense" />
+    <result column="business_license_pic" property="businessLicensePic" />
+    <result column="food_allowance_license" property="foodAllowanceLicense" />
+    <result column="food_allowance_license_pic" property="foodAllowanceLicensePic" />
+    <result column="acreage" property="acreage" />
+    <result column="bank_address" property="bankAddress" />
+    <result column="bank_card_name" property="bankCardName" />
+    <result column="bank_card_no" property="bankCardNo" />
   </resultMap>
 
   <sql id="sql_column">
@@ -34,7 +42,8 @@
     distributor.sold_num, r.`name` regionName, r.`name` regionName, ifnull(p.shortName, p.areaName) provinceName , 
     ifnull(c.shortName, c.areaName) cityName, ifnull(a.shortName, a.areaName) areaName, ifnull(t.shortName, t.areaName) townName,
     p.areaId provinceId , c.areaId cityId, a.areaId areaId, t.areaId townId,
-    r.py
+    r.py, business_license, business_license_pic, food_allowance_license, food_allowance_license_pic, acreage, bank_address, 
+    bank_card_name, bank_card_no, apply_id
   </sql>
 
   <sql id="sql_where">

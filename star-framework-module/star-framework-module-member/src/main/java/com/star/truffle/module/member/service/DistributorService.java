@@ -70,7 +70,7 @@ public class DistributorService implements ChooseDataIntf{
     distributorRequestDto.setEnabled(EnabledEnum.enabled.val());
     Long count = distributorCache.queryDistributorCount(distributorRequestDto);
     if (count > 0) {
-      throw new StarServiceException(ApiCode.PARAM_ERROR, "该区域下已经存在分销商，若还是需要添加，请先禁用老分销商");
+      throw new StarServiceException(ApiCode.PARAM_ERROR, "该区域下已经存在分销商，若还是需要添加，请先禁用该区域的老分销商");
     }
     distributor.setShopCode("");
     distributor.setEnabled(EnabledEnum.enabled.val());

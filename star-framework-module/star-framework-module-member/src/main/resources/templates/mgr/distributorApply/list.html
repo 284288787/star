@@ -14,7 +14,7 @@
 <script type="text/javascript" th:src="@{/webjars/jqGrid/js/jquery.jqGrid.js}"></script>
 <script type="text/javascript" th:src="@{/webjars/jqGrid/js/i18n/grid.locale-cn.js}"></script>
 <script type="text/javascript" th:src="@{/webjars/artDialog/js/jquery.artDialog.js}"></script>
-<script type="text/javascript" th:src="@{/webjars/artDialog/js/iframeTools.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/artDialog/js/iframeTools.source.js}"></script>
 </head>
 <body>
   <div class="main-container data-container" id="main-container">
@@ -33,9 +33,6 @@
       </form>
     </div>
     <div class="btnGroup">
-      <a star:authorize-uri="/distributorApply/add" onclick="distributorApplyHandle.addNew()" class="button grey">新增</a>
-      <a star:authorize-uri="/distributorApply/enabled" onclick="distributorApplyHandle.enabled()" class="button blue">启用</a>
-      <a star:authorize-uri="/distributorApply/disabled" onclick="distributorApplyHandle.disabled()" class="button yellow">禁用</a>
       <a star:authorize-uri="/distributorApply/deleted" onclick="distributorApplyHandle.remove()" class="button red">删除</a> 
     </div>
     <div class="data-container">
@@ -44,14 +41,11 @@
     </div>
   </div>
   <script type="text/javascript" th:src="@{/webjars/star/js/star.authorize.js}"></script>
-  <script type="text/javascript" th:inline="javascript" star:authorize-uri="/distributorApply/editBefore/*">
-  addAuthorize("distributorApply-editBefore", true);
+  <script type="text/javascript" th:inline="javascript" star:authorize-uri="/distributorApply/pass/*">
+  addAuthorize("distributorApply-pass", true);
   </script>
-  <script type="text/javascript" th:inline="javascript" star:authorize-uri="/distributorApply/disabled">
-  addAuthorize("distributorApply-disabled", true);
-  </script>
-  <script type="text/javascript" th:inline="javascript" star:authorize-uri="/distributorApply/enabled">
-  addAuthorize("distributorApply-enabled", true);
+  <script type="text/javascript" th:inline="javascript" star:authorize-uri="/distributorApply/nopass/*">
+  addAuthorize("distributorApply-nopass", true);
   </script>
   <script type="text/javascript" th:src="@{/webjars/star/js/star.list.comm.js}"></script>
   <script type="text/javascript" th:inline="javascript" th:src="@{/js/mgr/distributorApply/list.js}"></script>

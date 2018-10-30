@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,6 +18,7 @@ import com.star.truffle.core.jdbc.Page;
 import com.star.truffle.core.jdbc.Page.OrderType;
 import com.star.truffle.core.web.ApiCode;
 import com.star.truffle.core.web.ApiResult;
+import com.star.truffle.module.member.constant.DistributorApplyStateEnum;
 import com.star.truffle.module.member.dto.req.DistributorApplyRequestDto;
 import com.star.truffle.module.member.dto.res.DistributorApplyResponseDto;
 import com.star.truffle.module.member.service.DistributorApplyService;
@@ -62,10 +62,10 @@ public class DistributorApplyController {
   }
 
   @ResponseBody
-  @RequestMapping(value = "/edit", method = RequestMethod.POST)
-  public ApiResult<Void> edit(@RequestBody DistributorApplyRequestDto distributorApplyRequestDto) {
+  @RequestMapping(value = "/pass/{id}", method = RequestMethod.POST)
+  public ApiResult<Void> pass(@PathVariable Long id, Long regionId) {
     try {
-      distributorApplyService.updateDistributorApply(distributorApplyRequestDto);
+      distributorApplyService.pass(id, regionId);
       return ApiResult.success();
     } catch (StarServiceException e) {
       return ApiResult.fail(e.getCode(), e.getMsg());
@@ -74,7 +74,21 @@ public class DistributorApplyController {
       return ApiResult.fail(ApiCode.SYSTEM_ERROR);
     }
   }
-
+  
+  @ResponseBody
+  @RequestMapping(value = "/nopass/{id}", method = RequestMethod.POST)
+  public ApiResult<Void> nopass(@PathVariable Long id, String reject) {
+    try {
+      distributorApplyService.changeState(id, DistributorApplyStateEnum.nopass.getState(), reject);
+      return ApiResult.success();
+    } catch (StarServiceException e) {
+      return ApiResult.fail(e.getCode(), e.getMsg());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return ApiResult.fail(ApiCode.SYSTEM_ERROR);
+    }
+  }
+  
   @ResponseBody
   @RequestMapping(value = "/deleted", method = RequestMethod.POST)
   public ApiResult<Void> delete(String ids) {

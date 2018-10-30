@@ -2,15 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.star.truffle.module.member.dao.write.DistributorApplyWriteDao">
   <insert id="saveDistributorApply" useGeneratedKeys="true" keyProperty="id" parameterType="com.star.truffle.module.member.domain.DistributorApply">
-    insert into distributor_apply(id, mobile, name, shop_name, id_card_pic1, id_card_pic2, shop_pic, weixin_pic, province_id, province_name, city_id, city_name, area_id, area_name, address, business_license, business_license_pic, food_allowance_license, food_allowance_license_pic, acreage, bank_name, bank_address, bank_card_name, bank_card_no, create_time, open_id)
-    values(#{id}, #{mobile}, #{name}, #{shopName}, #{idCardPic1}, #{idCardPic2}, #{shopPic}, #{weixinPic}, #{provinceId}, #{provinceName}, #{cityId}, #{cityName}, #{areaId}, #{areaName}, #{address}, #{businessLicense}, #{businessLicensePic}, #{foodAllowanceLicense}, #{foodAllowanceLicensePic}, #{acreage}, #{bankName}, #{bankAddress}, #{bankCardName}, #{bankCardNo}, #{createTime}, #{openId})
+    insert into distributor_apply(id, mobile, name, shop_name, id_card_pic1, id_card_pic2, shop_pic, weixin_pic, province_id, province_name, city_id, city_name, area_id, area_name, address, business_license, business_license_pic, food_allowance_license, food_allowance_license_pic, acreage, bank_name, bank_address, bank_card_name, bank_card_no, create_time, open_id, state, reject, update_time)
+    values(#{id}, #{mobile}, #{name}, #{shopName}, #{idCardPic1}, #{idCardPic2}, #{shopPic}, #{weixinPic}, #{provinceId}, #{provinceName}, #{cityId}, #{cityName}, #{areaId}, #{areaName}, #{address}, #{businessLicense}, #{businessLicensePic}, #{foodAllowanceLicense}, #{foodAllowanceLicensePic}, #{acreage}, #{bankName}, #{bankAddress}, #{bankCardName}, #{bankCardNo}, #{createTime}, #{openId}, #{state}, #{reject}, #{createTime})
   </insert>
 
   <insert id="batchSaveDistributorApply" parameterType="java.util.List">
-    insert into distributor_apply(id, mobile, name, shop_name, id_card_pic1, id_card_pic2, shop_pic, weixin_pic, province_id, province_name, city_id, city_name, area_id, area_name, address, business_license, business_license_pic, food_allowance_license, food_allowance_license_pic, acreage, bank_name, bank_address, bank_card_name, bank_card_no, create_time, open_id)
+    insert into distributor_apply(id, mobile, name, shop_name, id_card_pic1, id_card_pic2, shop_pic, weixin_pic, province_id, province_name, city_id, city_name, area_id, area_name, address, business_license, business_license_pic, food_allowance_license, food_allowance_license_pic, acreage, bank_name, bank_address, bank_card_name, bank_card_no, create_time, open_id, state, reject, update_time)
     values
     <foreach collection="list" item="item" index="index" separator=",">
-      (#{item.id}, #{item.mobile}, #{item.name}, #{item.shopName}, #{item.idCardPic1}, #{item.idCardPic2}, #{item.shopPic}, #{item.weixinPic}, #{item.provinceId}, #{item.provinceName}, #{item.cityId}, #{item.cityName}, #{item.areaId}, #{item.areaName}, #{item.address}, #{item.businessLicense}, #{item.businessLicensePic}, #{item.foodAllowanceLicense}, #{item.foodAllowanceLicensePic}, #{item.acreage}, #{item.bankName}, #{item.bankAddress}, #{item.bankCardName}, #{item.bankCardNo}, #{item.createTime}, #{item.openId})
+      (#{item.id}, #{item.mobile}, #{item.name}, #{item.shopName}, #{item.idCardPic1}, #{item.idCardPic2}, #{item.shopPic}, #{item.weixinPic}, #{item.provinceId}, #{item.provinceName}, #{item.cityId}, #{item.cityName}, #{item.areaId}, #{item.areaName}, #{item.address}, #{item.businessLicense}, #{item.businessLicensePic}, #{item.foodAllowanceLicense}, #{item.foodAllowanceLicensePic}, #{item.acreage}, #{item.bankName}, #{item.bankAddress}, #{item.bankCardName}, #{item.bankCardNo}, #{item.createTime}, #{item.openId}, #{item.state}, #{item.reject}, #{item.createTime})
     </foreach>
   </insert>
 
@@ -40,8 +40,10 @@
       <if test="bankAddress != null and bankAddress != ''">bank_address = #{bankAddress},</if>
       <if test="bankCardName != null and bankCardName != ''">bank_card_name = #{bankCardName},</if>
       <if test="bankCardNo != null and bankCardNo != ''">bank_card_no = #{bankCardNo},</if>
-      <if test="createTime != null">create_time = #{createTime},</if>
       <if test="openId != null and openId != ''">open_id = #{openId},</if>
+      <if test="state != null ">state = #{state},</if>
+      <if test="reject != null and reject != ''">reject = #{reject},</if>
+      <if test="updateTime != null ">update_time = #{updateTime},</if>
     </trim>
     where id = #{id}
   </update>
@@ -80,7 +82,9 @@
   </resultMap>
 
   <sql id="sql_column">
-    id, mobile, name, shop_name, id_card_pic1, id_card_pic2, shop_pic, weixin_pic, province_id, province_name, city_id, city_name, area_id, area_name, address, business_license, business_license_pic, food_allowance_license, food_allowance_license_pic, acreage, bank_name, bank_address, bank_card_name, bank_card_no, create_time, open_id
+    id, mobile, name, shop_name, id_card_pic1, id_card_pic2, shop_pic, weixin_pic, province_id, province_name, city_id, city_name, area_id, 
+    area_name, address, business_license, business_license_pic, food_allowance_license, food_allowance_license_pic, acreage, bank_name, 
+    bank_address, bank_card_name, bank_card_no, create_time, open_id, state, reject, update_time
   </sql>
 
   <select id="getDistributorApply" resultType="com.star.truffle.module.member.dto.res.DistributorApplyResponseDto">
