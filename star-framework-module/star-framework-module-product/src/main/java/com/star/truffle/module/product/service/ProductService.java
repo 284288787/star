@@ -253,7 +253,7 @@ public class ProductService {
     int pageNum = 1;
     int pageSize = 50;
     ProductRequestDto productRequestDto = new ProductRequestDto();
-    productRequestDto.setStates("1234");
+    productRequestDto.setStates("1,2,3,4");
     while(true) {
       productRequestDto.setPager(new Page(pageNum, pageSize, "update_time", OrderType.desc));
       List<ProductResponseDto> list = this.productCache.queryProduct(productRequestDto);
