@@ -4,8 +4,12 @@
     vertical-align: middle;
 }
 .header{
-    background: #4a8a40;
-    line-height: 44px;
+    background: #238e37;
+    line-height: 54px;
+}
+.mui-bar{
+  padding: 5px 0px;
+  height:54px;
 }
 .logofont{
     width: auto;
@@ -15,8 +19,7 @@
     margin-left: 25px;
 }
 .main{
-    padding-top: 44px;
-
+    padding-top: 54px;
 }
 .desc{
     font-size: 12px !important;
@@ -95,8 +98,8 @@
     color: #ff0000;
   }
   #pullrefresh{
-     top: 44px !important;
-     bottom: 10px;
+     top: 54px !important;
+     bottom: 20px;
   }
   .mui-table-view:before,.mui-table-view:after{
     background: none !important;
