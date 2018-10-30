@@ -261,4 +261,13 @@
       limit #{pager.startIndex}, #{pager.pageSize}
     </if>
   </select>
+  
+  <resultMap id="orderNumMap" type="HashMap">
+    <result column="state" property="state" />
+    <result column="num" property="num" />
+  </resultMap>
+
+  <select id="orderNum" resultMap="orderNumMap">
+    SELECT o.state, count(1) num FROM `order` o where o.deleted = 0 and o.member_id = #{memberId} GROUP BY o.state HAVING count(1) > 0
+  </select>
 </mapper>

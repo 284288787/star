@@ -424,4 +424,9 @@ public class OrderService {
     return list;
   }
 
+  public Map<String, Object> orderNum(Long memberId) {
+    Map<String, Object> map = this.orderCache.orderNum(memberId);
+    return map;
+  }
+
 }

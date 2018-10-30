@@ -47,6 +47,23 @@ public class OrderApiController {
     binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));//true:允许为空, false:不允许为空
   }
   
+  @RequestMapping(value = "/orderNum", method = RequestMethod.POST)
+  @ApiOperation(value = "会员订单各个状态的数量", notes = "会员订单各个状态的数量", httpMethod = "POST", response = OrderResponseDto.class)
+  @ApiImplicitParams({ 
+    @ApiImplicitParam(name = "memberId", value = "会员id", dataType = "Long", required = true, paramType = "query"), 
+  })
+  public ApiResult<Map<String, Object>> orderNum(Long memberId) {
+    try {
+      Map<String, Object> map = orderService.orderNum(memberId);
+      return ApiResult.success(map);
+    } catch (StarServiceException e) {
+      return ApiResult.fail(e.getCode(), e.getMsg());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return ApiResult.fail(ApiCode.SYSTEM_ERROR);
+    }
+  }
+  
   @RequestMapping(value = "/seeUser", method = RequestMethod.POST)
   @ApiOperation(value = "分销商的所有会员", notes = "分销商的所有会员", httpMethod = "POST", response = OrderResponseDto.class)
   @ApiImplicitParams({ 

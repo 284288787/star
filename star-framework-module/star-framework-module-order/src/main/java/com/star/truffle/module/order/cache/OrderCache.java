@@ -86,4 +86,8 @@ public class OrderCache {
     return orderReadDao.seeUser(distributorId, keyword, pager);
   }
 
+  public Map<String, Object> orderNum(Long memberId) {
+    return orderReadDao.orderNum(memberId);
+  }
+
 }

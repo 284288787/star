@@ -34,4 +34,6 @@ public interface OrderReadDao {
   public Long sumBrokerage(OrderRequestDto orderRequestDto);
 
   public List<Map<String, Object>> seeUser(@Param("distributorId") Long distributorId, @Param("keyword") String keyword, @Param("pager") Page pager);
+
+  public Map<String, Object> orderNum(Long memberId);
 }
