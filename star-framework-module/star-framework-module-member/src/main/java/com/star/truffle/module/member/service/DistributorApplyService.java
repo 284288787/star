@@ -28,6 +28,7 @@ public class DistributorApplyService {
   private DistributorCache distributorCache;
 
   public Long saveDistributorApply(DistributorApplyRequestDto distributorApply) {
+    distributorApply.setState(DistributorApplyStateEnum.normal.getState());
     this.distributorApplyCache.saveDistributorApply(distributorApply);
     return distributorApply.getId();
   }

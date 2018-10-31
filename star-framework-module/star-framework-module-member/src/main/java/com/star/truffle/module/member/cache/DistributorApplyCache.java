@@ -28,6 +28,7 @@ public class DistributorApplyCache {
 //  @CachePut(value = "module-member-distributorApply", key = "'distributorApply_id_'+#result.id", condition = "#result != null and #result.id != null")
   public DistributorApplyResponseDto saveDistributorApply(DistributorApply distributorApply){
     distributorApply.setCreateTime(new Date());
+    distributorApply.setUpdateTime(distributorApply.getCreateTime());
     this.distributorApplyWriteDao.saveDistributorApply(distributorApply);
     DistributorApplyResponseDto distributorApplyResponseDto = this.distributorApplyWriteDao.getDistributorApply(distributorApply.getId());
     return distributorApplyResponseDto;
