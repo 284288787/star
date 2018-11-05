@@ -153,9 +153,12 @@ public class ImageWaterMark {
     }
   }
   
-  private static String getSuffix(String path) {
+  public static String getSuffix(String path) {
     int idx = path.lastIndexOf(".");
-    return path.substring(idx + 1);
+    if (idx != -1) {
+      return path.substring(idx + 1);
+    }
+    return "";
   }
   
   private static String getTargetFilePath(String srcFilePath) {

@@ -63,34 +63,34 @@ public class FileUploadController {
           }
           Map<String, String> item = new HashMap<>();
           String name = UUID.randomUUID().toString().replace("-", "");
-          String suffix = getSuffix(mf.getOriginalFilename());
-          String fileName = name + suffix;
+          String suffix = ImageWaterMark.getSuffix(mf.getOriginalFilename());
+          String fileName = name + "." + suffix;
           FileUtils.writeByteArrayToFile(new File(dir, fileName), bs);
           FileUtils.write(new File(dir, name + ".name"), mf.getOriginalFilename(), "UTF-8"); //保留原文件名
 //          item.put("original", "/photo/image/" + name + suffix);
           Thumbnails.of(realPath + fileName).scale(1f)
           .outputQuality(1f)
-          .outputFormat("gif")
-          .toFile(realPath + name + ".gif");
-          item.put("original", "/photo/image/" + name + ".gif");
+          .outputFormat(suffix)
+          .toFile(realPath + name + "." + suffix);
+          item.put("original", "/photo/image/" + name + "." + suffix);
           if (StringUtils.isNotBlank(mark) && "1".equals(mark)) {
 //            ImageWaterMark.addWaterMarkImage(realPath, fileName, starSpringMvcProperties.getPhotoPath() + "shuiyin.png", ImageWaterMark.HORIZONTAL_ALIGN_RIGHT, ImageWaterMark.VERTICAL_ALIGN_CENTER);
 //            item.put("mark", "/photo/image/" + name + ImageWaterMark.WATER_MARK_SUFFIX + suffix);
             Thumbnails.of(realPath + fileName).scale(1f)
-            .watermark(Positions.CENTER_RIGHT, ImageIO.read(new File(starSpringMvcProperties.getPhotoPath() + "shuiyin.png")), 0.5f)
+            .watermark(Positions.BOTTOM_RIGHT, ImageIO.read(new File(starSpringMvcProperties.getPhotoPath() + "shuiyin.png")), 0.5f)
             .outputQuality(0.8f)
-            .outputFormat("gif")
-            .toFile(realPath + name + ImageWaterMark.WATER_MARK_SUFFIX + ".gif");
-            item.put("mark", "/photo/image/" + name + ImageWaterMark.WATER_MARK_SUFFIX + ".gif");
+            .outputFormat(suffix)
+            .toFile(realPath + name + ImageWaterMark.WATER_MARK_SUFFIX + "." + suffix);
+            item.put("mark", "/photo/image/" + name + ImageWaterMark.WATER_MARK_SUFFIX + "." + suffix);
           }
           if (StringUtils.isNotBlank(shrink) && "1".equals(shrink)) {
 //            ImageShrink.shrink(realPath, fileName, 300);
 //            item.put("shrink", "/photo/image/" + name + ImageShrink.SHRINK_SUFFIX + suffix);
             Thumbnails.of(realPath + fileName).scale(0.25f)
             .outputQuality(0.8f)
-            .outputFormat("gif")
-            .toFile(realPath + name + ImageShrink.SHRINK_SUFFIX + ".gif");
-            item.put("shrink", "/photo/image/" + name + ImageShrink.SHRINK_SUFFIX + ".gif");
+            .outputFormat(suffix)
+            .toFile(realPath + name + ImageShrink.SHRINK_SUFFIX + "." + suffix);
+            item.put("shrink", "/photo/image/" + name + ImageShrink.SHRINK_SUFFIX + "." + suffix);
           }
           list.add(item);
         }
@@ -131,13 +131,5 @@ public class FileUploadController {
       apiResult = ApiResult.fail();
     }
     return apiResult;
-  }
-  
-  private static String getSuffix(String originalFilename) {
-    int idx = originalFilename.lastIndexOf(".");
-    if (idx != -1) {
-      return originalFilename.substring(idx);
-    }
-    return "";
   }
 }
