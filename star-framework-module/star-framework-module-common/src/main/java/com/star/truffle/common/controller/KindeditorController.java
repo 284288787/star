@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import com.star.truffle.common.utils.ImageShrink;
 import com.star.truffle.common.utils.ImageWaterMark;
 import com.star.truffle.core.StarServiceException;
 import com.star.truffle.core.jackson.StarJson;
@@ -103,10 +102,10 @@ public class KindeditorController {
           Thumbnails.of(savePath + newFileName).scale(1f)
           .watermark(Positions.CENTER_RIGHT, ImageIO.read(new File(starSpringMvcProperties.getPhotoPath() + "shuiyin.png")), 0.5f)
           .outputQuality(0.8f)
-          .outputFormat("gif")
-          .toFile(savePath + name + ImageWaterMark.WATER_MARK_SUFFIX + ".gif");
+          .outputFormat(fileExt)
+          .toFile(savePath + name + ImageWaterMark.WATER_MARK_SUFFIX + "." + fileExt);
 //          ImageWaterMark.addWaterMarkImage(savePath, newFileName, starSpringMvcProperties.getPhotoPath() + "shuiyin.png", ImageWaterMark.HORIZONTAL_ALIGN_RIGHT, ImageWaterMark.VERTICAL_ALIGN_CENTER);
-          return "{\"error\": 0, \"url\": \"" + saveUrl + name + ImageWaterMark.WATER_MARK_SUFFIX + ".gif\"}";
+          return "{\"error\": 0, \"url\": \"" + saveUrl + name + ImageWaterMark.WATER_MARK_SUFFIX + "."+fileExt+"\"}";
         }
       }
     } catch (Exception e) {
@@ -182,9 +181,9 @@ public class KindeditorController {
           hash.put("filetype", "");
         } else if (file.isFile()) {
           String fileExt = fileName.substring(fileName.lastIndexOf(".") + 1).toLowerCase();
-          if (! fileName.endsWith(ImageShrink.SHRINK_SUFFIX + ".gif") && ! fileName.endsWith(ImageWaterMark.WATER_MARK_SUFFIX + ".gif")) {
-            continue;
-          }
+//          if (! fileName.endsWith(ImageShrink.SHRINK_SUFFIX + ".") && ! fileName.endsWith(ImageWaterMark.WATER_MARK_SUFFIX + ".")) {
+//            continue;
+//          }
           boolean ext = Arrays.<String> asList(fileTypes).contains(fileExt);
           hash.put("is_dir", false);
           hash.put("has_file", false);

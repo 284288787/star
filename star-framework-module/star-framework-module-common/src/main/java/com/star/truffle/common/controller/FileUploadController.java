@@ -39,7 +39,7 @@ public class FileUploadController {
   private StarSpringMvcProperties starSpringMvcProperties;
   @Autowired
   private ExcelService excelService;
-
+  
   @RequestMapping(value = "/images", method = RequestMethod.POST)
   public ApiResult<List<Map<String, String>>> images(MultipartHttpServletRequest multipartRequest) {
     ApiResult<List<Map<String, String>>> apiResult = null;
