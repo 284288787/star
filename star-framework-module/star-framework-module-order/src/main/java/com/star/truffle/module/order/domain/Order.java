@@ -61,6 +61,8 @@ public class Order {
   private String pickupCode;
   // 创建日期
   private Date createTime;
-  //1用户自己 2系统 3后台
+  // 1用户自己 2系统 3后台
   private Integer deleteUser;
+  // 备注
+  private String remark;
 }

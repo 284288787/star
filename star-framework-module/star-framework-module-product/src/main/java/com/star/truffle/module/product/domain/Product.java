@@ -51,6 +51,16 @@ public class Product {
   private String updateUser;
   // 提成类型 1固定金额 2售价百分比
   private Integer brokerageType;
-  // 商品提成 例如：设置值为5，brokerageType=1，表示5分钱；=2，表示5%
+  // 二级分销商提成 例如：设置值为5，brokerageType=1，表示5分钱；=2，表示5%
   private Integer brokerageValue;
+  // 一级分销商提成 金额
+  private Integer brokerageFirst;
+  // 含税价
+  private Integer priceHan;
+  // 未税价
+  private Integer priceWei;
+  // 供应商联系人
+  private String supplierName;
+  // 供应商电话
+  private String supplierMobile;
 }
