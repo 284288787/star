@@ -634,7 +634,10 @@ public class BeanService {
     mapper.append("      <when test=\"pager != null and pager.orderBy != null and pager.orderBy != ''\">${pager.orderBy}</when>\n");
     mapper.append("      <otherwise>" + primary.getDsName() + "</otherwise>\n");
     mapper.append("    </choose>\n");
-    mapper.append("    <if test=\"pager != null and pager.orderType != null and pager.orderType != ''\">${pager.orderType}</if>\n");
+    mapper.append("    <choose>\n");
+    mapper.append("      <when test=\"pager != null and pager.orderType != null and pager.orderType != ''\">${pager.orderType}</when>\n");
+    mapper.append("      <otherwise>desc</otherwise>\n");
+    mapper.append("    </choose>\n");
     mapper.append("    <if test=\"pager != null and pager.pageSize!=null and pager.startIndex!=null\">\n");
     mapper.append("      limit #{pager.startIndex}, #{pager.pageSize}\n");
     mapper.append("    </if>\n");

@@ -63,4 +63,6 @@ public class Product {
   private String supplierName;
   // 供应商电话
   private String supplierMobile;
+  // 分类id
+  private Long cateId;
 }

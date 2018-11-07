@@ -1,29 +1,25 @@
 var basePath="/";
 var parentParams=artDialog.data('params');
 $(function(){
-  $("#edit${entityName}Form").validate({
+  $("#editCategoryForm").validate({
     rules: {
-    <#list fields as field>
-      ${field.javaName}: {
-        required: ${field.fieldEdit.required}<#if field.fieldEdit.zhengze?exists && field.fieldEdit.zhengze != ''>,
-        zhengze: "${field.fieldEdit.zhengze}"</#if>
-      }<#if field_has_next>,</#if>
-    </#list>
+      cateName: {
+        required: true,
+        zhengze: ".{2,25}"
+      }
     },
     messages: {
-      <#list fields as field>
-      ${field.javaName}: {
-        required: "${field.fieldEdit.requiredMsg}"<#if field.fieldEdit.zhengze?exists && field.fieldEdit.zhengze != ''>,
-        zhengze: "${field.fieldEdit.zhengzeMsg}"</#if>
-      }<#if field_has_next>,</#if>
-    </#list>
+      cateName: {
+        required: "必填",
+        zhengze: "长度在2至25个字"
+      }
     }
   });
   
   $("#saveBtn").click(function(){
-    var flag = $("#edit${entityName}Form").valid();
+    var flag = $("#editCategoryForm").valid();
     if(! flag) return;
-    var data=$("#edit${entityName}Form").serializeArray();
+    var data=$("#editCategoryForm").serializeArray();
     var params = {};
     $.each(data, function(i, field){
       var name = field.name;
@@ -33,7 +29,7 @@ $(function(){
     $("#saveBtn").attr("disabled", true);
     $.ajax({
       contentType: "application/json",
-      url: basePath+"${entityNameVar}/edit",
+      url: basePath+"category/edit",
       data: JSON.stringify(params),
       type: 'post',
       dataType: 'json',

@@ -27,6 +27,7 @@
       <if test="offShelfTime != null">off_shelf_time = #{offShelfTime},</if>
       <if test="pickupTime != null">pickup_time = #{pickupTime},</if>
       <if test="state != null">state = #{state},</if>
+      <if test="cateId != null">cate_id = #{cateId},</if>
       <if test="originalPrice != null">original_price = #{originalPrice},</if>
       <if test="price != null">price = #{price},</if>
       <if test="supplier != null and supplier != ''">supplier = #{supplier},</if>
@@ -80,8 +81,8 @@
   </resultMap>
 
   <sql id="sql_column">
-    product.product_id, title, subtitle, tag, presell_time, off_shelf_time, pickup_time, state, original_price, price, supplier, brand, specification, origin_place, description, subscribers, create_time, create_user, update_time, update_user, brokerage_type, brokerage_value,
-    number_type, number, sold_number, type, brokerage_first, price_han, price_wei, supplier_name, supplier_mobile, 
+    product.product_id, title, subtitle, tag, presell_time, off_shelf_time, pickup_time, state, original_price, price, supplier, brand, specification, origin_place, description, subscribers, product.create_time, create_user, update_time, update_user, brokerage_type, brokerage_value,
+    number_type, number, sold_number, type, brokerage_first, price_han, price_wei, supplier_name, supplier_mobile, product.cate_id, c.cate_name, 
     (select p.url from product_picture p where p.product_id = product.product_id and p.type = 1 limit 1) mainPictureUrl
   </sql>
 
@@ -90,6 +91,7 @@
     <include refid="sql_column" />
     from product
     inner join product_inventory i on product.product_id = i.product_id 
+    LEFT JOIN category c on product.cate_id = c.cate_id
     where product.product_id = #{productId}
   </select>
 

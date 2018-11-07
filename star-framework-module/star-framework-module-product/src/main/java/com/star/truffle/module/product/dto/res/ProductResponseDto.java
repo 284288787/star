@@ -26,6 +26,8 @@ public class ProductResponseDto extends Product {
   private Integer soldNumber;
   // 提成类型 1商品 2活动
   private Integer type;
+  // 分类名称
+  private String cateName;
   // 当前时间 毫秒
   private Long currentTimeMillis = System.currentTimeMillis();
 }

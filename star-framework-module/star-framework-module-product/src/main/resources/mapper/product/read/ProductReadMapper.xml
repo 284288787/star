@@ -31,8 +31,8 @@
   </resultMap>
 
   <sql id="sql_column">
-    product.product_id, title, subtitle, tag, presell_time, off_shelf_time, pickup_time, state, original_price, price, supplier, brand, specification, origin_place, description, subscribers, create_time, create_user, update_time, update_user, brokerage_type, brokerage_value,
-    number_type, number, sold_number, type, brokerage_first, price_han, price_wei, supplier_name, supplier_mobile, 
+    product.product_id, title, subtitle, tag, presell_time, off_shelf_time, pickup_time, state, original_price, price, supplier, brand, specification, origin_place, description, subscribers, product.create_time, create_user, update_time, update_user, brokerage_type, brokerage_value,
+    number_type, number, sold_number, type, brokerage_first, price_han, price_wei, supplier_name, supplier_mobile, product.cate_id, c.cate_name,
     (select p.url from product_picture p where p.product_id = product.product_id and p.type = 1 limit 1) mainPictureUrl
   </sql>
 
@@ -46,6 +46,9 @@
       </if>
       <if test="state != null">
         and state = #{state}
+      </if>
+      <if test="cateId != null">
+        and cate_id = #{cateId}
       </if>
       <if test="states != null and states != ''">
         and state in (${states})
@@ -61,6 +64,7 @@
     <include refid="sql_column" />
     from product
     inner join product_inventory i on product.product_id = i.product_id 
+    LEFT JOIN category c on product.cate_id = c.cate_id
     where product.product_id = #{productId}
   </select>
 
@@ -69,13 +73,17 @@
     <include refid="sql_column" />
     from product
     inner join product_inventory i on product.product_id = i.product_id 
+    LEFT JOIN category c on product.cate_id = c.cate_id
     <include refid="sql_where" />
     order by
     <choose>
       <when test="pager != null and pager.orderBy != null and pager.orderBy != ''">${pager.orderBy}</when>
-      <otherwise>product.product_id</otherwise>
+      <otherwise>product.update_time</otherwise>
     </choose>
-    <if test="pager != null and pager.orderType != null and pager.orderType != ''">${pager.orderType}</if>
+    <choose>
+      <when test="pager != null and pager.orderType != null and pager.orderType != ''">${pager.orderType}</when>
+      <otherwise>desc</otherwise>
+    </choose>
     <if test="pager != null and pager.pageSize!=null and pager.startIndex!=null">
       limit #{pager.startIndex}, #{pager.pageSize}
     </if>
@@ -86,6 +94,7 @@
     count(1)
     from product
     inner join product_inventory i on product.product_id = i.product_id 
+    LEFT JOIN category c on product.cate_id = c.cate_id
     <include refid="sql_where" />
   </select>
 </mapper>

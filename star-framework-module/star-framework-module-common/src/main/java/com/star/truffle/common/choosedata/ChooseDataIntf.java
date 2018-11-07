@@ -8,7 +8,7 @@ import com.star.truffle.core.jdbc.Page;
 
 public interface ChooseDataIntf {
 
-  public GridPagerResponse getDatas(Map<String, Object> conditon, Page pager);
+  public GridPagerResponse getDatas(Map<String, Object> condition, Page pager);
 
   public List<GridColumn> getGridColumns();
 }

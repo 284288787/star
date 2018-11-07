@@ -46,7 +46,7 @@ function ListHandle(options, funcs) {
 			rownumbers : config.rownumbers || false,
 			multiselect : config.multiselect || false,
 			viewrecords : false,
-			autowidth : true,
+			autowidth : null != config.autowidth ? config.autowidth : true,
 			hidegrid : false,
 			loadtext : '加载中...',
 			height : config.height || '300px',
@@ -145,7 +145,7 @@ function ListHandle(options, funcs) {
 		});
 		if (!options.subGrid) {
 			jQuery(options.tableId).jqGrid('navGrid', options.pagerId, {edit: false, add: false, del: false, search: false});
-			var h = handle.getScreenHeight() - 150;
+			var h = handle.getScreenHeight() - 160;
 			if($(".search-container").length>0) h -= $(".search-container").height();
 			if($(".btnGroup").length>0) h -= $(".btnGroup").height();
 			jQuery(options.tableId).setGridHeight(config.height || h);

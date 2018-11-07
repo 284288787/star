@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.product.dao.read.CategoryReadDao">
+  <resultMap id="categoryResponseDtoResultMap" type="com.star.truffle.module.product.dto.res.CategoryResponseDto">
+    <result column="cate_id" property="cateId" />
+    <result column="cate_name" property="cateName" />
+    <result column="create_time" property="createTime" />
+  </resultMap>
+
+  <sql id="sql_column">
+    cate_id, cate_name, create_time
+  </sql>
+
+  <sql id="sql_where">
+    <trim prefix="WHERE" prefixOverrides="AND | OR">
+      <if test="cateId != null">
+        and cate_id = #{cateId}
+      </if>
+      <if test="cateName != null and cateName != ''">
+        and cate_name = #{cateName}
+      </if>
+    </trim>
+  </sql>
+
+  <select id="getCategory" resultType="com.star.truffle.module.product.dto.res.CategoryResponseDto">
+    select
+    <include refid="sql_column" />
+    from category
+    where cate_id = #{cateId}
+  </select>
+
+  <select id="queryCategory" resultMap="categoryResponseDtoResultMap">
+    select
+    <include refid="sql_column" />
+    from category
+    <include refid="sql_where" />
+    order by
+    <choose>
+      <when test="pager != null and pager.orderBy != null and pager.orderBy != ''">${pager.orderBy}</when>
+      <otherwise>cate_id</otherwise>
+    </choose>
+    <if test="pager != null and pager.orderType != null and pager.orderType != ''">${pager.orderType}</if>
+    <if test="pager != null and pager.pageSize!=null and pager.startIndex!=null">
+      limit #{pager.startIndex}, #{pager.pageSize}
+    </if>
+  </select>
+
+  <select id="queryCategoryCount" resultType="java.lang.Long">
+    select
+    count(1)
+    from category
+    <include refid="sql_where" />
+  </select>
+</mapper>

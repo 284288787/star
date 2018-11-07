@@ -96,7 +96,7 @@ public class ResourceService {
       }
       Map<String, Object> conditions = new HashMap<>();
       conditions.put("parentId", resourceDto.getParentId());
-      conditions.put("idx", "&gt;= " + idx);
+      conditions.put("idx", ">= " + idx);
       conditions.put("s_orderBy", "idx");
       List<ResourceDto> list = this.resourceCache.queryResource(conditions);
       int i = idx;

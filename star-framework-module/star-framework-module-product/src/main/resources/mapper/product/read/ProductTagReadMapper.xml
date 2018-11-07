@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.product.dao.read.ProductTagReadDao">
+  <resultMap id="productTagResponseDtoResultMap" type="com.star.truffle.module.product.dto.res.ProductTagResponseDto">
+    <result column="tag_id" property="tagId" />
+    <result column="tag_name" property="tagName" />
+    <result column="type" property="type" />
+    <result column="create_time" property="createTime" />
+  </resultMap>
+
+  <sql id="sql_column">
+    tag_id, tag_name, type, create_time
+  </sql>
+
+  <sql id="sql_where">
+    <trim prefix="WHERE" prefixOverrides="AND | OR">
+      <if test="tagId != null">
+        and tag_id = #{tagId}
+      </if>
+      <if test="tagName != null and tagName != ''">
+        and tag_name = #{tagName}
+      </if>
+    </trim>
+  </sql>
+
+  <select id="getProductTag" resultType="com.star.truffle.module.product.dto.res.ProductTagResponseDto">
+    select
+    <include refid="sql_column" />
+    from product_tag
+    where tag_id = #{tagId}
+  </select>
+
+  <select id="queryProductTag" resultMap="productTagResponseDtoResultMap">
+    select
+    <include refid="sql_column" />
+    from product_tag
+    <include refid="sql_where" />
+    order by
+    <choose>
+      <when test="pager != null and pager.orderBy != null and pager.orderBy != ''">${pager.orderBy}</when>
+      <otherwise>tag_id</otherwise>
+    </choose>
+    <choose>
+      <when test="pager != null and pager.orderType != null and pager.orderType != ''">${pager.orderType}</when>
+      <otherwise>desc</otherwise>
+    </choose>
+    <if test="pager != null and pager.pageSize!=null and pager.startIndex!=null">
+      limit #{pager.startIndex}, #{pager.pageSize}
+    </if>
+  </select>
+
+  <select id="queryProductTagCount" resultType="java.lang.Long">
+    select
+    count(1)
+    from product_tag
+    <include refid="sql_where" />
+  </select>
+</mapper>

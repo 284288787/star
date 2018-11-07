@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.product.dao.write.ProductTagWriteDao">
+  <insert id="saveProductTag" useGeneratedKeys="true" keyProperty="tagId" parameterType="com.star.truffle.module.product.domain.ProductTag">
+    insert into product_tag(tag_id, tag_name, type, create_time)
+    values(#{tagId}, #{tagName}, #{type}, #{createTime})
+  </insert>
+
+  <insert id="batchSaveProductTag" parameterType="java.util.List">
+    insert into product_tag(tag_id, tag_name, type, create_time)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.tagId}, #{item.tagName}, #{item.type}, #{item.createTime})
+    </foreach>
+  </insert>
+
+  <update id="updateProductTag" parameterType="com.star.truffle.module.product.dto.req.ProductTagRequestDto">
+    update product_tag
+    <trim prefix="set" suffixOverrides=",">
+      <if test="tagName != null and tagName != ''">tag_name = #{tagName},</if>
+      <if test="type != null">type = #{type},</if>
+    </trim>
+    where tag_id = #{tagId}
+  </update>
+
+  <delete id="deleteProductTag" parameterType="java.lang.Long">
+    delete from product_tag where tag_id = #{tagId}
+  </delete>
+
+  <resultMap id="productTagResponseDtoResultMap" type="com.star.truffle.module.product.dto.res.ProductTagResponseDto">
+    <result column="tag_id" property="tagId" />
+    <result column="tag_name" property="tagName" />
+    <result column="type" property="type" />
+    <result column="create_time" property="createTime" />
+  </resultMap>
+
+  <sql id="sql_column">
+    tag_id, tag_name, type, create_time
+  </sql>
+
+  <select id="getProductTag" resultType="com.star.truffle.module.product.dto.res.ProductTagResponseDto">
+    select
+    <include refid="sql_column" />
+    from product_tag
+    where tag_id = #{tagId}
+  </select>
+
+</mapper>
