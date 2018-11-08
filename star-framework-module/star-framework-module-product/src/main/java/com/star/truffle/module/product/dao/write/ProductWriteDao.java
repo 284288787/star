@@ -18,4 +18,6 @@ public interface ProductWriteDao {
 
   public ProductResponseDto getProduct(Long productId);
 
+  public Integer getMinIdx();
+
 }

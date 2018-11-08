@@ -1,6 +1,7 @@
 /**create by framework at 2018年09月04日 10:28:04**/
 package com.star.truffle.module.product.cache;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -46,6 +47,7 @@ public class ProductCache {
 
   @CachePut(value = "module-product-product", key = "'product_productId_'+#result.productId", condition = "#result != null and #result.productId != null")
   public ProductResponseDto updateProduct(ProductRequestDto productRequestDto){
+    productRequestDto.setUpdateTime(new Date());
     this.productWriteDao.updateProduct(productRequestDto);
     ProductResponseDto productResponseDto = this.productWriteDao.getProduct(productRequestDto.getProductId());
     return productResponseDto;
@@ -70,6 +72,10 @@ public class ProductCache {
   public Long queryProductCount(ProductRequestDto productRequestDto){
     Map<String, Object> conditions = starJson.bean2Map(productRequestDto);
     return this.productReadDao.queryProductCount(conditions);
+  }
+
+  public Integer getMinIdx() {
+    return this.productWriteDao.getMinIdx();
   }
 
 }

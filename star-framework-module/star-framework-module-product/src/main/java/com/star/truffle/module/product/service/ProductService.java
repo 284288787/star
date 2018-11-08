@@ -110,7 +110,6 @@ public class ProductService {
       updateUser = auth.getName();
     }
     product.setUpdateUser(updateUser);
-    product.setUpdateTime(now);
     ProductInventory productInventory = this.productInventoryCache.getProductInventory(product.getProductId(), ProductInventoryTypeEnum.product.type());
     if (null != productInventory) {
       productInventory.setNumberType(product.getProductInventory().getNumberType());
@@ -281,6 +280,14 @@ public class ProductService {
         this.productCache.updateProduct(dto);
       }
     }
+  }
+
+  public void top(Long productId) {
+    Integer idx = this.productCache.getMinIdx();
+    ProductRequestDto dto = new ProductRequestDto();
+    dto.setProductId(productId);
+    dto.setIdx(idx - 1);
+    this.productCache.updateProduct(dto);
   }
 
 }
