@@ -2,15 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.star.truffle.module.product.dao.write.ProductWriteDao">
   <insert id="saveProduct" useGeneratedKeys="true" keyProperty="productId" parameterType="com.star.truffle.module.product.domain.Product">
-    insert into product(product_id, title, subtitle, tag, presell_time, off_shelf_time, pickup_time, state, original_price, price, supplier, brand, specification, origin_place, description, subscribers, create_time, create_user, update_time, update_user, brokerage_type, brokerage_value, brokerage_first, price_han, price_wei, supplier_name, supplier_mobile)
-    values(#{productId}, #{title}, #{subtitle}, #{tag}, #{presellTime}, #{offShelfTime}, #{pickupTime}, #{state}, #{originalPrice}, #{price}, #{supplier}, #{brand}, #{specification}, #{originPlace}, #{description}, #{subscribers}, #{createTime}, #{createUser}, #{updateTime}, #{updateUser}, #{brokerageType}, #{brokerageValue}, #{brokerageFirst}, #{priceHan}, #{priceWei}, #{supplierName}, #{supplierMobile})
+    insert into product(cate_id, product_id, title, subtitle, tag, presell_time, off_shelf_time, pickup_time, state, original_price, price, supplier, brand, specification, origin_place, description, subscribers, create_time, create_user, update_time, update_user, brokerage_type, brokerage_value, brokerage_first, price_han, price_wei, supplier_name, supplier_mobile)
+    values(#{cateId}, #{productId}, #{title}, #{subtitle}, #{tag}, #{presellTime}, #{offShelfTime}, #{pickupTime}, #{state}, #{originalPrice}, #{price}, #{supplier}, #{brand}, #{specification}, #{originPlace}, #{description}, #{subscribers}, #{createTime}, #{createUser}, #{updateTime}, #{updateUser}, #{brokerageType}, #{brokerageValue}, #{brokerageFirst}, #{priceHan}, #{priceWei}, #{supplierName}, #{supplierMobile})
   </insert>
 
   <insert id="batchSaveProduct" parameterType="java.util.List">
-    insert into product(product_id, title, subtitle, tag, presell_time, off_shelf_time, pickup_time, state, original_price, price, supplier, brand, specification, origin_place, description, subscribers, create_time, create_user, update_time, update_user, brokerage_type, brokerage_value, brokerage_first, price_han, price_wei, supplier_name, supplier_mobile)
+    insert into product(cate_id, product_id, title, subtitle, tag, presell_time, off_shelf_time, pickup_time, state, original_price, price, supplier, brand, specification, origin_place, description, subscribers, create_time, create_user, update_time, update_user, brokerage_type, brokerage_value, brokerage_first, price_han, price_wei, supplier_name, supplier_mobile)
     values
     <foreach collection="list" item="item" index="index" separator=",">
-      (#{item.productId}, #{item.title}, #{item.subtitle}, #{item.tag}, #{item.presellTime}, #{item.offShelfTime}, #{item.pickupTime}, 
+      (#{item.cateId}, #{item.productId}, #{item.title}, #{item.subtitle}, #{item.tag}, #{item.presellTime}, #{item.offShelfTime}, #{item.pickupTime}, 
       #{item.state}, #{item.originalPrice}, #{item.price}, #{item.supplier}, #{item.brand}, #{item.specification}, #{item.originPlace}, 
       #{item.description}, #{item.subscribers}, #{item.createTime}, #{item.createUser}, #{item.updateTime}, #{item.updateUser}, 
       #{item.brokerageType}, #{item.brokerageValue}, #{item.brokerageFirst}, #{item.priceHan}, #{item.priceWei}, #{item.supplierName}, #{item.supplierMobile})

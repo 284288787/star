@@ -51,6 +51,7 @@ public class ProductController {
   public Map<String, Object> list(ProductRequestDto productRequestDto, Integer page, Integer rows, String sord, String sidx) {
     Page pager = new Page(page, rows, sidx, OrderType.desc.name().equals(sord) ? OrderType.desc : OrderType.asc);
     productRequestDto.setPager(pager);
+    productRequestDto.setStates("1,2,3,4,5");
     List<ProductResponseDto> list = productService.queryProduct(productRequestDto);
     Long count = productService.queryProductCount(productRequestDto);
 

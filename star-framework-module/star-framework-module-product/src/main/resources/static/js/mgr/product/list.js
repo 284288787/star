@@ -18,10 +18,29 @@ var productHandle = new ListHandle({
   }
 },{});
 $(function(){
-  var colNames = ['主图', '商品分类', '商品ID', '商品状态', '商品标题', '副标题', '商品标签', '预售时间', '下架时间', '提货时间', '原价', '含税价', '未税价', '售价', '一级分销提成', '二级分销提成', '库存数量', '已售数量', '供应商', '供应商联系人', '供应商电话', '商品品牌', '商品规格', '商品产地', '关注人数', '更新日期', '更新人', '操作'];
+  var colNames = ['操作', '主图', '商品分类', '商品ID', '商品状态', '商品标题', '副标题', '商品标签', '预售时间', '下架时间', '提货时间', '原价', '含税价', '未税价', '售价', '一级分销提成', '二级分销提成', '库存数量', '已售数量', '供应商', '供应商联系人', '供应商电话', '商品品牌', '商品规格', '商品产地', '关注人数', '更新日期', '更新人'];
   var colModel = [
+    {align: "center", width: '90px', editable: false, sortable: false, formatter: function(cellvalue, options, rowObject){
+      var temp = '';
+      if(hasAuthorize('product-editBefore')){
+        temp += '<a class="linetaga" href="javascript: productHandle.edit(\'' + rowObject.productId.toFixed(0) + '\');" >编辑</a>';
+      }
+//      if(hasAuthorize('product-setInventory')){
+//        temp += '<a class="linetaga" href="javascript: productHandle.setInventory(\'' + rowObject.productId.toFixed(0) + '\');" >设置库存</a>';
+//      }
+      if(rowObject.state!=5){
+        if(hasAuthorize('product-disabled')){
+          temp += '<a class="linetaga" href="javascript: productHandle.disabled(\'' + rowObject.productId.toFixed(0) + '\');" >禁用</a>';
+        }
+      }else{
+        if(hasAuthorize('product-enabled')){
+          temp += '<a class="linetaga" href="javascript: productHandle.enabled(\'' + rowObject.productId.toFixed(0) + '\');" >启用</a>';
+        }
+      }
+      return temp;
+    }},
     {name: 'mainPictureUrl', index: 'mainPictureUrl', width: '70px', align: "center", editable: false, sortable: false, formatter: function(cellvalue, options, rowObject){
-      return "<img src='"+cellvalue+"' height='60px'>";
+      return "<img src='http://mgr.hnkbmd.com"+cellvalue+"' height='60px'>";
     }}, 
     {name: 'cateName', index: 'cate_id', width: '70px', align: "center"}, 
     {name: 'productId', index: 'product_id', width: '50px', align: "center", formatter: function(cellvalue, options, rowObject){
@@ -94,26 +113,7 @@ $(function(){
     {name: 'originPlace', index: 'origin_place', width: '90px', align: "center"}, 
     {name: 'subscribers', index: 'subscribers', width: '90px', align: "center"}, 
     {name: 'updateTime', index: 'update_time', width: '90px', align: "center", formatter:'date', formatoptions: {newformat:'Y-m-d'}}, 
-    {name: 'updateUser', index: 'update_user', width: '90px', align: "center"}, 
-    {align: "center", width: '90px', editable: false, sortable: false, formatter: function(cellvalue, options, rowObject){
-      var temp = '';
-      if(hasAuthorize('product-editBefore')){
-        temp += '<a class="linetaga" href="javascript: productHandle.edit(\'' + rowObject.productId.toFixed(0) + '\');" >编辑</a>';
-      }
-//      if(hasAuthorize('product-setInventory')){
-//        temp += '<a class="linetaga" href="javascript: productHandle.setInventory(\'' + rowObject.productId.toFixed(0) + '\');" >设置库存</a>';
-//      }
-      if(rowObject.state!=5){
-        if(hasAuthorize('product-disabled')){
-          temp += '<a class="linetaga" href="javascript: productHandle.disabled(\'' + rowObject.productId.toFixed(0) + '\');" >禁用</a>';
-        }
-      }else{
-        if(hasAuthorize('product-enabled')){
-          temp += '<a class="linetaga" href="javascript: productHandle.enabled(\'' + rowObject.productId.toFixed(0) + '\');" >启用</a>';
-        }
-      }
-      return temp;
-    }}
+    {name: 'updateUser', index: 'update_user', width: '90px', align: "center"}
   ];
   var rowList = [10, 20, 30, 50];
   var rownumbers = true;

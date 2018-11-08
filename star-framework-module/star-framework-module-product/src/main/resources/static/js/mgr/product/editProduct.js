@@ -5,6 +5,28 @@ $(function(){
   var contentEditor;
   new UtilsHandle({
     basePath: "/",
+    choose: [
+      {
+        object: $("input[name=cateName]"),
+        service: "categoryService",
+        title: "选择商品分类",
+        width: "800px",
+        height: "500px",
+        callback: function(rowObject){
+          $("input[name=cateName]").val(rowObject.cateName);
+          $("input[name=cateId]").val(rowObject.cateId);
+        }
+      }, {
+        object: $("input[name=tag]"),
+        service: "productTagService",
+        title: "选择商品标签",
+        width: "800px",
+        height: "500px",
+        callback: function(rowObject){
+          $("input[name=tag]").val(rowObject.tagName);
+        }
+      }
+    ],
     kindEditor: [{
       object: 'textarea[name=description]',
       width: '100%',
@@ -52,6 +74,9 @@ $(function(){
   },{});
   $("#editProductForm").validate({
     rules: {
+      cateName: {
+        required: true,
+      },
       title: {
         required: true,
         zhengze: ".{2,50}"
@@ -84,13 +109,33 @@ $(function(){
         required: true,
         money: true
       },
+      priceHan: {
+        required: true,
+        money: true
+      },
+      priceWei: {
+        required: true,
+        money: true
+      },
       price: {
+        required: true,
+        money: true
+      },
+      brokerageFirst: {
         required: true,
         money: true
       },
       supplier: {
         required: true,
         zhengze: ".{2,10}"
+      },
+      supplierName: {
+        required: true,
+        zhengze: ".{2,10}"
+      },
+      supplierMobile: {
+        required: true,
+        mobile: true
       },
       brand: {
         zhengze: ".{0,20}"
@@ -112,6 +157,9 @@ $(function(){
       }
     },
     messages: {
+      cateName: {
+        required: "必填",
+      },
       title: {
         required: "必填",
         zhengze: "长度在2至50个字"
@@ -142,12 +190,28 @@ $(function(){
       originalPrice: {
         required: "必填",
       },
+      priceHan: {
+        required: "必填",
+      },
+      priceWei: {
+        required: "必填",
+      },
       price: {
+        required: "必填",
+      },
+      brokerageFirst: {
         required: "必填",
       },
       supplier: {
         required: "必填",
         zhengze: "长度在2至10个字"
+      },
+      supplierName: {
+        required: "必填",
+        zhengze: "长度在2至10个字"
+      },
+      supplierMobile: {
+        required: "必填",
       },
       brand: {
         zhengze: "10个字以内"
@@ -227,6 +291,9 @@ $(function(){
     params["price"] = params["price"] * 100;
     params["originalPrice"] = params["originalPrice"] * 100;
     params["brokerageValue"] = params["brokerageValue"] * 100;
+    params["priceHan"] = params["priceHan"] * 100;
+    params["priceWei"] = params["priceWei"] * 100;
+    params["brokerageFirst"] = params["brokerageFirst"] * 100;
     if(params.brokerageType == 1 && params.price < params.brokerageValue){
       artDialog.alert("提成金额不得大于商品售价");
       return;

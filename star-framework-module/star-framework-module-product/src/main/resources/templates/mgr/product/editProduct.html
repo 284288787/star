@@ -16,6 +16,13 @@
       <input type="hidden" name="productId" th:value="${productResponseDto.productId}">
       <table class="gy_table">
         <tr>
+          <td class="titleTd"><strong>商品类目：</strong></td>
+          <td>
+            <input type="text" name="cateName" class="ipt300" placeholder="商品类目" readonly th:value="${productResponseDto.cateName}">
+            <input type="hidden" name="cateId" th:value="${productResponseDto.cateId}">
+          </td>
+        </tr>
+        <tr>
           <td class="titleTd"><strong>商品标题：</strong></td>
           <td>
             <input type="text" name="title" class="ipt500" maxlength="50" placeholder="商品标题" th:value="${productResponseDto.title}">
@@ -75,19 +82,38 @@
           </td>
         </tr>
         <tr>
+          <td class="titleTd"><strong>含税价：</strong></td>
+          <td>
+            <input type="text" name="priceHan" maxlength="10" placeholder="含税价" th:value="${#numbers.formatDecimal(productResponseDto.priceHan/100.0,1,2)}">
+          </td>
+        </tr>
+        <tr>
+          <td class="titleTd"><strong>未税价：</strong></td>
+          <td>
+            <input type="text" name="priceWei" maxlength="10" placeholder="未税价" th:value="${#numbers.formatDecimal(productResponseDto.priceWei/100.0,1,2)}">
+          </td>
+        </tr>
+        <tr>
           <td class="titleTd"><strong>商品售价：</strong></td>
           <td>
             <input type="text" name="price" maxlength="10" placeholder="商品售价" th:value="${#numbers.formatDecimal(productResponseDto.price/100.0,1,2)}">
           </td>
         </tr>
         <tr>
-          <td class="titleTd"><strong>商品提成：</strong></td>
+          <td class="titleTd"><strong>一级分销商提成：</strong></td>
           <td>
-            <select name="brokerageType">
+            <input type="text" name="brokerageFirst" placeholder="一级分销商提成金额" th:value="${#numbers.formatDecimal(productResponseDto.brokerageFirst/100.0,1,2)}">
+            <span class="tip">输入一个金额数量，例如：0.8，表示0.8元</span>
+          </td>
+        </tr>
+        <tr>
+          <td class="titleTd"><strong>二级分销商提成：</strong></td>
+          <td>
+            <select name="brokerageType" style="display:none">
               <option value="1" th:selected="${productResponseDto.brokerageType==1}">固定金额</option>
               <option value="2" th:selected="${productResponseDto.brokerageType==2}">售价百分比</option>
             </select>
-            <input type="text" name="brokerageValue" placeholder="提成金额" th:value="${#numbers.formatDecimal(productResponseDto.brokerageValue/100.0,1,2)}">
+            <input type="text" name="brokerageValue" placeholder="二级分销商提成金额" th:value="${#numbers.formatDecimal(productResponseDto.brokerageValue/100.0,1,2)}">
             <span class="tip" th:if="${productResponseDto.brokerageType==1}">输入一个金额数量，例如：0.8，表示0.8元</span>
             <span class="tip" th:if="${productResponseDto.brokerageType==2}">输入一个百分比数值，例如：5，表示5%，5.3，表示5.3%</span>
           </td>
@@ -96,6 +122,18 @@
           <td class="titleTd"><strong>供应商名称：</strong></td>
           <td>
             <input type="text" name="supplier" class="ipt200" maxlength="10" placeholder="供应商名称 例如：臻有味食品" th:value="${productResponseDto.supplier}">
+          </td>
+        </tr>
+        <tr>
+          <td class="titleTd"><strong>供应商联系人：</strong></td>
+          <td>
+            <input type="text" name="supplierName" class="ipt200" maxlength="10" placeholder="供应商联系人，例如：张经理" th:value="${productResponseDto.supplierName}">
+          </td>
+        </tr>
+        <tr>
+          <td class="titleTd"><strong>供应商电话：</strong></td>
+          <td>
+            <input type="text" name="supplierMobile" class="ipt100" maxlength="11" placeholder="供应商电话" th:value="${productResponseDto.supplierMobile}">
           </td>
         </tr>
         <tr>
