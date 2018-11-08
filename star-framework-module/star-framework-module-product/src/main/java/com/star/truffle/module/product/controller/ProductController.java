@@ -124,12 +124,40 @@ public class ProductController {
     }
     return apiResult;
   }
-
+  
   @ResponseBody
   @RequestMapping(value = "/top/{productId}", method = RequestMethod.POST)
   public ApiResult<Void> top(@PathVariable Long productId) {
     try {
       productService.top(productId);
+      return ApiResult.success();
+    } catch (StarServiceException e) {
+      return ApiResult.fail(e.getCode(), e.getMsg());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return ApiResult.fail(ApiCode.SYSTEM_ERROR);
+    }
+  }
+  
+  @ResponseBody
+  @RequestMapping(value = "/up/{productId}", method = RequestMethod.POST)
+  public ApiResult<Void> up(@PathVariable Long productId) {
+    try {
+      productService.up(productId);
+      return ApiResult.success();
+    } catch (StarServiceException e) {
+      return ApiResult.fail(e.getCode(), e.getMsg());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return ApiResult.fail(ApiCode.SYSTEM_ERROR);
+    }
+  }
+
+  @ResponseBody
+  @RequestMapping(value = "/down/{productId}", method = RequestMethod.POST)
+  public ApiResult<Void> down(@PathVariable Long productId) {
+    try {
+      productService.down(productId);
       return ApiResult.success();
     } catch (StarServiceException e) {
       return ApiResult.fail(e.getCode(), e.getMsg());

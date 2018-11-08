@@ -290,4 +290,38 @@ public class ProductService {
     this.productCache.updateProduct(dto);
   }
 
+  public void up(Long productId) {
+    ProductResponseDto product = this.productCache.getProduct(productId);
+    if (null != productId) {
+      ProductResponseDto upProduct = this.productCache.getProductOfIdx(product.getIdx(), 1);
+      if (null != upProduct) {
+        ProductRequestDto up = new ProductRequestDto();
+        up.setProductId(upProduct.getProductId());
+        up.setIdx(product.getIdx());
+        this.productCache.updateProduct(up);
+        ProductRequestDto update = new ProductRequestDto();
+        update.setProductId(product.getProductId());
+        update.setIdx(upProduct.getIdx());
+        this.productCache.updateProduct(update);
+      }
+    }
+  }
+
+  public void down(Long productId) {
+    ProductResponseDto product = this.productCache.getProduct(productId);
+    if (null != productId) {
+      ProductResponseDto downProduct = this.productCache.getProductOfIdx(product.getIdx(), 2);
+      if (null != downProduct) {
+        ProductRequestDto down = new ProductRequestDto();
+        down.setProductId(downProduct.getProductId());
+        down.setIdx(product.getIdx());
+        this.productCache.updateProduct(down);
+        ProductRequestDto update = new ProductRequestDto();
+        update.setProductId(product.getProductId());
+        update.setIdx(downProduct.getIdx());
+        this.productCache.updateProduct(update);
+      }
+    }
+  }
+
 }

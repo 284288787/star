@@ -78,4 +78,8 @@ public class ProductCache {
     return this.productWriteDao.getMinIdx();
   }
 
+  public ProductResponseDto getProductOfIdx(Integer idx, int position) {
+    return this.productReadDao.getProductOfIdx(idx, position);
+  }
+
 }

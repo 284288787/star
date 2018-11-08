@@ -68,6 +68,27 @@
     where product.product_id = #{productId}
   </select>
 
+  <select id="getProductOfIdx" resultType="com.star.truffle.module.product.dto.res.ProductResponseDto">
+    select
+    <include refid="sql_column" />
+    from product
+    inner join product_inventory i on product.product_id = i.product_id 
+    LEFT JOIN category c on product.cate_id = c.cate_id
+    where product.idx 
+    <choose>
+      <when test="position == 1">&lt;</when>
+      <when test="position == 2">&gt;</when>
+      <otherwise>=</otherwise>
+    </choose>
+     #{idx}
+     <choose>
+      <when test="position == 1">order by product.idx desc </when>
+      <when test="position == 2">order by product.idx asc</when>
+      <otherwise>=</otherwise>
+    </choose>
+     limit 1
+  </select>
+
   <select id="queryProduct" resultMap="productResponseDtoResultMap">
     select
     <include refid="sql_column" />

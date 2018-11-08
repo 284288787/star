@@ -3,6 +3,9 @@ package com.star.truffle.module.product.dao.read;
 
 import java.util.List;
 import java.util.Map;
+
+import org.apache.ibatis.annotations.Param;
+
 import com.star.truffle.module.product.dto.res.ProductResponseDto;
 
 public interface ProductReadDao {
@@ -12,5 +15,7 @@ public interface ProductReadDao {
   public List<ProductResponseDto> queryProduct(Map<String, Object> conditions);
 
   public Long queryProductCount(Map<String, Object> conditions);
+
+  public ProductResponseDto getProductOfIdx(@Param("idx") Integer idx, @Param("position") int position);
 
 }
