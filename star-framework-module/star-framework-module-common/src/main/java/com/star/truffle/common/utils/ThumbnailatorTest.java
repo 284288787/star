@@ -20,16 +20,21 @@ public class ThumbnailatorTest {
    * @throws IOException
    */
   public static void main(String[] args) throws IOException {
-    ThumbnailatorTest thumbnailatorTest = new ThumbnailatorTest();
-    thumbnailatorTest.test1();
-    thumbnailatorTest.test2();
-    thumbnailatorTest.test3();
-    thumbnailatorTest.test4();
-    thumbnailatorTest.test5();
-    thumbnailatorTest.test6();
-    thumbnailatorTest.test7();
-    thumbnailatorTest.test8();
-    thumbnailatorTest.test9();
+//    ThumbnailatorTest thumbnailatorTest = new ThumbnailatorTest();
+//    thumbnailatorTest.test1();
+//    thumbnailatorTest.test2();
+//    thumbnailatorTest.test3();
+//    thumbnailatorTest.test4();
+//    thumbnailatorTest.test5();
+//    thumbnailatorTest.test6();
+//    thumbnailatorTest.test7();
+//    thumbnailatorTest.test8();
+//    thumbnailatorTest.test9();
+    
+    Thumbnails.of("C:\\Users\\liuhua\\Documents\\Tencent Files\\3158459\\FileRecv\\MobileFile\\444\\a.jpg").size(613, 512)
+    .watermark(Positions.CENTER_RIGHT, ImageIO.read(new File("D:\\opt\\upload\\shuiyin.png")), 0.4f).outputFormat("jpg")
+    .outputQuality(0.8f)
+    .toFile("C:\\\\Users\\\\liuhua\\\\Documents\\\\Tencent Files\\\\3158459\\\\FileRecv\\\\MobileFile\\\\444\\\\1-min2.jpg");
   }
 
   /**

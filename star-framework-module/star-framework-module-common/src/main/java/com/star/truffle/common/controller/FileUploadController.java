@@ -77,8 +77,8 @@ public class FileUploadController {
 //            ImageWaterMark.addWaterMarkImage(realPath, fileName, starSpringMvcProperties.getPhotoPath() + "shuiyin.png", ImageWaterMark.HORIZONTAL_ALIGN_RIGHT, ImageWaterMark.VERTICAL_ALIGN_CENTER);
 //            item.put("mark", "/photo/image/" + name + ImageWaterMark.WATER_MARK_SUFFIX + suffix);
             Thumbnails.of(realPath + fileName).scale(1f)
-            .watermark(Positions.BOTTOM_RIGHT, ImageIO.read(new File(starSpringMvcProperties.getPhotoPath() + "shuiyin.png")), 0.5f)
-            .outputQuality(0.8f)
+            .watermark(Positions.CENTER_RIGHT, ImageIO.read(new File(starSpringMvcProperties.getPhotoPath() + "shuiyin.png")), 0.5f)
+            .outputQuality(1f)
             .outputFormat(suffix)
             .toFile(realPath + name + ImageWaterMark.WATER_MARK_SUFFIX + "." + suffix);
             item.put("mark", "/photo/image/" + name + ImageWaterMark.WATER_MARK_SUFFIX + "." + suffix);
@@ -87,7 +87,7 @@ public class FileUploadController {
 //            ImageShrink.shrink(realPath, fileName, 300);
 //            item.put("shrink", "/photo/image/" + name + ImageShrink.SHRINK_SUFFIX + suffix);
             Thumbnails.of(realPath + fileName).scale(0.25f)
-            .outputQuality(0.8f)
+            .outputQuality(1f)
             .outputFormat(suffix)
             .toFile(realPath + name + ImageShrink.SHRINK_SUFFIX + "." + suffix);
             item.put("shrink", "/photo/image/" + name + ImageShrink.SHRINK_SUFFIX + "." + suffix);

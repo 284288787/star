@@ -70,6 +70,8 @@ public class ProductService {
     if (2 == product.getProductInventory().getNumberType() && product.getProductInventory().getNumber() == 0) { //库存为0 表示售罄
       product.setState(ProductEnum.sellout.state());
     }
+    Integer idx = this.productCache.getMinIdx();
+    product.setIdx(idx - 1);
     this.productCache.saveProduct(product);
     Long productId = product.getProductId();
     this.productPictureCache.batchSavePicture(productId, pictures);
