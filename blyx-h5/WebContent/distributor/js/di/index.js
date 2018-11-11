@@ -8,7 +8,7 @@ $(function(){
     success: function(data) {
       wx.config({
         debug: false,
-        appId: 'wx43fd4135600dcee3',
+        appId: 'wx8a05f2d3eb34111f',
         timestamp: data.timestamp,
         nonceStr: data.nonceStr,
         signature: data.signature,

@@ -69,6 +69,6 @@ function authLogin(mobile, code){
   var state = 'yx';
   putLocalData("mobile", mobile);
   putLocalData("code", code);
-  var wx = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx43fd4135600dcee3&redirect_uri="+url+"&response_type=code&scope=snsapi_userinfo&state="+state+"#wechat_redirect";
+  var wx = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wx8a05f2d3eb34111f&redirect_uri="+url+"&response_type=code&scope=snsapi_userinfo&state="+state+"#wechat_redirect";
   document.location.href=wx;
 }

@@ -59,7 +59,9 @@ public class RequestInfoAspect {
       }
     } catch (Throwable e) {
       e.printStackTrace();
-      object = ApiResult.fail();
+      if (object instanceof ApiResult) {
+        object = ApiResult.fail();
+      }
     }
     params.put("result", object);
     

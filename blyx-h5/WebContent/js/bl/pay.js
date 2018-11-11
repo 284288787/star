@@ -23,7 +23,7 @@ $(function() {
       //通过config接口注入权限验证配置
       wx.config({
         debug: false,
-        appId: 'wx43fd4135600dcee3',
+        appId: 'wx8a05f2d3eb34111f',
         timestamp: data.timestamp,
         nonceStr: data.nonceStr,
         signature: data.signature,
