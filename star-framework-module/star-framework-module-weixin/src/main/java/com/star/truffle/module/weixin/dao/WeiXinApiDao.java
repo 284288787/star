@@ -552,7 +552,7 @@ class JsapiTicket {
    * @return
    */
   public boolean isExpires() {
-    if (createTime + expires_in * 1000 > System.currentTimeMillis()) {
+    if (null != expires_in && createTime + expires_in * 1000 > System.currentTimeMillis()) {
       return true;
     }
     return false;
