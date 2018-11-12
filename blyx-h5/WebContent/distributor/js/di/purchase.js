@@ -188,17 +188,20 @@ function cal(href){
   });
   if(! href) href = $("#segmentedControl .mui-active").attr("href");
   if(href=="#item1"){
-    $(".totaldiv .youfei").parent().hide();
+    $(".totaldiv .despatch").hide();
     $(".despatchLimit").hide();
     youfei = 0;
   }else{
-    $(".totaldiv .youfei").parent().show();
+    $(".totaldiv .despatch").show();
     $(".totaldiv .youfei").text("￥" + youfei.toMoney());
     youfei = despatchMoney;
     if(prices >= despatchLimit){
+      youfei = 0;
       $(".despatchLimit span").text(despatchLimit.toMoney());
-      $(".despatchLimit .youfei").text("-￥" + youfei.toMoney());
+      $(".despatchLimit .youfei").text("-￥" + despatchMoney.toMoney());
       $(".despatchLimit").show();
+    }else{
+      $(".despatchLimit").hide();
     }
   }
   $(".totaldiv .number").text(goodsNum);
