@@ -81,14 +81,14 @@ public class DistributorApiController {
     }
   }
   
-  @RequestMapping(value = "/getDistributorByOpenId", method = RequestMethod.POST)
-  @ApiOperation(value = "根据openId获取分销商", notes = "根据openId获取分销商", httpMethod = "POST", response = DistributorResponseDto.class)
+  @RequestMapping(value = "/getDistributorByMobile", method = RequestMethod.POST)
+  @ApiOperation(value = "根据mobile获取分销商", notes = "根据mobile获取分销商", httpMethod = "POST", response = DistributorResponseDto.class)
   @ApiImplicitParams({
-    @ApiImplicitParam(name = "openId", value = "openId", dataType = "String", required = true, paramType = "query")
+    @ApiImplicitParam(name = "mobile", value = "mobile", dataType = "String", required = true, paramType = "query")
   })
-  public ApiResult<DistributorResponseDto> getDistributorByOpenId(String openId) {
+  public ApiResult<DistributorResponseDto> getDistributorByMobile(String mobile) {
     try {
-      DistributorResponseDto distributorResponseDto = distributorService.getDistributorByOpenId(openId);
+      DistributorResponseDto distributorResponseDto = distributorService.getDistributorByMobile(mobile);
       return ApiResult.success(distributorResponseDto);
     } catch (StarServiceException e) {
       return ApiResult.fail(e.getCode(), e.getMsg());

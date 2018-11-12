@@ -58,8 +58,8 @@ if(! islogin()){
 }else{
 	var user = getLoginInfo();
 	ajax({
-		url: '/api/distributor/getDistributorByOpenId',
-		data: {'openId': user.openId},
+		url: '/api/distributor/getDistributorByMobile',
+		data: {'mobile': user.mobile},
 		success: function(data){
 		  setLoginInfo(data);
 		},

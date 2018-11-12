@@ -257,4 +257,18 @@ public class DistributorService implements ChooseDataIntf{
     }
     return distributorResponseDto;
   }
+
+  public DistributorResponseDto getDistributorByMobile(String mobile) {
+    DistributorResponseDto distributorResponseDto = distributorCache.getDistributorByMobile(mobile);
+    if (null == distributorResponseDto) {
+      throw new StarServiceException(ApiCode.NO_EXISTS);
+    }
+    if (distributorResponseDto.getEnabled() == EnabledEnum.disabled.val()) {
+      throw new StarServiceException(ApiCode.NO_LOGIN, "已被取消分销商身份");
+    }
+    if (distributorResponseDto.getState() == LoginStateEnum.logout.getState()) {
+      throw new StarServiceException(ApiCode.NO_LOGIN);
+    }
+    return distributorResponseDto;
+  }
 }
