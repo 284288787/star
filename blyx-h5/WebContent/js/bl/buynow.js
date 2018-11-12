@@ -7,6 +7,7 @@ mui('.main').on('tap', '.cancel', function() {
   mui('.mui-popover').popover('hide');
 });
 var despatchMoney = 0;
+var despatchLimit = 0;
 var deliveryAddress = null;
 var originalPrice = 0;
 var totalMoney = 0;
@@ -30,21 +31,28 @@ $(function() {
     $("#item2").addClass("mui-active");
   }
   $(".totaldiv .despatch").hide();
+  $(".totaldiv .despatchLimit").hide();
   $(".myself input[name=name]").val(user.name);
   $(".myself input[name=mobile]").val(user.mobile);
   $("#item1 .blank span").text(distributor.provinceName + distributor.cityName + distributor.areaName + ' ' + distributor.address);
-  $("#item1 .red span").text(distributor.shopName);
+  $("#item1 .red span").text(distributor.shopName + " " + distributor.mobile);
   initOrder();
   $(".mui-control-item").on("tap", function(){
     var href=$(this).attr("href");
     if(href=='#item1'){
       $(".totaldiv .despatch").hide();
-      $(".totaldiv .productTotalMoney").text(totalMoney.toFixed(2));
-      $("#mean2 .red").text(totalMoney.toFixed(2));
+      $(".totaldiv .despatchLimit").hide();
+      $(".totaldiv .productTotalMoney").text("￥"+totalMoney.toFixed(2));
+      $("#mean2 .red").text("￥"+totalMoney.toFixed(2));
     }else {
       $(".totaldiv .despatch").show();
-      $(".totaldiv .productTotalMoney").text((totalMoney + despatchMoney/100.0).toFixed(2));
-      $("#mean2 .red").text((totalMoney + despatchMoney/100.0).toFixed(2));
+      var yf = despatchMoney;
+      if(totalMoney >= despatchLimit){
+        $(".totaldiv .despatchLimit").show();
+        yf = 0;
+      }
+      $(".totaldiv .productTotalMoney").text("￥"+(totalMoney + yf/100.0).toFixed(2));
+      $("#mean2 .red").text("￥"+(totalMoney + yf/100.0).toFixed(2));
     }
   });
   
@@ -102,6 +110,7 @@ function initOrder(){
     success: function(data){
       $(".goodslist ul").html("");
       despatchMoney = data.despatchMoney;
+      despatchLimit = data.despatchLimit;
       deliveryAddress = data.deliveryAddress;
       if(deliveryAddress != null){
         $("#deliveryAddressId").val(deliveryAddress.id);
@@ -139,11 +148,13 @@ function initOrder(){
         
       }
       $(".totaldiv .productNum").text(num);
-      $(".totaldiv .productMoney").text(totalMoney.toFixed(2));
-      $(".totaldiv .productOriginalPrice").text(originalPrice.toFixed(2));
-      $(".totaldiv .despatchMoney").text((despatchMoney/100.0).toFixed(2));
-      $(".totaldiv .productTotalMoney").text(totalMoney.toFixed(2));
-      $("#mean2 .red").text(totalMoney.toFixed(2));
+      $(".totaldiv .productMoney").text("￥"+totalMoney.toFixed(2));
+      $(".totaldiv .productOriginalPrice").text("￥"+originalPrice.toFixed(2));
+      $(".totaldiv .despatchMoney").text("￥"+(despatchMoney/100.0).toFixed(2));
+      $(".totaldiv .despatchLimit span").text("￥"+(despatchLimit/100.0).toFixed(0));
+      $(".totaldiv .despatchLimit b.despatchMoney").text("-￥"+(despatchMoney/100.0).toFixed(2));
+      $(".totaldiv .productTotalMoney").text("￥"+totalMoney.toFixed(2));
+      $("#mean2 .red").text("￥"+totalMoney.toFixed(2));
     }
   });
 }

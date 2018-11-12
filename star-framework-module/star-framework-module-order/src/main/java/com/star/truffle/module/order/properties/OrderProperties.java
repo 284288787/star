@@ -11,5 +11,6 @@ import lombok.Data;
 @ConfigurationProperties(prefix = "order")
 public class OrderProperties {
 
-  private Integer despatchMoney = 800;
+  private Integer despatchMoney;
+  private Integer despatchLimit;
 }

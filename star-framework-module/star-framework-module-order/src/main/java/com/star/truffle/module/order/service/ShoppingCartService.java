@@ -207,6 +207,7 @@ public class ShoppingCartService {
 //      }
     }
     Integer despatchMoney = this.orderProperties.getDespatchMoney();
+    Integer despatchLimit = this.orderProperties.getDespatchLimit();
     DeliveryAddressRequestDto deliveryAddressRequestDto = new DeliveryAddressRequestDto();
     deliveryAddressRequestDto.setMemberId(memberId);
     deliveryAddressRequestDto.setDef(EnabledEnum.enabled.val());
@@ -215,7 +216,7 @@ public class ShoppingCartService {
     if (null != list && ! list.isEmpty()) {
       deliveryAddress = list.get(0);
     }
-    EnterOrder enterOrder = new EnterOrder(despatchMoney, products, deliveryAddress);
+    EnterOrder enterOrder = new EnterOrder(despatchMoney, despatchLimit, products, deliveryAddress);
     return enterOrder;
   }
 
@@ -252,6 +253,7 @@ public class ShoppingCartService {
     ShoppingCartResponseDto shoppingCartResponseDto = starJson.str2obj(starJson.obj2string(productResponseDto), ShoppingCartResponseDto.class);
     shoppingCartResponseDto.setNum(num);
     Integer despatchMoney = this.orderProperties.getDespatchMoney();
+    Integer despatchLimit = this.orderProperties.getDespatchLimit();
     DeliveryAddressRequestDto deliveryAddressRequestDto = new DeliveryAddressRequestDto();
     deliveryAddressRequestDto.setMemberId(memberId);
     deliveryAddressRequestDto.setDef(EnabledEnum.enabled.val());
@@ -260,7 +262,7 @@ public class ShoppingCartService {
     if (null != list && ! list.isEmpty()) {
       deliveryAddress = list.get(0);
     }
-    EnterOrder enterOrder = new EnterOrder(despatchMoney, Arrays.asList(shoppingCartResponseDto), deliveryAddress);
+    EnterOrder enterOrder = new EnterOrder(despatchMoney, despatchLimit, Arrays.asList(shoppingCartResponseDto), deliveryAddress);
     return enterOrder;
   }
 }

@@ -22,6 +22,7 @@ import com.star.truffle.module.order.dto.req.OrderRequestDto;
 import com.star.truffle.module.order.dto.res.OrderDetailResponseDto;
 import com.star.truffle.module.order.dto.res.OrderResponseDto;
 import com.star.truffle.module.order.dto.res.OrderTotal;
+import com.star.truffle.module.order.properties.OrderProperties;
 import com.star.truffle.module.order.service.OrderService;
 
 import io.swagger.annotations.Api;
@@ -39,7 +40,9 @@ public class OrderApiController {
 
   @Autowired
   private OrderService orderService;
-
+  @Autowired
+  private OrderProperties orderProperties;
+  
   @InitBinder
   public void initBinder(WebDataBinder binder) {
     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -266,7 +269,7 @@ public class OrderApiController {
       return ApiResult.fail(ApiCode.SYSTEM_ERROR);
     }
   }
-
+  
   @RequestMapping(value = "/buyRecordTotal", method = RequestMethod.POST)
   @ApiOperation(value = "购买记录统计", notes = "购买记录统计", httpMethod = "POST", response = ApiResult.class)
   @ApiImplicitParams({ @ApiImplicitParam(name = "productId", value = "供应id", dataType = "Long", required = true, paramType = "query") })
@@ -274,6 +277,19 @@ public class OrderApiController {
     try {
       Map<String, Integer> map = orderService.buyRecordTotal(productId);
       return ApiResult.success(map);
+    } catch (StarServiceException e) {
+      return ApiResult.fail(e.getCode(), e.getMsg());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return ApiResult.fail(ApiCode.SYSTEM_ERROR);
+    }
+  }
+
+  @RequestMapping(value = "/getProperties", method = RequestMethod.POST)
+  @ApiOperation(value = "订单相关的参数", notes = "订单相关的参数", httpMethod = "POST", response = ApiResult.class)
+  public ApiResult<OrderProperties> getProperties() {
+    try {
+      return ApiResult.success(orderProperties);
     } catch (StarServiceException e) {
       return ApiResult.fail(e.getCode(), e.getMsg());
     } catch (Exception e) {

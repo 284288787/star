@@ -40,7 +40,7 @@ function loadCarData(){
               <p class="gd">'+item.specification+'</p>' + 
               (canBuy ? '' : '<p class="gd red">'+(item.state==3? '已售罄': '预售')+'</p>') +
               '<div class="gn">\
-                <div class="mui-numbox smallbox" data-numbox-min="1" data-numbox-max="100">\
+                <div class="mui-numbox smallbox" data-numbox-min="1">\
                   <button class="mui-btn mui-btn-numbox-minus" type="button" data-cartid="'+item.cartId+'">-</button>\
                   <input class="mui-input-numbox" type="number" value="'+item.num+'" />\
                   <button class="mui-btn mui-btn-numbox-plus" type="button" data-cartid="'+item.cartId+'">+</button>\

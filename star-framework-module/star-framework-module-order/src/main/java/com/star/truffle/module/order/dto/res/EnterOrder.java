@@ -12,6 +12,8 @@ public class EnterOrder {
 
   // 邮费
   private Integer despatchMoney;
+  // 免邮费最低金额
+  private Integer despatchLimit;
   // 商品列表
   private List<ShoppingCartResponseDto> products;
   // 默认收获地址

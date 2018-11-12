@@ -117,6 +117,9 @@ public class OrderService {
       totalBrokerage += detail.getBrokerage() * detail.getCount();
     }
     orderRequestDto.setTotalMoney(totalMoney);
+    if (totalMoney >= orderProperties.getDespatchLimit()) {
+      orderRequestDto.setDespatchMoney(0);
+    }
     orderRequestDto.setTotalBrokerage(totalBrokerage);
     orderRequestDto.setRegionId(distributor.getRegionId());
     orderRequestDto.setShopAddress(distributor.getAddress());
@@ -188,6 +191,9 @@ public class OrderService {
       totalBrokerage += detail.getBrokerage() * detail.getCount();
     }
     orderRequestDto.setTotalMoney(totalMoney);
+    if (totalMoney >= orderProperties.getDespatchLimit()) {
+      orderRequestDto.setDespatchMoney(0);
+    }
     orderRequestDto.setTotalBrokerage(totalBrokerage);
     orderRequestDto.setRegionId(distributor.getRegionId());
     orderRequestDto.setShopAddress(distributor.getAddress());

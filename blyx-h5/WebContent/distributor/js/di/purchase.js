@@ -8,7 +8,16 @@ function giveValue(provinceName, cityName, areaName) {
   mui('#addSelect').popover('hide');
 }
 
+var despatchMoney = 0;
+var despatchLimit = 0;
 $(function(){
+  ajax({
+    url: '/api/order/getProperties',
+    success: function(properties){
+      despatchMoney = properties.despatchMoney;
+      despatchLimit = properties.despatchLimit;
+    }
+  });
   mui('.mui-scroll-wrapper').scroll();
   $("#address").on('tap', function() {
     mui('#addSelect').popover('show');
@@ -169,7 +178,7 @@ $(function(){
 function cal(href){
   var goodsNum = 0;
   var prices = 0;
-  var youfei = 900;
+  var youfei = despatchMoney;
   $(".goodslist li").each(function(){
     var thisObj = $(this);
     var p = $(this).attr("data-price") * 1;
@@ -180,16 +189,22 @@ function cal(href){
   if(! href) href = $("#segmentedControl .mui-active").attr("href");
   if(href=="#item1"){
     $(".totaldiv .youfei").parent().hide();
+    $(".despatchLimit").hide();
     youfei = 0;
   }else{
     $(".totaldiv .youfei").parent().show();
-    $(".totaldiv .youfei").text(youfei.toMoney());
-    youfei = 900;
+    $(".totaldiv .youfei").text("￥" + youfei.toMoney());
+    youfei = despatchMoney;
+    if(prices >= despatchLimit){
+      $(".despatchLimit span").text(despatchLimit.toMoney());
+      $(".despatchLimit .youfei").text("-￥" + youfei.toMoney());
+      $(".despatchLimit").show();
+    }
   }
   $(".totaldiv .number").text(goodsNum);
-  $(".totaldiv .money").text("￥：" + prices.toMoney());
-  $(".totaldiv .big b").text("￥：" + (prices + youfei).toMoney());
-  $("#nav .red").text("￥：" + (prices + youfei).toMoney());
+  $(".totaldiv .money").text("￥" + prices.toMoney());
+  $(".totaldiv .big b").text("￥" + (prices + youfei).toMoney());
+  $("#nav .red").text("￥" + (prices + youfei).toMoney());
 }
 
 var pageNum = 1, pageSize = 10;
