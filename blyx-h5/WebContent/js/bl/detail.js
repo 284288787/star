@@ -4,7 +4,51 @@ mui('.mui-scroll-wrapper').scroll({
   deceleration: 0.0005,
   indicators: true, //是否显示滚动条
 });
+var player;
 $(function() {
+  var intap = false;
+  var playing = false;
+  player = videojs('product-video', {autoDisable: true }, function () {
+    console.log('Good to go!');
+    //this.play(); // if you don't trust autoplay for some reason
+    var w=$(".firstimg").width();
+    var h=$(".firstimg").height();
+    $("#product-video").width(w);
+    $("#product-video").height(h);
+  });
+  player.on('play', function () {
+    playing = true;
+    $("button.vjs-big-play-button[title='Play Video']").hide();
+  });
+  player.on('pause', function () {
+    playing = false;
+    $("button.vjs-big-play-button[title='Play Video']").show();
+  });
+  player.on('ended', function () {
+    $("button.vjs-big-play-button[title='Play Video']").show();
+  });
+  player.on('tap', function (e) {
+    if(playing){
+      intap = true;
+      if(e.target.tagName=="BUTTON") return false;
+      if($("button.vjs-big-play-button[title='Play Video']:hidden").length>0){
+        $("button.vjs-big-play-button[title='Play Video'] .vjs-icon-placeholder").hide();
+        $("button.vjs-big-play-button[title='Play Video']").addClass("vjs-icon-pause").show();
+        $("button.vjs-big-play-button[title='Play Video']").off().on("tap", function(){
+          player.pause();
+          var obj = $(this);
+          obj.removeClass("vjs-icon-pause");
+          $("button.vjs-big-play-button[title='Play Video'] .vjs-icon-placeholder").show();
+          $("button.vjs-big-play-button[title='Play Video']").off().on("tap", function(){
+            $("button.vjs-big-play-button[title='Play Video']").hide();
+            player.play();
+          });
+        });
+      }else{
+        $("button.vjs-big-play-button[title='Play Video']").hide();
+      }
+    }
+  });
   initDetailInfo();
   initCartNum();
   initBuyRecord();
@@ -127,8 +171,8 @@ function initDetailInfo(){
       document.title = product.title + " - 贝拉优选";
       var pictures = product.pictures;
       var len = pictures.length;
-      $(".firstimg img").attr("src", IMAGE_PREFIX + pictures[len - 1].url);
-      $(".lastimg img").attr("src", IMAGE_PREFIX + pictures[0].url);
+      $(".firstimg img").attr("src", IMAGE_PREFIX + pictures[len - 1].url)
+      $(".lastimg img").attr("src", IMAGE_PREFIX + pictures[0].url)
       for(var i in pictures){
         $(".lastimg").before('<div class="mui-slider-item">\
             <a href="#"> <img class="productImg" src="'+IMAGE_PREFIX+pictures[i].url+'">\
@@ -136,10 +180,11 @@ function initDetailInfo(){
         </div>');
         $(".point").append('<div class="mui-indicator'+(i==0 ? ' mui-active' : '')+'"></div>');
       }
-      var slider = mui("#slider");
-      slider.slider({
-        interval:2000
-      });
+      $("#slider").show();
+//      var slider = mui("#slider");
+//      slider.slider({
+//        interval:2000
+//      });
       $(".realPrice span").text((product.price / 100.0).toFixed(2));
       $(".marketPrice").text((product.originalPrice / 100.0).toFixed(2));
       $(".title").text(product.title);

@@ -20,12 +20,17 @@
 <script src="js/mui.min.js"></script>
 <script src="js/mui.pullToRefresh.js"></script>
 <script src="js/mui.pullToRefresh.material.js"></script>
+<link href="js/video-js/video-js.min.css" rel="stylesheet">
+<script src="js/video-js/video.min.js"></script>
 <style type="text/css">
 .mui-table-view {
   margin-top: 0px !important;
 }
 .mui-scroll-wrapper{
   padding-bottom: 50px;
+}
+.vjs-control-bar{
+  display:none !important;
 }
 </style>
 <title>商品详情</title>
@@ -46,21 +51,28 @@
           <div id="item1mobile" class="mui-slider-item mui-control-content mui-active">
             <div id="scroll1" class="mui-scroll-wrapper">
               <div class="mui-scroll">
-      <div id="slider" class="mui-slider">
+      <div id="slider" class="mui-slider" style="display:no1ne">
         <span class="mui-icon mui-icon-home homePage"></span> <span class="mui-icon mui-icon-contact userPage"></span>
         <div class="mui-slider-group mui-slider-loop">
           <!-- 额外增加的一个节点(循环轮播：第一个节点是最后一张轮播) -->
-          <div class="mui-slider-item mui-slider-item-duplicate firstimg">
-            <a href="#"> <img class="productImg" src="images/default/product.gif">
+          <div class="mui-slider-item mui-slider-item-duplicate firstimg " >
+            <a href="#"> <img class="productImg" src="images/default.png">
             </a>
           </div>
+          <div class="mui-slider-item">
+            <video id="product-video" class="video-js vjs-default-skin vjs-big-play-centered" controls preload="none" width="100%" 
+             poster="http://vjs.zencdn.net/v/oceans.png" data-setup='{"example_option":true}'>
+            <source src="http://yx.hnkbmd.com/photo/ab.mp4" type="video/mp4">
+            </video>
+          </div>
           <!-- 额外增加的一个节点(循环轮播：最后一个节点是第一张轮播) -->
-          <div class="mui-slider-item mui-slider-item-duplicate lastimg">
-            <a href="#"> <img class="productImg" src="images/default/product.gif">
+          <div class="mui-slider-item mui-slider-item-duplicate lastimg ">
+            <a href="#"> <img class="productImg" >
             </a>
           </div>
         </div>
         <div class="mui-slider-indicator point">
+        <div class="mui-indicator "></div>
         </div>
       </div>
       <div class="productcontentBox2">
