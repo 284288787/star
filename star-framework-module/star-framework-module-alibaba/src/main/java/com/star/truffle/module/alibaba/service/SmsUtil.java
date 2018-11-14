@@ -22,7 +22,7 @@ public class SmsUtil {
   private static final String accessKeyId = "LTAIm8QTmK1628VO";
   private static final String accessKeySecret = "SR67sEKYus3MFb0Q03nOpMZoH1Bke0";
 
-  private static SendSmsResponse sendSms(String mobiles, String templateCode, String templateParam) throws ClientException {
+  private static SendSmsResponse sendSms(String signName, String mobiles, String templateCode, String templateParam) throws ClientException {
     // 可自助调整超时时间
     System.setProperty("sun.net.client.defaultConnectTimeout", "10000");
     System.setProperty("sun.net.client.defaultReadTimeout", "10000");
@@ -37,7 +37,7 @@ public class SmsUtil {
     // 必填:待发送手机号
     request.setPhoneNumbers(mobiles);
     // 必填:短信签名-可在短信控制台中找到
-    request.setSignName("贝拉优选");
+    request.setSignName(signName);
     // 必填:短信模板-可在短信控制台中找到
     request.setTemplateCode(templateCode);
     // 可选:模板中的变量替换JSON串,如模板内容为"亲爱的${name},您的验证码为${code}"时,此处的值为
@@ -61,10 +61,10 @@ public class SmsUtil {
     return code;
   }
 
-  public static String sendSms(String mobile, PushInfo pushInfo) {
+  public static String sendSms(String signName, String mobile, PushInfo pushInfo) {
     try {
       String code = buildCode(4);
-      sendSms(mobile, pushInfo.getTemplateCode(), pushInfo.fillTemplateParam(code));
+      sendSms(signName, mobile, pushInfo.getTemplateCode(), pushInfo.fillTemplateParam(code));
       return code;
     } catch (Exception e) {
       e.printStackTrace();
@@ -72,10 +72,10 @@ public class SmsUtil {
     }
   }
 
-  public static void sendNote(String mobiles, String templateCode, String templateParam) {
+  public static void sendNote(String signName, String mobiles, String templateCode, String templateParam) {
     try {
       System.out.println("即将发短信：" + mobiles + " " + templateCode + " " + templateParam);
-      SendSmsResponse ssr = sendSms(mobiles, templateCode, templateParam);
+      SendSmsResponse ssr = sendSms(signName, mobiles, templateCode, templateParam);
       System.out.println(ssr.getCode() + " " + ssr.getRequestId() + " " + ssr.getMessage());
     } catch (ClientException e) {
       e.printStackTrace();

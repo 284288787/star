@@ -13,5 +13,6 @@ import lombok.Data;
 @ConfigurationProperties(prefix = "template")
 public class SmsProperties {
 
+  private String signName;
   private Map<Integer, PushInfo> sms;
 }

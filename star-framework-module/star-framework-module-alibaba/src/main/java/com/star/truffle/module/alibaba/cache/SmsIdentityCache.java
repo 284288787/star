@@ -26,7 +26,7 @@ public class SmsIdentityCache {
     return this.smsIdentityDao.getSmsIdentity(mobile, tag);
   }
   
-  @Cacheable(value = "smsidentity_info", key = "'smsidentity_info_mobile_'+#mobile+'_tag_'+#tag", condition = "#mobile != null and #tag != null")
+  @CachePut(value = "smsidentity_info", key = "'smsidentity_info_mobile_'+#mobile+'_tag_'+#tag", condition = "#mobile != null and #tag != null")
   public void deleteSmsIdentity(String mobile, Integer tag) {
     this.smsIdentityDao.deleteSmsIdentity(mobile, tag);
   }

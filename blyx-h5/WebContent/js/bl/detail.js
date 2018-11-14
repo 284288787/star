@@ -6,49 +6,6 @@ mui('.mui-scroll-wrapper').scroll({
 });
 var player;
 $(function() {
-  var intap = false;
-  var playing = false;
-  player = videojs('product-video', {autoDisable: true }, function () {
-    console.log('Good to go!');
-    //this.play(); // if you don't trust autoplay for some reason
-    var w=$(".firstimg").width();
-    var h=$(".firstimg").height();
-    $("#product-video").width(w);
-    $("#product-video").height(h);
-  });
-  player.on('play', function () {
-    playing = true;
-    $("button.vjs-big-play-button[title='Play Video']").hide();
-  });
-  player.on('pause', function () {
-    playing = false;
-    $("button.vjs-big-play-button[title='Play Video']").show();
-  });
-  player.on('ended', function () {
-    $("button.vjs-big-play-button[title='Play Video']").show();
-  });
-  player.on('tap', function (e) {
-    if(playing){
-      intap = true;
-      if(e.target.tagName=="BUTTON") return false;
-      if($("button.vjs-big-play-button[title='Play Video']:hidden").length>0){
-        $("button.vjs-big-play-button[title='Play Video'] .vjs-icon-placeholder").hide();
-        $("button.vjs-big-play-button[title='Play Video']").addClass("vjs-icon-pause").show();
-        $("button.vjs-big-play-button[title='Play Video']").off().on("tap", function(){
-          player.pause();
-          var obj = $(this);
-          obj.removeClass("vjs-icon-pause");
-          $("button.vjs-big-play-button[title='Play Video'] .vjs-icon-placeholder").show();
-          $("button.vjs-big-play-button[title='Play Video']").off().on("tap", function(){
-            $("button.vjs-big-play-button[title='Play Video']").hide();
-            player.play();
-          });
-        });
-      }else{
-        $("button.vjs-big-play-button[title='Play Video']").hide();
-      }
-    }
-  });
   initDetailInfo();
   initCartNum();
   initBuyRecord();
@@ -178,13 +135,57 @@ function initDetailInfo(){
             <a href="#"> <img class="productImg" src="'+IMAGE_PREFIX+pictures[i].url+'">\
             </a>\
         </div>');
-        $(".point").append('<div class="mui-indicator'+(i==0 ? ' mui-active' : '')+'"></div>');
+        $(".point").append('<div class="mui-indicator'+(i==-1 ? ' mui-active' : '')+'"></div>');
       }
-      $("#slider").show();
-//      var slider = mui("#slider");
-//      slider.slider({
-//        interval:2000
-//      });
+      $("#slider").show(function(){
+        var intap = false;
+        var playing = false;
+        player = videojs('product-video', {autoDisable: true }, function () {
+          console.log('Good to go!');
+          //this.play(); // if you don't trust autoplay for some reason
+          var w=$(".firstimg").width();
+          var h=$(".firstimg").height();
+          $("#product-video").width(w);
+          $("#product-video").height(h);
+        });
+        player.on('play', function () {
+          playing = true;
+          $("button.vjs-big-play-button[title='Play Video']").hide();
+        });
+        player.on('pause', function () {
+          playing = false;
+          $("button.vjs-big-play-button[title='Play Video']").show();
+        });
+        player.on('ended', function () {
+          $("button.vjs-big-play-button[title='Play Video']").show();
+        });
+        player.on('tap', function (e) {
+          if(playing){
+            intap = true;
+            if(e.target.tagName=="BUTTON") return false;
+            if($("button.vjs-big-play-button[title='Play Video']:hidden").length>0){
+              $("button.vjs-big-play-button[title='Play Video'] .vjs-icon-placeholder").hide();
+              $("button.vjs-big-play-button[title='Play Video']").addClass("vjs-icon-pause").show();
+              $("button.vjs-big-play-button[title='Play Video']").off().on("tap", function(){
+                player.pause();
+                var obj = $(this);
+                obj.removeClass("vjs-icon-pause");
+                $("button.vjs-big-play-button[title='Play Video'] .vjs-icon-placeholder").show();
+                $("button.vjs-big-play-button[title='Play Video']").off().on("tap", function(){
+                  $("button.vjs-big-play-button[title='Play Video']").hide();
+                  player.play();
+                });
+              });
+            }else{
+              $("button.vjs-big-play-button[title='Play Video']").hide();
+            }
+          }
+        });
+//        var slider = mui("#slider");
+//        slider.slider({
+//          interval:2000
+//        });
+      });
       $(".realPrice span").text((product.price / 100.0).toFixed(2));
       $(".marketPrice").text((product.originalPrice / 100.0).toFixed(2));
       $(".title").text(product.title);

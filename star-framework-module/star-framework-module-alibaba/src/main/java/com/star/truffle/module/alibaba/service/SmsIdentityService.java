@@ -34,8 +34,9 @@ public class SmsIdentityService {
       this.smsIdentityCache.deleteSmsIdentity(mobile, tag);
     }
     // 调用接口发短信
-//    PushInfo pushInfo = smsProperties.getSms().get(tag);
-    String code = "1234"; //SmsUtil.sendSms(mobile, pushInfo);
+    PushInfo pushInfo = smsProperties.getSms().get(tag);
+//    String code = "1234"; //SmsUtil.sendSms(mobile, pushInfo);
+    String code = SmsUtil.sendSms(smsProperties.getSignName(), mobile, pushInfo);
     SmsIdentity entity = new SmsIdentity();
     entity.setCode(code);
     entity.setContent(code + "为本次短信验证码，清及时使用！");
