@@ -8,26 +8,32 @@ $(function() {
       mui.toast("手机号码，验证码必填");
       return;
     }
-    var user = getLoginInfo();
-    if(user && user.openId){
-      ajax({
-        url: '/api/member/loginAndReg',
-        data: {'mobile': mobile, 'code': code, 'tag': 1, 'openId': user.openId},
-        success: function(data){
-          setLoginInfo(data);
-          document.location.href=redirctUrl;
-        },
-        othercode: function(res){
-          if(res.code==1){
-            authLogin(mobile, code);
-          }else{
-            mui.toast(res.msg);
-          }
+    ajax({
+      url: '/api/sms/verify',
+      data: {'mobile': mobile, 'code': code, 'tag': 1},
+      success: function(data){
+        var user = getLoginInfo();
+        if(user && user.openId){
+          ajax({
+            url: '/api/member/loginAndReg',
+            data: {'mobile': mobile, 'code': code, 'tag': 1, 'openId': user.openId},
+            success: function(data){
+              setLoginInfo(data);
+              document.location.href=redirctUrl;
+            },
+            othercode: function(res){
+              if(res.code==1){
+                authLogin(mobile, code);
+              }else{
+                mui.toast(res.msg);
+              }
+            }
+          });
+        }else{
+          authLogin(mobile, code);
         }
-      });
-    }else{
-      authLogin(mobile, code);
-    }
+      }
+    });
   });
   
   $("#send").on("tap", function(){

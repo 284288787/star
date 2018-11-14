@@ -1,5 +1,5 @@
 var SERVICE_ADDRESS = 'http://mgr.hnkbmd.com';
-var IMAGE_PREFIX = 'http://mgr.hnkbmd.com';
+var IMAGE_PREFIX = 'http://yx.hnkbmd.com';
 function getParam(name){
   var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");     
   var r = window.location.search.substr(1).match(reg);

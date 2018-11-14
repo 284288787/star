@@ -36,7 +36,9 @@ $(function(){
     deceleration: 0.0005
   });
   $(".fright").html("("+user.shopCode+")" + user.shopName);
-  $(".fleft img").attr("src", user.head);
+  if(user.head){
+    $(".fleft img").attr("src", (user.head.indexOf("http://") == -1 ? IMAGE_PREFIX : '') + user.head);
+  }
   ajax({
     url: '/api/order/shopIndex',
     data: {'distributorId': user.distributorId},
