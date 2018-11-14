@@ -18,6 +18,7 @@ $(function() {
             url: '/api/member/loginAndReg',
             data: {'mobile': mobile, 'code': code, 'tag': 1, 'openId': user.openId},
             success: function(data){
+              mui.toast("登录成功");
               setLoginInfo(data);
               document.location.href=redirctUrl;
             },

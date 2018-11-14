@@ -26,6 +26,7 @@ $(function() {
           url: '/api/distributor/login',
           data: {'mobile': mobile, 'code': code, 'tag': 2, 'openId': openid, 'name': name, 'head': head},
           success: function(data){
+            mui.toast("登录成功");
             setLoginInfo(data);
             document.location.href=redirectUrl;
           }

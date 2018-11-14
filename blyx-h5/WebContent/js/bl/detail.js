@@ -135,7 +135,7 @@ function initDetailInfo(){
             <a href="#"> <img class="productImg" src="'+IMAGE_PREFIX+pictures[i].url+'">\
             </a>\
         </div>');
-        $(".point").append('<div class="mui-indicator'+(i==-1 ? ' mui-active' : '')+'"></div>');
+        $(".point").append('<div class="mui-indicator'+(i==0 ? ' mui-active' : '')+'"></div>');
       }
       $("#slider").show(function(){
         var intap = false;
@@ -203,8 +203,8 @@ function initDetailInfo(){
         $(".pickUpTime").append('<p class="red">预售时间：'+product.presellTime.formatDate('M月d日 h点')+'</p>');
         flag = false;
       }
-      if(product.pickupTime){
-        $(".pickUpTime").append('<p class="red">提货时间：'+product.pickupTime.formatDate('M月d日 h点')+'</p>');
+      if(product.offShelfTime){
+        $(".pickUpTime").append('<p class="red">下架时间：'+product.offShelfTime.formatDate('M月d日 h点')+'</p>');
         flag = false;
       }
       if(flag)$(".pickUpTime").append('<p class="red">&nbsp;</p>');
