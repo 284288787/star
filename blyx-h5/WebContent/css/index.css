@@ -32,14 +32,32 @@
   color: #c0c0c0;
 }
 .distribution{
-  font-size: 16px !important;
-  color: red ;
+  font-size: 12px !important;
+  color: #000 ;
+}
+.distribution .title{
+  font-size: 14px !important;
+  color: #000 ;
+  text-align:center;
+  border-bottom: 1px solid #e3dddd;
+  height: 25px;
+  line-height:15px;
+  padding:0 0 10px 0;
+}
+.distribution .txt{
+  height: 25px;
+  line-height:25px;
+  margin-bottom:6px;
 }
 .distribution a{
   color: red ;
 }
 .distribution .tel{
   font-weight: bold;
+  font-size: 26px !important;
+}
+.distribution .gr{
+  color: green ;
 }
 .logo{
     width: 40px;
