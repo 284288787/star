@@ -267,12 +267,12 @@ $(function(){
       params[name] = field.value;
       console.log(name + "  " + field.value)
     });
-    params["price"] = params["price"] * 100;
-    params["originalPrice"] = params["originalPrice"] * 100;
-    params["brokerageValue"] = params["brokerageValue"] * 100;
-    params["priceHan"] = params["priceHan"] * 100;
-    params["priceWei"] = params["priceWei"] * 100;
-    params["brokerageFirst"] = params["brokerageFirst"] * 100;
+    params["price"] = (params["price"] * 100).toFixed(0);
+    params["originalPrice"] = (params["originalPrice"] * 100).toFixed(0);
+    params["brokerageValue"] = (params["brokerageValue"] * 100).toFixed(0);
+    params["priceHan"] = (params["priceHan"] * 100).toFixed(0);
+    params["priceWei"] = (params["priceWei"] * 100).toFixed(0);
+    params["brokerageFirst"] = (params["brokerageFirst"] * 100).toFixed(0);
     if(params.brokerageType == 1 && params.price < params.brokerageValue){
       artDialog.alert("提成金额不得大于商品售价");
       return;

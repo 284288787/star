@@ -230,7 +230,7 @@
   <select id="totalMoney" resultMap="totalMoneyMap">
     select IFNULL(SUM(o.total_brokerage), 0) totalMoney, IFNULL(DATE_FORMAT(max(o.create_time),'%Y-%m-%d %H:%i:%s'), '2018-10-10 00:00:00') time from `order` o where o.distributor_id = #{distributorId} and o.state in (2,3)
     <if test="beginTime != null">
-      and o.create_time &gt;= #{beginTime}
+      and o.create_time &gt; #{beginTime}
     </if>
   </select>
 

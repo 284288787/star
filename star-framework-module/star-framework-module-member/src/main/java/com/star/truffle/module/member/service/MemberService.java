@@ -48,7 +48,7 @@ public class MemberService {
       member.setState(LoginStateEnum.login.getState());
       this.memberCache.saveMember(member);
       memberResponseDto = this.memberCache.getMemberByOpenId(member.getOpenId());
-    } else if (memberResponseDto.getState() == LoginStateEnum.logout.getState()) {
+    } else {
       memberResponseDto.setState(LoginStateEnum.login.getState());
       MemberRequestDto memberRequestDto = new MemberRequestDto();
       memberRequestDto.setMemberId(memberResponseDto.getMemberId());

@@ -35,7 +35,7 @@ function ajax(options){
 }
 
 function getLoginInfo(){
-  if(!localStorage.login_user) return null;
+  if(!localStorage.login_user || localStorage.login_user == 'undefined') return null;
   var user = JSON.parse(localStorage.login_user);
   return user;
 }

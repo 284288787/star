@@ -145,8 +145,8 @@ function loadData(pageNum, pageSize, title){
           }
           li += '</span>\
             </p>';
-          if(item.pickupTime){
-            li += '<p class="gooddate">提货时间：'+item.pickupTime.formatDate('M月d日 h点')+'</p>';
+          if(item.offShelfTime){
+            li += '<p class="gooddate">下架时间：'+item.offShelfTime.formatDate('M月d日 h点')+'</p>';
           }
           li += '<p class="redp clearfix">￥<big>'+(item.price/100.0).toFixed(2)+'</big> <del>￥'+(item.originalPrice/100.0).toFixed(2)+'</del></p>';
           li += '<b class="like has" data-pid="'+item.productId+'"> <i >关注</i></b>';

@@ -30,6 +30,7 @@
   </sql>
 
   <select id="getMember" resultType="com.star.truffle.module.member.dto.res.MemberResponseDto">
+  	set names utf8mb4;
     select
     <include refid="sql_column" />
     from member_info
@@ -37,6 +38,7 @@
   </select>
 
   <select id="getMemberByOpenId" resultType="com.star.truffle.module.member.dto.res.MemberResponseDto">
+  	set names utf8mb4;
     select
     <include refid="sql_column" />
     from member_info
@@ -44,6 +46,7 @@
   </select>
 
   <select id="queryMember" resultMap="memberResponseDtoResultMap">
+  	set names utf8mb4;
     select
     <include refid="sql_column" />
     from member_info

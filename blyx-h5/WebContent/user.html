@@ -53,6 +53,7 @@
   <script type="text/javascript" src="js/bl/star.common.js"></script>
   <script type="text/javascript">
     $(function(){
+      alert("logout")
       var user = getLoginInfo();
       if(! user){
         document.location.href='login.html?redirect_url=user.html';
@@ -61,6 +62,8 @@
       $(".bigp").text(user.name);
       $(".mobile").text(user.mobile);
       $(".logoutbtn").on("tap", function(){
+        alert("logout")
+        logout();
         ajax({
           url: '/api/member/logout',
           data: {'openId': user.openId},
