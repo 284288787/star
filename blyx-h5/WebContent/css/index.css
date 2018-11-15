@@ -1,3 +1,46 @@
+.xfq{
+  right: 10px;
+  bottom: 70px;
+  position: absolute;
+  background: #d8edd;
+  border: 1px solid #32ae4f;
+  color: #0f0606;
+  font-size: 12px !important;
+  z-index: 888;
+  border-radius: 55px;
+  height: 35px;
+  width: 35px;
+  line-height: 35px;
+  text-align:center;
+}
+.xf{
+  right:0px;
+  opacity: 0;
+  bottom: 60px;
+  position: absolute;
+  border: 1px solid #d9d9d9;
+  width: 0%;
+  height: 50px;
+  line-height: 50px;
+  background: #FFF;
+  padding-left:10px;
+  z-index: 889;
+}
+.xf .close{
+  float:right;
+  padding-right:10px;
+  color: #c0c0c0;
+}
+.distribution{
+  font-size: 16px !important;
+  color: red ;
+}
+.distribution a{
+  color: red ;
+}
+.distribution .tel{
+  font-weight: bold;
+}
 .logo{
     width: 40px;
     height: auto;

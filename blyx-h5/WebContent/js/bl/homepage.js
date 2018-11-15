@@ -49,6 +49,16 @@ $(function(){
       return false;
     }
   });
+  $(".xfq").on("tap", function(){
+    $(".xfq").hide();
+    $(".xf").animate({width:'100%', opacity: 1});
+    $(".xf .close").on("tap", function(){
+      $(".xfq").show();  
+      $(".xf").animate({width:'0%', opacity: 0}, function(){
+      });
+      $(".xf .close").off();
+    });
+  });
 });
 
 function initCartNum(){
