@@ -135,7 +135,7 @@ function initDetailInfo(){
     url: '/api/product/getProductInfo',
     data: {'productId': pid},
     success: function(product){
-      document.title = product.title + " - 贝拉优选";
+      document.title = product.title + " - 五杂优选";
       var pictures = product.pictures;
       var len = pictures.length;
       $(".firstimg img").attr("src", IMAGE_PREFIX + pictures[len - 1].url)
@@ -148,6 +148,7 @@ function initDetailInfo(){
         $(".point").append('<div class="mui-indicator'+(i==0 ? ' mui-active' : '')+'"></div>');
       }
       $("#slider").show(function(){
+        return false;
         var intap = false;
         var playing = false;
         player = videojs('product-video', {autoDisable: true }, function () {
