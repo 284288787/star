@@ -61,7 +61,6 @@
       $(".bigp").text(user.name);
       $(".mobile").text(user.mobile);
       $(".logoutbtn").on("tap", function(){
-        alert("logout")
         logout();
         ajax({
           url: '/api/member/logout',
