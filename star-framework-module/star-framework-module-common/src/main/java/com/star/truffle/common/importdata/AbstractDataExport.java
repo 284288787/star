@@ -39,6 +39,8 @@ public abstract class AbstractDataExport<T> {
     this.params = params;
   }
   
+  public abstract Map<String, Object> getTemplateDatas();
+  
   public abstract List<String[]> getRecordsData(Map<String, Object> params, int pageNumber, int pageSize);
   
   public abstract void getApplication(ApplicationContext applicationContext);
@@ -47,16 +49,18 @@ public abstract class AbstractDataExport<T> {
     int pageNumber = 1;
     XSSFWorkbook workbook = new XSSFWorkbook();
     while(true) {
+      Map<String, Object> args = getTemplateDatas();
+      ExcelUtil.fullExcel(excel, args);
       List<String[]> datas = getRecordsData(params, pageNumber, getPageSize());
       if (null == datas || datas.isEmpty()) {
         break;
       }
       XSSFSheet sheet = workbook.createSheet(excel.getSheetName() + (pageNumber > 1 ? pageNumber : ""));
-      Map<Integer, Integer> columnWidth = ExcelUtil.createXlsxExcelSheetHead(sheet, excel.getFields());
-      ExcelUtil.createXlsxExcelSheetData(sheet, columnWidth, datas);
+      Map<Integer, Integer> columnWidth = ExcelUtil.createXlsxExcelSheetHead(sheet, excel);
+      ExcelUtil.createXlsxExcelSheetData(sheet, excel.getFieldsRowNum(), columnWidth, datas);
       pageNumber ++;
     }
-    String filename = ExcelUtil.excelFileName(excel.getFileName()) + ".xlsx";
+    String filename = ExcelUtil.fullDateOfNow(excel.getFileName()) + ".xlsx";
     String filePath = tempDir + File.separator + filename;
     File xlsFile = new File(filePath);
     FileOutputStream fileOutputStream = new FileOutputStream(xlsFile);

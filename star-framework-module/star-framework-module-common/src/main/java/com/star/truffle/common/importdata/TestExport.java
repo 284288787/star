@@ -2,6 +2,7 @@
 package com.star.truffle.common.importdata;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import org.springframework.context.ApplicationContext;
 
 import com.star.truffle.common.dto.Student;
 import com.star.truffle.common.properties.Excel;
+import com.star.truffle.core.util.DateUtils;
 
 public class TestExport extends AbstractDataExport<Student>{
 
@@ -52,5 +54,12 @@ public class TestExport extends AbstractDataExport<Student>{
   public void getApplication(ApplicationContext applicationContext) {
     // TODO Auto-generated method stub
     
+  }
+
+  @Override
+  public Map<String, Object> getTemplateDatas() {
+    Map<String, Object> map = new HashMap<>();
+    map.put("now", DateUtils.formatTodayDate());
+    return map;
   }
 }

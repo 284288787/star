@@ -46,7 +46,7 @@ public class ExcelService {
       AbstractDataExport<?> dataExport = (AbstractDataExport<?>) ClassUtils.getInstance(excelExportParam.getHandle(), new Class<?>[] {Excel.class}, new Object[] {excelExportParam.getExcel()});
       dataExport.setParams(excelExportParam.getParams());
       String filePath = dataExport.exportData();
-      String filename = ExcelUtil.excelFileName(excelExportParam.getExcel().getFileName()) + ".xlsx";
+      String filename = ExcelUtil.fullDateOfNow(excelExportParam.getExcel().getFileName()) + ".xlsx";
       filename = URLEncoder.encode(filename, "UTF-8");
       excelFiles.put(filename, filePath);
     }

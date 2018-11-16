@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +27,7 @@ import com.star.truffle.common.properties.ExcelTemplate;
 import com.star.truffle.common.service.ExcelService;
 import com.star.truffle.core.StarServiceException;
 import com.star.truffle.core.jackson.StarJson;
+import com.star.truffle.core.util.DateUtils;
 import com.star.truffle.core.util.ParamHandler;
 import com.star.truffle.core.web.ApiCode;
 import com.star.truffle.core.web.ApiResult;
@@ -113,14 +115,16 @@ public class FileDownloadController {
         response.getWriter().flush();
         return;
       }
+      Map<String, Object> params = new HashMap<>();
+      params.put("now", DateUtils.formatTodayDate());
+      ExcelUtil.fullExcel(excel, params);
       OutputStream os = response.getOutputStream();
       response.setContentType("application/vnd.ms-excel");
-      String filename = ExcelUtil.excelFileName(excel.getFileName()) + ".xlsx";
+      String filename = excel.getFileName() + ".xlsx";
       filename = URLEncoder.encode(filename, "UTF-8");
       response.setHeader("Content-Disposition", "attachment; filename=" + filename);
-      String[] titles = excel.getFields();
       List<String[]> datas = new ArrayList<>();
-      ExcelUtil.createXlsxExcelFile2(os, excel.getSheetName(), titles, datas);
+      ExcelUtil.createXlsx(os, excel, datas);
     } catch (IOException e) {
       e.printStackTrace();
       ApiResult<Void> apiResult = ApiResult.fail(ApiCode.SYSTEM_ERROR.getCode(), e.getMessage());
@@ -145,13 +149,15 @@ public class FileDownloadController {
       for (String key : ks) {
         Excel excel = excelTemplate.getExcel().get(key);
         if (null != excel) {
-          String[] titles = excel.getFields();
+          Map<String, Object> params = new HashMap<>();
+          params.put("now", DateUtils.formatTodayDate());
+          ExcelUtil.fullExcel(excel, params);
           List<String[]> datas = new ArrayList<>();
-          String filename = ExcelUtil.excelFileName(excel.getFileName()) + ".xlsx";
+          String filename = excel.getFileName() + ".xlsx";
           String filePath = path + File.separator + filename;
           File xlsFile = new File(filePath);
           FileOutputStream fileOutputStream = new FileOutputStream(xlsFile);
-          ExcelUtil.createXlsxExcelFile2(fileOutputStream, excel.getSheetName(), titles, datas);
+          ExcelUtil.createXlsx(fileOutputStream, excel, datas);
           srcfile.add(xlsFile);
         }
       }
