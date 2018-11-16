@@ -19,6 +19,7 @@ import com.star.truffle.module.member.dto.res.DistributorResponseDto;
 import com.star.truffle.module.member.dto.res.MemberResponseDto;
 import com.star.truffle.module.member.service.MemberService;
 import com.star.truffle.module.order.constant.DeliveryTypeEnum;
+import com.star.truffle.module.order.constant.OrderProductStateEnum;
 import com.star.truffle.module.order.constant.OrderStateEnum;
 import com.star.truffle.module.order.domain.OrderDetail;
 import com.star.truffle.module.order.dto.req.OrderRequestDto;
@@ -119,6 +120,7 @@ public class PayService {
         OrderRequestDto orderRequestDto = new OrderRequestDto();
         orderRequestDto.setOrderId(order.getOrderId());
         orderRequestDto.setState(OrderStateEnum.nosend.state());
+        orderRequestDto.setTransportState(OrderProductStateEnum.ready.state());
         if (order.getDeliveryType() == DeliveryTypeEnum.self.type()) {
           orderRequestDto.setPickupCode(SmsUtil.buildCode(4));
         }

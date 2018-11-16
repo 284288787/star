@@ -28,6 +28,7 @@ import com.star.truffle.module.order.cache.OrderCache;
 import com.star.truffle.module.order.cache.OrderDetailCache;
 import com.star.truffle.module.order.constant.DeleteUserTypeEnum;
 import com.star.truffle.module.order.constant.DeliveryTypeEnum;
+import com.star.truffle.module.order.constant.OrderProductStateEnum;
 import com.star.truffle.module.order.constant.OrderStateEnum;
 import com.star.truffle.module.order.constant.OrderTypeEnum;
 import com.star.truffle.module.order.domain.Order;
@@ -433,6 +434,34 @@ public class OrderService {
   public Map<String, Object> orderNum(Long memberId) {
     Map<String, Object> map = this.orderCache.orderNum(memberId);
     return map;
+  }
+
+  public void deliverGoods(Long orderId, String expressNumber) {
+    OrderResponseDto order = this.orderCache.getOrder(orderId);
+    if (null == order) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR, "订单不存在");
+    }
+    OrderRequestDto orderRequestDto = new OrderRequestDto();
+    orderRequestDto.setOrderId(orderId);
+    orderRequestDto.setTransportState(OrderProductStateEnum.sending.state());
+    orderRequestDto.setExpressNumber(expressNumber);
+    this.orderCache.updateOrder(orderRequestDto);
+  }
+
+  public void deliverGoodsFinish(Long orderId) {
+    OrderResponseDto order = this.orderCache.getOrder(orderId);
+    if (null == order) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR, "订单不存在");
+    }
+    OrderRequestDto orderRequestDto = new OrderRequestDto();
+    orderRequestDto.setOrderId(orderId);
+    orderRequestDto.setTransportState(OrderProductStateEnum.finish.state());
+    this.orderCache.updateOrder(orderRequestDto);
+  }
+
+  public List<OrderDetail> getDetails(Long orderId) {
+    List<OrderDetail> details = orderDetailCache.getOrderDetails(orderId);
+    return details;
   }
 
 }

@@ -67,8 +67,8 @@ public class OrderController {
   @RequestMapping(value = "/listDetails", method = {RequestMethod.POST, RequestMethod.GET})
   public Map<String, Object> listDetails(OrderDetail orderDetail, Integer page, Integer rows, String sord, String sidx) {
     Page pager = new Page(page, rows, sidx, OrderType.desc.name().equals(sord) ? OrderType.desc : OrderType.asc);
-    OrderResponseDto orderResponseDto = this.orderService.getOrder(orderDetail.getOrderId());
-    List<OrderDetail> list = orderResponseDto.getDetails();
+//    OrderResponseDto orderResponseDto = this.orderService.getOrder(orderDetail.getOrderId());
+    List<OrderDetail> list = orderService.getDetails(orderDetail.getOrderId());
     int count = 0;
     if (null != list && ! list.isEmpty()) {
       count = list.size();
@@ -109,12 +109,40 @@ public class OrderController {
       return ApiResult.fail(ApiCode.SYSTEM_ERROR);
     }
   }
-
+  
   @ResponseBody
   @RequestMapping(value = "/deleted", method = RequestMethod.POST)
   public ApiResult<Void> delete(String ids) {
     try {
       orderService.deleteOrder(ids);
+      return ApiResult.success();
+    } catch (StarServiceException e) {
+      return ApiResult.fail(e.getCode(), e.getMsg());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return ApiResult.fail(ApiCode.SYSTEM_ERROR);
+    }
+  }
+  
+  @ResponseBody
+  @RequestMapping(value = "/deliverGoods", method = RequestMethod.POST)
+  public ApiResult<Void> deliverGoods(Long orderId, String expressNumber) {
+    try {
+      orderService.deliverGoods(orderId, expressNumber);
+      return ApiResult.success();
+    } catch (StarServiceException e) {
+      return ApiResult.fail(e.getCode(), e.getMsg());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return ApiResult.fail(ApiCode.SYSTEM_ERROR);
+    }
+  }
+
+  @ResponseBody
+  @RequestMapping(value = "/deliverGoodsFinish", method = RequestMethod.POST)
+  public ApiResult<Void> deliverGoodsFinish(Long orderId) {
+    try {
+      orderService.deliverGoodsFinish(orderId);
       return ApiResult.success();
     } catch (StarServiceException e) {
       return ApiResult.fail(e.getCode(), e.getMsg());

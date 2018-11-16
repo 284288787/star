@@ -25,6 +25,7 @@ public class OrderRequestDto extends Order {
   private List<OrderDetail> details;
   
   private String states;
+  private String transportStates;
   private Long regionProvinceId;
   private Long regionCityId;
   private Long regionAreaId;

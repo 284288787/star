@@ -68,10 +68,25 @@
         <span>提货码：
           <input type="text" name="pickupCode" placeholder="提货码"/>
         </span> 
+        <span>运输状态：
+          <select name="transportState">
+            <option value="">全部</option>
+            <option value="1">待发货</option>
+            <option value="2">已发货</option>
+            <option value="3">已完成</option>
+          </select>
+        </span> 
+        <span>快递单号：
+          <input type="text" name="expressNumber" placeholder="输入一部分也可以查询"/>
+        </span> 
         <span> 
           <a onclick="orderHandle.query()" class="button blue">查询</a> 
           <a onclick="orderHandle.reset()" class="button grey">清空</a>
         </span>
+          <!-- <br><br>
+        <span> 
+          <a onclick="orderHandle.exportTransportOrder()" class="button red">导出门店对接单</a>
+        </span> -->
       </form>
     </div>
     <div class="btnGroup">
@@ -83,14 +98,14 @@
     </div>
   </div>
   <script type="text/javascript" th:src="@{/webjars/star/js/star.authorize.js}"></script>
+  <script type="text/javascript" th:inline="javascript" star:authorize-uri="/order/deliverGoods">
+  addAuthorize("order-deliverGoods", true);
+  </script>
+  <script type="text/javascript" th:inline="javascript" star:authorize-uri="/order/deliverGoodsFinish">
+  addAuthorize("order-deliverGoodsFinish", true);
+  </script>
   <script type="text/javascript" th:inline="javascript" star:authorize-uri="/order/editBefore/*">
   addAuthorize("order-editBefore", true);
-  </script>
-  <script type="text/javascript" th:inline="javascript" star:authorize-uri="/order/disabled">
-  addAuthorize("order-disabled", true);
-  </script>
-  <script type="text/javascript" th:inline="javascript" star:authorize-uri="/order/enabled">
-  addAuthorize("order-enabled", true);
   </script>
   <script type="text/javascript" th:src="@{/webjars/star/js/star.list.comm.js}"></script>
   <script type="text/javascript" th:src="@{/webjars/star/js/star.utils.js}"></script>

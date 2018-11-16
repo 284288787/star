@@ -43,6 +43,8 @@
       <if test="pickupCode != null and pickupCode != ''">pickup_code = #{pickupCode},</if>
       <if test="createTime != null">create_time = #{createTime},</if>
       <if test="deleteUser != null">delete_user = #{deleteUser},</if>
+      <if test="transportState != null">transport_state = #{transportState},</if>
+      <if test="expressNumber != null">express_number = #{expressNumber},</if>
     </trim>
     where order_id = #{orderId}
   </update>
@@ -83,7 +85,7 @@
   </resultMap>
 
   <sql id="sql_column">
-    `order`.remark, `order`.deleted, `order`.delete_user, order_id, order_code, `order`.type, member_id, `order`.open_id, `order`.`name`, `order`.mobile, delivery_type, `order`.province_name, `order`.city_name, `order`.area_name, delivery_address, delivery_name, delivery_mobile, despatch_money, total_money, total_brokerage, `order`.region_id, `order`.distributor_id, `order`.shop_address, `order`.shop_name, `order`.shop_mobile, `order`.state, pickup_code, `order`.create_time
+    `order`.express_number, `order`.transport_state, `order`.remark, `order`.deleted, `order`.delete_user, order_id, order_code, `order`.type, member_id, `order`.open_id, `order`.`name`, `order`.mobile, delivery_type, `order`.province_name, `order`.city_name, `order`.area_name, delivery_address, delivery_name, delivery_mobile, despatch_money, total_money, total_brokerage, `order`.region_id, `order`.distributor_id, `order`.shop_address, `order`.shop_name, `order`.shop_mobile, `order`.state, pickup_code, `order`.create_time
     , r.`name` region_name, p.areaId regionProvinceId, ifnull(p.shortName, p.areaName) regionProvinceName, c.areaId regionCityId, ifnull(c.shortName, c.areaName) regionCityName, a.areaId regionAreaId, ifnull(a.shortName, a.areaName) regionAreaName, t.areaId regionTownId, ifnull(t.shortName, t.areaName) regionTownName
     , d.`name` distributor_name,
     (select a.state from order_aftersale a where a.order_id = `order`.order_id) saleAfterState

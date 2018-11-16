@@ -35,7 +35,7 @@
   </resultMap>
 
   <sql id="sql_column">
-    `order`.remark, `order`.deleted, `order`.delete_user, order_id, order_code, `order`.type, member_id, `order`.open_id, `order`.`name`, `order`.mobile, delivery_type, `order`.province_name, `order`.city_name, `order`.area_name, delivery_address, delivery_name, delivery_mobile, despatch_money, total_money, total_brokerage, `order`.region_id, `order`.distributor_id, `order`.shop_address, `order`.shop_name, `order`.shop_mobile, `order`.state, pickup_code, `order`.create_time
+    `order`.express_number, `order`.transport_state, `order`.remark, `order`.deleted, `order`.delete_user, order_id, order_code, `order`.type, member_id, `order`.open_id, `order`.`name`, `order`.mobile, delivery_type, `order`.province_name, `order`.city_name, `order`.area_name, delivery_address, delivery_name, delivery_mobile, despatch_money, total_money, total_brokerage, `order`.region_id, `order`.distributor_id, `order`.shop_address, `order`.shop_name, `order`.shop_mobile, `order`.state, pickup_code, `order`.create_time
    	, r.`name` region_name, p.areaId regionProvinceId, ifnull(p.shortName, p.areaName) regionProvinceName, c.areaId regionCityId, ifnull(c.shortName, c.areaName) regionCityName, a.areaId regionAreaId, ifnull(a.shortName, a.areaName) regionAreaName, t.areaId regionTownId, ifnull(t.shortName, t.areaName) regionTownName
 		,	d.`name` distributor_name,
 		(select a.state from order_aftersale a where a.order_id = `order`.order_id) saleAfterState
@@ -85,17 +85,26 @@
       <if test="shopName != null and shopName != ''">
         and `order`.shop_name like "%"#{shopName}"%"
       </if>
+      <if test="expressNumber != null and expressNumber != ''">
+        and `order`.express_number like "%"#{expressNumber}"%"
+      </if>
       <if test="shopMobile != null and shopMobile != ''">
-        and `order`.shop_mobile = #{shopMobile}
+        and `order`.shop_mobile like "%"#{shopMobile}"%"
       </if>
       <if test="state != null">
         and `order`.state = #{state}
+      </if>
+      <if test="transportState != null">
+        and `order`.transport_state = #{transportState}
       </if>
       <if test="deleted != null">
         and `order`.deleted = #{deleted}
       </if>
       <if test="states != null and states != ''">
         and `order`.state in (${states})
+      </if>
+      <if test="transportStates != null and transportStates != ''">
+        and `order`.transport_state in (${transportStates})
       </if>
       <if test="pickupCode != null and pickupCode != ''">
         and pickup_code = #{pickupCode}

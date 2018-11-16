@@ -32,6 +32,12 @@
          <td>分销商：</td>
          <td th:text="${orderResponseDto.distributorName}"></td>
        </tr>
+       <tr>
+       	 <td>运输状态：</td>
+         <td th:text="${orderResponseDto.transportState == null ? '' : {1:'待发货',2:'已发货',3:'已完成'}[orderResponseDto.transportState]}"></td>
+         <td>快递单号：</td>
+         <td th:text="${orderResponseDto.expressNumber}"></td>
+       </tr>
      </table>
      <div style="width:90%; margin: 0 auto 5px auto;">
      	<table id="grid-table"></table>
@@ -84,7 +90,7 @@
 		  var rowList = [10, 20, 30, 50];
 		  var rownumbers = true;
 		  var multiselect = false;
-		  var config={caption: "订单商品列表", colNames: colNames, colModel: colModel, rowList: rowList, rownumbers: rownumbers, multiselect: multiselect};
+		  var config={rowNum: 50, height: "300px", caption: "订单商品列表", colNames: colNames, colModel: colModel, rowList: rowList, rownumbers: rownumbers, multiselect: multiselect};
 		  setTimeout(function(){
 			  orderDetailHandle.init(config);
 		  }, 120);

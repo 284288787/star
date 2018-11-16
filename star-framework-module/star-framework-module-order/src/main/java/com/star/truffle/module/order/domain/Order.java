@@ -55,6 +55,8 @@ public class Order {
   private String shopMobile;
   // 订单状态 1待付款 2待提货 3已提货 4已退货
   private Integer state;
+  // 运输状态 1待发货 2已发货 3已完成
+  private Integer transportState;
   // 是否删除 1是 0否
   private Integer deleted;
   // 提货码
@@ -65,4 +67,6 @@ public class Order {
   private Integer deleteUser;
   // 备注
   private String remark;
+  // 快递单号
+  private String expressNumber;
 }
