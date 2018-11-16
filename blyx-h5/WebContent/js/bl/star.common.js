@@ -35,8 +35,8 @@ function ajax(options){
 }
 
 function getLoginInfo(){
-  if(!localStorage.login_user || localStorage.login_user == 'undefined') return null;
-  var user = JSON.parse(localStorage.login_user);
+  if(!localStorage.login_user_2 || localStorage.login_user_2 == 'undefined') return null;
+  var user = JSON.parse(localStorage.login_user_2);
   return user;
 }
 
@@ -54,13 +54,13 @@ function getShopInfo(){
 }
 
 function islogin(){
-  if(!localStorage.login_user) return false;
-  var user = JSON.parse(localStorage.login_user);
+  if(!localStorage.login_user_2) return false;
+  var user = JSON.parse(localStorage.login_user_2);
   return user.memberId > 0;
 }
 
 function setLoginInfo(user){
-  localStorage.login_user = JSON.stringify(user);
+  localStorage.login_user_2 = JSON.stringify(user);
 }
 
 function setShopInfo(distributor){
@@ -68,7 +68,7 @@ function setShopInfo(distributor){
 }
 
 function logout(){
-  localStorage.removeItem('login_user');
+  localStorage.removeItem('login_user_2');
 }
 
 function putLocalData(key, value){

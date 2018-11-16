@@ -7,6 +7,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.poi.ss.usermodel.BorderStyle;
+import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.context.ApplicationContext;
@@ -48,16 +52,23 @@ public abstract class AbstractDataExport<T> {
   public String exportData() throws IOException {
     int pageNumber = 1;
     XSSFWorkbook workbook = new XSSFWorkbook();
+    XSSFCellStyle style = workbook.createCellStyle();
+    style.setAlignment(HorizontalAlignment.CENTER);
+    style.setVerticalAlignment(VerticalAlignment.CENTER);
+    style.setBorderBottom(BorderStyle.THIN);
+    style.setBorderLeft(BorderStyle.THIN);//左边框    
+    style.setBorderTop(BorderStyle.THIN);//上边框    
+    style.setBorderRight(BorderStyle.THIN);//右边框  
     while(true) {
       Map<String, Object> args = getTemplateDatas();
-      ExcelUtil.fullExcel(excel, args);
+      excel = ExcelUtil.fullExcel(excel, args);
       List<String[]> datas = getRecordsData(params, pageNumber, getPageSize());
       if (null == datas || datas.isEmpty()) {
         break;
       }
       XSSFSheet sheet = workbook.createSheet(excel.getSheetName() + (pageNumber > 1 ? pageNumber : ""));
-      Map<Integer, Integer> columnWidth = ExcelUtil.createXlsxExcelSheetHead(sheet, excel);
-      ExcelUtil.createXlsxExcelSheetData(sheet, excel.getFieldsRowNum(), columnWidth, datas);
+      Map<Integer, Integer> columnWidth = ExcelUtil.createXlsxExcelSheetHead(sheet, excel, style);
+      ExcelUtil.createXlsxExcelSheetData(sheet, excel, columnWidth, datas, style);
       pageNumber ++;
     }
     String filename = ExcelUtil.fullDateOfNow(excel.getFileName()) + ".xlsx";

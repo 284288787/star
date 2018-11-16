@@ -117,7 +117,7 @@ public class FileDownloadController {
       }
       Map<String, Object> params = new HashMap<>();
       params.put("now", DateUtils.formatTodayDate());
-      ExcelUtil.fullExcel(excel, params);
+      excel = ExcelUtil.fullExcel(excel, params);
       OutputStream os = response.getOutputStream();
       response.setContentType("application/vnd.ms-excel");
       String filename = excel.getFileName() + ".xlsx";
@@ -151,7 +151,7 @@ public class FileDownloadController {
         if (null != excel) {
           Map<String, Object> params = new HashMap<>();
           params.put("now", DateUtils.formatTodayDate());
-          ExcelUtil.fullExcel(excel, params);
+          excel = ExcelUtil.fullExcel(excel, params);
           List<String[]> datas = new ArrayList<>();
           String filename = excel.getFileName() + ".xlsx";
           String filePath = path + File.separator + filename;

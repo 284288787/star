@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -194,7 +195,7 @@ public class ExcelUtil {
   }
 
   public static void createXlsx(OutputStream out, Excel excel, Map<String, Object> params, List<String[]> contentList) throws IOException {
-    fullExcel(excel, params);
+    excel = fullExcel(excel, params);
     String sheetName = excel.getSheetName();
     String[] titles = excel.getFields();
     XSSFWorkbook workbook = new XSSFWorkbook();
@@ -346,13 +347,18 @@ public class ExcelUtil {
     return columnWidth;
   }
 
-  public static void createXlsxExcelSheetData(XSSFSheet sheet, Integer rowNum, Map<Integer, Integer> columnWidth, List<String[]> contentList) throws IOException {
+  public static Integer createXlsxExcelSheetData(XSSFSheet sheet, Excel excel, Map<Integer, Integer> columnWidth, List<String[]> contentList, XSSFCellStyle style) throws IOException {
+    Integer rowNum = excel.getFieldsRowNum();
+    Map<Integer, Double> total = new HashMap<>();
+    int contentLen = 0;
+    
     if (contentList != null && contentList.size() > 0) {
       XSSFRow contentRow = null;
       XSSFCell contentCell = null;
       for (int iRow = 0; iRow < contentList.size(); iRow++) {
         String[] content = contentList.get(iRow);
         if (content != null && content.length > 0) {
+          contentLen = content.length;
           contentRow = sheet.createRow(rowNum ++);
           for (int iCell = 0; iCell < content.length; iCell++) {
             int w = (int) (35.7 * len(content[iCell]) * 15);
@@ -364,10 +370,37 @@ public class ExcelUtil {
             contentCell = null;
             contentCell = contentRow.createCell(iCell);
             contentCell.setCellValue(content[iCell]);
+            contentCell.setCellStyle(style);
+            if (null != excel.getColTotal()) {
+              Integer[] cols = excel.getColTotal().getCols();
+              for (Integer col : cols) {
+                if (col - 1 == iCell) {
+                  Double d = total.get(col);
+                  if (null == d) {
+                    d = 0.0;
+                  }
+                  d += Double.parseDouble(content[iCell]);
+                  total.put(col, d);
+                }
+              }
+            }
           }
         }
       }
     }
+    if (null != excel.getColTotal()) {
+      XSSFRow totalRow = sheet.createRow(rowNum ++);
+      for (int i = 0; i < contentLen; i++) {
+        XSSFCell cell = totalRow.createCell(i);
+        cell.setCellStyle(style);
+      }
+      totalRow.getCell(0).setCellValue(excel.getColTotal().getCaption());
+      Integer[] cols = excel.getColTotal().getCols();
+      for (Integer col : cols) {
+        totalRow.getCell(col - 1).setCellValue(total.get(col));
+      }
+    }
+    return rowNum;
   }
   
   private static int len(String str) {
@@ -473,36 +506,46 @@ public class ExcelUtil {
     return content;
   }
   
-  public static void fullExcel(Excel excel, Map<String, Object> datas) {
+  public static Excel fullExcel(Excel excel, Map<String, Object> datas) {
+    Excel res = new Excel();
     if (null != excel && null != datas) {
       StandardEvaluationContext context = toStandardEvaluationContext(datas);
-      excel.setFileName(fullParams(excel.getFileName(), context));
-      excel.setSheetName(fullParams(excel.getSheetName(), context));
-      excel.setTableCaption(fullParams(excel.getTableCaption(), context));
+      res.setFileName(fullParams(excel.getFileName(), context));
+      res.setSheetName(fullParams(excel.getSheetName(), context));
+      res.setTableCaption(fullParams(excel.getTableCaption(), context));
+      res.setFieldsRowNum(excel.getFieldsRowNum());
+      res.setColTotal(excel.getColTotal());
       List<RowData> rowDatas = excel.getRowDatas();
+      List<RowData> rowDatas2 = new ArrayList<>();
       if (null != rowDatas && ! rowDatas.isEmpty()) {
         for (RowData rowData : rowDatas) {
           String[] ds = rowData.getDatas();
+          String[] ds2 = new String[ds.length];
           if (null != ds) {
             for (int i = 0; i < ds.length; i++) {
-              ds[0] = fullParams(ds[0], context);
+              ds2[i] = fullParams(ds[i], context);
             }
           }
+          rowDatas2.add(new RowData(rowData.getRowNum(), ds2));
         }
+        res.setRowDatas(rowDatas2);
       }
       String[] fields = excel.getFields();
+      String[] fields2 = new String[fields.length];
       if (null != fields) {
         for (int i = 0; i < fields.length; i++) {
-          fields[0] = fullParams(fields[0], context);
+          fields2[i] = fullParams(fields[i], context);
         }
+        res.setFields(fields2);
       }
     }
+    return res;
   }
   
   private static ExpressionParser parser = new SpelExpressionParser();
   
   public static String fullParams(String content, StandardEvaluationContext context) {
-    if (StringUtils.isBlank(content)) {
+    if (StringUtils.isBlank(content) || content.indexOf("#") == -1) {
       return content;
     }
     Expression keyExp = parser.parseExpression(content);
@@ -531,15 +574,20 @@ public class ExcelUtil {
     return content;
   }
 
-  public static Map<Integer, Integer> createXlsxExcelSheetHead(XSSFSheet sheet, Excel excel) {
+  public static Map<Integer, Integer> createXlsxExcelSheetHead(XSSFSheet sheet, Excel excel, XSSFCellStyle style) {
     String[] titles = excel.getFields();
-    Integer titlesLen = null != titles ? titles.length : 0;
+    Integer titlesLen = null != titles ? (titles.length - 1) : 0;
     
     String tableCaption = excel.getTableCaption();
     if (StringUtils.isNotBlank(tableCaption)) {
       XSSFRow xrow = sheet.createRow(0);
       XSSFCell cell = xrow.createCell(0);
       cell.setCellValue(tableCaption);
+      cell.setCellStyle(style);
+      for (int i = 1; i <= titlesLen; i++) {
+        XSSFCell xc = xrow.createCell(i);
+        xc.setCellStyle(style);
+      }
       sheet.addMergedRegion(new CellRangeAddress(0, 0, 0, titlesLen));
     }
     List<RowData> rowDatas = excel.getRowDatas();
@@ -547,12 +595,16 @@ public class ExcelUtil {
       for (RowData rowData : rowDatas) {
         int r = rowData.getRowNum() - 1;
         XSSFRow xrow = sheet.createRow(r);
+        for (int i = 0; i <= titlesLen; i++) {
+          XSSFCell xc = xrow.createCell(i);
+          xc.setCellStyle(style);
+        }
         String[] rd = rowData.getDatas();
         for (int i = 0; i < rd.length; i++) {
           if (i == rd.length - 1 && i < titlesLen) {
             sheet.addMergedRegion(new CellRangeAddress(r, r, i, titlesLen));// 开始行，结束行，开始列，结束列
           }
-          XSSFCell cell = xrow.createCell(i);
+          XSSFCell cell = xrow.getCell(i);
           cell.setCellValue(rd[i]);
         }
       }
@@ -565,11 +617,13 @@ public class ExcelUtil {
       for (int i = 0; i < titles.length; i++) {
         titleCell = titleRow.createCell(i);
         titleCell.setCellValue(titles[i]);
-        int width = (int) (36 * len(titles[i]) * 15);
+        titleCell.setCellStyle(style);
+        int width = (int) (40 * len(titles[i]) * 20);
         columnWidth.put(i, width);
         sheet.setColumnWidth(i, width);
       }
     }
     return columnWidth;
   }
+
 }
