@@ -93,8 +93,8 @@ $(function() {
       url: '/api/order/saveMemberOrder',
       data: JSON.stringify(param),
       success: function(orderId){
-        putLocalData("pay_orderId", orderId);
-        document.location.href='pay.html';
+        //putLocalData("pay_orderId", orderId);
+        document.location.href='pay.html?oid='+orderId;
       }
     });
     return false;
