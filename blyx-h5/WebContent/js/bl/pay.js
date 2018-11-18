@@ -1,14 +1,19 @@
-var user = getDistributorLoginInfo();
-if(! user){
-  user = getLoginInfo();
+var f = getParam("f");
+var user = null;
+if(f == 'd'){
+  user = getDistributorLoginInfo();
 }
 if(! user){
-  document.location.href='login.html?redirect_url=pay.html';
+  user = getLoginInfo();
 }
 var to = "";
 var orderId = getParam("oid");
 if(!orderId) orderId = getLocalData("pay_orderId");
 else to = "distributor";
+if(! user){
+  document.location.href='login.html?redirect_url=pay.html?oid='+orderId;
+}
+
 if(! orderId){
   mui.alert("此次支付已经失效，请重新选择订单进行支付");
   document.location.href='orderlist.html';
@@ -66,7 +71,7 @@ $(function() {
               'success': function(res1) {
                 delLocalData("pay_orderId");
                 if(to) putLocalData("pay_orderId_from", "distributor");
-                document.location.href='paysuccess.html?oid='+orderId;
+                document.location.href='paysuccess.html?oid='+orderId+(f? ('f='+f) : '');
               },
               'cancel': function(res2) {
                 //取消支付

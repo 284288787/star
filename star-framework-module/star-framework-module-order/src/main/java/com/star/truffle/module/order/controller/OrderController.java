@@ -154,9 +154,9 @@ public class OrderController {
 
   @ResponseBody
   @RequestMapping(value = "/getDistributorIds", method = RequestMethod.POST)
-  public ApiResult<List<Long>> getDistributorIds(String beginTime, String endTime, String states, String transportStates) {
+  public ApiResult<List<Map<String, Object>>> getDistributorIds(String beginTime, String endTime, String states, String transportStates) {
     try {
-      List<Long> ids = orderService.getDistributorIds(beginTime, endTime, states, transportStates);
+      List<Map<String, Object>> ids = orderService.getDistributorIds(beginTime, endTime, states, transportStates);
       return ApiResult.success(ids);
     } catch (StarServiceException e) {
       return ApiResult.fail(e.getCode(), e.getMsg());

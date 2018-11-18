@@ -66,7 +66,6 @@ public class MemberCache {
     return memberResponseDto;
   }
 
-  @Cacheable(value = "module-member-member", key = "'member_openId_'+#openId", condition = "#openId != null")
   public MemberResponseDto getMemberByOpenId(String openId) {
     MemberResponseDto memberResponseDto = this.memberReadDao.getMemberByOpenId(openId);
     return memberResponseDto;

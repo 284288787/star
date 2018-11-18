@@ -108,7 +108,7 @@ $(function(){
       url: '/api/order/saveDistributorOrder',
       data: JSON.stringify(param),
       success: function(orderId){
-        document.location.href='http://yx.hnkbmd.com/pay.html?oid='+orderId;
+        document.location.href='http://yx.hnkbmd.com/pay.html?f=d&oid='+orderId;
       }
     });
     return false;

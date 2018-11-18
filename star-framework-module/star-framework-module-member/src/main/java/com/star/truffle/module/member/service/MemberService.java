@@ -55,6 +55,8 @@ public class MemberService {
       memberRequestDto.setState(LoginStateEnum.login.getState());
       if (! memberResponseDto.getMobile().equals(member.getMobile())) {
         memberRequestDto.setMobile(member.getMobile());
+        memberResponseDto.setMobile(member.getMobile());
+        memberResponseDto.setState(LoginStateEnum.login.getState());
       }
       this.memberCache.updateMember(memberRequestDto);
     }

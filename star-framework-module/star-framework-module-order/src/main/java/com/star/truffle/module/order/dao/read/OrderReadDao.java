@@ -38,5 +38,5 @@ public interface OrderReadDao {
 
   public Map<String, Object> orderNum(Long memberId);
 
-  public List<Long> getDistributorIds(OrderDetailRequestDto orderDetailRequestDto);
+  public List<Map<String, Object>> getDistributorIds(OrderDetailRequestDto orderDetailRequestDto);
 }

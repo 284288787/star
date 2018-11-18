@@ -131,8 +131,8 @@ function loadData(self, pageNum, pageSize, state){
         });
         $(".topay").off().on('tap', function(){
           var orderId = $(this).attr("data-orderId");
-          putLocalData("pay_orderId", orderId);
-          document.location.href='pay.html';
+          //putLocalData("pay_orderId", orderId);
+          document.location.href='pay.html?oid='+orderId;
         });
         $(".viewdetail").off().on('tap', function(){
           var orderId = $(this).attr("data-orderId");

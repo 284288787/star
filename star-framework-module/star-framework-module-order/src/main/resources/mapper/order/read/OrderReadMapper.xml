@@ -281,8 +281,15 @@
     SELECT o.state, count(1) num FROM `order` o where o.deleted = 0 and o.member_id = #{memberId} GROUP BY o.state HAVING count(1) > 0
   </select>
   
-  <select id="getDistributorIds" resultType="java.lang.Long">
-    select DISTINCT o.distributor_id, o.shop_name FROM `order` o
+  <resultMap id="distributorMap" type="HashMap">
+    <result column="distributor_id" property="distributorId" />
+    <result column="shop_code" property="shopCode" />
+    <result column="shop_name" property="shopName" />
+  </resultMap>
+  
+  <select id="getDistributorIds" resultMap="distributorMap">
+    select DISTINCT o.distributor_id, d.shop_code, d.shop_name FROM `order` o
+    inner join distributor d on d.distributor_id = o.distributor_id
     <trim prefix="WHERE" prefixOverrides="AND | OR">
     	<if test="states != null and states != ''">
 	      and o.state in (${states})

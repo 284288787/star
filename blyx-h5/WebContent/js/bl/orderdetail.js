@@ -48,7 +48,7 @@ function initOrderDetail(){
       $("#mean3").on("tap", function(){
         if(data.state==1){
           putLocalData("pay_orderId", orderId);
-          document.location.href='pay.html';
+          document.location.href='pay.html?oid='+orderId;
         }else if(data.state==2){
           ajax({
             url: '/api/order/pickupOrder',

@@ -494,7 +494,7 @@ public class OrderService {
     return details;
   }
 
-  public List<Long> getDistributorIds(String beginTime, String endTime, String states, String transportStates) {
+  public List<Map<String, Object>> getDistributorIds(String beginTime, String endTime, String states, String transportStates) {
     OrderDetailRequestDto orderDetailRequestDto = new OrderDetailRequestDto();
     orderDetailRequestDto.setStates(states);
     orderDetailRequestDto.setTransportStates(transportStates);

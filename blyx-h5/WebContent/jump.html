@@ -38,6 +38,7 @@ ajax({
 	  	url: '/api/member/loginAndReg',
 	  	data: {'mobile': mobile, 'code': code, 'tag': 1, 'openId': openid},
 	  	success: function(data){
+	  	  mui.toast(JSON.stringify(data));
 	  	  setLoginInfo(data)
         document.location.href=to;
 	  	},

@@ -42,7 +42,7 @@
     select
     <include refid="sql_column" />
     from member_info
-    where open_id = #{openId}
+    where open_id = #{openId} limit 1
   </select>
 
   <select id="queryMember" resultMap="memberResponseDtoResultMap">
