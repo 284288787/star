@@ -129,9 +129,11 @@ public class PayService {
             orderRequestDto.setPickupCode(SmsUtil.buildCode(4));
           }
           orderService.updateOrder(orderRequestDto);
-          List<OrderDetail> details = order.getDetails();
+          log.info("updateProductSoldNumber: pid-> update end");
+          List<OrderDetail> details = orderService.getDetails(order.getOrderId());
           int count = 0;
           if (null != details && ! details.isEmpty()) {
+            log.info("updateProductSoldNumber: pid->" + details.size());
             for (OrderDetail orderDetail : details) {
               count += orderDetail.getCount();
               log.info("updateProductSoldNumber: pid->" + orderDetail.getProductId() + " add num -> " + orderDetail.getCount());

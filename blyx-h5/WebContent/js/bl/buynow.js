@@ -50,6 +50,8 @@ $(function() {
       if(totalMoney >= despatchLimit){
         $(".totaldiv .despatchLimit").show();
         yf = 0;
+      }else{
+        mui.alert('', '满'+(despatchLimit/100.0).toFixed(2)+'元，即可包邮', function() {});
       }
       $(".totaldiv .productTotalMoney").text("￥"+(totalMoney + yf/100.0).toFixed(2));
       $("#mean2 .red").text("￥"+(totalMoney + yf/100.0).toFixed(2));

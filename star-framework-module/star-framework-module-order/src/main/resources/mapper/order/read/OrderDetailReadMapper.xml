@@ -60,7 +60,7 @@
   </select>
   
   <select id="buyRecord" resultMap="orderDetailResponseResultMap">
-    SELECT d.count, o.create_time, o.member_id, m.head, CONCAT(left(m.`name`, 1), '***') `name`
+    SELECT d.count, o.create_time, o.member_id, m.head, CONCAT(left(IFNULL(m.`name`,IFNULL(o.`name`,o.delivery_name)), 1), '***') `name`
     from order_detail d 
     LEFT JOIN `order` o on d.order_id = o.order_id
     LEFT JOIN member_info m on m.member_id = o.member_id

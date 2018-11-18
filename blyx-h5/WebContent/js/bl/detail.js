@@ -243,7 +243,7 @@ function initBuyRecord(){
         for(var i in items){
           var item=items[i];
           $("ul.ullist").append('<li>\
-              <img src="'+item.head+'"> \
+              <img src="'+(item.head? item.head: 'images/qq.png')+'"> \
               <span class="c1">'+item.name+'</span> \
               <span class="c2"><b>'+item.count+'</b>份</span> \
               <span class="c3">'+item.createTime+'</span>\
