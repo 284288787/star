@@ -128,8 +128,11 @@ public class ProductService {
   public ProductResponseDto getProduct(Long productId) {
     ProductResponseDto productResponseDto = this.productCache.getProduct(productId);
     if (null != productResponseDto) {
-//      ProductInventory inventory = productInventoryCache.getProductInventory(productId, ProductInventoryTypeEnum.product.type());
-//      productResponseDto.setProductInventory(inventory);
+      ProductInventory inventory = productInventoryCache.getProductInventory(productId, ProductInventoryTypeEnum.product.type());
+      productResponseDto.setNumberType(inventory.getNumberType());
+      productResponseDto.setNumber(inventory.getNumber());
+      productResponseDto.setSoldNumber(inventory.getSoldNumber());
+      productResponseDto.setType(inventory.getType());
       List<ProductPicture> pictures = productPictureCache.getProductPictureByProductId(productId);
       List<ProductPicture> pics = new ArrayList<>();
       if (null != pictures && ! pictures.isEmpty()) {
