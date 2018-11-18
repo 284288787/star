@@ -280,4 +280,22 @@
   <select id="orderNum" resultMap="orderNumMap">
     SELECT o.state, count(1) num FROM `order` o where o.deleted = 0 and o.member_id = #{memberId} GROUP BY o.state HAVING count(1) > 0
   </select>
+  
+  <select id="getDistributorIds" resultType="java.lang.Long">
+    select DISTINCT o.distributor_id FROM `order` o
+    <trim prefix="WHERE" prefixOverrides="AND | OR">
+    	<if test="states != null and states != ''">
+	      and o.state in (${states})
+	    </if>
+			<if test="transportStates != null and transportStates != ''">
+	      and o.transport_state in (${transportStates})
+	    </if>
+	    <if test="beginCreateTime != null">
+	      and o.create_time &gt;= #{beginCreateTime}
+	    </if>
+	    <if test="endCreateTime != null">
+	      and o.create_time &lt;= #{endCreateTime}
+	    </if>
+    </trim>
+  </select>
 </mapper>

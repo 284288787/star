@@ -20,14 +20,13 @@ import com.star.truffle.core.web.config.SpringContextConfig;
 
 public abstract class AbstractDataExport<T> {
 
-  public static final String tempDir = "d:/temp";
-  private int pageSize = 1;
+  public static final String tempDir = "/opt/temp";
+  private int pageSize = 10;
   private Map<String, Object> params;
   private Excel excel;
   
-  public AbstractDataExport(Excel excel) {
+  public AbstractDataExport() {
     super();
-    this.excel = excel;
     this.getApplication(SpringContextConfig.getApplicationContext());
     File dir = new File(tempDir);
     if (! dir.exists()) {
@@ -38,17 +37,17 @@ public abstract class AbstractDataExport<T> {
   public Map<String, Object> getParams() {
     return this.params;
   }
-
+  
   public void setParams(Map<String, Object> params) {
     this.params = params;
   }
+
+  public abstract void getApplication(ApplicationContext applicationContext);
   
   public abstract Map<String, Object> getTemplateDatas();
   
   public abstract List<String[]> getRecordsData(Map<String, Object> params, int pageNumber, int pageSize);
   
-  public abstract void getApplication(ApplicationContext applicationContext);
-
   public String exportData() throws IOException {
     int pageNumber = 1;
     XSSFWorkbook workbook = new XSSFWorkbook();
@@ -92,5 +91,9 @@ public abstract class AbstractDataExport<T> {
 
   public Excel getExcel() {
     return excel;
+  }
+
+  public void setExcel(Excel excel) {
+    this.excel = excel;
   }
 }

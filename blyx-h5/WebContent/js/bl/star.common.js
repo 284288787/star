@@ -87,7 +87,7 @@ function delLocalData(key){
 
 mui('body').on('tap', 'a', function() {
   var href = jQuery(this).attr("href");
-  if(href.indexOf("#")==0) return true;
+  if(!href || href.indexOf("#")==0) return true;
   document.location.href = this.href;
 });
 

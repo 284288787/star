@@ -185,7 +185,8 @@ function loadData(pageNum, pageSize, title){
         }
         syncOtherInfo(productIds);
         
-        $(".itemlist a.addCar:not(.disable)").off().on("tap", function(){
+//        $(".itemlist a.addCar:not(.disable)").off().on("tap", function(){
+        mui('body').on('tap','.itemlist a.addCar:not(.disable)',function(){
           var thisObj=$(this);
           if(islogin()){
             var pid=thisObj.attr("data-pid");

@@ -15,7 +15,31 @@
     <result column="count" property="count" />
     <result column="product_info" property="productInfo" />
   </resultMap>
-
+	<resultMap id="orderDetailResponseResultMap" type="com.star.truffle.module.order.dto.res.OrderDetailResponseDto">
+    <result column="id" property="id" />
+    <result column="order_id" property="orderId" />
+    <result column="product_id" property="productId" />
+    <result column="title" property="title" />
+    <result column="main_picture_url" property="mainPictureUrl" />
+    <result column="original_price" property="originalPrice" />
+    <result column="price" property="price" />
+    <result column="brokerage" property="brokerage" />
+    <result column="pickup_time" property="pickupTime" />
+    <result column="specification" property="specification" />
+    <result column="count" property="count" />
+    <result column="pickup_code" property="pickupCode" />
+    <result column="type" property="type" />
+    <result column="province_name" property="provinceName" />
+    <result column="city_name" property="cityName" />
+    <result column="area_name" property="areaName" />
+    <result column="delivery_address" property="deliveryAddress" />
+    <result column="delivery_name" property="deliveryName" />
+    <result column="delivery_mobile" property="deliveryMobile" />
+    <result column="shop_address" property="shopAddress" />
+    <result column="shop_name" property="shopName" />
+    <result column="shop_mobile" property="shopMobile" />
+    <result column="delivery_type" property="deliveryType" />
+  </resultMap>
   <sql id="sql_column">
     id, order_id, product_id, title, main_picture_url, original_price, price, brokerage, pickup_time, specification, count, product_info
   </sql>
@@ -34,14 +58,6 @@
     from order_detail d 
     where d.product_id = #{productId} and exists (select * from `order` o where o.order_id = d.order_id and o.state = #{state} and o.deleted = 0)
   </select>
-  
-  <resultMap id="orderDetailResponseResultMap" type="com.star.truffle.module.order.dto.res.OrderDetailResponseDto">
-    <result column="count" property="count" />
-    <result column="create_time" property="createTime" />
-    <result column="member_id" property="memberId" />
-    <result column="head" property="head" />
-    <result column="name" property="name" />
-  </resultMap>
   
   <select id="buyRecord" resultMap="orderDetailResponseResultMap">
     SELECT d.count, o.create_time, o.member_id, m.head, CONCAT(left(m.`name`, 1), '***') `name`
@@ -65,5 +81,32 @@
     LEFT JOIN member_info m on m.member_id = o.member_id
     where 
       o.state in (2,3) and d.product_id = #{productId}
+  </select>
+
+  <select id="queryOrderDetail" resultMap="orderDetailResponseResultMap">
+    select 
+			id, o.order_id, product_id, title, main_picture_url, original_price, price, brokerage, pickup_time, specification, count, 
+		  o.pickup_code, o.type, o.province_name, o.city_name, o.area_name, o.delivery_address, o.delivery_name, o.delivery_mobile,
+		  o.shop_address, o.shop_name, o.shop_mobile, o.delivery_type
+		from order_detail d, `order` o where d.order_id = o.order_id
+		<if test="states != null and states != ''">
+      and o.state in (${states})
+    </if>
+		<if test="distributorId != null">
+      and o.distributor_id = #{distributorId}
+    </if>
+		<if test="transportStates != null and transportStates != ''">
+      and o.transport_state in (${transportStates})
+    </if>
+    <if test="beginCreateTime != null">
+      and o.create_time &gt;= #{beginCreateTime}
+    </if>
+    <if test="endCreateTime != null">
+      and o.create_time &lt;= #{endCreateTime}
+    </if>
+    order by o.delivery_type, o.create_time asc
+    <if test="pager != null and pager.pageSize!=null and pager.startIndex!=null">
+      limit #{pager.startIndex}, #{pager.pageSize}
+    </if>
   </select>
 </mapper>

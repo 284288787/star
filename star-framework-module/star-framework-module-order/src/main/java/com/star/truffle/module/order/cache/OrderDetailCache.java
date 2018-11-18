@@ -13,6 +13,7 @@ import com.star.truffle.core.jdbc.Page;
 import com.star.truffle.module.order.dao.read.OrderDetailReadDao;
 import com.star.truffle.module.order.dao.write.OrderDetailWriteDao;
 import com.star.truffle.module.order.domain.OrderDetail;
+import com.star.truffle.module.order.dto.req.OrderDetailRequestDto;
 import com.star.truffle.module.order.dto.res.OrderDetailResponseDto;
 
 @Service
@@ -45,5 +46,9 @@ public class OrderDetailCache {
 
   public Map<String, Integer> buyRecordTotal(Long productId) {
     return orderDetailReadDao.buyRecordTotal(productId);
+  }
+
+  public List<OrderDetailResponseDto> queryOrderDetail(OrderDetailRequestDto orderDetailRequestDto) {
+    return orderDetailReadDao.queryOrderDetail(orderDetailRequestDto);
   }
 }

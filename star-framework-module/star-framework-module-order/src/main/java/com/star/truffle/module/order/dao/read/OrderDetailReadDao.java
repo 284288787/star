@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 
 import com.star.truffle.core.jdbc.Page;
 import com.star.truffle.module.order.domain.OrderDetail;
+import com.star.truffle.module.order.dto.req.OrderDetailRequestDto;
 import com.star.truffle.module.order.dto.res.OrderDetailResponseDto;
 
 public interface OrderDetailReadDao {
@@ -19,5 +20,7 @@ public interface OrderDetailReadDao {
   public List<OrderDetailResponseDto> buyRecord(@Param("productId") Long productId, @Param("pager") Page pager);
   
   public Map<String, Integer> buyRecordTotal(Long productId);
+
+  public List<OrderDetailResponseDto> queryOrderDetail(OrderDetailRequestDto orderDetailRequestDto);
 
 }

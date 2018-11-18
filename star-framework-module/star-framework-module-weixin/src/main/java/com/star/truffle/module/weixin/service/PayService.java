@@ -34,6 +34,9 @@ import com.star.truffle.module.weixin.dto.req.PayReqData;
 import com.star.truffle.module.weixin.dto.res.PayResData;
 import com.star.truffle.module.weixin.intf.WeixinConfigIntf;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class PayService {
 
@@ -113,46 +116,49 @@ public class PayService {
     return bool;
   }
 
-  private boolean finishOrder(String orderId) {
+  public boolean finishOrder(String orderId) {
     if (StringUtils.isNotBlank(orderId)) {
-      OrderResponseDto order = orderService.getOrder(Long.parseLong(orderId));
-      if (null != order) {
-        OrderRequestDto orderRequestDto = new OrderRequestDto();
-        orderRequestDto.setOrderId(order.getOrderId());
-        orderRequestDto.setState(OrderStateEnum.nosend.state());
-        orderRequestDto.setTransportState(OrderProductStateEnum.ready.state());
-        if (order.getDeliveryType() == DeliveryTypeEnum.self.type()) {
-          orderRequestDto.setPickupCode(SmsUtil.buildCode(4));
-        }
-        orderService.updateOrder(orderRequestDto);
-        List<OrderDetail> details = order.getDetails();
-        int count = 0;
-        if (null != details && ! details.isEmpty()) {
-          for (OrderDetail orderDetail : details) {
-            count += orderDetail.getCount();
-            productService.updateProductSoldNumber(orderDetail.getProductId(), orderDetail.getCount());
+      synchronized (orderId) {
+        OrderResponseDto order = orderService.getOrder(Long.parseLong(orderId));
+        if (null != order) {
+          OrderRequestDto orderRequestDto = new OrderRequestDto();
+          orderRequestDto.setOrderId(order.getOrderId());
+          orderRequestDto.setState(OrderStateEnum.nosend.state());
+          orderRequestDto.setTransportState(OrderProductStateEnum.ready.state());
+          if (order.getDeliveryType() == DeliveryTypeEnum.self.type()) {
+            orderRequestDto.setPickupCode(SmsUtil.buildCode(4));
           }
-        }
-        distributionRegionCache.addDistributionRegionNum("soldNum", order.getRegionId(), count);
-        distributorCache.addDistributorNum("soldNum", order.getDistributorId(), count);
-        Long num = 0L;
-        if (order.getMemberId() > 0) {
-          OrderRequestDto orderParam = new OrderRequestDto();
-          orderParam.setMemberId(order.getMemberId());
-          orderParam.setRegionId(order.getRegionId());
-          num = orderService.queryOrderCount(orderParam);
-        }
-        if (num == 1 || order.getMemberId() < 0) {
-          distributionRegionCache.addDistributionRegionNum("fansNum", order.getRegionId(), 1);
-        }
-        if (order.getMemberId() > 0) {
-          OrderRequestDto order2Param = new OrderRequestDto();
-          order2Param.setMemberId(order.getMemberId());
-          order2Param.setDistributorId(order.getDistributorId());
-          num = orderService.queryOrderCount(order2Param);
-        }
-        if (num == 1 || order.getMemberId() < 0) {
-          distributorCache.addDistributorNum("fansNum", order.getDistributorId(), 1);
+          orderService.updateOrder(orderRequestDto);
+          List<OrderDetail> details = order.getDetails();
+          int count = 0;
+          if (null != details && ! details.isEmpty()) {
+            for (OrderDetail orderDetail : details) {
+              count += orderDetail.getCount();
+              log.info("updateProductSoldNumber: pid->" + orderDetail.getProductId() + " add num -> " + orderDetail.getCount());
+              productService.updateProductSoldNumber(orderDetail.getProductId(), orderDetail.getCount());
+            }
+          }
+          distributionRegionCache.addDistributionRegionNum("soldNum", order.getRegionId(), count);
+          distributorCache.addDistributorNum("soldNum", order.getDistributorId(), count);
+          Long num = 0L;
+          if (order.getMemberId() > 0) {
+            OrderRequestDto orderParam = new OrderRequestDto();
+            orderParam.setMemberId(order.getMemberId());
+            orderParam.setRegionId(order.getRegionId());
+            num = orderService.queryOrderCount(orderParam);
+          }
+          if (num == 1 || order.getMemberId() < 0) {
+            distributionRegionCache.addDistributionRegionNum("fansNum", order.getRegionId(), 1);
+          }
+          if (order.getMemberId() > 0) {
+            OrderRequestDto order2Param = new OrderRequestDto();
+            order2Param.setMemberId(order.getMemberId());
+            order2Param.setDistributorId(order.getDistributorId());
+            num = orderService.queryOrderCount(order2Param);
+          }
+          if (num == 1 || order.getMemberId() < 0) {
+            distributorCache.addDistributorNum("fansNum", order.getDistributorId(), 1);
+          }
         }
       }
     }

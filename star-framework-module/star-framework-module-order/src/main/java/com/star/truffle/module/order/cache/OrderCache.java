@@ -16,6 +16,7 @@ import com.star.truffle.core.jdbc.Page;
 import com.star.truffle.module.order.dao.read.OrderReadDao;
 import com.star.truffle.module.order.dao.write.OrderWriteDao;
 import com.star.truffle.module.order.domain.Order;
+import com.star.truffle.module.order.dto.req.OrderDetailRequestDto;
 import com.star.truffle.module.order.dto.req.OrderRequestDto;
 import com.star.truffle.module.order.dto.res.OrderResponseDto;
 import com.star.truffle.module.order.dto.res.OrderTotal;
@@ -88,6 +89,10 @@ public class OrderCache {
 
   public Map<String, Object> orderNum(Long memberId) {
     return orderReadDao.orderNum(memberId);
+  }
+
+  public List<Long> getDistributorIds(OrderDetailRequestDto orderDetailRequestDto) {
+    return orderReadDao.getDistributorIds(orderDetailRequestDto);
   }
 
 }

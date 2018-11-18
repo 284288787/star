@@ -9,14 +9,9 @@ import java.util.Map;
 import org.springframework.context.ApplicationContext;
 
 import com.star.truffle.common.dto.Student;
-import com.star.truffle.common.properties.Excel;
 import com.star.truffle.core.util.DateUtils;
 
 public class TestExport extends AbstractDataExport<Student>{
-
-  public TestExport(Excel excel) {
-    super(excel);
-  }
 
   @Override
   public List<String[]> getRecordsData(Map<String, Object> params, int pageNumber, int pageSize) {
@@ -49,17 +44,17 @@ public class TestExport extends AbstractDataExport<Student>{
   public int getPageSize() {
     return 3;
   }
-  
-  @Override
-  public void getApplication(ApplicationContext applicationContext) {
-    // TODO Auto-generated method stub
-    
-  }
 
   @Override
   public Map<String, Object> getTemplateDatas() {
     Map<String, Object> map = new HashMap<>();
     map.put("now", DateUtils.formatTodayDate());
     return map;
+  }
+
+  @Override
+  public void getApplication(ApplicationContext applicationContext) {
+    // TODO Auto-generated method stub
+    
   }
 }

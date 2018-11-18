@@ -20,7 +20,6 @@ import com.star.truffle.common.importdata.AbstractDataExport;
 import com.star.truffle.common.importdata.AbstractDataImport;
 import com.star.truffle.common.importdata.ExcelUtil;
 import com.star.truffle.common.importdata.ImportResult;
-import com.star.truffle.common.properties.Excel;
 import com.star.truffle.core.util.ClassUtils;
 
 @Service
@@ -43,7 +42,9 @@ public class ExcelService {
   public void exportExcel(List<ExcelExportParam> eeps, HttpServletResponse response) throws IOException {
     Map<String, String> excelFiles = new LinkedHashMap<>();
     for (ExcelExportParam excelExportParam : eeps) {
-      AbstractDataExport<?> dataExport = (AbstractDataExport<?>) ClassUtils.getInstance(excelExportParam.getHandle(), new Class<?>[] {Excel.class}, new Object[] {excelExportParam.getExcel()});
+      AbstractDataExport<?> dataExport = (AbstractDataExport<?>) ClassUtils.getInstance(excelExportParam.getHandle(), null, null);
+//      AbstractDataExport<?> dataExport = SpringContextConfig.getBean(excelExportParam.getHandle(), AbstractDataExport.class);
+      dataExport.setExcel(excelExportParam.getExcel());
       dataExport.setParams(excelExportParam.getParams());
       String filePath = dataExport.exportData();
       String filename = filePath.substring(filePath.lastIndexOf(File.separator) + 1);

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>订单导出</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jquery-ui/jquery-ui.min.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jqGrid/css/ui.jqgrid.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/artDialog/skins/simple-star.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/buttons.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/editEntityTable.css}" />
+</head>
+<body>
+  <div class="edit-container">
+     <table class="gy_table">
+       <tr>
+       	 <td width="80px">时间范围：</td>
+         <td >
+          <input type="text" class="Wdate" id="beginTime" name="beginTime" placeholder="起始日期" th:value="${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')}"
+                onclick="WdatePicker({startDate:'%y-%M-%d',isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd',alwaysUseStartDate:true})"> 
+          <input type="text" class="Wdate" id="endTime" name="endTime" placeholder="终止日期" th:value="${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')}"
+                onclick="WdatePicker({minDate:'#F{$dp.$D(\'beginTime\')}',isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})"> 
+         </td>
+       </tr>
+       <tr>
+       	 <td>订单状态：</td>
+         <td >
+           <input type="checkbox" name="state" id="state_1" value="1"><label for="state_1">待付款</label>
+           <input type="checkbox" name="state" id="state_2" value="2" checked><label for="state_2">待提货</label>
+           <input type="checkbox" name="state" id="state_3" value="3"><label for="state_3">已提货</label>
+           <input type="checkbox" name="state" id="state_4" value="4"><label for="state_4">已退货</label>
+         </td>
+       </tr>
+       <tr>
+       	 <td>运输状态：</td>
+         <td >
+           <input type="checkbox" name="transportState" id="transportState_1" value="1" checked><label for="transportState_1">待发货</label>
+           <input type="checkbox" name="transportState" id="transportState_2" value="2"><label for="transportState_2">已发货</label>
+           <input type="checkbox" name="transportState" id="transportState_3" value="3"><label for="transportState_3">已完成</label>
+         </td>
+       </tr>
+       <tr>
+         <td colspan="2">
+           <div class="btnGroup">
+            <button class="button blue">导出</button>
+           </div>
+         </td>
+       </tr>
+     </table>
+  </div>
+  <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+  <script type="text/javascript" th:src="@{/webjars/jqGrid/js/jquery.jqGrid.js}"></script>
+  <script type="text/javascript" th:src="@{/webjars/jqGrid/js/i18n/grid.locale-cn.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/artDialog/js/jquery.artDialog.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/artDialog/js/iframeTools.js}"></script>
+  <script type="text/javascript" th:src="@{/webjars/My97DatePicker/WdatePicker.js}"></script>
+	<script type="text/javascript" th:inline="javascript">
+	var basePath = "/";
+	$(function(){
+		$(".button").click(function(){
+		  var beginTime = $("#beginTime").val();
+		  var endTime = $("#endTime").val();
+		  var states = "";
+		  $(":checked[name=state]").each(function(i){
+		    states += (i==0 ? "" : ",") + this.value;
+		  });
+		  var transportStates = "";
+		  $(":checked[name=transportState]").each(function(i){
+		    transportStates += (i==0 ? "" : ",") + this.value;
+		  });
+		  var params = {"key": 'transportOrder', "handle": 'com.star.truffle.module.order.service.ImportData', 'beginTime': beginTime, 'endTime': endTime, 'states': states, 'transportStates': transportStates};
+		  $.ajax({
+		    url: '/order/getDistributorIds',
+		    data: params,
+		    type: 'post',
+		    dataType: 'json',
+		    success: function(res){
+		      if(res.code == 0){
+		        var ids = res.data;
+		        if(ids.length == 0){
+		          artDialog.alert("没有满足条件的订单可以导出");
+		          return false;
+		        }
+		        for(var i in ids){
+		          params['distributorId'] = ids[i];
+		          var url = '/download/excel/data?params=';
+		    		  url+=encodeURI(JSON.stringify(params));
+		    		  window.open(url);
+		        }
+		      }else{
+		        artDialog.alert(res.msg);
+		      }
+		    }
+		  });
+		  
+		});
+	});
+	</script>
+</body>
+</html>

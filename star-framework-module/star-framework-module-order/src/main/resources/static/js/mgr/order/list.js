@@ -15,7 +15,14 @@ var orderHandle = new ListHandle({
   }
 },{
   exportTransportOrder: function(){
-    
+    artDialog.open(basePath+'common/mgr/order/exportTransportOrder', {
+      title : "导出订单",
+      width : "600px",
+      height : "210px",
+      drag : true,
+      resize : true,
+      lock : true
+    });
   },
   deliverGoods: function(orderId){
     artDialog.prompt("填写快递单号：", function(expressNumber) {

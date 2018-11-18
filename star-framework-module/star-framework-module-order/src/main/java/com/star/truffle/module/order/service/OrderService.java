@@ -33,6 +33,7 @@ import com.star.truffle.module.order.constant.OrderStateEnum;
 import com.star.truffle.module.order.constant.OrderTypeEnum;
 import com.star.truffle.module.order.domain.Order;
 import com.star.truffle.module.order.domain.OrderDetail;
+import com.star.truffle.module.order.dto.req.OrderDetailRequestDto;
 import com.star.truffle.module.order.dto.req.OrderRequestDto;
 import com.star.truffle.module.order.dto.req.ShoppingCartRequestDto;
 import com.star.truffle.module.order.dto.res.DeliveryAddressResponseDto;
@@ -67,6 +68,7 @@ public class OrderService {
   private ProductService productService;
   @Autowired
   private ShoppingCartService shoppingCartService;
+  
   
   public Long saveOrder(Order order) {
     this.orderCache.saveOrder(order);
@@ -123,11 +125,25 @@ public class OrderService {
     }
     orderRequestDto.setTotalBrokerage(totalBrokerage);
     orderRequestDto.setRegionId(distributor.getRegionId());
-    orderRequestDto.setShopAddress(distributor.getAddress());
+    String aname = "";
+    if (StringUtils.isNotBlank(distributor.getProvinceName())) {
+      aname += distributor.getProvinceName();
+    }
+    if (StringUtils.isNotBlank(distributor.getCityName())) {
+      aname += distributor.getCityName();
+    }
+    if (StringUtils.isNotBlank(distributor.getAreaName())) {
+      aname += distributor.getAreaName();
+    }
+    if (StringUtils.isNotBlank(distributor.getTownName())) {
+      aname += distributor.getTownName();
+    }
+    orderRequestDto.setShopAddress(aname + distributor.getAddress());
     orderRequestDto.setShopName(distributor.getShopName());
     orderRequestDto.setShopMobile(distributor.getMobile());
     orderRequestDto.setState(OrderStateEnum.nopay.state());
     orderRequestDto.setType(OrderTypeEnum.self.type());
+    orderRequestDto.setTransportState(OrderProductStateEnum.ready.state());
     orderRequestDto.setOpenId(member.getOpenId());
     orderRequestDto.setName(member.getName());
     orderRequestDto.setMobile(member.getMobile());
@@ -197,12 +213,26 @@ public class OrderService {
     }
     orderRequestDto.setTotalBrokerage(totalBrokerage);
     orderRequestDto.setRegionId(distributor.getRegionId());
-    orderRequestDto.setShopAddress(distributor.getAddress());
+    String aname = "";
+    if (StringUtils.isNotBlank(distributor.getProvinceName())) {
+      aname += distributor.getProvinceName();
+    }
+    if (StringUtils.isNotBlank(distributor.getCityName())) {
+      aname += distributor.getCityName();
+    }
+    if (StringUtils.isNotBlank(distributor.getAreaName())) {
+      aname += distributor.getAreaName();
+    }
+    if (StringUtils.isNotBlank(distributor.getTownName())) {
+      aname += distributor.getTownName();
+    }
+    orderRequestDto.setShopAddress(aname + distributor.getAddress());
     orderRequestDto.setShopName(distributor.getShopName());
     orderRequestDto.setShopMobile(distributor.getMobile());
     orderRequestDto.setOpenId(distributor.getOpenId());
     orderRequestDto.setState(OrderStateEnum.nopay.state());
     orderRequestDto.setType(OrderTypeEnum.behalf.type());
+    orderRequestDto.setTransportState(OrderProductStateEnum.ready.state());
     orderRequestDto.setCreateTime(new Date());
     OrderResponseDto orderResponseDto = this.orderCache.saveOrder(orderRequestDto);
     Long orderId = orderResponseDto.getOrderId();
@@ -462,6 +492,19 @@ public class OrderService {
   public List<OrderDetail> getDetails(Long orderId) {
     List<OrderDetail> details = orderDetailCache.getOrderDetails(orderId);
     return details;
+  }
+
+  public List<Long> getDistributorIds(String beginTime, String endTime, String states, String transportStates) {
+    OrderDetailRequestDto orderDetailRequestDto = new OrderDetailRequestDto();
+    orderDetailRequestDto.setStates(states);
+    orderDetailRequestDto.setTransportStates(transportStates);
+    if (StringUtils.isNotBlank(beginTime) && beginTime.length() > 4) {
+      orderDetailRequestDto.setBeginCreateTime(DateUtils.toDateYmdHms(beginTime + " 00:00:00"));
+    }
+    if (StringUtils.isNotBlank(endTime) && endTime.length() > 4) {
+      orderDetailRequestDto.setEndCreateTime(DateUtils.toDateYmdHms(endTime + " 23:59:59"));
+    }
+    return this.orderCache.getDistributorIds(orderDetailRequestDto);
   }
 
 }

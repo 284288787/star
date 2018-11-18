@@ -57,6 +57,23 @@ public class PayApiController {
     }
   }
   
+//  @RequestMapping(value = "/finishOrder", method = RequestMethod.POST)
+//  @ApiOperation(value = "统一下单", notes = "返回订单号，金额等信息，使客户端完成支付", httpMethod = "POST", response = ApiResult.class)
+//  @ApiImplicitParams({
+//    @ApiImplicitParam(name = "orderId", value = "主键", dataType = "Long", required = true, paramType = "query")
+//  })
+//  public ApiResult<Boolean> finishOrder(String orderId) {
+//    try {
+//      boolean payInfo = payService.finishOrder(orderId);
+//      return ApiResult.success(payInfo);
+//    } catch (StarServiceException e) {
+//      return ApiResult.fail(e.getCode(), e.getMsg());
+//    } catch (Exception e) {
+//      log.error(e.getMessage(), e);
+//      return ApiResult.fail(ApiCode.SYSTEM_ERROR);
+//    }
+//  }
+  
   @RequestMapping(value = "/callback", method = RequestMethod.POST)
   @ApiOperation(value = "统一下单", notes = "返回订单号，金额等信息，使客户端完成支付", httpMethod = "POST", response = ApiResult.class)
   @ApiImplicitParams({
