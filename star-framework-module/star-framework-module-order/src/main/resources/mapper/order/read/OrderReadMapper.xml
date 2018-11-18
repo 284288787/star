@@ -282,7 +282,7 @@
   </select>
   
   <select id="getDistributorIds" resultType="java.lang.Long">
-    select DISTINCT o.distributor_id FROM `order` o
+    select DISTINCT o.distributor_id, o.shop_name FROM `order` o
     <trim prefix="WHERE" prefixOverrides="AND | OR">
     	<if test="states != null and states != ''">
 	      and o.state in (${states})
