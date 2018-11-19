@@ -36,6 +36,7 @@ public class ChooseController {
   public String dialog(String service, String condition, Model model) throws UnsupportedEncodingException {
     ChooseDataIntf data = SpringContextConfig.getBean(service, ChooseDataIntf.class);
     List<GridColumn> columns = data.getGridColumns();
+    model.addAttribute("primaryKey", data.getPrimaryKey());
     model.addAttribute("columns", columns);
     model.addAttribute("service", service);
     if (StringUtils.isNotBlank(condition)) {

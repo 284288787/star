@@ -11,4 +11,6 @@ public interface ChooseDataIntf {
   public GridPagerResponse getDatas(Map<String, Object> condition, Page pager);
 
   public List<GridColumn> getGridColumns();
+  
+  public String getPrimaryKey();
 }

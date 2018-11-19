@@ -24,8 +24,8 @@
             <input type="text" th:name="${col.viewName}" th:attr="data-javaname=${col.javaName},data-service=${col.service},data-jsname=${col.jsName},data-jsviewname=${col.jsViewName}" th:placeholder="${col.placeholder == null ? col.caption : col.placeholder}"/>
             <input type="hidden" th:name="${col.javaName}"/>
           </span> 
-          <span th:if="${col.type=='text'}" style="display:inline-block"><span th:text="${col.caption}">姓名</span>：
-            <input type="text" th:name="${col.javaName}" th:placeholder="${col.placeholder == null ? col.caption : col.placeholder}"/>
+          <span th:if="${col.type=='text'}" style="display:inline-block"><span th:text="${col.caption}" th:style="${col.hidden ? 'display:none' : ''}">姓名：</span>
+            <input type="text" th:name="${col.javaName}" th:placeholder="${col.placeholder == null ? col.caption : col.placeholder}" th:hidden="${col.hidden}"/>
           </span> 
           <span th:if="${col.type=='date'}" style="display:inline-block"><span>起止日期</span>：
             <input type="text" id="beginTime" name="beginTime" placeholder="开始日期" class="Wdate" onclick="WdatePicker({isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})">
@@ -73,7 +73,7 @@
     tableId: '#grid-table',
     pagerId: '#grid-pager',
     formId: '#queryForm',
-    primaryKey: 'distributorId',
+    primaryKey: [[${primaryKey}]],
     urls:{
       list: basePath+'choose/dialogData?service='+[[${service}]],
     }
@@ -153,7 +153,7 @@
     }
     var rowList = [10, 20, 30, 50];
     var rownumbers = true;
-    var multiselect = false;
+    var multiselect = opts.multiselect | false;
     var config={colNames: colNames, colModel: colModel, dataType: "local", height:"300px", rowList: rowList, rownumbers: rownumbers, multiselect: multiselect};
     setTimeout(function(){
       dialogHandle.init(config);
@@ -167,11 +167,26 @@
       $("div.item:first").before(clone);
     }
     $("#enterBtn").click(function() {
-      var rowId=$('#grid-table').jqGrid('getGridParam','selrow'); //selarrrow
-      var rowData = $('#grid-table').jqGrid('getRowData', rowId);
-      if (opts) {
-        opts.callback(rowData);
-        art.dialog.close();
+      //var rowId=$('#grid-table').jqGrid('getGridParam','selrow'); //selarrrow
+      if(opts.multiselect){
+        var ids = dialogHandle.getSelectedRows();
+        dialogHandle.resetSelectedIds();
+        var da = new Array();
+        for(var rid in ids){
+          var rowData = $('#grid-table').jqGrid('getRowData', rid);
+          da.push(rowData);
+        }
+        if (opts) {
+          opts.callback(da);
+          art.dialog.close();
+        }
+      }else{
+        var rowId=$('#grid-table').jqGrid('getGridParam','selrow'); //selarrrow
+        var rowData = $('#grid-table').jqGrid('getRowData', rowId);
+        if (opts) {
+          opts.callback(rowData);
+          art.dialog.close();
+        }
       }
     });
   });

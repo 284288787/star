@@ -37,6 +37,11 @@ public class DistributionRegionService implements ChooseDataIntf {
   @Autowired
   private DistributorCache distributorCache;
 
+  @Override
+  public String getPrimaryKey() {
+    return "regionId";
+  }
+  
   public List<GridColumn> getGridColumns(){
     List<GridColumn> columns = new ArrayList<>();
     columns.add(GridColumn.builder().caption("regionId").javaName("regionId").dsName("region_id").hidden(true).build());

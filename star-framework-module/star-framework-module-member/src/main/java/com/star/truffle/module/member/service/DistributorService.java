@@ -26,7 +26,7 @@ import com.star.truffle.module.member.dto.req.DistributorRequestDto;
 import com.star.truffle.module.member.dto.res.DistributorResponseDto;
 
 @Service
-public class DistributorService implements ChooseDataIntf{
+public class DistributorService implements ChooseDataIntf {
 
   @Autowired
   private StarJson starJson;
@@ -35,6 +35,11 @@ public class DistributorService implements ChooseDataIntf{
   @Autowired
   private SmsIdentityService smsIdentityService;
 
+  @Override
+  public String getPrimaryKey() {
+    return "distributorId";
+  }
+  
   @Override
   public GridPagerResponse getDatas(Map<String, Object> condition, Page pager) {
     DistributorRequestDto distributorRequestDto = starJson.str2obj(starJson.obj2string(condition), DistributorRequestDto.class);

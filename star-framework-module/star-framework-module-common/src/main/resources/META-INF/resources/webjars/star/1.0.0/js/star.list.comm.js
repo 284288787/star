@@ -170,6 +170,10 @@ function ListHandle(options, funcs) {
 		};
 		$.ajax(o);
 	}
+	handle.resetSelectedIds = function() {
+	  selectedRows = {};
+    historyIds = ",";
+  }
 	handle.setId = function(id) {
 		selectedRows[id] = true;
 	}
@@ -204,6 +208,9 @@ function ListHandle(options, funcs) {
 		var temp = historyIds.substring(1, historyIds.length - 1);
 		return temp;
 	}
+	handle.getSelectedRows = function() {
+    return selectedRows;
+  }
 	handle.query = function() {
 		var data = $(options.formId).serializeArray();
 		var params = {};

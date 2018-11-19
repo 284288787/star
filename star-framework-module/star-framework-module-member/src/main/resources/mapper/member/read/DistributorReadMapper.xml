@@ -52,10 +52,10 @@
         and distributor_id = #{distributorId}
       </if>
       <if test="name != null and name != ''">
-        and distributor.name = "%"#{name}"%"
+        and distributor.name like "%"#{name}"%"
       </if>
       <if test="shopName != null and shopName != ''">
-        and shop_name = "%"#{shopName}"%"
+        and shop_name like "%"#{shopName}"%"
       </if>
       <if test="shopCode != null and shopCode != ''">
         and shop_code = #{shopCode}

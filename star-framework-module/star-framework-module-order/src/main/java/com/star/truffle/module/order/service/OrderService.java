@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +15,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.star.truffle.common.choosedata.ChooseDataIntf;
+import com.star.truffle.common.choosedata.GridColumn;
+import com.star.truffle.common.choosedata.GridPagerResponse;
 import com.star.truffle.common.constants.DeletedEnum;
 import com.star.truffle.core.StarServiceException;
 import com.star.truffle.core.jackson.StarJson;
@@ -48,7 +52,7 @@ import com.star.truffle.module.product.dto.res.ProductResponseDto;
 import com.star.truffle.module.product.service.ProductService;
 
 @Service
-public class OrderService {
+public class OrderService implements ChooseDataIntf {
 
   @Autowired
   private StarJson starJson;
@@ -505,6 +509,45 @@ public class OrderService {
       orderDetailRequestDto.setEndCreateTime(DateUtils.toDateYmdHms(endTime + " 23:59:59"));
     }
     return this.orderCache.getDistributorIds(orderDetailRequestDto);
+  }
+
+  @Override
+  public GridPagerResponse getDatas(Map<String, Object> condition, Page pager) {
+    String beginTime = condition.get("beginTime") + "";
+    String endTime = condition.get("endTime") + "";
+    String states = condition.get("states") + "";
+    String transportStates = condition.get("transportStates") + "";
+    OrderDetailRequestDto orderDetailRequestDto = new OrderDetailRequestDto();
+    orderDetailRequestDto.setStates(states);
+    orderDetailRequestDto.setTransportStates(transportStates);
+    if (StringUtils.isNotBlank(beginTime) && beginTime.length() > 4) {
+      orderDetailRequestDto.setBeginCreateTime(DateUtils.toDateYmdHms(beginTime + " 00:00:00"));
+    }
+    if (StringUtils.isNotBlank(endTime) && endTime.length() > 4) {
+      orderDetailRequestDto.setEndCreateTime(DateUtils.toDateYmdHms(endTime + " 23:59:59"));
+    }
+    List<Map<String, Object>> list = this.orderCache.getDistributorIds(orderDetailRequestDto);
+    int count = list.size();
+    long total = count % pager.getPageSize() == 0 ? count / pager.getPageSize() : count / pager.getPageSize() + 1;
+    return new GridPagerResponse(pager.getPageNum(), total, count, list);
+  }
+
+  @Override
+  public List<GridColumn> getGridColumns() {
+    List<GridColumn> columns = new ArrayList<>();
+    columns.add(GridColumn.builder().caption("beginTime").javaName("beginTime").query(true).type("text").hidden(true).build());
+    columns.add(GridColumn.builder().caption("endTime").javaName("endTime").query(true).type("text").hidden(true).build());
+    columns.add(GridColumn.builder().caption("states").javaName("states").query(true).type("text").hidden(true).build());
+    columns.add(GridColumn.builder().caption("transportStates").javaName("transportStates").query(true).type("text").hidden(true).build());
+    columns.add(GridColumn.builder().caption("distributorId").javaName("distributorId").dsName("distributor_id").hidden(true).build());
+    columns.add(GridColumn.builder().caption("店铺名称").javaName("shopName").dsName("shop_name").build());
+    columns.add(GridColumn.builder().caption("店铺编码").javaName("shopCode").dsName("shop_code").build());
+    return columns;
+  }
+
+  @Override
+  public String getPrimaryKey() {
+    return "distributorId";
   }
 
 }

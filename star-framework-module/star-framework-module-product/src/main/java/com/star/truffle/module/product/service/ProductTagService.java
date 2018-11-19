@@ -86,4 +86,9 @@ public class ProductTagService implements ChooseDataIntf {
     return columns;
   }
 
+  @Override
+  public String getPrimaryKey() {
+    return "tagId";
+  }
+
 }

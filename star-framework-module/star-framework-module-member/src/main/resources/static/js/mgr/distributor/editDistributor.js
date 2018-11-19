@@ -24,7 +24,13 @@ $(function(){
         width: "800px",
         height: "500px",
         callback: function(rowObject){
-          $("input[name=regionName]").val(rowObject.name);
+          var r = "";
+          if(rowObject.provinceName) r+=rowObject.provinceName;
+          if(rowObject.cityName) r+=rowObject.cityName;
+          if(rowObject.areaName) r+=rowObject.areaName;
+          if(rowObject.townName) r+=rowObject.townName;
+          r+=" -> "+rowObject.name;
+          $("input[name=regionName]").val(r);
           $("input[name=regionId]").val(rowObject.regionId);
         }
       }

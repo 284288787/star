@@ -18,7 +18,7 @@ var orderHandle = new ListHandle({
     artDialog.open(basePath+'common/mgr/order/exportTransportOrder', {
       title : "导出订单",
       width : "600px",
-      height : "210px",
+      height : "300px",
       drag : true,
       resize : true,
       lock : true

@@ -85,4 +85,9 @@ public class CategoryService implements ChooseDataIntf {
     return columns;
   }
 
+  @Override
+  public String getPrimaryKey() {
+    return "cateId";
+  }
+
 }

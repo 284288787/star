@@ -14,7 +14,7 @@
   <div class="edit-container">
      <table class="gy_table">
        <tr>
-       	 <td width="80px">时间范围：</td>
+       	 <td width="100px">时间范围：</td>
          <td >
           <input type="text" class="Wdate" id="beginTime" name="beginTime" placeholder="起始日期" th:value="${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')}"
                 onclick="WdatePicker({startDate:'%y-%M-%d',isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd',alwaysUseStartDate:true})"> 
@@ -40,6 +40,13 @@
          </td>
        </tr>
        <tr>
+         <td >选择分销商：</td>
+         <td >
+           <input type="text" name="distributorNames" class="ipt300" placeholder="选择分销商">
+           <input type="hidden" name="distributorIds">
+         </td>
+       </tr>
+       <tr>
          <td colspan="2">
            <div class="btnGroup">
             <button class="button blue">导出</button>
@@ -54,9 +61,47 @@
 	<script type="text/javascript" th:src="@{/webjars/artDialog/js/jquery.artDialog.js}"></script>
 	<script type="text/javascript" th:src="@{/webjars/artDialog/js/iframeTools.js}"></script>
   <script type="text/javascript" th:src="@{/webjars/My97DatePicker/WdatePicker.js}"></script>
+  <script type="text/javascript" th:src="@{/webjars/star/js/star.utils.js}"></script>
 	<script type="text/javascript" th:inline="javascript">
 	var basePath = "/";
 	$(function(){
+	  new UtilsHandle({
+	    basePath: "/",
+	    choose: [
+	      {
+	        object: $("input[name=distributorNames]"),
+	        service: "orderService",
+	        title: "选择分销商",
+	        width: "800px",
+	        height: "500px",
+	        multiselect: true,
+	        condition: function(){
+	          var beginTime = $("#beginTime").val();
+	          var endTime = $("#endTime").val();
+	          var states = "";
+	          $(":checked[name=state]").each(function(i){
+	            states += (i==0 ? "" : ",") + this.value;
+	          });
+	          var transportStates = "";
+	          $(":checked[name=transportState]").each(function(i){
+	            transportStates += (i==0 ? "" : ",") + this.value;
+	          });
+	          var params = {'beginTime': beginTime, 'endTime': endTime, 'states': states, 'transportStates': transportStates};
+            return JSON.stringify(params);
+	        },
+	        callback: function(rows){
+	          var name = "";
+	          var ids = "";
+	          rows.forEach(function(rowObject){
+	            name += rowObject.shopName + " ";
+	            ids += ((ids.length==0) ? "" : ",") + rowObject.distributorId;
+	          });
+	          $("input[name=distributorNames]").val(name);
+	          $("input[name=distributorIds]").val(ids);
+	        }
+	      }
+	    ]
+	  },{});
 		$(".button").click(function(){
 		  var beginTime = $("#beginTime").val();
 		  var endTime = $("#endTime").val();
@@ -69,29 +114,32 @@
 		    transportStates += (i==0 ? "" : ",") + this.value;
 		  });
 		  var params = {"key": 'transportOrder', "handle": 'com.star.truffle.module.order.service.ImportData', 'beginTime': beginTime, 'endTime': endTime, 'states': states, 'transportStates': transportStates};
-		  $.ajax({
-		    url: '/order/getDistributorIds',
-		    data: params,
-		    type: 'post',
-		    dataType: 'json',
-		    success: function(res){
-		      if(res.code == 0){
-		        var ids = res.data;
-		        if(ids.length == 0){
-		          artDialog.alert("没有满足条件的订单可以导出");
-		          return false;
-		        }
+		  var distributorIds = $("input[name=distributorIds]").val();
+		  if(! distributorIds) artDialog.alert("请选择分销商");
+// 		  $.ajax({
+// 		    url: '/order/getDistributorIds',
+// 		    data: params,
+// 		    type: 'post',
+// 		    dataType: 'json',
+// 		    success: function(res){
+// 		      if(res.code == 0){
+		        //var ids = res.data;
+		        //if(ids.length == 0){
+		        //  artDialog.alert("没有满足条件的订单可以导出");
+		        //  return false;
+		        //}
+		        var ids = distributorIds.split(",");
 		        for(var i in ids){
 		          params['distributorId'] = ids[i];
 		          var url = '/download/excel/data?params=';
 		    		  url+=encodeURI(JSON.stringify(params));
 		    		  window.open(url);
 		        }
-		      }else{
-		        artDialog.alert(res.msg);
-		      }
-		    }
-		  });
+// 		      }else{
+// 		        artDialog.alert(res.msg);
+// 		      }
+// 		    }
+// 		  });
 		  
 		});
 	});
