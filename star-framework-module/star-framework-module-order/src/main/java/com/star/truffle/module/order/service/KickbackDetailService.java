@@ -1,6 +1,7 @@
 /**create by framework at 2018年10月11日 11:07:21**/
 package com.star.truffle.module.order.service;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -23,6 +24,7 @@ import com.star.truffle.module.order.dto.req.KickbackDetailRequestDto;
 import com.star.truffle.module.order.dto.req.OrderRequestDto;
 import com.star.truffle.module.order.dto.res.KickbackDetailResponseDto;
 import com.star.truffle.module.order.dto.res.OrderResponseDto;
+import com.star.truffle.module.order.properties.OrderProperties;
 
 @Service
 public class KickbackDetailService {
@@ -31,6 +33,8 @@ public class KickbackDetailService {
   private KickbackDetailCache kickbackDetailCache;
   @Autowired
   private OrderCache orderCache;
+  @Autowired
+  private OrderProperties orderProperties;
 
   public void apply(Long distributorId) {
     Date beginTime = null;
@@ -47,6 +51,10 @@ public class KickbackDetailService {
     }
     Map<String, Object> map = orderCache.totalMoney(distributorId, beginTime);
     Integer totalMoney = Integer.parseInt(map.get("totalMoney").toString());
+    if (totalMoney < orderProperties.getKickbackMoney()) {
+      DecimalFormat decimalFormat = new DecimalFormat("0.00");
+      throw new StarServiceException(ApiCode.PARAM_ERROR, "暂不可提现，可提现金额须达到" + decimalFormat.format(orderProperties.getKickbackMoney() / 100.0)+ "元。");
+    }
     Date pointEndTime = DateUtils.toDateYmdHms(map.get("time").toString());
     KickbackDetail kickbackDetail = new KickbackDetail();
     kickbackDetail.setDistributorId(distributorId);

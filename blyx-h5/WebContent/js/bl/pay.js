@@ -32,11 +32,8 @@ $(function() {
         timestamp: data.timestamp,
         nonceStr: data.nonceStr,
         signature: data.signature,
-        jsApiList: ['chooseWXPay',
-          'onMenuShareTimeline',
-          'onMenuShareAppMessage',
-          'onMenuShareQQ',
-          'onMenuShareWeibo'
+        jsApiList: [
+          'chooseWXPay',
         ]
       });
     }

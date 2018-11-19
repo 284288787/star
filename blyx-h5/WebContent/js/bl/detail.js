@@ -6,6 +6,30 @@ mui('.mui-scroll-wrapper').scroll({
 });
 var player;
 $(function() {
+  ajax({
+    url: '/weixin/ticket/jssdk',
+    data: {
+      url: document.location.href
+    },
+    success: function(data) {
+      wx.config({
+        debug: false,
+        appId: 'wx8a05f2d3eb34111f',
+        timestamp: data.timestamp,
+        nonceStr: data.nonceStr,
+        signature: data.signature,
+        jsApiList: [
+          'onMenuShareAppMessage',
+          'onMenuShareTimeline',
+          'showOptionMenu',
+          'updateAppMessageShareData',
+          'updateTimelineShareData',
+          'onMenuShareWeibo'
+        ]
+      });
+    }
+  });
+  
   initDetailInfo();
   initCartNum();
   initBuyRecord();
@@ -230,6 +254,35 @@ function initDetailInfo(){
       $(".information .specification").text(product.specification);
       $(".information .originPlace").text(product.originPlace);
       $(".productContentBox5 .desc").html(product.description);
+      wx.ready(function(){
+        wx.updateAppMessageShareData({
+          title: product.title + " - 五杂优选",
+          desc: '亲，所有单品高性价比，正品保证，售后无忧！',
+          link: document.location.href,
+          imgUrl: 'http://yx.hnkbmd.com'+product.mainPictureUrl,
+          success: function(){
+          }
+        }, function(res){
+          alert(JSON.stringify(res))
+        });
+        wx.updateTimelineShareData({
+          title: product.title + " - 五杂优选",
+          link: document.location.href,
+          imgUrl: 'http://yx.hnkbmd.com'+product.mainPictureUrl,
+          success: function () {
+          }
+        });
+        wx.onMenuShareWeibo({
+          title: product.title + " - 五杂优选",
+          desc: '亲，所有单品高性价比，正品保证，售后无忧！',
+          link: document.location.href,
+          imgUrl: 'http://yx.hnkbmd.com'+product.mainPictureUrl,
+          success: function () {
+          },
+          cancel: function () {
+          }
+        });
+      });
     }
   });
 }

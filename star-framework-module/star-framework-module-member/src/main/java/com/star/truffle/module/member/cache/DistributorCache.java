@@ -73,7 +73,7 @@ public class DistributorCache {
     return distributorResponseDto;
   }
   
-  @Cacheable(value = "module-member-distributor", key = "'distributor_mobile_'+#mobile", condition = "#mobile != null")
+//  @Cacheable(value = "module-member-distributor", key = "'distributor_mobile_'+#mobile", condition = "#mobile != null")
   public DistributorResponseDto getDistributorByMobile(String mobile) {
     Map<String, Object> conditions = new HashMap<>();
     conditions.put("mobile", mobile);

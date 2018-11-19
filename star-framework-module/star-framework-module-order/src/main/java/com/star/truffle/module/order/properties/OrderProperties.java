@@ -13,4 +13,5 @@ public class OrderProperties {
 
   private Integer despatchMoney;
   private Integer despatchLimit;
+  private Integer kickbackMoney;
 }

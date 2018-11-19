@@ -13,10 +13,12 @@ $(function(){
         nonceStr: data.nonceStr,
         signature: data.signature,
         jsApiList: [
-          'onMenuShareTimeline',
           'onMenuShareAppMessage',
-          'onMenuShareQQ',
-          'updateAppMessageShareData'
+          'onMenuShareTimeline',
+          'showOptionMenu',
+          'updateAppMessageShareData',
+          'updateTimelineShareData',
+          'onMenuShareWeibo'
         ]
       });
     }
@@ -30,7 +32,23 @@ $(function(){
     }, function(res){
       alert(JSON.stringify(res))
     });
-    
+    wx.updateTimelineShareData({
+      title: "五杂优选（今日爆品），" + user.shopName,
+      link: 'http://yx.hnkbmd.com/index.html?py='+user.py,
+      imgUrl: 'http://yx.hnkbmd.com/photo/shop.jpg',
+      success: function () {
+      }
+    });
+    wx.onMenuShareWeibo({
+      title: "五杂优选（今日爆品），" + user.shopName,
+      desc: '亲，所有单品高性价比，正品保证，售后无忧！',
+      link: 'http://yx.hnkbmd.com/index.html?py='+user.py,
+      imgUrl: 'http://yx.hnkbmd.com/photo/shop.jpg',
+      success: function () {
+      },
+      cancel: function () {
+      }
+    });
   });
   mui('.mui-scroll-wrapper').scroll({
     deceleration: 0.0005
