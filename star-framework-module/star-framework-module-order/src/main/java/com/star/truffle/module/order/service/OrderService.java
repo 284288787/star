@@ -550,4 +550,15 @@ public class OrderService implements ChooseDataIntf {
     return "distributorId";
   }
 
+  public void updateExpressNumber(Long orderId, String expressNumber) {
+    OrderResponseDto order = this.orderCache.getOrder(orderId);
+    if (null == order) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR, "订单不存在");
+    }
+    OrderRequestDto orderRequestDto = new OrderRequestDto();
+    orderRequestDto.setOrderId(orderId);
+    orderRequestDto.setExpressNumber(expressNumber);
+    this.orderCache.updateOrder(orderRequestDto);
+  }
+
 }

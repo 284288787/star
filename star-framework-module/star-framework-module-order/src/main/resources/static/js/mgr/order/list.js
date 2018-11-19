@@ -127,7 +127,9 @@ $(function(){
       if(!cellvalue) return "";
       return '<span style="color:'+colors[cellvalue]+'">'+transportStates[cellvalue]+'</span>';
     }}, 
-    {name: 'expressNumber', index: 'express_number', width: "100px", align: "center"}, 
+    {name: 'expressNumber', index: 'express_number', width: "140px", align: "left", formatter: function(cellvalue, options, rowObject){
+      return "<button class='editExpressNumber button grey' data-expr='"+cellvalue+"' data-oid='"+rowObject.orderId+"'>修改</button><div style='word-wrap: break-word;word-break:break-all;white-space:normal'>" + cellvalue + "</div>";
+    }}, 
     {name: 'orderCode', index: 'order_code', width: "100px", align: "center"}, 
     {name: 'totalMoney', index: 'total_money', width: "70px", align: "center", formatter: function(cellvalue, options, rowObject){
         return (cellvalue / 100.0).toFixed(2);
@@ -167,6 +169,31 @@ $(function(){
   var rowList = [10, 20, 30, 50];
   var rownumbers = true;
   var multiselect = true;
-  var config={caption: "订单列表", autowidth: false, colNames: colNames, colModel: colModel, rowList: rowList, rownumbers: rownumbers, multiselect: multiselect};
+  var config={caption: "订单列表", autowidth: false, colNames: colNames, colModel: colModel, rowList: rowList, rownumbers: rownumbers, multiselect: multiselect, callback: function(){
+    $(".editExpressNumber").click(function(){
+      var orderId = $(this).attr("data-oid");
+      var value = $(this).attr("data-expr");
+      artDialog.prompt("修改快递单号：", function(expressNumber) {
+        expressNumber = $.trim(expressNumber);
+        if(! expressNumber){
+          artDialog.alert("请填写快递单号");
+          return false;
+        }
+        orderHandle.ajax({
+          url : '/order/updateExpressNumber',
+          data: {orderId: orderId, expressNumber: expressNumber},
+          success : function(res) {
+            if (res.code == 0) {
+              artDialog.tips("修改快递单号成功")
+              orderHandle.query();
+            } else {
+              artDialog.alert(res.msg)
+            }
+          }
+        });
+      }, value);
+      return false;
+    });
+  }};
   orderHandle.init(config);
 });

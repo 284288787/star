@@ -139,6 +139,20 @@ public class OrderController {
   }
   
   @ResponseBody
+  @RequestMapping(value = "/updateExpressNumber", method = RequestMethod.POST)
+  public ApiResult<Void> updateExpressNumber(Long orderId, String expressNumber) {
+    try {
+      orderService.updateExpressNumber(orderId, expressNumber);
+      return ApiResult.success();
+    } catch (StarServiceException e) {
+      return ApiResult.fail(e.getCode(), e.getMsg());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return ApiResult.fail(ApiCode.SYSTEM_ERROR);
+    }
+  }
+  
+  @ResponseBody
   @RequestMapping(value = "/deliverGoodsFinish", method = RequestMethod.POST)
   public ApiResult<Void> deliverGoodsFinish(Long orderId) {
     try {

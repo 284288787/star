@@ -53,6 +53,24 @@
           </td>
         </tr>
         <tr>
+          <td class="titleTd100"><strong>开户行：</strong></td>
+          <td>
+            <input type="text" name="bankAddress" class="ipt400" placeholder="开户行地址" th:value="${distributorResponseDto.bankAddress}">
+          </td>
+        </tr>
+        <tr>
+          <td class="titleTd100"><strong>开户姓名：</strong></td>
+          <td>
+            <input type="text" name="bankCardName" placeholder="卡号所有人" th:value="${distributorResponseDto.bankCardName}">
+          </td>
+        </tr>
+        <tr>
+          <td class="titleTd100"><strong>银行卡号：</strong></td>
+          <td>
+            <input type="text" name="bankCardNo" class="ipt300" placeholder="银行卡号" th:value="${distributorResponseDto.bankCardNo}">
+          </td>
+        </tr>
+        <tr>
           <td colspan="2">
             <div class="btnGroup">
               <input type="button" value="保存" class="button blue" id="saveBtn"> <input type="button" value="关闭" class="button grey" onclick="art.dialog.close();">
