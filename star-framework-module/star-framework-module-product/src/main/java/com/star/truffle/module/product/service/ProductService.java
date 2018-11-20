@@ -117,7 +117,7 @@ public class ProductService {
       productInventory.setNumberType(product.getProductInventory().getNumberType());
       productInventory.setNumber(product.getProductInventory().getNumber());
       productInventory.setSoldNumber(productResponseDto.getSoldNumber());
-      productInventory.setTimes(productResponseDto.getTimes());
+      productInventory.setTimes(product.getProductInventory().getTimes());
       this.productInventoryCache.updateProductInventory(productInventory);
     }
     

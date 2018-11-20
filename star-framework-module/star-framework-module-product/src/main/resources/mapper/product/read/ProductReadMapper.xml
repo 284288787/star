@@ -32,7 +32,7 @@
 
   <sql id="sql_column">
     product.idx, product.product_id, title, subtitle, tag, presell_time, off_shelf_time, pickup_time, state, original_price, price, supplier, brand, specification, origin_place, description, subscribers, product.create_time, create_user, update_time, update_user, brokerage_type, brokerage_value,
-    number_type, number, sold_number, type, brokerage_first, price_han, price_wei, supplier_name, supplier_mobile, product.cate_id, c.cate_name,
+    number_type, number, sold_number, type, times, brokerage_first, price_han, price_wei, supplier_name, supplier_mobile, product.cate_id, c.cate_name,
     (select p.url from product_picture p where p.product_id = product.product_id and p.type = 1 limit 1) mainPictureUrl
   </sql>
 

@@ -102,6 +102,10 @@ $(function(){
         required: true,
         number:true
       },
+      times: {
+        required: true,
+        number2:true
+      },
       state: {
         required: true
       },
@@ -182,6 +186,9 @@ $(function(){
         required: "必选"
       },
       number: {
+        required: "必填"
+      },
+      times: {
         required: "必填"
       },
       state: {
@@ -273,11 +280,11 @@ $(function(){
     params["priceHan"] = (params["priceHan"] * 100).toFixed(0);
     params["priceWei"] = (params["priceWei"] * 100).toFixed(0);
     params["brokerageFirst"] = (params["brokerageFirst"] * 100).toFixed(0);
-    if(params.brokerageType == 1 && params.price < params.brokerageValue){
+    if(params.brokerageType == 1 && params.price * 1 < params.brokerageValue * 1){
       artDialog.alert("提成金额不得大于商品售价");
       return;
     }
-    params["productInventory"] = {"numberType": params["numberType"], "number": params["number"], "type": 1};
+    params["productInventory"] = {"numberType": params["numberType"], "number": params["number"], "type": 1, "times": params["times"]};
     var pictures = new Array();
     var mainFlag = 1;
     $(".dataImg").each(function(){

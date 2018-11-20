@@ -76,6 +76,18 @@
           </td>
         </tr>
         <tr>
+          <td class="titleTd"><strong>单买最大量：</strong></td>
+          <td>
+            <input type="text" name="times" maxlength="3" placeholder="0不限，1一次，2二次" th:value="${productResponseDto.times}">
+          </td>
+        </tr>
+        <tr>
+          <td class="titleTd"> </td>
+          <td>
+            该商品单个会员允许购买的最大数量，填写0表示不限制数量，填写1表示该商品每个会员允许购买一次，填写2表示2次。
+          </td>
+        </tr>
+        <tr>
           <td class="titleTd"><strong>商品原价：</strong></td>
           <td>
             <input type="text" name="originalPrice" maxlength="10" placeholder="商品原价" th:value="${#numbers.formatDecimal(productResponseDto.originalPrice/100.0,1,2)}">

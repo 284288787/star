@@ -43,11 +43,16 @@
 		var moblieReg = new RegExp("^[1-9]{1}\\d*(\\.\\d{1}){0,1}$");
 		return this.optional(element) || (moblieReg.test(value));
 	}, "请填写正确的体重");
-
+	
 	jQuery.validator.addMethod("number", function(value, element) {
-		var moblieReg = new RegExp("^[1-9]{1}\\d*$");
-		return this.optional(element) || (moblieReg.test(value));
+	  var moblieReg = new RegExp("^[1-9]{1}\\d*$");
+	  return this.optional(element) || (moblieReg.test(value));
 	}, "请输入正整数");
+
+	jQuery.validator.addMethod("number2", function(value, element) {
+		var moblieReg = new RegExp("^\\d+$");
+		return this.optional(element) || (moblieReg.test(value));
+	}, "请输入整数");
 	
 	jQuery.validator.addMethod("time", function(value, element) {
 		var moblieReg = new RegExp(
