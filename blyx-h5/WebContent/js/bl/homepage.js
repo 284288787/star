@@ -18,6 +18,29 @@ var user = getLoginInfo();
 var userCartNum;
 if(py) putLocalData('py', py);
 $(function(){
+  ajax({
+    url: '/weixin/ticket/jssdk',
+    data: {
+      url: document.location.href
+    },
+    success: function(data) {
+      wx.config({
+        debug: false,
+        appId: 'wx8a05f2d3eb34111f',
+        timestamp: data.timestamp,
+        nonceStr: data.nonceStr,
+        signature: data.signature,
+        jsApiList: [
+          'onMenuShareAppMessage',
+          'onMenuShareTimeline',
+          'showOptionMenu',
+          'updateAppMessageShareData',
+          'updateTimelineShareData',
+          'onMenuShareWeibo'
+        ]
+      });
+    }
+  });
   initShopInfo();
   initCartNum();
   $("#search").on("input", function(){
@@ -91,6 +114,33 @@ function initShopInfo(){
       $('.shopaddress').text(distributor.address);
       $('.soldNum').text(distributor.soldNum);
       $('.fansNum').text(distributor.fansNum);
+      wx.ready(function(){
+        wx.updateAppMessageShareData({
+          title: "五杂优选（今日爆品），" + distributor.shopName,
+          desc: '亲，所有单品高性价比，正品保证，售后无忧！',
+          link: document.location.href,
+          imgUrl: 'http://yx.hnkbmd.com/photo/shop.jpg',
+          success: function () {
+          }
+        });
+        wx.updateTimelineShareData({
+          title: "五杂优选（今日爆品），" + user.shopName,
+          link: 'http://yx.hnkbmd.com/index.html?py='+user.py,
+          imgUrl: 'http://yx.hnkbmd.com/photo/shop.jpg',
+          success: function () {
+          }
+        });
+        wx.onMenuShareWeibo({
+          title: "五杂优选（今日爆品），" + user.shopName,
+          desc: '亲，所有单品高性价比，正品保证，售后无忧！',
+          link: 'http://yx.hnkbmd.com/index.html?py='+user.py,
+          imgUrl: 'http://yx.hnkbmd.com/photo/shop.jpg',
+          success: function () {
+          },
+          cancel: function () {
+          }
+        });
+      });
     }
   });
 }

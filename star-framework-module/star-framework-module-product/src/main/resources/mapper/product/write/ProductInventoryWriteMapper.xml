@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.star.truffle.module.product.dao.write.ProductInventoryWriteDao">
   <insert id="saveProductInventory" useGeneratedKeys="true" keyProperty="id" parameterType="com.star.truffle.module.product.domain.ProductInventory">
-    insert into product_inventory(id, product_id, number_type, number, sold_number, type)
-    values(#{id}, #{productId}, #{numberType}, #{number}, #{soldNumber}, #{type})
+    insert into product_inventory(id, product_id, number_type, number, sold_number, type, times)
+    values(#{id}, #{productId}, #{numberType}, #{number}, #{soldNumber}, #{type}, #{times})
   </insert>
 
   <delete id="deleteProductInventoryByProductId" parameterType="java.lang.Long">
@@ -12,7 +12,7 @@
 
   <select id="getProductInventoryByProductId" resultType="com.star.truffle.module.product.domain.ProductInventory">
     select
-    id, product_id, number_type, number, sold_number, type
+    id, product_id, number_type, number, sold_number, type, times
     from product_inventory
     where product_id = #{productId} and type = ${type}
   </select>
@@ -23,6 +23,7 @@
       <if test="numberType != null">number_type = #{numberType},</if>
       <if test="number != null">number = #{number},</if>
       <if test="soldNumber != null">sold_number = #{soldNumber},</if>
+      <if test="times != null">times = #{times},</if>
     </trim>
     where id = #{id}
   </update>

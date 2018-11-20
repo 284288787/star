@@ -561,4 +561,8 @@ public class OrderService implements ChooseDataIntf {
     this.orderCache.updateOrder(orderRequestDto);
   }
 
+  public Integer getBuyTimes(Long memberId, Long productId) {
+    return this.orderDetailCache.getBuyTimes(memberId, productId);
+  }
+
 }

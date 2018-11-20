@@ -23,4 +23,6 @@ public interface OrderDetailReadDao {
 
   public List<OrderDetailResponseDto> queryOrderDetail(OrderDetailRequestDto orderDetailRequestDto);
 
+  public Integer getBuyTimes(@Param("memberId") Long memberId, @Param("productId") Long productId);
+
 }

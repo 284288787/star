@@ -59,6 +59,13 @@
     where d.product_id = #{productId} and exists (select * from `order` o where o.order_id = d.order_id and o.state = #{state} and o.deleted = 0)
   </select>
   
+  <select id="getBuyTimes" resultType="java.lang.Integer">
+    select
+    IFNULL(sum(d.count),0)
+    from order_detail d 
+    where d.product_id = #{productId} and exists (select * from `order` o where o.order_id = d.order_id and o.member_id = #{memberId} and o.state in (2, 3))
+  </select>
+  
   <select id="buyRecord" resultMap="orderDetailResponseResultMap">
     SELECT d.count, o.create_time, o.member_id, m.head, CONCAT(left(IFNULL(m.`name`,IFNULL(o.`name`,o.delivery_name)), 1), '***') `name`
     from order_detail d 

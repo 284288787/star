@@ -117,6 +117,7 @@ public class ProductService {
       productInventory.setNumberType(product.getProductInventory().getNumberType());
       productInventory.setNumber(product.getProductInventory().getNumber());
       productInventory.setSoldNumber(productResponseDto.getSoldNumber());
+      productInventory.setTimes(productResponseDto.getTimes());
       this.productInventoryCache.updateProductInventory(productInventory);
     }
     
@@ -133,6 +134,7 @@ public class ProductService {
       productResponseDto.setNumber(inventory.getNumber());
       productResponseDto.setSoldNumber(inventory.getSoldNumber());
       productResponseDto.setType(inventory.getType());
+      productResponseDto.setTimes(inventory.getTimes());
       List<ProductPicture> pictures = productPictureCache.getProductPictureByProductId(productId);
       List<ProductPicture> pics = new ArrayList<>();
       if (null != pictures && ! pictures.isEmpty()) {

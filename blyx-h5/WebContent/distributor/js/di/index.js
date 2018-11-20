@@ -29,8 +29,8 @@ $(function(){
       desc: '亲，所有单品高性价比，正品保证，售后无忧！',
       link: 'http://yx.hnkbmd.com/index.html?py='+user.py,
       imgUrl: 'http://yx.hnkbmd.com/photo/shop.jpg',
-    }, function(res){
-      alert(JSON.stringify(res))
+      success: function () {
+      }
     });
     wx.updateTimelineShareData({
       title: "五杂优选（今日爆品），" + user.shopName,

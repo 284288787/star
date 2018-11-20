@@ -20,4 +20,6 @@ public class ProductInventory {
   private Integer soldNumber;
   // 提成类型 1商品 2活动
   private Integer type;
+  // 个人可以购买的次数 0无限
+  private Integer times;
 }

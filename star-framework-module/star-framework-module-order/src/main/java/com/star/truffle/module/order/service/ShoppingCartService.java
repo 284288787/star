@@ -170,7 +170,13 @@ public class ShoppingCartService {
         throw new StarServiceException(ApiCode.PARAM_ERROR, "商品不存在");
       }
       if (productResponseDto.getState() >= ProductEnum.presell.state()) {
-        throw new StarServiceException(ApiCode.PARAM_ERROR, "商品["+productResponseDto.getTitle()+"]现在已不能购买");
+        throw new StarServiceException(ApiCode.PARAM_ERROR, "商品["+productResponseDto.getTitle()+"]现在不能购买");
+      }
+      if (productResponseDto.getTimes() > 0) {
+        Integer buyTimes = this.orderService.getBuyTimes(memberId, shoppingCartResponseDto.getProductId());
+        if (buyTimes >= productResponseDto.getTimes()) {
+          throw new StarServiceException(ApiCode.PARAM_ERROR, "只能购买" + productResponseDto.getTimes() + "次");
+        }
       }
       if (productResponseDto.getNumberType() == 2) {
         Long number = orderService.getProductNoPayNumber(shoppingCartResponseDto.getProductId());
@@ -195,6 +201,12 @@ public class ShoppingCartService {
       if (null == productResponseDto || productResponseDto.getState() >= ProductEnum.presell.state()) {
         continue;
 //        throw new StarServiceException(ApiCode.PARAM_ERROR, "商品不存在");
+      }
+      if (productResponseDto.getTimes() > 0) {
+        Integer buyTimes = this.orderService.getBuyTimes(memberId, shoppingCartResponseDto.getProductId());
+        if (buyTimes >= productResponseDto.getTimes()) {
+          throw new StarServiceException(ApiCode.PARAM_ERROR, "只能购买" + productResponseDto.getTimes() + "次");
+        }
       }
       if (productResponseDto.getNumberType() == 2) {
         Long number = orderService.getProductNoPayNumber(shoppingCartResponseDto.getProductId());
@@ -228,6 +240,12 @@ public class ShoppingCartService {
     if (productResponseDto.getState() != ProductEnum.onshelf.state()) {
       throw new StarServiceException(ApiCode.PARAM_ERROR, "该商品现在不能购买");
     }
+    if (productResponseDto.getTimes() > 0) {
+      Integer buyTimes = this.orderService.getBuyTimes(memberId, productId);
+      if (buyTimes >= productResponseDto.getTimes()) {
+        throw new StarServiceException(ApiCode.PARAM_ERROR, "只能购买" + productResponseDto.getTimes() + "次");
+      }
+    }
     if (productResponseDto.getNumberType() == 2) {
       Long number = orderService.getProductNoPayNumber(productId);
       if(productResponseDto.getSoldNumber() + num + number > productResponseDto.getNumber()) {
@@ -243,6 +261,12 @@ public class ShoppingCartService {
     }
     if (productResponseDto.getState() != ProductEnum.onshelf.state()) {
       throw new StarServiceException(ApiCode.PARAM_ERROR, "商品现在已不能购买");
+    }
+    if (productResponseDto.getTimes() > 0) {
+      Integer buyTimes = this.orderService.getBuyTimes(memberId, productId);
+      if (buyTimes >= productResponseDto.getTimes()) {
+        throw new StarServiceException(ApiCode.PARAM_ERROR, "只能购买" + productResponseDto.getTimes() + "次");
+      }
     }
     if (productResponseDto.getNumberType() == 2) {
       Long number = orderService.getProductNoPayNumber(productId);

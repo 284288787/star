@@ -94,5 +94,4 @@ public class OrderCache {
   public List<Map<String, Object>> getDistributorIds(OrderDetailRequestDto orderDetailRequestDto) {
     return orderReadDao.getDistributorIds(orderDetailRequestDto);
   }
-
 }

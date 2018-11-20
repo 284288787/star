@@ -51,4 +51,8 @@ public class OrderDetailCache {
   public List<OrderDetailResponseDto> queryOrderDetail(OrderDetailRequestDto orderDetailRequestDto) {
     return orderDetailReadDao.queryOrderDetail(orderDetailRequestDto);
   }
+
+  public Integer getBuyTimes(Long memberId, Long productId) {
+    return orderDetailReadDao.getBuyTimes(memberId, productId);
+  }
 }
