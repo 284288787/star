@@ -128,7 +128,7 @@ $(function(){
       return '<span style="color:'+colors[cellvalue]+'">'+transportStates[cellvalue]+'</span>';
     }}, 
     {name: 'expressNumber', index: 'express_number', width: "140px", align: "left", formatter: function(cellvalue, options, rowObject){
-      return "<button class='editExpressNumber button grey' data-expr='"+cellvalue+"' data-oid='"+rowObject.orderId+"'>修改</button><div style='word-wrap: break-word;word-break:break-all;white-space:normal'>" + cellvalue + "</div>";
+      return "<button class='editExpressNumber button grey' data-expr='"+cellvalue+"' data-oid='"+rowObject.orderId+"'>修改</button><div style='word-wrap: break-word;word-break:break-all;white-space:normal'>" + (cellvalue?cellvalue:"") + "</div>";
     }}, 
     {name: 'orderCode', index: 'order_code', width: "100px", align: "center"}, 
     {name: 'totalMoney', index: 'total_money', width: "70px", align: "center", formatter: function(cellvalue, options, rowObject){
