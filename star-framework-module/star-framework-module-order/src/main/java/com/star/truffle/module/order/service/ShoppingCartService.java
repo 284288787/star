@@ -42,7 +42,7 @@ public class ShoppingCartService {
   private StarJson starJson;
 
   public Long saveShoppingCart(ShoppingCartRequestDto shoppingCart) {
-    if (null == shoppingCart || ! shoppingCart.checkSaveData()) {
+    if (null == shoppingCart || !shoppingCart.checkSaveData()) {
       throw new StarServiceException(ApiCode.PARAM_ERROR);
     }
     ProductResponseDto product = productService.getProduct(shoppingCart.getProductId());
@@ -60,7 +60,7 @@ public class ShoppingCartService {
     queryParam.setProductId(shoppingCart.getProductId());
     List<ShoppingCartResponseDto> list = this.shoppingCartCache.queryShoppingCart(queryParam);
     Long cartId = null;
-    if (null != list && ! list.isEmpty()) {
+    if (null != list && !list.isEmpty()) {
       ShoppingCartResponseDto cart = list.get(0);
       ShoppingCartRequestDto shoppingCartRequestDto = new ShoppingCartRequestDto();
       shoppingCartRequestDto.setCartId(cart.getCartId());
@@ -70,7 +70,7 @@ public class ShoppingCartService {
       }
       this.shoppingCartCache.updateShoppingCart(shoppingCartRequestDto);
       cartId = cart.getCartId();
-    }else {
+    } else {
       shoppingCart.setChecked(EnabledEnum.enabled.val());
       shoppingCart.setCreateTime(new Date());
       this.shoppingCartCache.saveShoppingCart(shoppingCart);
@@ -80,9 +80,7 @@ public class ShoppingCartService {
   }
 
   public void updateShoppingCart(ShoppingCartRequestDto shoppingCartRequestDto) {
-    if (null == shoppingCartRequestDto || null == shoppingCartRequestDto.getCartId() 
-        || null == shoppingCartRequestDto.getMemberId() || null == shoppingCartRequestDto.getNum()
-        || shoppingCartRequestDto.getNum() < 1) {
+    if (null == shoppingCartRequestDto || null == shoppingCartRequestDto.getCartId() || null == shoppingCartRequestDto.getMemberId() || null == shoppingCartRequestDto.getNum() || shoppingCartRequestDto.getNum() < 1) {
       throw new StarServiceException(ApiCode.PARAM_ERROR);
     }
     ShoppingCartResponseDto cart = this.shoppingCartCache.getShoppingCart(shoppingCartRequestDto.getCartId());
@@ -94,7 +92,7 @@ public class ShoppingCartService {
     }
     this.shoppingCartCache.updateShoppingCart(shoppingCartRequestDto);
   }
-  
+
   public void updateShoppingCartChecked(Long memberId, String cartIds) {
     if (null == memberId) {
       throw new StarServiceException(ApiCode.PARAM_ERROR);
@@ -109,7 +107,7 @@ public class ShoppingCartService {
         shoppingCartRequestDto.setCartId(shoppingCartResponseDto.getCartId());
         if (cartIds.indexOf("," + shoppingCartResponseDto.getCartId() + ",") != -1) {
           shoppingCartRequestDto.setChecked(1);
-        }else {
+        } else {
           shoppingCartRequestDto.setChecked(0);
         }
         this.shoppingCartCache.updateShoppingCart(shoppingCartRequestDto);
@@ -173,9 +171,12 @@ public class ShoppingCartService {
         throw new StarServiceException(ApiCode.PARAM_ERROR, "商品["+productResponseDto.getTitle()+"]现在不能购买");
       }
       if (productResponseDto.getTimes() > 0) {
+        if (shoppingCartResponseDto.getNum() > productResponseDto.getTimes()) {
+          throw new StarServiceException(ApiCode.PARAM_ERROR, "添加了"+shoppingCartResponseDto.getNum()+"份，该商品只能购买" + productResponseDto.getTimes() + "份");
+        }
         Integer buyTimes = this.orderService.getBuyTimes(memberId, shoppingCartResponseDto.getProductId());
         if (buyTimes >= productResponseDto.getTimes()) {
-          throw new StarServiceException(ApiCode.PARAM_ERROR, "只能购买" + productResponseDto.getTimes() + "次");
+          throw new StarServiceException(ApiCode.PARAM_ERROR, "该商品只能购买" + productResponseDto.getTimes() + "份");
         }
       }
       if (productResponseDto.getNumberType() == 2) {
@@ -190,7 +191,7 @@ public class ShoppingCartService {
       throw new StarServiceException(ApiCode.PARAM_ERROR, "购物车里没有可下单的商品");
     }
   }
-  
+
   public EnterOrder enterOrder(Long memberId) {
     ShoppingCartRequestDto shoppingCartRequestDto = new ShoppingCartRequestDto();
     shoppingCartRequestDto.setMemberId(memberId);
@@ -200,23 +201,26 @@ public class ShoppingCartService {
       ProductResponseDto productResponseDto = this.productService.getProduct(shoppingCartResponseDto.getProductId());
       if (null == productResponseDto || productResponseDto.getState() >= ProductEnum.presell.state()) {
         continue;
-//        throw new StarServiceException(ApiCode.PARAM_ERROR, "商品不存在");
+        // throw new StarServiceException(ApiCode.PARAM_ERROR, "商品不存在");
       }
       if (productResponseDto.getTimes() > 0) {
+        if (shoppingCartResponseDto.getNum() > productResponseDto.getTimes()) {
+          throw new StarServiceException(ApiCode.PARAM_ERROR, "添加了"+shoppingCartResponseDto.getNum()+"份，该商品只能购买" + productResponseDto.getTimes() + "份");
+        }
         Integer buyTimes = this.orderService.getBuyTimes(memberId, shoppingCartResponseDto.getProductId());
         if (buyTimes >= productResponseDto.getTimes()) {
-          throw new StarServiceException(ApiCode.PARAM_ERROR, "只能购买" + productResponseDto.getTimes() + "次");
+          throw new StarServiceException(ApiCode.PARAM_ERROR, "该商品只能购买" + productResponseDto.getTimes() + "份");
         }
       }
       if (productResponseDto.getNumberType() == 2) {
         Long number = orderService.getProductNoPayNumber(shoppingCartResponseDto.getProductId());
-        if(productResponseDto.getSoldNumber() + shoppingCartResponseDto.getNum() + number > productResponseDto.getNumber()) {
-          throw new StarServiceException(ApiCode.PARAM_ERROR, "商品["+productResponseDto.getTitle()+"]库存不足");
+        if (productResponseDto.getSoldNumber() + shoppingCartResponseDto.getNum() + number > productResponseDto.getNumber()) {
+          throw new StarServiceException(ApiCode.PARAM_ERROR, "商品[" + productResponseDto.getTitle() + "]库存不足");
         }
       }
-//      if (productResponseDto.getState() != ProductEnum.onshelf.state()) {
-//        throw new StarServiceException(ApiCode.PARAM_ERROR, "商品现在已不能购买");
-//      }
+      // if (productResponseDto.getState() != ProductEnum.onshelf.state()) {
+      // throw new StarServiceException(ApiCode.PARAM_ERROR, "商品现在已不能购买");
+      // }
     }
     Integer despatchMoney = this.orderProperties.getDespatchMoney();
     Integer despatchLimit = this.orderProperties.getDespatchLimit();
@@ -225,7 +229,7 @@ public class ShoppingCartService {
     deliveryAddressRequestDto.setDef(EnabledEnum.enabled.val());
     List<DeliveryAddressResponseDto> list = this.deliveryAddressCache.queryDeliveryAddress(deliveryAddressRequestDto);
     DeliveryAddressResponseDto deliveryAddress = null;
-    if (null != list && ! list.isEmpty()) {
+    if (null != list && !list.isEmpty()) {
       deliveryAddress = list.get(0);
     }
     EnterOrder enterOrder = new EnterOrder(despatchMoney, despatchLimit, products, deliveryAddress);
@@ -241,19 +245,22 @@ public class ShoppingCartService {
       throw new StarServiceException(ApiCode.PARAM_ERROR, "该商品现在不能购买");
     }
     if (productResponseDto.getTimes() > 0) {
+      if (num > productResponseDto.getTimes()) {
+        throw new StarServiceException(ApiCode.PARAM_ERROR, "添加了"+num+"份，该商品只能购买" + productResponseDto.getTimes() + "份");
+      }
       Integer buyTimes = this.orderService.getBuyTimes(memberId, productId);
       if (buyTimes >= productResponseDto.getTimes()) {
-        throw new StarServiceException(ApiCode.PARAM_ERROR, "只能购买" + productResponseDto.getTimes() + "次");
+        throw new StarServiceException(ApiCode.PARAM_ERROR, "该商品只能购买" + productResponseDto.getTimes() + "次");
       }
     }
     if (productResponseDto.getNumberType() == 2) {
       Long number = orderService.getProductNoPayNumber(productId);
-      if(productResponseDto.getSoldNumber() + num + number > productResponseDto.getNumber()) {
-        throw new StarServiceException(ApiCode.PARAM_ERROR, "商品["+productResponseDto.getTitle()+"]库存不足");
+      if (productResponseDto.getSoldNumber() + num + number > productResponseDto.getNumber()) {
+        throw new StarServiceException(ApiCode.PARAM_ERROR, "商品[" + productResponseDto.getTitle() + "]库存不足");
       }
     }
   }
-  
+
   public EnterOrder buyNow(Long memberId, Long productId, int num) {
     ProductResponseDto productResponseDto = this.productService.getProduct(productId);
     if (null == productResponseDto) {
@@ -263,15 +270,18 @@ public class ShoppingCartService {
       throw new StarServiceException(ApiCode.PARAM_ERROR, "商品现在已不能购买");
     }
     if (productResponseDto.getTimes() > 0) {
+      if (num > productResponseDto.getTimes()) {
+        throw new StarServiceException(ApiCode.PARAM_ERROR, "添加了"+num+"份，该商品只能购买" + productResponseDto.getTimes() + "份");
+      }
       Integer buyTimes = this.orderService.getBuyTimes(memberId, productId);
       if (buyTimes >= productResponseDto.getTimes()) {
-        throw new StarServiceException(ApiCode.PARAM_ERROR, "只能购买" + productResponseDto.getTimes() + "次");
+        throw new StarServiceException(ApiCode.PARAM_ERROR, "该商品只能购买" + productResponseDto.getTimes() + "次");
       }
     }
     if (productResponseDto.getNumberType() == 2) {
       Long number = orderService.getProductNoPayNumber(productId);
-      if(productResponseDto.getSoldNumber() + num + number > productResponseDto.getNumber()) {
-        throw new StarServiceException(ApiCode.PARAM_ERROR, "商品["+productResponseDto.getTitle()+"]库存不足");
+      if (productResponseDto.getSoldNumber() + num + number > productResponseDto.getNumber()) {
+        throw new StarServiceException(ApiCode.PARAM_ERROR, "商品[" + productResponseDto.getTitle() + "]库存不足");
       }
     }
     ShoppingCartResponseDto shoppingCartResponseDto = starJson.str2obj(starJson.obj2string(productResponseDto), ShoppingCartResponseDto.class);
@@ -283,7 +293,7 @@ public class ShoppingCartService {
     deliveryAddressRequestDto.setDef(EnabledEnum.enabled.val());
     List<DeliveryAddressResponseDto> list = this.deliveryAddressCache.queryDeliveryAddress(deliveryAddressRequestDto);
     DeliveryAddressResponseDto deliveryAddress = null;
-    if (null != list && ! list.isEmpty()) {
+    if (null != list && !list.isEmpty()) {
       deliveryAddress = list.get(0);
     }
     EnterOrder enterOrder = new EnterOrder(despatchMoney, despatchLimit, Arrays.asList(shoppingCartResponseDto), deliveryAddress);
