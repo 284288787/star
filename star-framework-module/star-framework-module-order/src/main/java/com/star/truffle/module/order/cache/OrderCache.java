@@ -43,7 +43,7 @@ public class OrderCache {
     return orderResponseDto;
   }
 
-  @Cacheable(value = "module-Porder-order", key = "'order_orderId_'+#orderId", condition = "#orderId != null")
+  @Cacheable(value = "module-order-order", key = "'order_orderId_'+#orderId", condition = "#orderId != null")
   public OrderResponseDto getOrder(Long orderId){
     OrderResponseDto orderResponseDto = this.orderReadDao.getOrder(orderId);
     return orderResponseDto;
