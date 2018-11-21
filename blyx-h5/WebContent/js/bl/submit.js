@@ -34,7 +34,12 @@ $(function() {
   $(".totaldiv .despatchLimit").hide();
   $(".myself input[name=name]").val(user.name);
   $(".myself input[name=mobile]").val(user.mobile);
-  $("#item1 .blank span").text(distributor.provinceName + distributor.cityName + distributor.areaName + ' ' + distributor.address);
+  var a = ""; 
+  if(distributor.provinceName) a += distributor.provinceName;
+  if(distributor.cityName) a += distributor.cityName;
+  if(distributor.areaName) a += distributor.areaName;
+  if(distributor.townName) a += distributor.townName;
+  $("#item1 .blank span").text(a + ' ' + distributor.address);
   $("#item1 .red span").text(distributor.shopName + " " + distributor.mobile);
   initOrder();
   $(".mui-control-item").on("tap", function(){
