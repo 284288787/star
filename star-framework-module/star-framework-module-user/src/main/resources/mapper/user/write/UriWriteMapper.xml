@@ -17,7 +17,7 @@
       <if test="true">sourceId = #{uri.sourceId},</if>
       <if test="uri.intro != null and uri.intro != ''">intro = #{uri.intro},</if>
     </trim>
-    where uri in (#{uris})
+    where uri in (${uris})
   </update>
   
   <update id="updateUriDate">

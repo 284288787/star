@@ -36,7 +36,7 @@
         and idx ${idx}
       </if>
       <if test="roleIds != null and roleIds != ''">
-        and exists (select * from sys_role_source_relation rs where rs.sourceId = sys_resource.sourceId and rs.roleId in (#{roleIds}))
+        and exists (select * from sys_role_source_relation rs where rs.sourceId = sys_resource.sourceId and rs.roleId in (${roleIds}))
       </if>
     </trim>
   </sql>
@@ -91,7 +91,7 @@
 	FROM
 	 sys_role_source_relation s
 	WHERE
-	 s.roleId in (#{roleIds}) and s.sourceId = #{sourceId} and s.mainUri = 1
+	 s.roleId in (${roleIds}) and s.sourceId = #{sourceId} and s.mainUri = 1
   limit 1
   </select>
 </mapper>

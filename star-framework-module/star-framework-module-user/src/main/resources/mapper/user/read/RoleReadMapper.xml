@@ -32,7 +32,7 @@
         and roleName = #{roleName}
       </if>
       <if test="userIds != null and userIds != ''">
-        and exists (select * from sys_user_role_relation ur where ur.roleId = sys_role.roleId and ur.userId in (#{userIds}))
+        and exists (select * from sys_user_role_relation ur where ur.roleId = sys_role.roleId and ur.userId in (${userIds}))
       </if>
     </trim>
   </sql>
