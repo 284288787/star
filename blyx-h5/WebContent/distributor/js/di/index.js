@@ -118,7 +118,7 @@ $(function(){
   
   $("a.logout").on("tap", function(){
     logout();
-    document.location.href="login.html";
+    document.location.href="/";
     return false;
   });
 });

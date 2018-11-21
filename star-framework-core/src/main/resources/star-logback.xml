@@ -2,7 +2,19 @@
 <included>
   <springProperty scope="context" name="applicationName" source="spring.application.name" defaultValue="NONE"/>
   <springProperty scope="context" name="syslogHost" source="syslog.host" defaultValue="10.20.210.249"/>
-
+  <!-- 记录sql执行的时间，可以分析耗时的sql语句 -->
+  <logger name="jdbc.sqlonly" level="INFO"/>
+  <!-- 记录sql执行的时间，可以分析耗时的sql语句 -->
+  <logger name="jdbc.sqltiming" level="ERROR"/>
+  <!-- 记录返回结果集信息 -->
+  <logger name="jdbc.resultsettable" level="ERROR"/>
+  <!-- 记录返回结果集信息 -->
+  <logger name="jdbc.resultset" level="ERROR"/>
+  <!-- 记录数据库连接和释放信息，可记录当前的数据库连接数，便于诊断连接是否释放。 -->
+  <logger name="jdbc.connection" level="ERROR"/>
+  <!-- 记录除了ResultSet外的所有JDBC调用情况。一般不需要。 -->
+  <logger name="jdbc.audit" level="ERROR"/> 
+  
   <!-- 开发环境 -->
   <springProfile name="local">
     <!-- 控制台输出 -->

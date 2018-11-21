@@ -82,7 +82,7 @@ public class PayApiController {
     @ApiImplicitParam(name = "orderId", value = "主键", dataType = "Long", required = true, paramType = "query")
   })
   public String callback(HttpServletRequest request, HttpServletResponse response) throws Exception {
-    log.info(".................微信支付返回");
+    log.info(".................微信支付返回:" );
     InputStream is = request.getInputStream();
     StringBuffer sBuffer = new StringBuffer();
     byte[] b = new byte[1024];

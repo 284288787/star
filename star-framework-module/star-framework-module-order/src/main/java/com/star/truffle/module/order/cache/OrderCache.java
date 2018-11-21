@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -31,7 +30,6 @@ public class OrderCache {
   @Autowired
   private OrderReadDao orderReadDao;
 
-  @CachePut(value = "module-order-order", key = "'order_orderId_'+#result.orderId", condition = "#result != null and #result.orderId != null")
   public OrderResponseDto saveOrder(Order order){
     this.orderWriteDao.saveOrder(order);
     OrderResponseDto orderResponseDto = this.orderWriteDao.getOrder(order.getOrderId());
@@ -45,12 +43,7 @@ public class OrderCache {
     return orderResponseDto;
   }
 
-  @CacheEvict(value = "module-order-order", key = "'order_orderId_'+#orderId", condition = "#orderId != null")
-  public int deleteOrder(Long orderId){
-    return this.orderWriteDao.deleteOrder(orderId);
-  }
-
-  @Cacheable(value = "module-order-order", key = "'order_orderId_'+#orderId", condition = "#orderId != null")
+  @Cacheable(value = "module-Porder-order", key = "'order_orderId_'+#orderId", condition = "#orderId != null")
   public OrderResponseDto getOrder(Long orderId){
     OrderResponseDto orderResponseDto = this.orderReadDao.getOrder(orderId);
     return orderResponseDto;
