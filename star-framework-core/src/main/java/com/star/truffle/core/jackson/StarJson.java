@@ -180,4 +180,8 @@ public class StarJson {
   public JavaType constructType(Type type) {
     return this.objectMapper.getTypeFactory().constructType(type);
   }
+
+  public <T> T map2Bean(Map<String, Object> params, Class<T> cls) {
+    return this.str2obj(this.obj2string(params), cls);
+  }
 }

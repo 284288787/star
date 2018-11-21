@@ -21,15 +21,24 @@
     <div class="search-container">
       <form id="queryForm">
         <span>订单状态：
-          <select name="state">
-            <option value="">全部</option>
-            <option value="1">待付款</option>
-            <option value="2">待提货</option>
-            <option value="3">已提货</option>
-            <option value="4">已退货</option>
-            <option value="5">已删除</option>
-          </select>
+          <input type="checkbox" name="states" id="state_1" value="1" checked><label for="state_1">待付款</label>
+          <input type="checkbox" name="states" id="state_2" value="2" checked><label for="state_2">待提货</label>
+          <input type="checkbox" name="states" id="state_3" value="3" checked><label for="state_3">已提货</label>
+          <input type="checkbox" name="states" id="state_4" value="4" checked><label for="state_4">已退货</label>
         </span> 
+        <br>
+        <span>运输状态：
+          <input type="checkbox" name="transportStates" id="transportState_1" value="1" checked><label for="transportState_1">待发货</label>
+          <input type="checkbox" name="transportStates" id="transportState_2" value="2" checked><label for="transportState_2">已发货</label>
+          <input type="checkbox" name="transportStates" id="transportState_3" value="3" checked><label for="transportState_3">已完成</label>
+        </span> 
+        <br>
+        <span>下单时间：
+          <input type="text" class="Wdate" id="beginCreateTime" name="beginCreateTime" placeholder="起始日期" 
+                onclick="WdatePicker({startDate:'%y-%M-%d %H-%m-%s',isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss',alwaysUseStartDate:true})"> 
+          <input type="text" class="Wdate" id="endCreateTime" name="endCreateTime" placeholder="终止日期" 
+                onclick="WdatePicker({minDate:'#F{$dp.$D(\'beginCreateTime\')}',isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd HH:mm:ss'})"> 
+        </span>
         <span>订单编号：
           <input type="text" name="orderCode" placeholder="订单编号"/>
         </span> 
@@ -68,14 +77,6 @@
         <span>提货码：
           <input type="text" name="pickupCode" placeholder="提货码"/>
         </span> 
-        <span>运输状态：
-          <select name="transportState">
-            <option value="">全部</option>
-            <option value="1">待发货</option>
-            <option value="2">已发货</option>
-            <option value="3">已完成</option>
-          </select>
-        </span> 
         <span>快递单号：
           <input type="text" name="expressNumber" placeholder="输入一部分也可以查询"/>
         </span> 
@@ -85,7 +86,8 @@
         </span>
           <br><br>
         <span> 
-          <a onclick="orderHandle.exportTransportOrder()" class="button red">导出订单</a>
+          <a onclick="orderHandle.exportTransportOrder()" class="button red">导出订单对接单</a>
+          <a onclick="orderHandle.exportOrder()" class="button blue">导出订单</a>
         </span>
       </form>
     </div>
@@ -107,6 +109,7 @@
   <script type="text/javascript" th:inline="javascript" star:authorize-uri="/order/editBefore/*">
   addAuthorize("order-editBefore", true);
   </script>
+  <script type="text/javascript" th:src="@{/webjars/My97DatePicker/WdatePicker.js}"></script>
   <script type="text/javascript" th:src="@{/webjars/star/js/star.list.comm.js}"></script>
   <script type="text/javascript" th:src="@{/webjars/star/js/star.utils.js}"></script>
   <script type="text/javascript" th:inline="javascript" th:src="@{/js/mgr/order/list.js}"></script>

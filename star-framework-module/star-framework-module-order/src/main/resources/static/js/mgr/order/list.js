@@ -24,6 +24,14 @@ var orderHandle = new ListHandle({
       lock : true
     });
   },
+  exportOrder: function(){
+    var params = orderHandle.getQueryParams();
+    params["key"] = "order";
+    params["handle"] = "com.star.truffle.module.order.service.ExportOrder";
+    var url = '/download/excel/data?params=';
+    url+=encodeURI(JSON.stringify(params));
+    window.open(url);
+  },
   deliverGoods: function(orderId){
     artDialog.prompt("填写快递单号：", function(expressNumber) {
       expressNumber = $.trim(expressNumber);

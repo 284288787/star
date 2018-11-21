@@ -211,20 +211,24 @@ function ListHandle(options, funcs) {
 	handle.getSelectedRows = function() {
     return selectedRows;
   }
+	handle.getQueryParams = function(){
+	  var data = $(options.formId).serializeArray();
+    var params = {};
+    $.each(data, function(i, field) {
+      if (field.value) {
+        var name = field.name;
+        if (params[name]) {
+          params[name] += "," + field.value;
+        } else {
+          params[name] = field.value;
+        }
+        console.log(name + "  " + field.value)
+      }
+    });
+    return params;
+	}
 	handle.query = function() {
-		var data = $(options.formId).serializeArray();
-		var params = {};
-		$.each(data, function(i, field) {
-			if (field.value) {
-				var name = field.name;
-				if (params[name]) {
-					params[name] += "," + field.value;
-				} else {
-					params[name] = field.value;
-				}
-				console.log(name + "  " + field.value)
-			}
-		});
+		var params = this.getQueryParams();
 		$(options.tableId).jqGrid('setGridParam', {
 			datatype : 'json',
 			postData : params,
@@ -243,7 +247,7 @@ function ListHandle(options, funcs) {
 			$(this).val("");
 		});
 		$(options.formId + " input[type='checkbox']").each(function(i) {
-			$(this).attr("checked", false);
+			this.checked=true;
 		});
 		$(options.formId + " select").each(function(i) {
 			// var id = $($(this).find("option:first")).val();

@@ -3,6 +3,9 @@ package com.star.truffle.module.order.dto.res;
 
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.Date;
+
 import com.star.truffle.module.order.domain.OrderDetail;
 
 @Getter
@@ -12,8 +15,11 @@ public class OrderDetailResponseDto extends OrderDetail {
   private Long memberId;
   private String name;
   private String head;
-  private String createTime;
-
+  private Date createTime;
+  
+  private String orderCode;
+  //订单状态 1待付款 2待提货 3已提货 4已退货
+  private Integer state;
   private String pickupCode;
   // 订单类型 1自主下单 2代客下单
   private Integer type;
