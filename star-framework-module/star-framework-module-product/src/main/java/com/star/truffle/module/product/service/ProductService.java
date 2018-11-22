@@ -67,9 +67,9 @@ public class ProductService {
     }else if(product.getState() != ProductEnum.presell.state()) {
       product.setState(ProductEnum.onshelf.state());
     }
-    if (2 == product.getProductInventory().getNumberType() && product.getProductInventory().getNumber() == 0) { //库存为0 表示售罄
-      product.setState(ProductEnum.sellout.state());
-    }
+//    if (2 == product.getProductInventory().getNumberType() && product.getProductInventory().getNumber() == 0) { //库存为0 表示售罄
+//      product.setState(ProductEnum.sellout.state());
+//    }
     Integer idx = this.productCache.getMinIdx();
     product.setIdx(idx - 1);
     this.productCache.saveProduct(product);
@@ -103,7 +103,7 @@ public class ProductService {
     }else if(product.getState() != ProductEnum.presell.state()) {
       product.setState(ProductEnum.onshelf.state());
     }
-    if (2 == product.getProductInventory().getNumberType() && product.getProductInventory().getNumber() == 0) { //库存为0 表示售罄
+    if (2 == product.getProductInventory().getNumberType() && null != product.getProductInventory().getSoldNumber() && product.getProductInventory().getNumber() <= product.getProductInventory().getSoldNumber()) { //库存为0 表示售罄
       product.setState(ProductEnum.sellout.state());
     }
     String updateUser = "无登录测试";
@@ -167,7 +167,7 @@ public class ProductService {
     }
     productInventory.setSoldNumber(productInventory.getSoldNumber() + count);
     this.productInventoryCache.updateProductInventory(productInventory);
-    if (productInventory.getNumberType() == 2 && productInventory.getNumber().intValue() == productInventory.getSoldNumber()) {
+    if (productInventory.getNumberType() == 2 && null != productInventory.getSoldNumber() && productInventory.getNumber().intValue() <= productInventory.getSoldNumber()) {
       ProductRequestDto productRequestDto = new ProductRequestDto();
       productRequestDto.setProductId(productId);
       productRequestDto.setState(ProductEnum.sellout.state());
@@ -247,7 +247,7 @@ public class ProductService {
         }else if(product.getState() != ProductEnum.presell.state()) {
           dto.setState(ProductEnum.onshelf.state());
         }
-        if (2 == product.getNumberType() && product.getNumber() == 0) { //库存为0 表示售罄
+        if (2 == product.getNumberType() && product.getNumber() <= product.getSoldNumber()) { //库存为0 表示售罄
           dto.setState(ProductEnum.sellout.state());
         }
         this.productCache.updateProduct(dto);
@@ -281,7 +281,7 @@ public class ProductService {
         }else if(product.getState() != ProductEnum.presell.state()) {
           dto.setState(ProductEnum.onshelf.state());
         }
-        if (2 == product.getNumberType() && product.getNumber() == 0) { //库存为0 表示售罄
+        if (2 == product.getNumberType() && product.getNumber() <= product.getSoldNumber()) { // 
           dto.setState(ProductEnum.sellout.state());
         }
         this.productCache.updateProduct(dto);

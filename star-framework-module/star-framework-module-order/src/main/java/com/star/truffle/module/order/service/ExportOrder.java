@@ -71,7 +71,7 @@ public class ExportOrder extends AbstractDataExport<Order> {
           address = detail.getShopAddress();
         }
         DecimalFormat decimalFormat = new DecimalFormat("0.00");  
-        String[] arr = {orderCode, state, pickupCode, typeName, deliveryType, name, mobile, address, detail.getCount() + "", decimalFormat.format(detail.getPrice() / 100.0), decimalFormat.format((detail.getPrice() * detail.getCount()) / 100.0), detail.getTitle(), detail.getShopName(), DateUtils.formatDateTime(detail.getCreateTime())};
+        String[] arr = {orderCode, state, pickupCode, typeName, deliveryType, name, mobile, address, detail.getCount() + "", decimalFormat.format(detail.getPrice() / 100.0), decimalFormat.format((detail.getPrice() * detail.getCount()) / 100.0), detail.getTitle(), detail.getShopName(), DateUtils.formatDateTime(detail.getCreateTime()), detail.getName(), detail.getMobile()};
         list.add(arr);
       }
     }

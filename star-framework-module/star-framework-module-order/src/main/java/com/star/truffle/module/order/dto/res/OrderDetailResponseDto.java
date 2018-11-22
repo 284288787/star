@@ -14,6 +14,7 @@ public class OrderDetailResponseDto extends OrderDetail {
 
   private Long memberId;
   private String name;
+  private String mobile;
   private String head;
   private Date createTime;
   

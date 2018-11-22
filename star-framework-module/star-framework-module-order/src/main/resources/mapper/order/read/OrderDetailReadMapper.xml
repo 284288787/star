@@ -82,19 +82,19 @@
 	</resultMap>
 
   <select id="buyRecordTotal" resultMap="buyRecordTotalResult">
-    SELECT count(DISTINCT m.member_id) members, SUM(d.count) counts
+    SELECT count(DISTINCT o.member_id) members, SUM(d.count) counts
     from order_detail d 
     LEFT JOIN `order` o on d.order_id = o.order_id
-    LEFT JOIN member_info m on m.member_id = o.member_id
     where 
       o.state in (2,3) and d.product_id = #{productId}
   </select>
 
   <select id="queryOrderDetail" resultMap="orderDetailResponseResultMap">
+  	set names utf8mb4;
     select 
 			id, o.order_id, product_id, title, main_picture_url, original_price, price, brokerage, pickup_time, specification, count, 
 		  o.pickup_code, o.type, o.province_name, o.city_name, o.area_name, o.delivery_address, o.delivery_name, o.delivery_mobile,
-		  o.shop_address, o.shop_name, o.shop_mobile, o.delivery_type, o.order_code, o.state, o.create_time
+		  o.shop_address, o.shop_name, o.shop_mobile, o.delivery_type, o.order_code, o.state, o.create_time, o.`name`, o.mobile
 		from order_detail d, `order` o where d.order_id = o.order_id
 		<if test="states != null and states != ''">
       and o.state in (${states})
