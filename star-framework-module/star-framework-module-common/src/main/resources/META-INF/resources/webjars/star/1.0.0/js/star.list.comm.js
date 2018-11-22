@@ -52,6 +52,11 @@ function ListHandle(options, funcs) {
 			height : config.height || '300px',
 			caption : config.caption,
 			editurl: config.editurl || '',
+			jsonReader: {
+	      repeatitems : false
+	    },
+	    shrinkToFit: false,
+	    width: config.width || '',
 			serializeRowData: config.serializeRowData,
 			gridComplete : function() {
 				// var
@@ -143,6 +148,7 @@ function ListHandle(options, funcs) {
 				groupCollapse : false,
 			}
 		});
+		jQuery(options.tableId).jqGrid('setFrozenColumns');
 		if (!options.subGrid) {
 			jQuery(options.tableId).jqGrid('navGrid', options.pagerId, {edit: false, add: false, del: false, search: false});
 			var h = handle.getScreenHeight() - 160;
