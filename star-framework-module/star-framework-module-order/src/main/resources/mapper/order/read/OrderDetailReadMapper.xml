@@ -114,6 +114,6 @@
     order by o.delivery_type, o.create_time asc
     <if test="pager != null and pager.pageSize!=null and pager.startIndex!=null">
       limit #{pager.startIndex}, #{pager.pageSize}
-    </if>
+    </if> 
   </select>
 </mapper>
