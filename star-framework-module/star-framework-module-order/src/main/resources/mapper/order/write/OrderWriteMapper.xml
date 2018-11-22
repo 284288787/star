@@ -2,15 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.star.truffle.module.order.dao.write.OrderWriteDao">
   <insert id="saveOrder" useGeneratedKeys="true" keyProperty="orderId" parameterType="com.star.truffle.module.order.domain.Order">
-    insert into `order`(remark, order_id, order_code, type, member_id, open_id, `name`, mobile, delivery_type, province_name, city_name, area_name, delivery_address, delivery_name, delivery_mobile, despatch_money, total_money, total_brokerage, region_id, distributor_id, shop_address, shop_name, shop_mobile, state, pickup_code, create_time, deleted)
-    values(#{remark}, #{orderId}, #{orderCode}, #{type}, #{memberId}, #{openId}, #{name}, #{mobile}, #{deliveryType}, #{provinceName}, #{cityName}, #{areaName}, #{deliveryAddress}, #{deliveryName}, #{deliveryMobile}, #{despatchMoney}, #{totalMoney}, #{totalBrokerage}, #{regionId}, #{distributorId}, #{shopAddress}, #{shopName}, #{shopMobile}, #{state}, #{pickupCode}, #{createTime}, 0)
+    insert into `order`(transport_state, remark, order_id, order_code, type, member_id, open_id, `name`, mobile, delivery_type, province_name, city_name, area_name, delivery_address, delivery_name, delivery_mobile, despatch_money, total_money, total_brokerage, region_id, distributor_id, shop_address, shop_name, shop_mobile, state, pickup_code, create_time, deleted)
+    values(#{transportState}, #{remark}, #{orderId}, #{orderCode}, #{type}, #{memberId}, #{openId}, #{name}, #{mobile}, #{deliveryType}, #{provinceName}, #{cityName}, #{areaName}, #{deliveryAddress}, #{deliveryName}, #{deliveryMobile}, #{despatchMoney}, #{totalMoney}, #{totalBrokerage}, #{regionId}, #{distributorId}, #{shopAddress}, #{shopName}, #{shopMobile}, #{state}, #{pickupCode}, #{createTime}, 0)
   </insert>
 
   <insert id="batchSaveOrder" parameterType="java.util.List">
-    insert into `order`(remark, order_id, order_code, type, member_id, open_id, `name`, mobile, delivery_type, province_name, city_name, area_name, delivery_address, delivery_name, delivery_mobile, despatch_money, total_money, total_brokerage, region_id, distributor_id, shop_address, shop_name, shop_mobile, state, pickup_code, create_time, deleted)
+    insert into `order`(transport_state, remark, order_id, order_code, type, member_id, open_id, `name`, mobile, delivery_type, province_name, city_name, area_name, delivery_address, delivery_name, delivery_mobile, despatch_money, total_money, total_brokerage, region_id, distributor_id, shop_address, shop_name, shop_mobile, state, pickup_code, create_time, deleted)
     values
     <foreach collection="list" item="item" index="index" separator=",">
-      (#{item.remark}, #{item.orderId}, #{item.orderCode}, #{item.type}, #{item.memberId}, #{item.openId}, #{item.name}, #{item.mobile}, #{item.deliveryType}, #{item.provinceName}, #{item.cityName}, #{item.areaName}, #{item.deliveryAddress}, #{item.deliveryName}, #{item.deliveryMobile}, #{despatchMoney}, #{item.totalMoney}, #{item.totalBrokerage}, #{item.regionId}, #{item.distributorId}, #{item.shopAddress}, #{item.shopName}, #{item.shopMobile}, #{item.state}, #{item.pickupCode}, #{item.createTime}, 0)
+      (#{item.transportState}, #{item.remark}, #{item.orderId}, #{item.orderCode}, #{item.type}, #{item.memberId}, #{item.openId}, #{item.name}, #{item.mobile}, #{item.deliveryType}, #{item.provinceName}, #{item.cityName}, #{item.areaName}, #{item.deliveryAddress}, #{item.deliveryName}, #{item.deliveryMobile}, #{despatchMoney}, #{item.totalMoney}, #{item.totalBrokerage}, #{item.regionId}, #{item.distributorId}, #{item.shopAddress}, #{item.shopName}, #{item.shopMobile}, #{item.state}, #{item.pickupCode}, #{item.createTime}, 0)
     </foreach>
   </insert>
 

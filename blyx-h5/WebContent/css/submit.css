@@ -227,3 +227,13 @@
 .topay{
   background: #f00 !important;
 }
+.remarkp{
+  text-align:left;
+}
+.remarkp input{
+  height:30px;
+  font-size: 14px;
+}
+.ipt400{
+  width: 400px;
+}

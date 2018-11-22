@@ -90,6 +90,7 @@ $(function() {
       return false;
     }
     param['details'] = details;
+    param['remark'] = $("input[name=remark]").val();
     ajax({
       contentType: 'application/json',
       url: '/api/order/saveMemberOrder',
