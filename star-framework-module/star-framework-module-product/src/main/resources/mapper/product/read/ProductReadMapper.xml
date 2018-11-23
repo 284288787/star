@@ -48,7 +48,10 @@
         and state = #{state}
       </if>
       <if test="cateId != null">
-        and cate_id = #{cateId}
+        and product.cate_id = #{cateId}
+      </if>
+      <if test="tag != null">
+        and tag = #{tag}
       </if>
       <if test="states != null and states != ''">
         and state in (${states})

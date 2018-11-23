@@ -65,7 +65,7 @@ public class ResourceService {
     if (! status) {
       uri.setSourceId(null);
     }
-    this.uriWriteDao.updateUri(uri, uri.getUri());
+    this.uriWriteDao.updateUri(uri, "'"+uri.getUri()+"'");
   }
 
   public List<UriDto> queryUri(UriDto uri) {
@@ -176,6 +176,6 @@ public class ResourceService {
   }
 
   public void editUri(Uri uri) {
-    this.uriWriteDao.updateUri(uri, uri.getUri());
+    this.uriWriteDao.updateUri(uri, "'"+uri.getUri()+"'");
   }
 }

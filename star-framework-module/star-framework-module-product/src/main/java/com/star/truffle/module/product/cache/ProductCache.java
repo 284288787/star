@@ -82,4 +82,8 @@ public class ProductCache {
     return this.productReadDao.getProductOfIdx(idx, position);
   }
 
+  public void sortBySoldNumber() {
+    productWriteDao.sortBySoldNumber();
+  }
+
 }

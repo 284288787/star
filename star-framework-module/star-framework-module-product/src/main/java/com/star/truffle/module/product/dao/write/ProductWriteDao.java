@@ -20,4 +20,6 @@ public interface ProductWriteDao {
 
   public Integer getMinIdx();
 
+  public int sortBySoldNumber();
+
 }

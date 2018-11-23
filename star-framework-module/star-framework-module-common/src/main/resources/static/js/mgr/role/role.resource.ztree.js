@@ -44,6 +44,7 @@ function onCheck(event, treeId, treeNode){
 		params['uri'] = treeNode.uri;
 	}
 	$.ajax({
+	  async: false,
 		url: '/role/saveRoleResourceRelation',
 		data: params,
 		type: 'post',

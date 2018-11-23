@@ -97,9 +97,9 @@ $(function(){
     {name: 'distributorId', index: 'distributor_id', width: '80px', frozen: true, align: "center", formatter: function(cellvalue, options, rowObject){
       return cellvalue.toFixed(0);
     }}, 
-    {name: 'name', index: 'name', width: '100px', align: "center"}, 
-    {name: 'shopName', index: 'shop_name', width: '260px', align: "center"}, 
-    {name: 'shopCode', index: 'shop_code', width: '70px', align: "center"}, 
+    {name: 'name', index: 'name', width: '100px', align: "center", frozen: true}, 
+    {name: 'shopName', index: 'shop_name', width: '260px', align: "center", frozen: true}, 
+    {name: 'shopCode', index: 'shop_code', width: '70px', align: "center", frozen: true}, 
     {name: 'mobile', index: 'mobile', width: '100px', align: "center"}, 
     {name: 'fansNum', index: 'fans_num', width: '80px', align: "center"}, 
     {name: 'soldNum', index: 'sold_num', width: '80px', align: "center"}, 

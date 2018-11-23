@@ -109,7 +109,7 @@ $(function(){
   var colors={1:'#e87108',2:'#ad30de',3:'green',4:'red',5:'gray'}
   var colNames = ['操作', '订单ID', '订单状态', '运输状态', '快递单号', '订单编号', '总金额', '总提成', '提货码', '订单类型', '用户姓名', '用户手机号', '收货类型', '收货地址', '收件人', '收件人手机', '分销区域', '分销商', '店铺名称', '店铺电话', '店铺地址', '创建日期'];
   var colModel = [
-    {align: "center", width: "130px", editable: false, sortable: false, formatter: function(cellvalue, options, rowObject){
+    {align: "center", width: "130px", editable: false, sortable: false, frozen: true, formatter: function(cellvalue, options, rowObject){
       var temp = '';
       if(hasAuthorize('order-editBefore')){
         if(rowObject.state >= 2){
@@ -125,13 +125,13 @@ $(function(){
       temp += '<a class="linetaga" href="javascript: orderHandle.view(\'' + rowObject.orderId.toFixed(0) + '\');" >查看详情</a>';
       return temp;
     }},
-    {name: 'orderId', index: 'order_id', width: "60px", align: "center", formatter: function(cellvalue, options, rowObject){
+    {name: 'orderId', index: 'order_id', width: "60px", align: "center", frozen: true, formatter: function(cellvalue, options, rowObject){
       return cellvalue.toFixed(0);
     }}, 
-    {name: 'state', index: 'state', width: "70px", align: "center", formatter: function(cellvalue, options, rowObject){
+    {name: 'state', index: 'state', width: "70px", align: "center", frozen: true, formatter: function(cellvalue, options, rowObject){
       return '<span style="color:'+colors[cellvalue]+'">'+states[cellvalue]+'</span>';
     }}, 
-    {name: 'transportState', index: 'transport_state', width: "70px", align: "center", formatter: function(cellvalue, options, rowObject){
+    {name: 'transportState', index: 'transport_state', width: "70px", align: "center", frozen: true, formatter: function(cellvalue, options, rowObject){
       if(!cellvalue) return "";
       return '<span style="color:'+colors[cellvalue]+'">'+transportStates[cellvalue]+'</span>';
     }}, 

@@ -20,26 +20,24 @@
   <div class="main-container data-container" id="main-container">
     <div class="search-container">
       <form id="queryForm">
+        <span>商品状态：
+          <input type="checkbox" name="states" id="state_1" value="1" checked><label for="state_1">上架中</label>
+          <input type="checkbox" name="states" id="state_2" value="2" checked><label for="state_2">预售中</label>
+          <input type="checkbox" name="states" id="state_3" value="3" checked><label for="state_3">已售罄</label>
+          <input type="checkbox" name="states" id="state_4" value="4"><label for="state_4">已下架</label>
+          <input type="checkbox" name="states" id="state_5" value="5"><label for="state_5">已禁用</label>
+          <input type="checkbox" name="states" id="state_6" value="6"><label for="state_6">已删除</label>
+        </span> 
+        <br>
+        <span>商品类目：
+          <input type="text" name="cateName" placeholder="商品类目" readonly>
+          <input type="hidden" name="cateId">
+        </span> 
+        <span>商品标签：
+          <input type="text" name="tag" maxlength="4" placeholder="悬浮在图片右上角，4个字，例如：十点爆款">
+        </span> 
         <span>商品标题：
           <input type="text" name="title" placeholder="商品标题"/>
-        </span> 
-        <span>商品状态：
-          <select name="state">
-            <option value="">全部</option>
-            <option value="1">上架</option>
-            <option value="2">预售</option>
-            <option value="3">售罄</option>
-            <option value="4">下架</option>
-            <option value="5">禁用</option>
-            <option value="6">删除</option>
-          </select>
-        </span> 
-        <span>提成类型：
-          <select name="brokerageType">
-            <option value="">全部</option>
-            <option value="1">固定金额</option>
-            <option value="2">售价百分比</option>
-          </select>
         </span> 
         <span> 
           <a onclick="productHandle.query()" class="button blue">查询</a> 
@@ -52,6 +50,7 @@
       <a star:authorize-uri="/product/enabled" onclick="productHandle.enabled()" class="button blue">启用</a>
       <a star:authorize-uri="/product/disabled" onclick="productHandle.disabled()" class="button yellow">禁用</a>
       <a star:authorize-uri="/product/deleted" onclick="productHandle.remove()" class="button red">删除</a> 
+      <a star:authorize-uri="/product/sortBySoldNumber" onclick="productHandle.sortBySoldNumber()" class="button purple">按销量降序排列</a> 
     </div>
     <div class="data-container">
       <table id="grid-table"></table>
@@ -75,6 +74,7 @@
   addAuthorize("product-enabled", true);
   </script>
   <script type="text/javascript" th:src="@{/webjars/star/js/star.list.comm.js}"></script>
+  <script type="text/javascript" th:src="@{/webjars/star/js/star.utils.js}"></script>
   <script type="text/javascript" th:inline="javascript" th:src="@{/js/mgr/product/list.js}"></script>
 </body>
 </html>

@@ -38,6 +38,7 @@ function beforeDrag(treeId, treeNodes) {
 function onCheck(event, treeId, treeNode){
 	var params={'roleId': parentParams.roleId, 'status': treeNode.checked, 'sourceId': treeNode.pId, 'uri': treeNode.uri};
 	$.ajax({
+	  async: false,
 		url: '/role/setMainUri',
 		data: params,
 		type: 'post',

@@ -50,6 +50,14 @@
     where product_id = #{productId}
   </update>
 
+  <update id="sortBySoldNumber">
+    update product p, (
+      select (@i:=@i+1) rownum, t.idx, t.sold_number, t.product_id from (
+      select p.idx, i.sold_number, p.product_id from product p
+      left join product_inventory i on p.product_id = i.product_id 
+      order by i.sold_number desc
+      ) t, (select @i:=0) t2) b SET p.idx = b.rownum where b.product_id = p.product_id
+  </update>
   <delete id="deleteProduct" parameterType="java.lang.Long">
     delete from product where product_id = #{productId}
   </delete>

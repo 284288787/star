@@ -18,46 +18,85 @@ var productHandle = new ListHandle({
   }
 },{
   top: function(id){
-      productHandle.ajax({
-        url : basePath+'product/top/' + id,
-        success : function(res) {
-          if (res.code == 0) {
-            productHandle.query();
-            artDialog.tips("置顶成功")
-          } else {
-            artDialog.tips(res.msg)
-          }
+    productHandle.ajax({
+      url : basePath+'product/top/' + id,
+      success : function(res) {
+        if (res.code == 0) {
+          productHandle.query();
+          artDialog.tips("置顶成功")
+        } else {
+          artDialog.tips(res.msg)
         }
-      });
+      }
+    });
   },
   up: function(id){
-      productHandle.ajax({
-        url : basePath+'product/up/' + id,
-        success : function(res) {
-          if (res.code == 0) {
-            productHandle.query();
-            artDialog.tips("上移成功")
-          } else {
-            artDialog.tips(res.msg)
-          }
+    productHandle.ajax({
+      url : basePath+'product/up/' + id,
+      success : function(res) {
+        if (res.code == 0) {
+          productHandle.query();
+          artDialog.tips("上移成功")
+        } else {
+          artDialog.tips(res.msg)
         }
-      });
+      }
+    });
   },
   down: function(id){
-      productHandle.ajax({
-        url : basePath+'product/down/' + id,
-        success : function(res) {
-          if (res.code == 0) {
-            productHandle.query();
-            artDialog.tips("下移成功")
-          } else {
-            artDialog.tips(res.msg)
-          }
+    productHandle.ajax({
+      url : basePath+'product/down/' + id,
+      success : function(res) {
+        if (res.code == 0) {
+          productHandle.query();
+          artDialog.tips("下移成功")
+        } else {
+          artDialog.tips(res.msg)
         }
-      });
+      }
+    });
+  },
+  sortBySoldNumber: function(){
+    productHandle.ajax({
+      url : basePath+'product/sortBySoldNumber',
+      success : function(res) {
+        if (res.code == 0) {
+          productHandle.query();
+          artDialog.tips("按销售数量降序排列完成")
+        } else {
+          artDialog.tips(res.msg)
+        }
+      }
+    });
   }
 });
 $(function(){
+  new UtilsHandle({
+    basePath: "/",
+    choose: [
+      {
+        object: $("input[name=cateName]"),
+        service: "categoryService",
+        title: "选择商品分类",
+        width: "800px",
+        height: "500px",
+        callback: function(rowObject){
+          $("input[name=cateName]").val(rowObject.cateName);
+          $("input[name=cateId]").val(rowObject.cateId);
+        }
+      }, {
+        object: $("input[name=tag]"),
+        service: "productTagService",
+        title: "选择商品标签",
+        width: "800px",
+        height: "500px",
+        callback: function(rowObject){
+          $("input[name=tag]").val(rowObject.tagName);
+        }
+      }
+    ],
+  },{});
+  
   var colNames = ['操作', '主图', '商品分类', '商品ID', '商品状态', '单买最大量', '商品标题', '副标题', '商品标签', '预售时间', '下架时间', '提货时间', '原价', '含税价', '未税价', '售价', '一级分销提成', '二级分销提成', '库存数量', '已售数量', '供应商', '供应商联系人', '供应商电话', '商品品牌', '商品规格', '商品产地', '关注人数', '更新日期', '更新人'];
   var colModel = [
     {align: "center", width: '160px', editable: false, sortable: false, frozen: true, formatter: function(cellvalue, options, rowObject){

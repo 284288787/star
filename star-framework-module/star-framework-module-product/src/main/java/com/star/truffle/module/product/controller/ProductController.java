@@ -51,7 +51,6 @@ public class ProductController {
   public Map<String, Object> list(ProductRequestDto productRequestDto, Integer page, Integer rows, String sord, String sidx) {
     Page pager = new Page(page, rows, sidx, OrderType.desc.name().equals(sord) ? OrderType.desc : OrderType.asc);
     productRequestDto.setPager(pager);
-    productRequestDto.setStates("1,2,3,4,5");
     List<ProductResponseDto> list = productService.queryProduct(productRequestDto);
     Long count = productService.queryProductCount(productRequestDto);
 
@@ -152,12 +151,26 @@ public class ProductController {
       return ApiResult.fail(ApiCode.SYSTEM_ERROR);
     }
   }
-
+  
   @ResponseBody
   @RequestMapping(value = "/down/{productId}", method = RequestMethod.POST)
   public ApiResult<Void> down(@PathVariable Long productId) {
     try {
       productService.down(productId);
+      return ApiResult.success();
+    } catch (StarServiceException e) {
+      return ApiResult.fail(e.getCode(), e.getMsg());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return ApiResult.fail(ApiCode.SYSTEM_ERROR);
+    }
+  }
+
+  @ResponseBody
+  @RequestMapping(value = "/sortBySoldNumber", method = RequestMethod.POST)
+  public ApiResult<Void> sortBySoldNumber() {
+    try {
+      productService.sortBySoldNumber();
       return ApiResult.success();
     } catch (StarServiceException e) {
       return ApiResult.fail(e.getCode(), e.getMsg());
