@@ -169,5 +169,10 @@ $(function(){
   var multiselect = true;
   var screenWidth = document.documentElement.clientWidth || document.body.clientWidth - 140;
   var config={rowNum: 50, autowidth: false, caption: "商品信息列表", colNames: colNames, colModel: colModel, rowList: rowList, rownumbers: rownumbers, multiselect: multiselect};
-  productHandle.init(config);
+  productHandle.init(config, {
+    jsonReader: {
+      repeatitems : false
+    },
+    shrinkToFit: false,
+  });
 });

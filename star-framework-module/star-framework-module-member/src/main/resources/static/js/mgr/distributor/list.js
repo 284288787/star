@@ -77,7 +77,7 @@ new UtilsHandle({
 $(function(){
   var colNames = ['操作', '是否可用', 'distributorId', '姓名', '店铺名称', '店铺编码', '手机号', '粉丝数', '已售件数', '分销区域拼音', '分销区域', '街道地址', '更新日期', 'openid', '营业执照', '食品流通许可证', '营业面积', '开户行', '开户名', '银行卡号'];
   var colModel = [
-    {align: "center", width: '80px', editable: false, sortable: false, formatter: function(cellvalue, options, rowObject){
+    {align: "center", width: '80px', editable: false, sortable: false, frozen: true, formatter: function(cellvalue, options, rowObject){
       var temp = '';
       if(hasAuthorize('distributor-editBefore')){
         temp += '<a class="linetaga" href="javascript: distributorHandle.edit(\'' + rowObject.distributorId.toFixed(0) + '\');" >编辑</a>';
@@ -93,18 +93,18 @@ $(function(){
       }
       return temp;
     }},
-    {name: 'enabled', index: 'enabled', width: 50, align: "center", formatter: 'select', editoptions: {value:'1:可用;0:禁用'}},
-    {name: 'distributorId', index: 'distributor_id', width: '80px', align: "center", formatter: function(cellvalue, options, rowObject){
+    {name: 'enabled', index: 'enabled', width: 50, align: "center", frozen: true, formatter: 'select', editoptions: {value:'1:可用;0:禁用'}},
+    {name: 'distributorId', index: 'distributor_id', width: '80px', frozen: true, align: "center", formatter: function(cellvalue, options, rowObject){
       return cellvalue.toFixed(0);
     }}, 
-    {name: 'name', index: 'name', width: '80px', align: "center"}, 
-    {name: 'shopName', index: 'shop_name', width: '200px', align: "center"}, 
-    {name: 'shopCode', index: 'shop_code', width: '60px', align: "center"}, 
-    {name: 'mobile', index: 'mobile', width: '80px', align: "center"}, 
+    {name: 'name', index: 'name', width: '100px', align: "center"}, 
+    {name: 'shopName', index: 'shop_name', width: '260px', align: "center"}, 
+    {name: 'shopCode', index: 'shop_code', width: '70px', align: "center"}, 
+    {name: 'mobile', index: 'mobile', width: '100px', align: "center"}, 
     {name: 'fansNum', index: 'fans_num', width: '80px', align: "center"}, 
     {name: 'soldNum', index: 'sold_num', width: '80px', align: "center"}, 
     {name: 'py', index: 'py', width: '80px', align: "center"}, 
-    {name: 'regionName', index: 'regionName', width: '300px', align: "center", formatter: function(cellvalue, options, rowObject){
+    {name: 'regionName', index: 'regionName', width: '370px', align: "center", formatter: function(cellvalue, options, rowObject){
       var temp = cellvalue;
       if(rowObject.townName) temp = rowObject.townName + "-" + temp;
       if(rowObject.areaName) temp = rowObject.areaName + "-" + temp;
@@ -112,31 +112,31 @@ $(function(){
       if(rowObject.provinceName) temp = rowObject.provinceName + "-" + temp;
       return temp;
     }}, 
-    {name: 'address', index: 'address', width: '200px', align: "center"}, 
-    {name: 'updateTime', index: 'update_time', width: '120px', align: "center", formatter:'date', formatoptions: {newformat:'Y-m-d H:i:s'}}, 
-    {name: 'openId', index: 'open_id', width: '150px', align: "center", formatter: function(cellvalue, options, rowObject){
+    {name: 'address', index: 'address', width: '300px', align: "center"}, 
+    {name: 'updateTime', index: 'update_time', width: '140px', align: "center", formatter:'date', formatoptions: {newformat:'Y-m-d H:i:s'}}, 
+    {name: 'openId', index: 'open_id', width: '200px', align: "center", formatter: function(cellvalue, options, rowObject){
       var temp = cellvalue;
       if(! temp) temp = "<span style='color:lightgray'>老板从未登录过</span>";
       return temp;
     }}, 
-    {editable: false, sortable: false, width: '80px', align: "center", formatter: function(cellvalue, options, rowObject){
+    {editable: false, sortable: false, width: '100px', align: "center", formatter: function(cellvalue, options, rowObject){
       if(!cellvalue) return "";
       var temp = '<span style="word-wrap: break-word;word-break: break-all;white-space: pre-wrap !important;">'+rowObject.businessLicense+'</span><img class="dataImg" src="'+rowObject.businessLicensePic+'" height="60px;">';
       return temp;
     }}, 
-    {editable: false, sortable: false, width: '80px', align: "center", formatter: function(cellvalue, options, rowObject){
+    {editable: false, sortable: false, width: '100px', align: "center", formatter: function(cellvalue, options, rowObject){
       if(!cellvalue) return "";
       var temp = '<span style="word-wrap: break-word;word-break: break-all;white-space: pre-wrap !important;">'+rowObject.foodAllowanceLicense+'</span><img class="dataImg" src="'+rowObject.foodAllowanceLicensePic+'" height="60px;">';
       return temp;
     }}, 
-    {name: 'acreage', index: 'acreage', width: '80px', align: "center"}, 
-    {name: 'bankAddress', index: 'bank_address', width: '200px', align: "center", formatter: function(cellvalue, options, rowObject){
+    {name: 'acreage', index: 'acreage', width: '100px', align: "center"}, 
+    {name: 'bankAddress', index: 'bank_address', width: '300px', align: "center", formatter: function(cellvalue, options, rowObject){
       if(!cellvalue) return "";
       var temp = '<span style="word-wrap: break-word;word-break: break-all;white-space: pre-wrap !important;">'+cellvalue+'</span>';
       return temp;
     }}, 
-    {name: 'bankCardName', index: 'bank_card_name', width: '80px', align: "center"}, 
-    {name: 'bankCardNo', index: 'bank_card_no', width: '160px', align: "center", formatter: function(cellvalue, options, rowObject){
+    {name: 'bankCardName', index: 'bank_card_name', width: '100px', align: "center"}, 
+    {name: 'bankCardNo', index: 'bank_card_no', width: '200px', align: "center", formatter: function(cellvalue, options, rowObject){
       if(!cellvalue) return "";
       var temp = '<span style="word-wrap: break-word;word-break: break-all;white-space: pre-wrap !important;">'+cellvalue+'</span>';
       return temp;
@@ -146,5 +146,10 @@ $(function(){
   var rownumbers = true;
   var multiselect = true;
   var config={rowNum: 50, caption: "分销商列表", autowidth: false, colNames: colNames, colModel: colModel, rowList: rowList, rownumbers: rownumbers, multiselect: multiselect};
-  distributorHandle.init(config);
+  distributorHandle.init(config, {
+    jsonReader: {
+      repeatitems : false
+    },
+    shrinkToFit: false,
+  });
 });

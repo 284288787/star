@@ -33,122 +33,122 @@ function ListHandle(options, funcs) {
 		}
 	}
 
-	handle.init = function(config) {
-		var obj = jQuery(config.tableId || options.tableId).jqGrid({
-			url : options.urls.list + (config.params ? '?' + config.params : ''),
-			datatype : config.dataType || 'json',
-			colNames : config.colNames,
-			colModel : config.colModel,
-			rowNum : config.rowNum || 10,
-			rowList : config.rowList,
-			pager : config.pagerId || options.pagerId,
-			mtype : "post",
-			rownumbers : config.rownumbers || false,
-			multiselect : config.multiselect || false,
-			viewrecords : false,
-			autowidth : null != config.autowidth ? config.autowidth : true,
-			hidegrid : false,
-			loadtext : '加载中...',
-			height : config.height || '300px',
-			caption : config.caption,
-			editurl: config.editurl || '',
-			jsonReader: {
-	      repeatitems : false
-	    },
-	    shrinkToFit: false,
-	    width: config.width || '',
-			serializeRowData: config.serializeRowData,
-			gridComplete : function() {
-				// var
-				// ids=jQuery(options.tableId).jqGrid('getDataIDs');
-				// $.each(ids, function(i, rowIdx){
-				// var curChk =
-				// $("#"+rowIdx+"").find(":checkbox");
-				// var rowData =
-				// $(options.tableId).jqGrid("getRowData",
-				// rowIdx);
-				// if(rowData.enabled==0){
-				// curChk.attr("disabled", true);
-				// }
-				// });
-				$("#cb_grid-table").on("click", function() {
-					var checked = this.checked;
-					var ids = jQuery(options.tableId).jqGrid('getDataIDs');
-					$.each(ids,function(i, rowIdx) {
-						selectedRows[rowIdx] = checked;
-						if (!checked) {
-							var rowData = $(options.tableId).jqGrid("getRowData", rowIdx);
-							var temp = "," + rowData[options.primaryKey] + ",";
-							historyIds = historyIds.replace(temp, ",");
-						}
-					});
-				});
-				if (config.callback) {
-					config.callback(obj);
-				}
-			},
-			onSelectRow : function(rowId, status, obje) {
-				selectedRows[rowId] = status;
-				var rowData = $(options.tableId).jqGrid("getRowData", rowId);
-				if (!status) {
-					var temp = "," + rowData[options.primaryKey] + ",";
-					historyIds = historyIds.replace(temp, ",");
-				}
-				if (config.onSelectRow) {
-					config.onSelectRow(rowId, status, obj, rowData);
-				}
-			},
-			onPaging : function(pgButton) {
-				var history = handle.getIds2();
-				if (history) {
-					var tempIds = history.split(",");
-					for ( var i in tempIds) {
-						var temp = "," + tempIds[i] + ",";
-						if (historyIds.indexOf(temp) == -1) {
-							historyIds = "," + tempIds[i] + historyIds;
-						}
-					}
-				}
-				selectedRows = {};
-			},
-			loadComplete : function(xhr) {
-				var ids = jQuery(options.tableId).jqGrid('getDataIDs');
-				$.each(ids, function(i, rowIdx) {
-					var rowData = $(options.tableId).jqGrid("getRowData", rowIdx);
-					var keyValue = rowData[options.primaryKey];
-					if (historyIds.indexOf("," + keyValue + ",") != -1) {
-						selectedRows[rowIdx] = true;
-						var curChk = $("#" + rowIdx).find(":checkbox");
-						curChk.attr("checked",true);
-					}
-				});
-				if (config.callback) {
-					config.callback(obj);
-				}
-			},
-			ondblClickRow : function(rowId, iRow, iCol, e){
-				if (config.ondblClickRow) {
-					config.ondblClickRow(obj, rowId, iRow, iCol, e);
-				}
-			},
-			onCellSelect : function(rowId, iCol, cellcontent, e){
-				if (config.onCellSelect) {
-					config.onCellSelect(obj, rowId, iCol, cellcontent, e);
-				}
-			},
-			subGrid : config.subGrid || false,
-			subGridRowExpanded : config.subGridRowExpanded,
-			subGridRowColapsed : config.subGridRowColapsed,
-			sortname : config.sortname,
-			grouping : config.grouping || false,
-			groupingView : {
-				groupField : [ 'parentId' ],
-				groupColumnShow : [ true ],
-				groupText : [ '<b>{0} - {1} Item(s)</b>' ],
-				groupCollapse : false,
-			}
-		});
-		jQuery(options.tableId).jqGrid('setFrozenColumns');
+	handle.init = function(config, cfg2) {
+	  var cfg = {
+      url : options.urls.list + (config.params ? '?' + config.params : ''),
+      datatype : config.dataType || 'json',
+      colNames : config.colNames,
+      colModel : config.colModel,
+      rowNum : config.rowNum || 10,
+      rowList : config.rowList,
+      pager : config.pagerId || options.pagerId,
+      mtype : "post",
+      rownumbers : config.rownumbers || false,
+      multiselect : config.multiselect || false,
+      viewrecords : false,
+      autowidth : null != config.autowidth ? config.autowidth : true,
+      hidegrid : false,
+      loadtext : '加载中...',
+      height : config.height || '300px',
+      caption : config.caption,
+      editurl: config.editurl || '',
+      width: config.width || '',
+      serializeRowData: config.serializeRowData,
+      gridComplete : function() {
+        // var
+        // ids=jQuery(options.tableId).jqGrid('getDataIDs');
+        // $.each(ids, function(i, rowIdx){
+        // var curChk =
+        // $("#"+rowIdx+"").find(":checkbox");
+        // var rowData =
+        // $(options.tableId).jqGrid("getRowData",
+        // rowIdx);
+        // if(rowData.enabled==0){
+        // curChk.attr("disabled", true);
+        // }
+        // });
+        $("#cb_grid-table").on("click", function() {
+          var checked = this.checked;
+          var ids = jQuery(options.tableId).jqGrid('getDataIDs');
+          $.each(ids,function(i, rowIdx) {
+            selectedRows[rowIdx] = checked;
+            if (!checked) {
+              var rowData = $(options.tableId).jqGrid("getRowData", rowIdx);
+              var temp = "," + rowData[options.primaryKey] + ",";
+              historyIds = historyIds.replace(temp, ",");
+            }
+          });
+        });
+        if (config.callback) {
+          config.callback(obj);
+        }
+      },
+      onSelectRow : function(rowId, status, obje) {
+        selectedRows[rowId] = status;
+        var rowData = $(options.tableId).jqGrid("getRowData", rowId);
+        if (!status) {
+          var temp = "," + rowData[options.primaryKey] + ",";
+          historyIds = historyIds.replace(temp, ",");
+        }
+        if (config.onSelectRow) {
+          config.onSelectRow(rowId, status, obj, rowData);
+        }
+      },
+      onPaging : function(pgButton) {
+        var history = handle.getIds2();
+        if (history) {
+          var tempIds = history.split(",");
+          for ( var i in tempIds) {
+            var temp = "," + tempIds[i] + ",";
+            if (historyIds.indexOf(temp) == -1) {
+              historyIds = "," + tempIds[i] + historyIds;
+            }
+          }
+        }
+        selectedRows = {};
+      },
+      loadComplete : function(xhr) {
+        var ids = jQuery(options.tableId).jqGrid('getDataIDs');
+        $.each(ids, function(i, rowIdx) {
+          var rowData = $(options.tableId).jqGrid("getRowData", rowIdx);
+          var keyValue = rowData[options.primaryKey];
+          if (historyIds.indexOf("," + keyValue + ",") != -1) {
+            selectedRows[rowIdx] = true;
+            var curChk = $("#" + rowIdx).find(":checkbox");
+            curChk.attr("checked",true);
+          }
+        });
+        if (config.callback) {
+          config.callback(obj);
+        }
+      },
+      ondblClickRow : function(rowId, iRow, iCol, e){
+        if (config.ondblClickRow) {
+          config.ondblClickRow(obj, rowId, iRow, iCol, e);
+        }
+      },
+      onCellSelect : function(rowId, iCol, cellcontent, e){
+        if (config.onCellSelect) {
+          config.onCellSelect(obj, rowId, iCol, cellcontent, e);
+        }
+      },
+      subGrid : config.subGrid || false,
+      subGridRowExpanded : config.subGridRowExpanded,
+      subGridRowColapsed : config.subGridRowColapsed,
+      sortname : config.sortname,
+      grouping : config.grouping || false,
+      groupingView : {
+        groupField : [ 'parentId' ],
+        groupColumnShow : [ true ],
+        groupText : [ '<b>{0} - {1} Item(s)</b>' ],
+        groupCollapse : false,
+      }
+    };
+	  if(cfg2) $.extend(cfg, cfg2);
+		var obj = jQuery(config.tableId || options.tableId).jqGrid(cfg);
+		if(cfg2 && cfg2.jsonReader){
+		  jQuery(options.tableId).jqGrid('setFrozenColumns');
+		}
 		if (!options.subGrid) {
 			jQuery(options.tableId).jqGrid('navGrid', options.pagerId, {edit: false, add: false, del: false, search: false});
 			var h = handle.getScreenHeight() - 160;

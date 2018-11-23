@@ -80,6 +80,6 @@ public class ExportOrder extends AbstractDataExport<Order> {
 
   @Override
   public int getPageSize() {
-    return 30;
+    return 5000;
   }
 }
