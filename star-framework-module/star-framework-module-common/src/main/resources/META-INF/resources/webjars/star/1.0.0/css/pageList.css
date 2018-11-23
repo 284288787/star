@@ -6,9 +6,13 @@
 .search-container span{
 	margin-right: 10px;
 }
+input[type="checkbox"] {
+  vertical-align: middle;
+}
 .search-container span input{
 	height:20px;
-	padding-left:3px;
+	padding:3px;
+	margin: 1px;
 }
 .search-container span select{
 	height:26px;

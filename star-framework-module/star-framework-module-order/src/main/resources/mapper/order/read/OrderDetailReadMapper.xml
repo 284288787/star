@@ -63,7 +63,7 @@
     select
     IFNULL(sum(d.count),0)
     from order_detail d 
-    where d.product_id = #{productId} and exists (select * from `order` o where o.order_id = d.order_id and o.member_id = #{memberId} and o.state in (1, 2, 3))
+    where d.product_id = #{productId} and exists (select * from `order` o where o.order_id = d.order_id and o.member_id = #{memberId} and (o.state in (2, 3) or (o.state = 1 and o.deleted = 0)))
   </select>
   
   <select id="buyRecord" resultMap="orderDetailResponseResultMap">
@@ -82,19 +82,19 @@
 	</resultMap>
 
   <select id="buyRecordTotal" resultMap="buyRecordTotalResult">
-    SELECT count(DISTINCT m.member_id) members, SUM(d.count) counts
+    SELECT count(DISTINCT o.member_id) members, SUM(d.count) counts
     from order_detail d 
     LEFT JOIN `order` o on d.order_id = o.order_id
-    LEFT JOIN member_info m on m.member_id = o.member_id
     where 
       o.state in (2,3) and d.product_id = #{productId}
   </select>
 
   <select id="queryOrderDetail" resultMap="orderDetailResponseResultMap">
+  	set names utf8mb4;
     select 
 			id, o.order_id, product_id, title, main_picture_url, original_price, price, brokerage, pickup_time, specification, count, 
 		  o.pickup_code, o.type, o.province_name, o.city_name, o.area_name, o.delivery_address, o.delivery_name, o.delivery_mobile,
-		  o.shop_address, o.shop_name, o.shop_mobile, o.delivery_type
+		  o.shop_address, o.shop_name, o.shop_mobile, o.delivery_type, o.order_code, o.state, o.create_time, o.`name`, o.mobile
 		from order_detail d, `order` o where d.order_id = o.order_id
 		<if test="states != null and states != ''">
       and o.state in (${states})
@@ -114,6 +114,6 @@
     order by o.delivery_type, o.create_time asc
     <if test="pager != null and pager.pageSize!=null and pager.startIndex!=null">
       limit #{pager.startIndex}, #{pager.pageSize}
-    </if>
+    </if> 
   </select>
 </mapper>

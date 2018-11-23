@@ -115,7 +115,7 @@
 		  });
 		  var params = {"key": 'transportOrder', "handle": 'com.star.truffle.module.order.service.ImportData', 'beginTime': beginTime, 'endTime': endTime, 'states': states, 'transportStates': transportStates};
 		  var distributorIds = $("input[name=distributorIds]").val();
-		  if(! distributorIds) artDialog.alert("请选择分销商");
+		  if(! distributorIds) {artDialog.alert("请选择分销商"); return false;}
 // 		  $.ajax({
 // 		    url: '/order/getDistributorIds',
 // 		    data: params,

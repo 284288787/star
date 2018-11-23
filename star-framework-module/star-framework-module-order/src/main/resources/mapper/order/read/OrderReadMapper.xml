@@ -130,6 +130,7 @@
   </sql>
 
   <select id="getOrder" resultType="com.star.truffle.module.order.dto.res.OrderResponseDto">
+  	set names utf8mb4;
     select
     <include refid="sql_column" />
     from `order`
@@ -143,6 +144,7 @@
   </select>
 
   <select id="queryOrder" resultMap="orderResponseDtoResultMap">
+  	set names utf8mb4;
     select
     <include refid="sql_column" />
     from `order`
@@ -168,6 +170,7 @@
   </select>
 
   <select id="sumBrokerage" resultType="java.lang.Long">
+  	set names utf8mb4;
     select
       ifNull(sum(`order`.total_brokerage), 0)
     from `order`
@@ -181,6 +184,7 @@
   </select>
 
   <select id="queryOrderCount" resultType="java.lang.Long">
+  	set names utf8mb4;
     select
     count(1)
     from `order`
@@ -208,6 +212,7 @@
   </resultMap>
 
   <select id="orderIndexToday" resultMap="orderIndexMap">
+  	set names utf8mb4;
     select * from (
       SELECT (@i:=@i+1) idx, t.distributor_id, t.totalOrderNum, t.totalOrderMoney, t.totalOrderBrokerage, t.totalDespatchMoney, t.fans_num, t.sold_num, t.shop_code, t.shop_name, t.address, t.`name` from (
       select 
@@ -256,6 +261,7 @@
   </resultMap>
 
   <select id="seeUser" resultMap="seeUserMap">
+  	set names utf8mb4;
     select 
       m.mobile, m.`name`, a.orderNum, a.totalMoney, a.totalBrokergae
     from
@@ -288,6 +294,7 @@
   </resultMap>
   
   <select id="getDistributorIds" resultMap="distributorMap">
+  	set names utf8mb4;
     select DISTINCT o.distributor_id, d.shop_code, d.shop_name FROM `order` o
     inner join distributor d on d.distributor_id = o.distributor_id
     <trim prefix="WHERE" prefixOverrides="AND | OR">

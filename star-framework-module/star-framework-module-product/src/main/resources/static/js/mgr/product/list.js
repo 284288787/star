@@ -60,7 +60,7 @@ var productHandle = new ListHandle({
 $(function(){
   var colNames = ['操作', '主图', '商品分类', '商品ID', '商品状态', '单买最大量', '商品标题', '副标题', '商品标签', '预售时间', '下架时间', '提货时间', '原价', '含税价', '未税价', '售价', '一级分销提成', '二级分销提成', '库存数量', '已售数量', '供应商', '供应商联系人', '供应商电话', '商品品牌', '商品规格', '商品产地', '关注人数', '更新日期', '更新人'];
   var colModel = [
-    {align: "center", width: '160px', editable: false, sortable: false, formatter: function(cellvalue, options, rowObject){
+    {align: "center", width: '160px', editable: false, sortable: false, frozen: true, formatter: function(cellvalue, options, rowObject){
       var temp = '';
       if(hasAuthorize('product-top')){
         temp += '<a class="linetaga" href="javascript: productHandle.top(\'' + rowObject.productId.toFixed(0) + '\');" >置顶</a>';
@@ -84,14 +84,14 @@ $(function(){
       }
       return temp;
     }},
-    {name: 'mainPictureUrl', index: 'mainPictureUrl', width: '70px', align: "center", editable: false, sortable: false, formatter: function(cellvalue, options, rowObject){
+    {name: 'mainPictureUrl', index: 'mainPictureUrl', width: '70px', align: "center", editable: false, frozen: true, sortable: false, formatter: function(cellvalue, options, rowObject){
       return "<img src='http://mgr.hnkbmd.com"+cellvalue+"' height='60px'>";
     }}, 
-    {name: 'cateName', index: 'cate_id', width: '70px', align: "center"}, 
-    {name: 'productId', index: 'product_id', width: '50px', align: "center", formatter: function(cellvalue, options, rowObject){
+    {name: 'cateName', index: 'cate_id', width: '70px', align: "center", frozen: true}, 
+    {name: 'productId', index: 'product_id', width: '50px', align: "center", frozen: true, formatter: function(cellvalue, options, rowObject){
       return cellvalue.toFixed(0);
     }}, 
-    {name: 'state', index: 'state', width: '50px', align: "center", formatter: 'select', editoptions: {value:'1:上架;2:预售;3:售罄;4:下架;5:禁用;6:删除'}}, 
+    {name: 'state', index: 'state', width: '50px', align: "center", frozen: true, formatter: 'select', editoptions: {value:'1:上架;2:预售;3:售罄;4:下架;5:禁用;6:删除'}}, 
     {name: 'times', index: 'times', width: '80px', align: "center", formatter: function(cellvalue, options, rowObject){
       if(cellvalue==0) return "不限";
       return "<div style='word-wrap: break-word;word-break:break-all;white-space:normal'>" + cellvalue + "件</div>";
@@ -167,6 +167,7 @@ $(function(){
   var rowList = [10, 20, 30, 50];
   var rownumbers = true;
   var multiselect = true;
+  var screenWidth = document.documentElement.clientWidth || document.body.clientWidth - 140;
   var config={rowNum: 50, autowidth: false, caption: "商品信息列表", colNames: colNames, colModel: colModel, rowList: rowList, rownumbers: rownumbers, multiselect: multiselect};
   productHandle.init(config);
 });

@@ -111,7 +111,12 @@ function initShopInfo(){
       $('.userimg').attr("src", distributor.head);
       $('.shopcode').text(distributor.shopCode);
       $('.shopname').text(distributor.shopName);
-      $('.shopaddress').text(distributor.address);
+      var a = ""; 
+      if(distributor.provinceName) a += distributor.provinceName;
+      if(distributor.cityName) a += distributor.cityName;
+      if(distributor.areaName) a += distributor.areaName;
+      if(distributor.townName) a += distributor.townName;
+      $('.shopaddress').text(a + distributor.address);
       $('.soldNum').text(distributor.soldNum);
       $('.fansNum').text(distributor.fansNum);
       wx.ready(function(){

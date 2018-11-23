@@ -52,6 +52,11 @@ function ListHandle(options, funcs) {
 			height : config.height || '300px',
 			caption : config.caption,
 			editurl: config.editurl || '',
+			jsonReader: {
+	      repeatitems : false
+	    },
+	    shrinkToFit: false,
+	    width: config.width || '',
 			serializeRowData: config.serializeRowData,
 			gridComplete : function() {
 				// var
@@ -143,6 +148,7 @@ function ListHandle(options, funcs) {
 				groupCollapse : false,
 			}
 		});
+		jQuery(options.tableId).jqGrid('setFrozenColumns');
 		if (!options.subGrid) {
 			jQuery(options.tableId).jqGrid('navGrid', options.pagerId, {edit: false, add: false, del: false, search: false});
 			var h = handle.getScreenHeight() - 160;
@@ -211,20 +217,24 @@ function ListHandle(options, funcs) {
 	handle.getSelectedRows = function() {
     return selectedRows;
   }
+	handle.getQueryParams = function(){
+	  var data = $(options.formId).serializeArray();
+    var params = {};
+    $.each(data, function(i, field) {
+      if (field.value) {
+        var name = field.name;
+        if (params[name]) {
+          params[name] += "," + field.value;
+        } else {
+          params[name] = field.value;
+        }
+        console.log(name + "  " + field.value)
+      }
+    });
+    return params;
+	}
 	handle.query = function() {
-		var data = $(options.formId).serializeArray();
-		var params = {};
-		$.each(data, function(i, field) {
-			if (field.value) {
-				var name = field.name;
-				if (params[name]) {
-					params[name] += "," + field.value;
-				} else {
-					params[name] = field.value;
-				}
-				console.log(name + "  " + field.value)
-			}
-		});
+		var params = this.getQueryParams();
 		$(options.tableId).jqGrid('setGridParam', {
 			datatype : 'json',
 			postData : params,
@@ -243,7 +253,7 @@ function ListHandle(options, funcs) {
 			$(this).val("");
 		});
 		$(options.formId + " input[type='checkbox']").each(function(i) {
-			$(this).attr("checked", false);
+			this.checked=true;
 		});
 		$(options.formId + " select").each(function(i) {
 			// var id = $($(this).find("option:first")).val();
