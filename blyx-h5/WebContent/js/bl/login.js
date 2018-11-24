@@ -51,7 +51,7 @@ $(function() {
         const TIME_COUNT = 60;
         if (!this.timer) {
           this.count = TIME_COUNT;
-          this.timer = setInterval(() => {
+          this.timer = setInterval(function(){
             if (this.count > 0 && this.count <= TIME_COUNT) {
               $("#send").text("重新发送(" + this.count + ")") ;
               this.count--;

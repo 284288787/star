@@ -1,3 +1,48 @@
+var SERVICE_ADDRESS = 'http://mgr.hnkbmd.com';
+function ajax(options){
+  $.ajax({
+    contentType: options.contentType || 'application/x-www-form-urlencoded',
+    url: SERVICE_ADDRESS + options.url,
+    async: options.async || true,
+    data: options.data,
+    type: options.type || 'post',
+    dataType: 'json',
+    success: function(res){
+      if(res.code==0){
+        if(options.success) options.success(res.data);
+      }else{
+        if(options.othercode){
+          options.othercode(res);
+        }else{
+          mui.toast(res.msg);
+        }
+      }
+    },
+    error: function(){
+      mui.toast("服务繁忙，请稍后再试！");
+    }
+  });
+}
+
+function getParam(name){
+  var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");     
+  var r = window.location.search.substr(1).match(reg);
+  //search,查询？后面的参数，并匹配正则    
+  if(r!=null)
+    return  unescape(r[2]); 
+  return null;
+}
+
+function setLoginInfo(user){
+  localStorage.setItem('login_distributor_user', JSON.stringify(user));
+}
+function islogin(){
+  var tem = localStorage.getItem("login_distributor_user");
+  if(!tem) return false;
+  var user = JSON.parse(tem);
+  return user.distributorId > 0;
+}
+
 if(islogin()){
   document.location.href="/";
 }
@@ -50,7 +95,7 @@ $(function() {
         const TIME_COUNT = 60;
         if (!this.timer) {
           this.count = TIME_COUNT;
-          this.timer = setInterval(() => {
+          this.timer = setInterval(function(){
             if (this.count > 0 && this.count <= TIME_COUNT) {
               $("#send").text("重新发送(" + this.count + ")") ;
               this.count--;
@@ -67,48 +112,3 @@ $(function() {
     return false;
   })
 });
-
-var SERVICE_ADDRESS = 'http://mgr.hnkbmd.com';
-function ajax(options){
-  $.ajax({
-    contentType: options.contentType || 'application/x-www-form-urlencoded',
-    url: SERVICE_ADDRESS + options.url,
-    async: options.async || true,
-    data: options.data,
-    type: options.type || 'post',
-    dataType: 'json',
-    success: function(res){
-      if(res.code==0){
-        if(options.success) options.success(res.data);
-      }else{
-        if(options.othercode){
-          options.othercode(res);
-        }else{
-          mui.toast(res.msg);
-        }
-      }
-    },
-    error: function(){
-      mui.toast("服务繁忙，请稍后再试！");
-    }
-  });
-}
-
-function getParam(name){
-  var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");     
-  var r = window.location.search.substr(1).match(reg);
-  //search,查询？后面的参数，并匹配正则    
-  if(r!=null)
-    return  unescape(r[2]); 
-  return null;
-}
-
-function setLoginInfo(user){
-  localStorage.setItem('login_distributor_user', JSON.stringify(user));
-}
-function islogin(){
-  var tem = localStorage.getItem("login_distributor_user");
-  if(!tem) return false;
-  var user = JSON.parse(tem);
-  return user.distributorId > 0;
-}
