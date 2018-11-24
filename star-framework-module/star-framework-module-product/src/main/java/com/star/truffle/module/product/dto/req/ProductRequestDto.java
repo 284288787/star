@@ -6,11 +6,12 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 import com.star.truffle.core.jdbc.Page;
-import lombok.Getter;
-import lombok.Setter;
 import com.star.truffle.module.product.domain.Product;
 import com.star.truffle.module.product.domain.ProductInventory;
 import com.star.truffle.module.product.domain.ProductPicture;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -23,6 +24,13 @@ public class ProductRequestDto extends Product {
   private List<ProductPicture> pictures;
   
   private ProductInventory productInventory;
+  
+  //预售时间
+  private Integer presellTimeUpdate;
+  // 下架时间
+  private Integer offShelfTimeUpdate;
+  // 提货时间
+  private Integer pickupTimeUpdate;
   
   public boolean checkSaveData() {
     if (null != getProductId() || StringUtils.isBlank(getTitle()) ||StringUtils.isBlank(getSubtitle())

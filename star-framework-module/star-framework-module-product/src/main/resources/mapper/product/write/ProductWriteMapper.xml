@@ -23,9 +23,9 @@
       <if test="title != null and title != ''">title = #{title},</if>
       <if test="subtitle != null and subtitle != ''">subtitle = #{subtitle},</if>
       <if test="tag != null and tag != ''">tag = #{tag},</if>
-      <if test="presellTime != null">presell_time = #{presellTime},</if>
-      <if test="offShelfTime != null">off_shelf_time = #{offShelfTime},</if>
-      <if test="pickupTime != null">pickup_time = #{pickupTime},</if>
+      <if test="presellTime != null or presellTimeUpdate == 1">presell_time = #{presellTime},</if>
+      <if test="offShelfTime != null or offShelfTimeUpdate == 1">off_shelf_time = #{offShelfTime},</if>
+      <if test="pickupTime != null or pickupTimeUpdate == 1">pickup_time = #{pickupTime},</if>
       <if test="state != null">state = #{state},</if>
       <if test="cateId != null">cate_id = #{cateId},</if>
       <if test="originalPrice != null">original_price = #{originalPrice},</if>

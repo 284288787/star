@@ -565,4 +565,15 @@ public class OrderService implements ChooseDataIntf {
     return this.orderDetailCache.getBuyTimes(memberId, productId);
   }
 
+  public void updateRemark(Long orderId, String remark) {
+    OrderResponseDto order = this.orderCache.getOrder(orderId);
+    if (null == order) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR, "订单不存在");
+    }
+    OrderRequestDto orderRequestDto = new OrderRequestDto();
+    orderRequestDto.setOrderId(orderId);
+    orderRequestDto.setRemark(remark);
+    this.orderCache.updateOrder(orderRequestDto);
+  }
+
 }

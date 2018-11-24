@@ -44,4 +44,6 @@ public class OrderDetailResponseDto extends OrderDetail {
   private String shopAddress;
   // 店铺电话
   private String shopMobile;
+  // 订单备注
+  private String remark;
 }

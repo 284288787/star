@@ -165,6 +165,20 @@ public class OrderController {
   }
   
   @ResponseBody
+  @RequestMapping(value = "/updateRemark", method = RequestMethod.POST)
+  public ApiResult<Void> updateRemark(Long orderId, String remark) {
+    try {
+      orderService.updateRemark(orderId, remark);
+      return ApiResult.success();
+    } catch (StarServiceException e) {
+      return ApiResult.fail(e.getCode(), e.getMsg());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return ApiResult.fail(ApiCode.SYSTEM_ERROR);
+    }
+  }
+  
+  @ResponseBody
   @RequestMapping(value = "/deliverGoodsFinish", method = RequestMethod.POST)
   public ApiResult<Void> deliverGoodsFinish(Long orderId) {
     try {

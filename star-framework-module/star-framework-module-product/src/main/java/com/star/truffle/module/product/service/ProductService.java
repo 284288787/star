@@ -120,7 +120,9 @@ public class ProductService {
       productInventory.setTimes(product.getProductInventory().getTimes());
       this.productInventoryCache.updateProductInventory(productInventory);
     }
-    
+    product.setPresellTimeUpdate(1);
+    product.setOffShelfTimeUpdate(1);
+    product.setPickupTimeUpdate(1);
     this.productCache.updateProduct(product);
     this.productPictureCache.deleteProductPictureByProductId(product.getProductId());
     this.productPictureCache.batchSavePicture(product.getProductId(), pictures);

@@ -94,7 +94,7 @@
     select 
 			id, o.order_id, product_id, title, main_picture_url, original_price, price, brokerage, pickup_time, specification, count, 
 		  o.pickup_code, o.type, o.province_name, o.city_name, o.area_name, o.delivery_address, o.delivery_name, o.delivery_mobile,
-		  o.shop_address, o.shop_name, o.shop_mobile, o.delivery_type, o.order_code, o.state, o.create_time, o.`name`, o.mobile
+		  o.shop_address, o.shop_name, o.shop_mobile, o.delivery_type, o.order_code, o.state, o.create_time, o.`name`, o.mobile, o.remark
 		from order_detail d, `order` o where d.order_id = o.order_id
 		<if test="distributorId != null">
       and o.distributor_id = #{distributorId}

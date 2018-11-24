@@ -42,6 +42,7 @@
       <if test="state != null">state = #{state},</if>
       <if test="deleted != null">deleted = #{deleted},</if>
       <if test="pickupCode != null and pickupCode != ''">pickup_code = #{pickupCode},</if>
+      <if test="remark != null and remark != ''">remark = #{remark},</if>
       <if test="createTime != null">create_time = #{createTime},</if>
       <if test="deleteUser != null">delete_user = #{deleteUser},</if>
       <if test="transportState != null">transport_state = #{transportState},</if>

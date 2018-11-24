@@ -107,7 +107,7 @@ $(function(){
   var states={1:'待付款',2:'待提货',3:'已提货',4:'已退货',5:'已删除'};
   var transportStates={1:'待发货',2:'已发货',3:'已完成'};
   var colors={1:'#e87108',2:'#ad30de',3:'green',4:'red',5:'gray'}
-  var colNames = ['操作', '订单ID', '订单状态', '运输状态', '快递单号', '订单编号', '总金额', '总提成', '提货码', '订单类型', '用户姓名', '用户手机号', '收货类型', '收货地址', '收件人', '收件人手机', '分销区域', '分销商', '店铺名称', '店铺电话', '店铺地址', '创建日期'];
+  var colNames = ['操作', '订单ID', '订单状态', '运输状态', '快递单号', '订单编号', '总金额', '总提成', '提货码', '订单类型', '用户姓名', '用户手机号', '订单备注', '收货类型', '收货地址', '收件人', '收件人手机', '分销区域', '分销商', '店铺名称', '店铺电话', '店铺地址', '创建日期'];
   var colModel = [
     {align: "center", width: "130px", editable: false, sortable: false, frozen: true, formatter: function(cellvalue, options, rowObject){
       var temp = '';
@@ -136,7 +136,8 @@ $(function(){
       return '<span style="color:'+colors[cellvalue]+'">'+transportStates[cellvalue]+'</span>';
     }}, 
     {name: 'expressNumber', index: 'express_number', width: "140px", align: "left", formatter: function(cellvalue, options, rowObject){
-      return "<button class='editExpressNumber button grey' data-expr='"+cellvalue+"' data-oid='"+rowObject.orderId+"'>修改</button><div style='word-wrap: break-word;word-break:break-all;white-space:normal'>" + (cellvalue?cellvalue:"") + "</div>";
+      var val = cellvalue?cellvalue:"";
+      return "<button class='editExpressNumber button grey' data-expr='"+val+"' data-oid='"+rowObject.orderId+"'>修改</button><div style='word-wrap: break-word;word-break:break-all;white-space:normal'>" + val + "</div>";
     }}, 
     {name: 'orderCode', index: 'order_code', width: "100px", align: "center"}, 
     {name: 'totalMoney', index: 'total_money', width: "70px", align: "center", formatter: function(cellvalue, options, rowObject){
@@ -151,6 +152,10 @@ $(function(){
       return "<div style='word-wrap: break-word;word-break:break-all;white-space:normal'>" + cellvalue + "</div>";
     }}, 
     {name: 'mobile', index: 'mobile', width: "100px", align: "center"}, 
+    {name: 'remark', index: 'remark', width: "140px", align: "left", formatter: function(cellvalue, options, rowObject){
+      var val = cellvalue?cellvalue:"";
+      return "<button class='editRemark button grey' data-expr='"+val+"' data-oid='"+rowObject.orderId+"'>修改</button><div style='word-wrap: break-word;word-break:break-all;white-space:normal'>" + val + "</div>";
+    }}, 
     {name: 'deliveryType', index: 'delivery_type', width: "60px", align: "center", formatter: 'select', editoptions: {value:'1:自提;2:快递'}}, 
     {name: 'deliveryAddress', index: 'delivery_address', width: "170px", align: "center", formatter: function(cellvalue, options, rowObject){
       if(!cellvalue) return "";
@@ -177,7 +182,7 @@ $(function(){
   var rowList = [10, 20, 30, 50];
   var rownumbers = true;
   var multiselect = true;
-  var config={rowNum: 50, caption: "订单列表", autowidth: false, colNames: colNames, colModel: colModel, rowList: rowList, rownumbers: rownumbers, multiselect: multiselect, callback: function(){
+  var config={rowNum: 50, datatype:'local', caption: "订单列表", autowidth: false, colNames: colNames, colModel: colModel, rowList: rowList, rownumbers: rownumbers, multiselect: multiselect, callback: function(){
     $(".editExpressNumber").click(function(){
       var orderId = $(this).attr("data-oid");
       var value = $(this).attr("data-expr");
@@ -202,6 +207,30 @@ $(function(){
       }, value);
       return false;
     });
+    $(".editRemark").click(function(){
+      var orderId = $(this).attr("data-oid");
+      var value = $(this).attr("data-expr");
+      artDialog.prompt("修改订单备注：", function(remark) {
+        remark = $.trim(remark);
+        if(! remark){
+          artDialog.alert("请填写订单备注");
+          return false;
+        }
+        orderHandle.ajax({
+          url : '/order/updateRemark',
+          data: {orderId: orderId, remark: remark},
+          success : function(res) {
+            if (res.code == 0) {
+              artDialog.tips("修改订单备注成功")
+              orderHandle.query();
+            } else {
+              artDialog.alert(res.msg)
+            }
+          }
+        });
+      }, value);
+      return false;
+    });
   }};
   orderHandle.init(config, {
     jsonReader: {
@@ -209,4 +238,5 @@ $(function(){
     },
     shrinkToFit: false,
   });
+  orderHandle.query();
 });
