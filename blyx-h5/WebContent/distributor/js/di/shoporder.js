@@ -136,6 +136,7 @@ function loadData(self, pageNum, pageSize, state){
           var orderId = $(this).attr("data-orderId");
 //          putLocalData("pay_orderId", orderId);
 //          putLocalData("pay_orderId_from", "distributor");
+          cookieStorage.setItem('login_distributor_user', JSON.stringify(distributor));
           document.location.href='http://yx.hnkbmd.com/pay.html?f=d&oid='+orderId;
         });
         $(".viewdetail").off().on('tap', function(){

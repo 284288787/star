@@ -108,6 +108,7 @@ $(function(){
       url: '/api/order/saveDistributorOrder',
       data: JSON.stringify(param),
       success: function(orderId){
+        cookieStorage.setItem('login_distributor_user', JSON.stringify(user));
         document.location.href='http://yx.hnkbmd.com/pay.html?f=d&oid='+orderId;
       }
     });

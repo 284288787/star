@@ -36,24 +36,24 @@ function ajax(options){
 
 function getLoginInfo(){
   try{
-    var tem = cookieStorage.getItem("login_distributor_user");
+    var tem = localStorage.getItem("login_distributor_user");
     if(!tem) return null;
     var user = JSON.parse(tem);
     return user;
   }catch(e){
-    cookieStorage.removeItem('login_distributor_user');
+    localStorage.removeItem('login_distributor_user');
     return null;
   }
 }
 
 function islogin(){
   try{
-    var tem = cookieStorage.getItem("login_distributor_user");
+    var tem = localStorage.getItem("login_distributor_user");
     if(!tem) return false;
     var user = JSON.parse(tem);
     return user.distributorId > 0;
   }catch(e){
-    cookieStorage.removeItem('login_distributor_user');
+    localStorage.removeItem('login_distributor_user');
     return false;
   }
 }
@@ -86,11 +86,11 @@ if(! islogin()){
 }
 
 function setLoginInfo(user){
-  cookieStorage.setItem('login_distributor_user', JSON.stringify(user));
+  localStorage.setItem('login_distributor_user', JSON.stringify(user));
 }
 
 function logout(){
-  cookieStorage.removeItem('login_distributor_user');
+  localStorage.removeItem('login_distributor_user');
 }
 
 function putLocalData(key, value){
