@@ -43,8 +43,8 @@ $(function(){
     {name: 'areaName', index: 'area_id', width: 50, align: "center"}, 
     {name: 'townName', index: 'town_id', width: 50, align: "center"}, 
     {name: 'state', index: 'state', width: 50, align: "center", formatter: 'select', editoptions: {value:'1:有效;2:禁用;3:删除'}}, 
-    {name: 'createTime', index: 'create_time', width: 50, align: "center", formatter:'date', formatoptions: {newformat:'Y-m-d'}}, 
-    {name: 'updateTime', index: 'update_time', width: 50, align: "center", formatter:'date', formatoptions: {newformat:'Y-m-d'}}, 
+    {name: 'createTime', index: 'create_time', width: 80, align: "center", formatter:'date', formatoptions: {srcformat: 'Y-m-d H:i:s', newformat:'Y-m-d H:i:s'}}, 
+    {name: 'updateTime', index: 'update_time', width: 80, align: "center", formatter:'date', formatoptions: {srcformat: 'Y-m-d H:i:s', newformat:'Y-m-d H:i:s'}}, 
     {name: 'fansNum', index: 'fans_num', width: 50, align: "center"}, 
     {name: 'soldNum', index: 'sold_num', width: 50, align: "center"}, 
     {align: "center", editable: false, sortable: false, formatter: function(cellvalue, options, rowObject){

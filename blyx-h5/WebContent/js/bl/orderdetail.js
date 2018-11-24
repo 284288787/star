@@ -4,6 +4,7 @@ if(! user){
 }
 var distributor = getShopInfo();
 var orderId = getParam("orderId");
+orderId = parseInt(orderId);
 mui('.main').on('tap', '.cancel', function() {
   mui('.mui-popover').popover('hide');
 });

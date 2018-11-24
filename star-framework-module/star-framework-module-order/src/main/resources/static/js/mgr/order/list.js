@@ -172,7 +172,7 @@ $(function(){
     {name: 'shopAddress', index: 'shop_address', width: "120px", align: "center", formatter: function(cellvalue, options, rowObject){
       return "<div style='word-wrap: break-word;word-break:break-all;white-space:normal'>" + cellvalue + "</div>";
     }}, 
-    {name: 'createTime', index: 'create_time', width: "120px", align: "center", formatter:'date', formatoptions: {newformat:'Y-m-d H:i:s'}}, 
+    {name: 'createTime', index: 'create_time', width: "140px", align: "center", formatter:'date', formatoptions: {srcformat: 'Y-m-d H:i:s', newformat:'Y-m-d H:i:s'}}, 
   ];
   var rowList = [10, 20, 30, 50];
   var rownumbers = true;

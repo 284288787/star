@@ -28,7 +28,7 @@ $(function(){
     {name: 'memberId', index: 'member_id', width: 30, align: "center"}, 
     {name: 'name', index: 'name', width: 50, align: "center"}, 
     {name: 'mobile', index: 'mobile', width: 50, align: "center"}, 
-    {name: 'createTime', index: 'create_time', width: 50, align: "center", formatter:'date', formatoptions: {newformat:'Y-m-d H:i:s'}}
+    {name: 'createTime', index: 'create_time', width: 50, align: "center", formatter:'date', formatoptions: {srcformat: 'Y-m-d H:i:s', newformat:'Y-m-d H:i:s'}}, 
   ];
   var rowList = [10, 20, 30, 50];
   var rownumbers = true;

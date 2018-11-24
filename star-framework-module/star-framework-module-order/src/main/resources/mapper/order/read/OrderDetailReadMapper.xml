@@ -96,11 +96,38 @@
 		  o.pickup_code, o.type, o.province_name, o.city_name, o.area_name, o.delivery_address, o.delivery_name, o.delivery_mobile,
 		  o.shop_address, o.shop_name, o.shop_mobile, o.delivery_type, o.order_code, o.state, o.create_time, o.`name`, o.mobile
 		from order_detail d, `order` o where d.order_id = o.order_id
-		<if test="states != null and states != ''">
-      and o.state in (${states})
-    </if>
 		<if test="distributorId != null">
       and o.distributor_id = #{distributorId}
+    </if>
+    <if test="orderCode != null">
+      and o.order_code = #{orderCode}
+    </if>
+    <if test="type != null">
+      and o.type = #{type}
+    </if>
+    <if test="regionId != null">
+      and o.region_id = #{regionId}
+    </if>
+    <if test="shopName != null and shopName != ''">
+      and o.shop_name like "%"#{shopName}"%"
+    </if>
+    <if test="expressNumber != null and expressNumber != ''">
+      and o.express_number like "%"#{expressNumber}"%"
+    </if>
+    <if test="shopMobile != null and shopMobile != ''">
+      and o.shop_mobile like "%"#{shopMobile}"%"
+    </if>
+    <if test="mobile != null and mobile != ''">
+      and o.mobile = #{mobile}
+    </if>
+    <if test="deliveryType != null">
+      and o.delivery_type = #{deliveryType}
+    </if>
+    <if test="pickupCode != null and pickupCode != ''">
+      and o.pickup_code = #{pickupCode}
+    </if>
+		<if test="states != null and states != ''">
+      and o.state in (${states})
     </if>
 		<if test="transportStates != null and transportStates != ''">
       and o.transport_state in (${transportStates})

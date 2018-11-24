@@ -65,7 +65,7 @@ $(function(){
     {name: 'totalMoney', index: 'total_money', width: 50, align: "center"}, 
     {name: 'remark', index: 'remark', width: 50, align: "center"}, 
     {name: 'state', index: 'state', width: 50, align: "center", formatter: 'select', editoptions: {value:'1:待处理;2:通过;3:不通过;4:已取消;5:已删除'}}, 
-    {name: 'createTime', index: 'create_time', width: 50, align: "center", formatter:'date', formatoptions: {newformat:'Y-m-d H:i:s'}}, 
+    {name: 'createTime', index: 'create_time', width: 50, align: "center", formatter:'date', formatoptions: {srcformat: 'Y-m-d H:i:s', newformat:'Y-m-d H:i:s'}}, 
     {align: "center", editable: false, sortable: false, formatter: function(cellvalue, options, rowObject){
       var temp = '';
       if(hasAuthorize('orderAfterSale-pass')){

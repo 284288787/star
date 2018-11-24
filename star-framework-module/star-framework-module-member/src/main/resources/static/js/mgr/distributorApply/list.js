@@ -94,7 +94,7 @@ $(function(){
       var temp = '<span style="word-wrap: break-word;word-break: break-all;white-space: pre-wrap !important;">'+cellvalue+'</span>';
       return temp;
     }}, 
-    {name: 'createTime', index: 'create_time', width: 80, align: "center", formatter:'date', formatoptions: {newformat:'Y-m-d H:i:s'}}, 
+    {name: 'createTime', index: 'create_time', width: 80, align: "center", formatter:'date', formatoptions: {srcformat: 'Y-m-d H:i:s', newformat:'Y-m-d H:i:s'}}, 
     {align: "center", editable: false, sortable: false, width: 80, formatter: function(cellvalue, options, rowObject){
       var temp = '';
       if(rowObject.state != 2){

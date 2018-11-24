@@ -142,15 +142,15 @@ $(function(){
       return "<div style='word-wrap: break-word;word-break:break-all;white-space:normal'>" + cellvalue + "</div>";
     }}, 
     {name: 'tag', index: 'tag', width: '70px', align: "center"}, 
-    {name: 'presellTime', index: 'presell_time', width: '100px', align: "center", formatter: function(cellvalue, options, rowObject){
+    {name: 'presellTime', index: 'presell_time', width: '120px', align: "center", formatter: function(cellvalue, options, rowObject){
       if(cellvalue) return cellvalue.substring(0,13)+"点";
       else return "<span style='color:lightgray'>现在有货</span>"
     }}, 
-    {name: 'offShelfTime', index: 'off_shelf_time', width: '100px', align: "center", formatter: function(cellvalue, options, rowObject){
+    {name: 'offShelfTime', index: 'off_shelf_time', width: '120px', align: "center", formatter: function(cellvalue, options, rowObject){
       if(cellvalue) return cellvalue.substring(0,13)+"点";
       else return "<span style='color:lightgray'>永不下架</span>"
     }}, 
-    {name: 'pickupTime', index: 'pickup_time', width: '100px', align: "center", formatter: function(cellvalue, options, rowObject){
+    {name: 'pickupTime', index: 'pickup_time', width: '120px', align: "center", formatter: function(cellvalue, options, rowObject){
       if(cellvalue) return cellvalue.substring(0,13)+"点";
       else return "<span style='color:lightgray'>随时提货</span>"
     }}, 
@@ -200,7 +200,7 @@ $(function(){
     }}, 
     {name: 'originPlace', index: 'origin_place', width: '90px', align: "center"}, 
     {name: 'subscribers', index: 'subscribers', width: '90px', align: "center"}, 
-    {name: 'updateTime', index: 'update_time', width: '90px', align: "center", formatter:'date', formatoptions: {newformat:'Y-m-d'}}, 
+    {name: 'updateTime', index: 'update_time', width: '140px', align: "center", formatter:'date', formatoptions: {srcformat: 'Y-m-d H:i:s', newformat:'Y-m-d H:i:s'}}, 
     {name: 'updateUser', index: 'update_user', width: '90px', align: "center"}
   ];
   var rowList = [10, 20, 30, 50];

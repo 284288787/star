@@ -24,7 +24,7 @@ $(function(){
       return cellvalue.toFixed(0);
     }}, 
     {name: 'tagName', index: 'tag_name', width: 50, align: "center"}, 
-    {name: 'createTime', index: 'create_time', width: 50, align: "center", formatter:'date', formatoptions: {newformat:'Y-m-d'}}, 
+    {name: 'createTime', index: 'create_time', width: 50, align: "center", formatter:'date', formatoptions: {srcformat: 'Y-m-d H:i:s', newformat:'Y-m-d H:i:s'}}, 
     {align: "center", editable: false, sortable: false, formatter: function(cellvalue, options, rowObject){
       var temp = '';
       if(hasAuthorize('productTag-editBefore')){

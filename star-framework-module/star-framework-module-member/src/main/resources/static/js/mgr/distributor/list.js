@@ -113,7 +113,7 @@ $(function(){
       return temp;
     }}, 
     {name: 'address', index: 'address', width: '300px', align: "center"}, 
-    {name: 'updateTime', index: 'update_time', width: '140px', align: "center", formatter:'date', formatoptions: {newformat:'Y-m-d H:i:s'}}, 
+    {name: 'updateTime', index: 'update_time', width: '140px', align: "center", formatter:'date', formatoptions: {srcformat: 'Y-m-d H:i:s', newformat:'Y-m-d H:i:s'}}, 
     {name: 'openId', index: 'open_id', width: '200px', align: "center", formatter: function(cellvalue, options, rowObject){
       var temp = cellvalue;
       if(! temp) temp = "<span style='color:lightgray'>老板从未登录过</span>";
