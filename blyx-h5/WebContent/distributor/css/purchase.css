@@ -280,3 +280,13 @@
       padding-top: 10px;
   font-size: 12px
 }
+.remarkp{
+  text-align:left;
+}
+.remarkp input{
+  height:30px;
+  font-size: 14px;
+}
+.ipt400{
+  width: 400px;
+}
