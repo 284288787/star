@@ -15,6 +15,9 @@ var num = 0;
 var details = new Array();
 
 $(function() {
+  mui('.mui-scroll-wrapper').scroll({
+    deceleration: 0.0005
+  });
   if(location.href.indexOf("#item2") != -1){
     var item = getLocalData("chooseAddress");
     if(item){
@@ -52,7 +55,7 @@ $(function() {
     }else {
       $(".totaldiv .despatch").show();
       var yf = despatchMoney;
-      if(totalMoney >= despatchLimit){
+      if(totalMoney * 1000 >= despatchLimit * 1){
         $(".totaldiv .despatchLimit").show();
         yf = 0;
       }else{
