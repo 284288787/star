@@ -255,15 +255,30 @@ function initDetailInfo(){
       $(".information .originPlace").text(product.originPlace);
       $(".productContentBox5 .desc").html(product.description);
       wx.ready(function(){
+        wx.onMenuShareAppMessage({
+          title: product.title + " - 五杂优选",
+          desc: product.subtitle,
+          link: document.location.href,
+          imgUrl: 'http://yx.hnkbmd.com'+product.mainPictureUrl,
+          success: function () {
+          }
+        });
         wx.updateAppMessageShareData({
           title: product.title + " - 五杂优选",
-          desc: '亲，所有单品高性价比，正品保证，售后无忧！',
+          desc: product.subtitle,
           link: document.location.href,
           imgUrl: 'http://yx.hnkbmd.com'+product.mainPictureUrl,
           success: function(){
           }
         }, function(res){
           alert(JSON.stringify(res))
+        });
+        wx.onMenuShareTimeline({
+          title: product.title + " - 五杂优选",
+          link: document.location.href,
+          imgUrl: 'http://yx.hnkbmd.com'+product.mainPictureUrl,
+          success: function () {
+          }
         });
         wx.updateTimelineShareData({
           title: product.title + " - 五杂优选",
@@ -274,7 +289,7 @@ function initDetailInfo(){
         });
         wx.onMenuShareWeibo({
           title: product.title + " - 五杂优选",
-          desc: '亲，所有单品高性价比，正品保证，售后无忧！',
+          desc: product.subtitle,
           link: document.location.href,
           imgUrl: 'http://yx.hnkbmd.com'+product.mainPictureUrl,
           success: function () {
