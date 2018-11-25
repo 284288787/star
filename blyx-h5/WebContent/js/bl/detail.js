@@ -239,7 +239,7 @@ function initDetailInfo(){
         flag = false;
       }
       if(product.offShelfTime){
-        $(".pickUpTime").append('<p class="red">下架时间：'+product.offShelfTime.formatDate('M月d日 h点')+'</p>');
+        $(".pickUpTime").append('<p class="red">结束时间：'+product.offShelfTime.formatDate('M月d日 h点')+'</p>');
         flag = false;
       }
       if(flag)$(".pickUpTime").append('<p class="red">&nbsp;</p>');
