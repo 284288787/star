@@ -51,7 +51,7 @@ function islogin(){
     var tem = localStorage.getItem("login_distributor_user");
     if(!tem) return false;
     var user = JSON.parse(tem);
-    return user.distributorId > 0;
+    return user.distributorId > 0 && user.py && user.shopName;
   }catch(e){
     localStorage.removeItem('login_distributor_user');
     return false;
