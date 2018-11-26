@@ -4,6 +4,6 @@ package com.star.truffle.module.member.temp;
 public class Operator {
 
   private Long operatorId;
-  private String name;          //姓名
-  private String mobile;        //电话
+  private Long distributorId;
+  private Long parentId;
 }

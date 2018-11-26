@@ -145,6 +145,7 @@ function ListHandle(options, funcs) {
       }
     };
 	  if(cfg2) $.extend(cfg, cfg2);
+	  handle.config = cfg;
 		var obj = jQuery(config.tableId || options.tableId).jqGrid(cfg);
 		if(cfg2 && cfg2.jsonReader){
 		  jQuery(options.tableId).jqGrid('setFrozenColumns');

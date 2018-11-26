@@ -22,4 +22,6 @@ public class DistributorResponseDto extends Distributor {
   
   private String fullAreaName;
   private String fullAreaJson;
+  
+  private Integer childNum;
 }

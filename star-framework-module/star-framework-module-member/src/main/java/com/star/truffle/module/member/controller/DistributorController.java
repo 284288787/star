@@ -34,6 +34,32 @@ public class DistributorController {
   @Autowired
   private DistributorService distributorService;
 
+  @ResponseBody
+  @RequestMapping(value = "/changeLevel", method = RequestMethod.POST)
+  public ApiResult<Void> changeLevel(Long distributorId, Long parentDistributorId) {
+    try {
+      distributorService.changeLevel(distributorId, parentDistributorId);
+      return ApiResult.success();
+    } catch (StarServiceException e) {
+      return ApiResult.fail(e.getCode(), e.getMsg());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return ApiResult.fail(ApiCode.SYSTEM_ERROR);
+    }
+  }
+  
+  @ResponseBody
+  @RequestMapping(value = "/tree", method = {RequestMethod.POST, RequestMethod.GET})
+  public List<DistributorResponseDto> tree(DistributorRequestDto distributorRequestDto) {
+    List<DistributorResponseDto> distributors = distributorService.queryDistributor(distributorRequestDto);
+    return distributors;
+  }
+  
+  @RequestMapping(value = "/operators", method = RequestMethod.GET)
+  public String operators() {
+    return "mgr/distributor/operators";
+  }
+  
   @RequestMapping(value = "/lists", method = RequestMethod.GET)
   public String list() {
     return "mgr/distributor/list";

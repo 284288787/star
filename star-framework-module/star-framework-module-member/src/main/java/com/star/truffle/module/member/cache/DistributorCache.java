@@ -29,22 +29,25 @@ public class DistributorCache {
   @Autowired
   private DistributorReadDao distributorReadDao;
 
-  @Caching(put = {
-      @CachePut(value = "module-member-distributor", key = "'distributor_distributorId_'+#result.distributorId", condition = "#result != null and #result.distributorId != null"),
-      @CachePut(value = "module-member-distributor", key = "'distributor_mobile_'+#result.mobile", condition = "#result != null"),
-      @CachePut(value = "module-member-distributor", key = "'distributor_openId_'+#result.openId", condition = "#result != null and #result.openId != null"),
-  })
+//  @Caching(put = {
+//      @CachePut(value = "module-member-distributor", key = "'distributor_distributorId_'+#result.distributorId", condition = "#result != null and #result.distributorId != null"),
+//      @CachePut(value = "module-member-distributor", key = "'distributor_mobile_'+#result.mobile", condition = "#result != null"),
+//      @CachePut(value = "module-member-distributor", key = "'distributor_openId_'+#result.openId", condition = "#result != null and #result.openId != null"),
+//  })
   public DistributorResponseDto saveDistributor(Distributor distributor){
     this.distributorWriteDao.saveDistributor(distributor);
     DistributorResponseDto distributorResponseDto = this.distributorWriteDao.getDistributor(distributor.getDistributorId());
     return distributorResponseDto;
   }
 
-  @Caching(put = {
+  @Caching(
+    put = {
       @CachePut(value = "module-member-distributor", key = "'distributor_distributorId_'+#result.distributorId", condition = "#result != null and #result.distributorId != null"),
       @CachePut(value = "module-member-distributor", key = "'distributor_mobile_'+#result.mobile", condition = "#result != null"),
       @CachePut(value = "module-member-distributor", key = "'distributor_openId_'+#result.openId", condition = "#result != null and #result.openId != null")
-  })
+    },
+    evict = @CacheEvict(value = "module-member-distributor-list", allEntries = true)
+  )
   public DistributorResponseDto updateDistributor(DistributorRequestDto distributorRequestDto){
     this.distributorWriteDao.updateDistributor(distributorRequestDto);
     DistributorResponseDto distributorResponseDto = this.distributorWriteDao.getDistributor(distributorRequestDto.getDistributorId());
@@ -73,7 +76,7 @@ public class DistributorCache {
     return distributorResponseDto;
   }
   
-//  @Cacheable(value = "module-member-distributor", key = "'distributor_mobile_'+#mobile", condition = "#mobile != null")
+  @Cacheable(value = "module-member-distributor", key = "'distributor_mobile_'+#mobile", condition = "#mobile != null")
   public DistributorResponseDto getDistributorByMobile(String mobile) {
     Map<String, Object> conditions = new HashMap<>();
     conditions.put("mobile", mobile);
@@ -83,6 +86,15 @@ public class DistributorCache {
       return list.get(0);
     }
     return null;
+  }
+  
+  @Cacheable(value = "module-member-distributor-list", key = "'distributor_list_by_parent_'+#parentDistributorId", condition = "#parentDistributorId != null")
+  public List<DistributorResponseDto> getDistributorsByParentId(Long parentDistributorId) {
+    Map<String, Object> conditions = new HashMap<>();
+    conditions.put("parentDistributorId", parentDistributorId);
+    conditions.put("enabled", EnabledEnum.enabled.val());
+    List<DistributorResponseDto> list = this.distributorReadDao.queryDistributor(conditions);
+    return list;
   }
   
   public List<DistributorResponseDto> queryDistributor(DistributorRequestDto distributorRequestDto){

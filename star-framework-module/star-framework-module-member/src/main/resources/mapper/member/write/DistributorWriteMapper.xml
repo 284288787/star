@@ -2,21 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.star.truffle.module.member.dao.write.DistributorWriteDao">
   <insert id="saveDistributor" useGeneratedKeys="true" keyProperty="distributorId" parameterType="com.star.truffle.module.member.domain.Distributor">
-    insert into distributor(state, head, name, shop_name, shop_code, mobile, region_id, address, enabled, create_time, update_time, open_id, 
+    insert into distributor(parent_distributor_id, state, head, name, shop_name, shop_code, mobile, region_id, address, enabled, create_time, update_time, open_id, 
     fans_num, sold_num, business_license, business_license_pic, food_allowance_license, food_allowance_license_pic, acreage, bank_address, 
     bank_card_name, bank_card_no, apply_id)
-    values(#{state}, #{head}, #{name}, #{shopName}, #{shopCode}, #{mobile}, #{regionId}, #{address}, #{enabled}, 
+    values(#{parentDistributorId}, #{state}, #{head}, #{name}, #{shopName}, #{shopCode}, #{mobile}, #{regionId}, #{address}, #{enabled}, 
     #{createTime}, #{updateTime}, #{openId}, #{fansNum}, #{soldNum}, #{businessLicense}, #{businessLicensePic}, 
     #{foodAllowanceLicense}, #{foodAllowanceLicensePic}, #{acreage}, #{bankAddress}, #{bankCardName}, #{bankCardNo}, #{applyId})
   </insert>
 
   <insert id="batchSaveDistributor" parameterType="java.util.List">
-    insert into distributor(state, head, name, shop_name, shop_code, mobile, region_id, address, enabled, create_time, update_time, open_id, 
+    insert into distributor(parent_distributor_id, state, head, name, shop_name, shop_code, mobile, region_id, address, enabled, create_time, update_time, open_id, 
     fans_num, sold_num, business_license, business_license_pic, food_allowance_license, food_allowance_license_pic, acreage, bank_address, 
     bank_card_name, bank_card_no, apply_id)
     values
     <foreach collection="list" item="item" index="index" separator=",">
-      (#{item.state}, #{item.head}, #{item.name}, #{item.shopName}, #{item.shopCode}, #{item.mobile}, #{item.regionId}, #{item.address}, 
+      (#{item.parentDistributorId}, #{item.state}, #{item.head}, #{item.name}, #{item.shopName}, #{item.shopCode}, #{item.mobile}, #{item.regionId}, #{item.address}, 
       #{item.enabled}, #{item.createTime}, #{item.updateTime}, #{item.openId}, #{item.fansNum}, #{item.soldNum}, #{item.businessLicense}, 
       #{item.businessLicensePic}, #{item.foodAllowanceLicense}, #{item.foodAllowanceLicensePic}, #{item.acreage}, #{item.bankAddress}, 
       #{item.bankCardName}, #{item.bankCardNo}, #{item.applyId})
@@ -32,6 +32,7 @@
       <if test="shopCode != null and shopCode != ''">shop_code = #{shopCode},</if>
       <if test="mobile != null and mobile != ''">mobile = #{mobile},</if>
       <if test="regionId != null">region_id = #{regionId},</if>
+      <if test="parentDistributorId != null">parent_distributor_id = #{parentDistributorId},</if>
       <if test="address != null and address != ''">address = #{address},</if>
       <if test="enabled != null">enabled = #{enabled},</if>
       <if test="createTime != null">create_time = #{createTime},</if>
@@ -107,7 +108,7 @@
   </resultMap>
 
   <sql id="sql_column">
-    distributor_id, head, distributor.`name`, shop_name, shop_code, mobile, distributor.region_id, address, distributor.state, 
+    parent_distributor_id, distributor_id, head, distributor.`name`, shop_name, shop_code, mobile, distributor.region_id, address, distributor.state, 
     enabled, distributor.create_time, distributor.update_time, open_id, distributor.fans_num, 
     distributor.sold_num, r.`name` regionName, r.`name` regionName, ifnull(p.shortName, p.areaName) provinceName , 
     ifnull(c.shortName, c.areaName) cityName, ifnull(a.shortName, a.areaName) areaName, ifnull(t.shortName, t.areaName) townName,

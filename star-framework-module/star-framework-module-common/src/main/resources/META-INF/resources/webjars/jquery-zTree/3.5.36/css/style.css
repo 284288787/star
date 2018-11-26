@@ -99,8 +99,8 @@ div.content_wrap {
 ul.ztree {
 	border: 1px solid #c5c5c5;
 	background: #f0f6e4;
-	width: 290px;
-	height: 420px;
+	min-width: 290px;
+	/* height: 420px; */
 	overflow-y: hidden;
 	overflow-x: hidden;
 }

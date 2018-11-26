@@ -37,19 +37,23 @@
   </resultMap>
 
   <sql id="sql_column">
-    distributor_id, head, distributor.`name`, shop_name, shop_code, mobile, distributor.region_id, address, distributor.state, 
+    parent_distributor_id, distributor_id, head, distributor.`name`, shop_name, shop_code, mobile, distributor.region_id, address, distributor.state, 
     enabled, distributor.create_time, distributor.update_time, open_id, distributor.fans_num, 
     distributor.sold_num, r.`name` regionName, r.`name` regionName, ifnull(p.shortName, p.areaName) provinceName , 
     ifnull(c.shortName, c.areaName) cityName, ifnull(a.shortName, a.areaName) areaName, ifnull(t.shortName, t.areaName) townName,
     p.areaId provinceId , c.areaId cityId, a.areaId areaId, t.areaId townId,
     r.py, business_license, business_license_pic, food_allowance_license, food_allowance_license_pic, acreage, bank_address, 
-    bank_card_name, bank_card_no, apply_id
+    bank_card_name, bank_card_no, apply_id,
+    (select count(1) from distributor b where b.parent_distributor_id = distributor.distributor_id) childNum
   </sql>
 
   <sql id="sql_where">
     <trim prefix="WHERE" prefixOverrides="AND | OR">
       <if test="distributorId != null">
         and distributor_id = #{distributorId}
+      </if>
+      <if test="parentDistributorId != null">
+        and parent_distributor_id = #{parentDistributorId}
       </if>
       <if test="name != null and name != ''">
         and distributor.name like "%"#{name}"%"

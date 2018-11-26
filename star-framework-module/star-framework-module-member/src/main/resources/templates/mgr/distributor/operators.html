@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:star="http://star">
+<head>
+<title>分销商列表</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jquery-ui/jquery-ui.min.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jqGrid/css/ui.jqgrid.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/artDialog/skins/simple-star.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jquery-zTree/css/style.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jquery-zTree/css/zTreeStyle/zTreeStyle.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/buttons.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/pageList.css}" />
+<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/jquery-ui/jquery-ui.min.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/jqGrid/js/jquery.jqGrid.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/jquery-zTree/jquery.ztree.core.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/jquery-zTree/jquery.ztree.excheck.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/jquery-zTree/jquery.ztree.exedit.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/jqGrid/js/i18n/grid.locale-cn.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/artDialog/js/jquery.artDialog.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/artDialog/js/iframeTools.js}"></script>
+<style type="text/css">
+.zTreeDemoBackground{
+  height:800px; overflow:auto;
+}
+</style>
+</head>
+<body>
+  <div class="main-container data-container" id="main-container">
+    <table class="ztree">
+      <tr>
+        <td width="300px">
+          <div class="zTreeDemoBackground left">
+            <ul id="operatorsTree" class="ztree"></ul>
+          </div>
+        </td>
+        <td>
+          <div class="data-container">
+            <table id="grid-table"></table>
+            <div id="grid-pager"></div>
+          </div>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <script type="text/javascript" th:src="@{/webjars/star/js/star.authorize.js}"></script>
+  <script type="text/javascript" th:inline="javascript" star:authorize-uri="/distributor/editBefore/*">
+  addAuthorize("distributor-editBefore", true);
+  </script>
+  <script type="text/javascript" th:inline="javascript" star:authorize-uri="/distributor/disabled">
+  addAuthorize("distributor-disabled", true);
+  </script>
+  <script type="text/javascript" th:inline="javascript" star:authorize-uri="/distributor/enabled">
+  addAuthorize("distributor-enabled", true);
+  </script>
+  <script type="text/javascript" th:src="@{/webjars/star/js/star.list.comm.js}"></script>
+  <script type="text/javascript" th:src="@{/webjars/star/js/star.utils.js}"></script>
+  <script type="text/javascript" th:inline="javascript" th:src="@{/js/mgr/distributor/operators.list.js}"></script>
+  <script type="text/javascript" th:inline="javascript" th:src="@{/js/mgr/distributor/operators.ztree.js}"></script>
+</body>
+</html>

@@ -276,4 +276,21 @@ public class DistributorService implements ChooseDataIntf {
     }
     return distributorResponseDto;
   }
+
+  public void changeLevel(Long distributorId, Long parentDistributorId) {
+    if(parentDistributorId > 0) {
+      DistributorResponseDto parent = distributorCache.getDistributor(parentDistributorId);
+      if (null == parent) {
+        throw new StarServiceException(ApiCode.NO_EXISTS, "父级分销商不存在，请刷新页面");
+      }
+    }
+    DistributorResponseDto child = distributorCache.getDistributor(distributorId);
+    if (null == child) {
+      throw new StarServiceException(ApiCode.NO_EXISTS, "子分销商不存在，请刷新页面");
+    }
+    DistributorRequestDto distributorRequestDto = new DistributorRequestDto();
+    distributorRequestDto.setDistributorId(distributorId);
+    distributorRequestDto.setParentDistributorId(parentDistributorId);
+    this.distributorCache.updateDistributor(distributorRequestDto);
+  }
 }

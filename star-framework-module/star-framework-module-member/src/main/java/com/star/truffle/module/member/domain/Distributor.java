@@ -57,4 +57,6 @@ public class Distributor {
   private String bankCardNo;
   // 申请的Id
   private Long applyId;
+  // 上级分销ID 0表示一级分销
+  private Long parentDistributorId;
 }
