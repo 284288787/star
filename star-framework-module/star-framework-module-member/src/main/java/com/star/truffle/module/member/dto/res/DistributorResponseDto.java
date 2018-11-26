@@ -10,6 +10,7 @@ import com.star.truffle.module.member.domain.Distributor;
 public class DistributorResponseDto extends Distributor {
 
   private String regionName;
+  private String parentDistributorName;
   private Long provinceId;
   private String provinceName;
   private Long cityId;

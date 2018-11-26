@@ -1,5 +1,6 @@
 var basePath="/";
 var parentParams=artDialog.data('params');
+var nodes=artDialog.data('nodes');
 $(function(){
   new UtilsHandle({
     basePath: "/",
@@ -32,6 +33,17 @@ $(function(){
           r+=" -> "+rowObject.name;
           $("input[name=regionName]").val(r);
           $("input[name=regionId]").val(rowObject.regionId);
+        }
+      },
+      {
+        object: $("input[name=parentDistributor]"),
+        service: "distributorService",
+        title: "选择分销商",
+        width: "800px",
+        height: "550px",
+        callback: function(rowObject){
+          $("input[name=parentDistributor]").val(rowObject.name);
+          $("input[name=parentDistributorId]").val(rowObject.distributorId);
         }
       }
     ]
@@ -100,7 +112,8 @@ $(function(){
       dataType: 'json',
       success: function(res){
         if(res.code==0){
-          parentParams.query();
+          if(parentParams && parentParams.query) parentParams.query();
+          if(nodes && nodes.callback) nodes.callback(params.parentDistributorId);
           art.dialog.close();
         }else{
           artDialog.alert(res.msg)

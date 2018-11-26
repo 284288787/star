@@ -24,7 +24,7 @@
         <tr>
           <td class="titleTd100"><strong>分销商姓名：</strong></td>
           <td>
-            <input type="text" name="name" placeholder="分销商姓名" th:value="${distributorResponseDto.name}">
+            <input type="text" name="name" autocomplete="off" placeholder="分销商姓名" th:value="${distributorResponseDto.name}">
           </td>
         </tr>
         <tr>
@@ -36,7 +36,14 @@
         <tr>
           <td class="titleTd100"><strong>手机号：</strong></td>
           <td>
-            <input type="text" name="mobile" placeholder="手机号" th:value="${distributorResponseDto.mobile}">
+            <input type="text" name="mobile" autocomplete="off" placeholder="手机号" th:value="${distributorResponseDto.mobile}">
+          </td>
+        </tr>
+        <tr>
+          <td class="titleTd100"><strong>上级分销：</strong></td>
+          <td>
+            <input type="text" name="parentDistributor" placeholder="选择上级分销商" th:value="${distributorResponseDto.parentDistributorName == null ? '一级分销商' : distributorResponseDto.parentDistributorName}">
+            <input type="hidden" name="parentDistributorId" th:value="${distributorResponseDto.parentDistributorId}">
           </td>
         </tr>
         <tr>
@@ -49,7 +56,7 @@
         <tr>
           <td class="titleTd100"><strong>详细地址：</strong></td>
           <td>
-            <input type="text" name="address" class="ipt400" placeholder="详细地址，例如：黄兴路步行街123号" th:value="${distributorResponseDto.address}">
+            <input type="text" name="address" autocomplete="off" class="ipt400" placeholder="详细地址，例如：黄兴路步行街123号" th:value="${distributorResponseDto.address}">
           </td>
         </tr>
         <tr>

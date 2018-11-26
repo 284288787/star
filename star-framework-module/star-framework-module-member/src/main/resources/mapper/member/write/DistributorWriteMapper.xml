@@ -114,7 +114,9 @@
     ifnull(c.shortName, c.areaName) cityName, ifnull(a.shortName, a.areaName) areaName, ifnull(t.shortName, t.areaName) townName,
     p.areaId provinceId , c.areaId cityId, a.areaId areaId, t.areaId townId,
     r.py, business_license, business_license_pic, food_allowance_license, food_allowance_license_pic, acreage, bank_address, 
-    bank_card_name, bank_card_no, apply_id
+    bank_card_name, bank_card_no, apply_id,
+    (select count(1) from distributor b where b.parent_distributor_id = distributor.distributor_id) childNum,
+    (select c.name from distributor c where c.distributor_id = distributor.parent_distributor_id) parentDistributorName
   </sql>
 
   <select id="getDistributor" resultType="com.star.truffle.module.member.dto.res.DistributorResponseDto">

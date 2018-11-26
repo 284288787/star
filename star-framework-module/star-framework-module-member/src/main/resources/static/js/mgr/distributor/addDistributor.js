@@ -1,6 +1,11 @@
 var basePath="/";
 var parentParams=artDialog.data('params');
+var nodes=artDialog.data('nodes');  //从tree添加
 $(function(){
+  if(nodes){
+    $("input[name=parentDistributor]").val(nodes.parentNode.id == 0 ? '一级分销商' : nodes.parentNode.name);
+    $("input[name=parentDistributorId]").val(nodes.parentNode.id);
+  }
   new UtilsHandle({
     basePath: "/",
     uploadImages:{uploadFileId: 'uploadImage', multiple: true, items: [{
@@ -32,6 +37,17 @@ $(function(){
           r+=" -> "+rowObject.name;
           $("input[name=regionName]").val(r);
           $("input[name=regionId]").val(rowObject.regionId);
+        }
+      },
+      {
+        object: $("input[name=parentDistributor]"),
+        service: "distributorService",
+        title: "选择分销商",
+        width: "800px",
+        height: "550px",
+        callback: function(rowObject){
+          $("input[name=parentDistributor]").val(rowObject.name);
+          $("input[name=parentDistributorId]").val(rowObject.distributorId);
         }
       }
     ]
@@ -100,7 +116,7 @@ $(function(){
       dataType: 'json',
       success: function(res){
         if(res.code==0){
-          parentParams.query();
+          if(parentParams && parentParams.query) parentParams.query();
           art.dialog.close();
         }else{
           artDialog.alert(res.msg)

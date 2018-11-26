@@ -44,6 +44,10 @@ public class DistributorService implements ChooseDataIntf {
   public GridPagerResponse getDatas(Map<String, Object> condition, Page pager) {
     DistributorRequestDto distributorRequestDto = starJson.str2obj(starJson.obj2string(condition), DistributorRequestDto.class);
     List<DistributorResponseDto> list = this.distributorCache.queryDistributor(distributorRequestDto);
+    DistributorResponseDto yiji = new DistributorResponseDto();
+    yiji.setDistributorId(0L);
+    yiji.setName("一级分销商");
+    list.add(0, yiji);
     Long count = distributorCache.queryDistributorCount(distributorRequestDto);
     long total = count % pager.getPageSize() == 0 ? count / pager.getPageSize() : count / pager.getPageSize() + 1;
     return new GridPagerResponse(pager.getPageNum(), total, count, list);

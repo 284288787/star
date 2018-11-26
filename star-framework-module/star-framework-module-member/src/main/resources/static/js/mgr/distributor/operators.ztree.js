@@ -179,11 +179,13 @@ function addHoverDom(treeId, treeNode) {
 	var btn = $("#addBtn_"+treeNode.tId);
 	if (btn) btn.bind("click", function(){
 		var zTree = $.fn.zTree.getZTreeObj(treeId);
-		artDialog.data("params", {'parentNode': treeNode, 'zTree': zTree});
+		artDialog.data("nodes", {'parentNode': treeNode, 'zTree': zTree, 'callback': function(){
+      zTree.reAsyncChildNodes(treeNode, "refresh", false);
+    }});
 		artDialog.open('/common/mgr/distributor/addDistributor', {
-      title : "新增 分销商",
+      title : "新增下级分销商",
       width : "700px",
-      height : "500px",
+      height : "600px",
       drag : true,
       resize : true,
       lock : true
@@ -196,15 +198,36 @@ function addHoverDom(treeId, treeNode) {
 	var editBtn = $("#editBtn_"+treeNode.tId);
 	if (editBtn) editBtn.bind("click", function(){
 		var zTree = $.fn.zTree.getZTreeObj(treeId);
-		artDialog.data("params", {'parentNode': treeNode.getParentNode(), 'zTree': zTree});
-		artDialog.open("/resource/editBefore/"+treeNode.id,{
-			title: "编辑["+treeNode.name+"]的子菜单["+treeNode.name+"]",
-			width : "400px",
-			height: "300px",
-			drag:true,
-			resize:false,
-			lock:true
-		});
+		artDialog.data("nodes", {'parentNode': treeNode.getParentNode(), 'zTree': zTree, 'callback': function(pid){
+		  if(pid == 0){
+		    zTree.refresh();
+		    return ;
+		  }
+		  var nodes = zTree.getNodesByParam("id", pid);
+		  nodes[0].isParent = true;
+		  zTree.updateNode(nodes[0]);
+		  zTree.reAsyncChildNodes(nodes[0], "refresh", false);
+		  zTree.reAsyncChildNodes(treeNode.getParentNode(), "refresh", false, function(){
+		    var folderNodes = zTree.getNodesByFilter(function (node) { return true}, false, treeNode.getParentNode());
+		    if(folderNodes.length == 0){
+		      treeNode.getParentNode().isParent = false;
+		    }else{
+		      treeNode.getParentNode().isParent = true;
+		    }
+		    zTree.updateNode(treeNode.getParentNode());
+		  });
+		}});
+    artDialog.open("/distributor/editBefore/" + treeNode.id, {
+      title : "编辑" + treeNode.name,
+      width : "700px",
+      height : "600px",
+      drag : true,
+      resize : true,
+      lock : true
+    /*
+     * , close:function(){ document.location.reload(); }
+     */
+    });
 		return false;
 	});
 	var removeBtn = $("#removeBtn_"+treeNode.tId);
