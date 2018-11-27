@@ -31,7 +31,7 @@
         and distributor_total.distributor_id = #{distributorId}
       </if>
       <if test="day != null">
-        and TO_DAYS( NOW() ) - TO_DAYS(create_time) = #{day}
+        and TO_DAYS( NOW() ) - TO_DAYS(distributor_total.create_time) = #{day}
       </if>
       <if test="beginTime != null and beginTime != ''">
         and distributor_total.create_time &gt;= #{beginTime}
@@ -49,7 +49,7 @@
 			sum(kickback_second) kickback_second, sum(kickback_first) kickback_first, sum(unuse_despatch_num) unuse_despatch_num, sum(unbuy_self_num) unbuy_self_num
 		from distributor_total 
 		<if test="day != null">
-			where TO_DAYS( NOW() ) - TO_DAYS(create_time) = #{day}
+			where TO_DAYS( NOW() ) - TO_DAYS(distributor_total.create_time) = #{day}
 		</if>
 		GROUP BY create_time
   </select>
