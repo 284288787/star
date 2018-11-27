@@ -29,17 +29,78 @@
 .listTable{
   margin-left:320px;
 }
+.infoDiv{
+}
+.infoDiv .title{
+  height:24px;
+  line-height:24px;
+  font-size: 14px;
+  font-weight:bold;
+  padding: 0 12px;
+}
 </style>
 </head>
 <body>
   <div class="main-container data-container" id="main-container">
-	   <div class="zTreeDemoBackground left" >
-       <ul id="operatorsTree" class="ztree"></ul>
-     </div>
-	   <div class="data-container listTable">
-       <table id="grid-table"></table>
-       <div id="grid-pager"></div>
-     </div>
+    <div class="zTreeDemoBackground left" >
+      <ul id="operatorsTree" class="ztree"></ul>
+    </div>
+    <div class="data-container listTable">
+      <div class="infoDiv">
+        <p class="title">程程，有下级分销商0人</p>
+        <p class="title">今日：二级分销提成 0.00 元，一级分销提成 0.00 元</p>
+        <p class="title">七日：二级分销提成 0.00 元，一级分销提成 0.00 元</p>
+        <p class="title">总共：二级分销提成 0.00 元，一级分销提成 0.00 元</p>
+        <hr>
+      </div>
+      <div class="search-container">
+      <form id="queryForm">
+        <span>姓名：
+          <input type="text" name="name" placeholder="姓名"/>
+        </span> 
+        <span>店铺名称：
+          <input type="text" name="shopName" placeholder="店铺名称"/>
+        </span> 
+        <span>店铺编码：
+          <input type="text" name="shopCode" placeholder="店铺编码"/>
+        </span> 
+        <span>手机号：
+          <input type="text" name="mobile" placeholder="手机号"/>
+        </span> 
+        <span>所属地区：
+          <input type="text" name="areaName" placeholder="省 或市 或区">
+          <input type="hidden" id="condition">
+          <input type="hidden" name="provinceId">
+          <input type="hidden" name="cityId">
+          <input type="hidden" name="areaId">
+          <input type="hidden" name="townId">
+        </span> 
+        <span>分销区域：
+          <input type="text" name="regionName" placeholder="分销区域"/>
+          <input type="hidden" name="regionId">
+        </span> 
+        <span>是否可用：
+          <select name="enabled">
+            <option value="">全部</option>
+            <option value="1">可用</option>
+            <option value="0">禁用</option>
+          </select>
+        </span> 
+        <span> 
+          <a onclick="distributorHandle.query()" class="button blue">查询</a> 
+          <a onclick="distributorHandle.reset()" class="button grey">清空</a>
+        </span>
+      </form>
+    </div>
+    <div class="btnGroup">
+      <a star:authorize-uri="/distributor/add" onclick="distributorHandle.addNew()" class="button grey">新增</a>
+      <a star:authorize-uri="/distributor/enabled" onclick="distributorHandle.enabled()" class="button blue">启用</a>
+      <a star:authorize-uri="/distributor/disabled" onclick="distributorHandle.disabled()" class="button yellow">禁用</a>
+      <a star:authorize-uri="/distributor/deleted" onclick="distributorHandle.remove()" class="button red">删除</a> 
+    </div>
+      <table id="grid-table"></table>
+      <div id="grid-pager"></div>
+    </div>
   </div>
   <script type="text/javascript" th:src="@{/webjars/star/js/star.authorize.js}"></script>
   <script type="text/javascript" th:inline="javascript" star:authorize-uri="/distributor/editBefore/*">

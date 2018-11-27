@@ -6,7 +6,7 @@ var distributorHandle = new ListHandle({
   formId: '#queryForm',
   entityName: '分销商',
   winWidth: '700px',
-  winHeight: '400px',
+  winHeight: '600px',
   primaryKey: 'distributorId',
   urls:{
     list: basePath+'distributor/list',
@@ -145,7 +145,7 @@ $(function(){
   var rowList = [10, 20, 30, 50];
   var rownumbers = true;
   var multiselect = true;
-  var config={rowNum: 50, caption: "分销商列表",dataType: 'local', autowidth: false, colNames: colNames, colModel: colModel, rowList: rowList, rownumbers: rownumbers, multiselect: multiselect};
+  var config={rowNum: 50, caption: "分销商列表",dataType: 'local', autowidth: false, height: '366px', colNames: colNames, colModel: colModel, rowList: rowList, rownumbers: rownumbers, multiselect: multiselect};
   distributorHandle.init(config, {
     jsonReader: {
       repeatitems : false

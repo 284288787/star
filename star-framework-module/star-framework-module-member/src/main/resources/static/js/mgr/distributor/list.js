@@ -6,7 +6,7 @@ var distributorHandle = new ListHandle({
   formId: '#queryForm',
   entityName: '分销商',
   winWidth: '700px',
-  winHeight: '400px',
+  winHeight: '600px',
   primaryKey: 'distributorId',
   urls:{
     list: basePath+'distributor/list',

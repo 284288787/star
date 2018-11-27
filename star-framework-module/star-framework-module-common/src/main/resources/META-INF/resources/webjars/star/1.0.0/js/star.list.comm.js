@@ -8,6 +8,7 @@ function ListHandle(options, funcs) {
 	handle.options = options;
 	handle.config = {};
 	handle.authorize = {};
+	handle.queryParams = {};
 
 	handle.addAuthorize = function(key, value) {
 		handle.authorize[key] = value;
@@ -236,6 +237,9 @@ function ListHandle(options, funcs) {
 	}
 	handle.query = function() {
 		var params = this.getQueryParams();
+		if(handle.queryParams){
+		  $.extend(params, handle.queryParams);
+		}
 		$(options.tableId).jqGrid('setGridParam', {
 			datatype : 'json',
 			postData : params,
@@ -243,6 +247,8 @@ function ListHandle(options, funcs) {
 		}, true).trigger("reloadGrid");
 	}
 	handle.queryByParams = function(params) {
+	  if(params) handle.queryParams = params;
+	  else params = handle.queryParams;
 		$(options.tableId).jqGrid('setGridParam', {
 			datatype : 'json',
 			postData : params,
