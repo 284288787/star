@@ -28,7 +28,6 @@ import com.star.truffle.core.web.ApiResult;
 import com.star.truffle.module.order.domain.Order;
 import com.star.truffle.module.order.domain.OrderDetail;
 import com.star.truffle.module.order.dto.req.OrderRequestDto;
-import com.star.truffle.module.order.dto.res.DistributorTotalResponseDto;
 import com.star.truffle.module.order.dto.res.OrderResponseDto;
 import com.star.truffle.module.order.service.OrderService;
 
@@ -211,9 +210,9 @@ public class OrderController {
   
   @ResponseBody
   @RequestMapping(value = "/getDistributorTotal", method = RequestMethod.POST)
-  public ApiResult<List<DistributorTotalResponseDto>> getDistributorTotal(Long distributorId, Integer day) {
+  public ApiResult<Map<String, Object>> getDistributorTotal(Long distributorId) {
     try {
-      List<DistributorTotalResponseDto> dtrd = orderService.getDistributorTotal(distributorId, day);
+      Map<String, Object> dtrd = orderService.getDistributorTotal(distributorId);
       return ApiResult.success(dtrd);
     } catch (StarServiceException e) {
       return ApiResult.fail(e.getCode(), e.getMsg());

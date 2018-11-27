@@ -297,4 +297,8 @@ public class DistributorService implements ChooseDataIntf {
     distributorRequestDto.setParentDistributorId(parentDistributorId);
     this.distributorCache.updateDistributor(distributorRequestDto);
   }
+
+  public List<DistributorResponseDto> getDistributorsByParentId(Long distributorId) {
+    return distributorCache.getDistributorsByParentId(distributorId);
+  }
 }

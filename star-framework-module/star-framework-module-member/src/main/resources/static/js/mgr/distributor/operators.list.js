@@ -16,7 +16,46 @@ var distributorHandle = new ListHandle({
     disabled: basePath+'distributor/disabled',
     deleted: basePath+'distributor/deleted',
   }
-},{});
+},{
+  total: function(distributorId, name){
+    $(".infoDiv span").text("0");
+    $(".infoDiv .name").text(name);
+    $(".infoDiv").show();
+    $.ajax({
+      url: basePath+'order/getDistributorTotal',
+      data: {distributorId: distributorId},
+      type: 'post',
+      dataType: 'json',
+      success: function(res){
+        if(res.code == 0){
+          if(distributorId == 0) $(".infoDiv .today, .infoDiv .yesterday").hide();
+          else $(".infoDiv .today, .infoDiv .yesterday").show();
+          $(".infoDiv .num").text(res.data.num);
+          var today = res.data.today;
+          if(today){
+            for(var k in today){
+              var txt = today[k];
+              if(k == 'kickbackSecond' || k == 'kickbackFirst')
+                txt = (txt / 100.0).toFixed(2);
+              $(".infoDiv .today ." + k).text(txt);
+            }
+          }
+          var yesterday = res.data.yesterday;
+          if(yesterday){
+            for(var k in yesterday){
+              var txt = today[k];
+              if(k == 'kickbackSecond' || k == 'kickbackFirst')
+                txt = (txt / 100.0).toFixed(2);
+              $(".infoDiv .yesterday ." + k).text(txt);
+            }
+          }
+        }else{
+          artDialog.alert(res.msg)
+        }
+      }
+    });
+  }
+});
 new UtilsHandle({
   basePath: basePath,
   chooseArea: {items: [

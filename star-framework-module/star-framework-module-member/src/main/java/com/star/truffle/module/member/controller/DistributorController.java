@@ -163,5 +163,4 @@ public class DistributorController {
       return ApiResult.fail(ApiCode.SYSTEM_ERROR);
     }
   }
-
 }

@@ -39,6 +39,7 @@ import com.star.truffle.module.order.constant.OrderTypeEnum;
 import com.star.truffle.module.order.domain.DistributorTotal;
 import com.star.truffle.module.order.domain.Order;
 import com.star.truffle.module.order.domain.OrderDetail;
+import com.star.truffle.module.order.dto.req.DistributorTotalRequestDto;
 import com.star.truffle.module.order.dto.req.OrderDetailRequestDto;
 import com.star.truffle.module.order.dto.req.OrderRequestDto;
 import com.star.truffle.module.order.dto.req.ShoppingCartRequestDto;
@@ -599,12 +600,22 @@ public class OrderService implements ChooseDataIntf {
       distributorTotalCache.batchSaveDistributorTotal(distributorTotals);
     }
   }
-
-  public List<DistributorTotalResponseDto> getDistributorTotal(Long distributorId, Integer day) {
-    if (null == day) {
-      day = 0;
+  
+  public Map<String, Object> getDistributorTotal(Long distributorId) {
+    Map<String, Object> res = new HashMap<>();
+    List<DistributorResponseDto> list = distributorService.getDistributorsByParentId(distributorId);
+    res.put("num", list.size());
+    List<DistributorTotalResponseDto> today = orderCache.totalOrderByDistributor(distributorId, 0);
+    if (null != today && today.size() > 0) {
+      res.put("today", today.get(0));
+      DistributorTotalRequestDto distributorTotalRequestDto = new DistributorTotalRequestDto();
+      distributorTotalRequestDto.setDistributorId(distributorId);
+      distributorTotalRequestDto.setDay(1);
+      List<DistributorTotalResponseDto> yesterday = distributorTotalCache.queryDistributorTotal(distributorTotalRequestDto);
+      if (null != yesterday && yesterday.size() > 0) {
+        res.put("yesterday", yesterday.get(0));
+      }
     }
-    List<DistributorTotalResponseDto> list = orderCache.totalOrderByDistributor(distributorId, day);
-    return list;
+    return res;
   }
 }

@@ -164,6 +164,7 @@ function onClick(event, treeId, treeNode, clickFlag){
 	distributorHandle.options.name = treeNode.name;
 	distributorHandle.queryByParams({parentDistributorId: treeNode.id});
 	distributorHandle.setCaption("[" + treeNode.name + "]的下级分销商");
+	distributorHandle.total(treeNode.id, treeNode.name);
 }
 
 var newCount = 1;
