@@ -92,4 +92,13 @@ public class OrderCache {
   public List<DistributorTotalResponseDto> totalOrderByDistributor(Long distributorId, int day) {
     return orderReadDao.totalOrderByDistributor(distributorId, day);
   }
+
+  /**
+   * 统计今天的订单情况
+   * @param day
+   * @return
+   */
+  public DistributorTotalResponseDto totalOrderBy(int day) {
+    return orderReadDao.totalOrderBy(day);
+  }
 }

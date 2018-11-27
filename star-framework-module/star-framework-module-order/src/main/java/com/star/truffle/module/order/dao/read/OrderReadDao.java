@@ -47,4 +47,6 @@ public interface OrderReadDao {
    * @return
    */
   public List<DistributorTotalResponseDto> totalOrderByDistributor(@Param("distributorId") Long distributorId, @Param("day") Integer day);
+
+  public DistributorTotalResponseDto totalOrderBy(@Param("day") Integer day);
 }

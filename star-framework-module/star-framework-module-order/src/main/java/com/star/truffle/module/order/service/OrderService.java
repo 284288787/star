@@ -605,13 +605,23 @@ public class OrderService implements ChooseDataIntf {
     Map<String, Object> res = new HashMap<>();
     List<DistributorResponseDto> list = distributorService.getDistributorsByParentId(distributorId);
     res.put("num", list.size());
-    List<DistributorTotalResponseDto> today = orderCache.totalOrderByDistributor(distributorId, 0);
-    if (null != today && today.size() > 0) {
-      res.put("today", today.get(0));
-      DistributorTotalRequestDto distributorTotalRequestDto = new DistributorTotalRequestDto();
-      distributorTotalRequestDto.setDistributorId(distributorId);
-      distributorTotalRequestDto.setDay(1);
-      List<DistributorTotalResponseDto> yesterday = distributorTotalCache.queryDistributorTotal(distributorTotalRequestDto);
+    if (distributorId > 0) {
+      List<DistributorTotalResponseDto> today = orderCache.totalOrderByDistributor(distributorId, 0);
+      if (null != today && today.size() > 0) {
+        res.put("today", today.get(0));
+        DistributorTotalRequestDto distributorTotalRequestDto = new DistributorTotalRequestDto();
+        distributorTotalRequestDto.setDistributorId(distributorId);
+        distributorTotalRequestDto.setDay(1);
+        List<DistributorTotalResponseDto> yesterday = distributorTotalCache.queryDistributorTotal(distributorTotalRequestDto);
+        if (null != yesterday && yesterday.size() > 0) {
+          res.put("yesterday", yesterday.get(0));
+        }
+      }
+    }else {
+      DistributorTotalResponseDto today = orderCache.totalOrderBy(0);
+      today.setDistributorId(distributorId);
+      res.put("today", today);
+      List<DistributorTotalResponseDto> yesterday = distributorTotalCache.totalDistributorTotal(1);
       if (null != yesterday && yesterday.size() > 0) {
         res.put("yesterday", yesterday.get(0));
       }

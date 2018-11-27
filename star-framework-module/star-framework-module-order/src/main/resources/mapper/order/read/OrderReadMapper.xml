@@ -319,11 +319,11 @@
   <select id="totalOrderByDistributor" resultMap="distributorTotalMap">
   	select 
       r.distributor_id, r.create_date create_time, count(DISTINCT r.order_id) order_num, 
-  IFNULL(sum(d.count),0) product_num, count(DISTINCT r.member_id) pay_people_num, 
-  IFNULL(sum(IF(r.type=1,1,0)),0) buy_self_num, IFNULL(sum(IF(r.delivery_type=2,1,0)),0) use_despatch_num,
-  IFNULL(sum(IF(r.type=2,1,0)),0) unbuy_self_num, IFNULL(sum(IF(r.delivery_type=1,1,0)),0) unuse_despatch_num,
-  IFNULL(sum(r.total_money),01) pay_money_of_product, IFNULL(sum(r.despatch_money),0) pay_money_of_despatch,
-  IFNULL(sum(r.total_brokerage),0) kickback_second, IFNULL(sum(r.total_brokerage_first),0) kickback_first
+		  IFNULL(sum(d.count),0) product_num, count(DISTINCT r.member_id) pay_people_num, 
+		  IFNULL(sum(IF(r.type=1,1,0)),0) buy_self_num, IFNULL(sum(IF(r.delivery_type=2,1,0)),0) use_despatch_num,
+		  IFNULL(sum(IF(r.type=2,1,0)),0) unbuy_self_num, IFNULL(sum(IF(r.delivery_type=1,1,0)),0) unuse_despatch_num,
+		  IFNULL(sum(r.total_money),01) pay_money_of_product, IFNULL(sum(r.despatch_money),0) pay_money_of_despatch,
+		  IFNULL(sum(r.total_brokerage),0) kickback_second, IFNULL(sum(r.total_brokerage_first),0) kickback_first
     from (
       SELECT 
         o.order_id, o.type, o.member_id, o.delivery_type, o.distributor_id, o.total_money, o.despatch_money, o.total_brokerage, o.total_brokerage_first, o.create_time, DATE_FORMAT(o.create_time, '%Y-%m-%d') create_date
@@ -337,5 +337,23 @@
     ) d on r.order_id = d.order_id
     GROUP BY r.distributor_id
     order by 3 desc
+  </select>
+  
+  <select id="totalOrderBy" resultMap="distributorTotalMap">
+  	select 
+      r.create_date create_time, count(DISTINCT r.order_id) order_num, 
+		  IFNULL(sum(d.count),0) product_num, count(DISTINCT r.member_id) pay_people_num, 
+		  IFNULL(sum(IF(r.type=1,1,0)),0) buy_self_num, IFNULL(sum(IF(r.delivery_type=2,1,0)),0) use_despatch_num,
+		  IFNULL(sum(IF(r.type=2,1,0)),0) unbuy_self_num, IFNULL(sum(IF(r.delivery_type=1,1,0)),0) unuse_despatch_num,
+		  IFNULL(sum(r.total_money),01) pay_money_of_product, IFNULL(sum(r.despatch_money),0) pay_money_of_despatch,
+		  IFNULL(sum(r.total_brokerage),0) kickback_second, IFNULL(sum(r.total_brokerage_first),0) kickback_first
+    from (
+      SELECT 
+        o.order_id, o.type, o.member_id, o.delivery_type, o.distributor_id, o.total_money, o.despatch_money, o.total_brokerage, o.total_brokerage_first, o.create_time, DATE_FORMAT(o.create_time, '%Y-%m-%d') create_date
+      from `order` o where o.state in (2, 3) and TO_DAYS( NOW() ) - TO_DAYS(o.create_time) = #{day}
+    ) r
+    INNER JOIN (
+      SELECT SUM(e.count) count, e.order_id from order_detail e GROUP BY e.order_id
+    ) d on r.order_id = d.order_id
   </select>
 </mapper>

@@ -13,4 +13,7 @@ public class DistributorTotalRequestDto extends DistributorTotal {
   private Page pager;
   
   private Integer day;
+  
+  private String beginTime;
+  private String endTime;
 }

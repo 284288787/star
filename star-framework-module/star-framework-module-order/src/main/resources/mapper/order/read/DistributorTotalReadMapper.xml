@@ -9,7 +9,7 @@
     <result column="product_num" property="productNum" />
     <result column="pay_people_num" property="payPeopleNum" />
     <result column="use_despatch_num" property="useDespatchNum" />
-    <result column="_buy_self_num" property="BuySelfNum" />
+    <result column="buy_self_num" property="buySelfNum" />
     <result column="pay_money_of_product" property="payMoneyOfProduct" />
     <result column="pay_money_of_despatch" property="payMoneyOfDespatch" />
     <result column="kickback_second" property="kickbackSecond" />
@@ -17,8 +17,9 @@
   </resultMap>
 
   <sql id="sql_column">
-    id, distributor_id, create_time, order_num, product_num, pay_people_num, use_despatch_num, buy_self_num, 
-    pay_money_of_product, pay_money_of_despatch, kickback_second, kickback_first, unuse_despatch_num, unbuy_self_num
+    id, distributor_total.distributor_id, distributor_total.create_time, order_num, product_num, pay_people_num, use_despatch_num, buy_self_num, 
+    pay_money_of_product, pay_money_of_despatch, kickback_second, kickback_first, unuse_despatch_num, unbuy_self_num,
+    d.name distributor_name
   </sql>
 
   <sql id="sql_where">
@@ -27,23 +28,42 @@
         and id = #{id}
       </if>
       <if test="distributorId != null">
-        and distributor_id = #{distributorId}
+        and distributor_total.distributor_id = #{distributorId}
       </if>
       <if test="day != null">
         and TO_DAYS( NOW() ) - TO_DAYS(create_time) = #{day}
       </if>
+      <if test="beginTime != null and beginTime != ''">
+        and distributor_total.create_time &gt;= #{beginTime}
+      </if>
+      <if test="endTime != null and endTime != ''">
+        and distributor_total.create_time &lt;= #{endTime}
+      </if>
     </trim>
   </sql>
+
+  <select id="totalDistributorTotal" resultMap="distributorTotalResponseDtoResultMap">
+    select 
+			create_time, sum(order_num) order_num, sum(product_num) product_num, sum(pay_people_num) pay_people_num, sum(use_despatch_num) use_despatch_num, 
+			sum(buy_self_num) buy_self_num, sum(pay_money_of_product) pay_money_of_product, sum(pay_money_of_despatch) pay_money_of_despatch, 
+			sum(kickback_second) kickback_second, sum(kickback_first) kickback_first, sum(unuse_despatch_num) unuse_despatch_num, sum(unbuy_self_num) unbuy_self_num
+		from distributor_total 
+		<if test="day != null">
+			where TO_DAYS( NOW() ) - TO_DAYS(create_time) = #{day}
+		</if>
+		GROUP BY create_time
+  </select>
 
   <select id="queryDistributorTotal" resultMap="distributorTotalResponseDtoResultMap">
     select
     <include refid="sql_column" />
     from distributor_total
-    <include refid="sql_where" />
+    inner join distributor d on d.distributor_id = distributor_total.distributor_id
+    <include refid="sql_where" /> 
     order by
     <choose>
       <when test="pager != null and pager.orderBy != null and pager.orderBy != ''">${pager.orderBy}</when>
-      <otherwise>id</otherwise>
+      <otherwise>distributor_total.create_time</otherwise>
     </choose>
     <choose>
       <when test="pager != null and pager.orderType != null and pager.orderType != ''">${pager.orderType}</when>
@@ -58,6 +78,7 @@
     select
     count(1)
     from distributor_total
+    inner join distributor d on d.distributor_id = distributor_total.distributor_id
     <include refid="sql_where" />
   </select>
 </mapper>

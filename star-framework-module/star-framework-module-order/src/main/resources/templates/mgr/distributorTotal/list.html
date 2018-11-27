@@ -21,7 +21,14 @@
     <div class="search-container">
       <form id="queryForm">
         <span>分销商：
-          <input type="text" name="distributorId" placeholder="分销商"/>
+          <input type="text" name="distributorName" autocomplete="off" placeholder="选择分销商"/>
+          <input type="hidden" name="distributorId"/>
+        </span> 
+        <span>下单日期：
+          <input type="text" class="Wdate" id="beginTime" name="beginTime" placeholder="起始日期" 
+                onclick="WdatePicker({startDate:'%y-%M-%d',isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd',alwaysUseStartDate:true})"> 
+          <input type="text" class="Wdate" id="endTime" name="endTime" placeholder="终止日期" 
+                onclick="WdatePicker({minDate:'#F{$dp.$D(\'beginTime\')}',isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd'})"> 
         </span> 
         <span> 
           <a onclick="distributorTotalHandle.query()" class="button blue">查询</a> 
@@ -40,6 +47,7 @@
       <div id="grid-pager"></div>
     </div>
   </div>
+  <script type="text/javascript" th:src="@{/webjars/My97DatePicker/WdatePicker.js}"></script>
   <script type="text/javascript" th:src="@{/webjars/star/js/star.authorize.js}"></script>
   <script type="text/javascript" th:inline="javascript" star:authorize-uri="/distributorTotal/editBefore/*">
   addAuthorize("distributorTotal-editBefore", true);
@@ -51,6 +59,7 @@
   addAuthorize("distributorTotal-enabled", true);
   </script>
   <script type="text/javascript" th:src="@{/webjars/star/js/star.list.comm.js}"></script>
+  <script type="text/javascript" th:src="@{/webjars/star/js/star.utils.js}"></script>
   <script type="text/javascript" th:inline="javascript" th:src="@{/js/mgr/distributorTotal/list.js}"></script>
 </body>
 </html>

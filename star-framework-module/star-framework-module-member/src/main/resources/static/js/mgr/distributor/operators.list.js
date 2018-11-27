@@ -28,8 +28,6 @@ var distributorHandle = new ListHandle({
       dataType: 'json',
       success: function(res){
         if(res.code == 0){
-          if(distributorId == 0) $(".infoDiv .today, .infoDiv .yesterday").hide();
-          else $(".infoDiv .today, .infoDiv .yesterday").show();
           $(".infoDiv .num").text(res.data.num);
           var today = res.data.today;
           if(today){
@@ -43,7 +41,7 @@ var distributorHandle = new ListHandle({
           var yesterday = res.data.yesterday;
           if(yesterday){
             for(var k in yesterday){
-              var txt = today[k];
+              var txt = yesterday[k];
               if(k == 'kickbackSecond' || k == 'kickbackFirst')
                 txt = (txt / 100.0).toFixed(2);
               $(".infoDiv .yesterday ." + k).text(txt);

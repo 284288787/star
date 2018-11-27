@@ -42,4 +42,8 @@ public class DistributorTotalCache {
     this.distributorTotalWriteDao.deleteDistributorTotalBy(day);
   }
 
+  public List<DistributorTotalResponseDto> totalDistributorTotal(Integer day) {
+    return distributorTotalReadDao.totalDistributorTotal(day);
+  }
+
 }
