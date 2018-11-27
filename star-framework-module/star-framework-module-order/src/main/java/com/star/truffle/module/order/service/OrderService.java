@@ -28,6 +28,7 @@ import com.star.truffle.module.member.dto.res.DistributorResponseDto;
 import com.star.truffle.module.member.dto.res.MemberResponseDto;
 import com.star.truffle.module.member.service.DistributorService;
 import com.star.truffle.module.member.service.MemberService;
+import com.star.truffle.module.order.cache.DistributorTotalCache;
 import com.star.truffle.module.order.cache.OrderCache;
 import com.star.truffle.module.order.cache.OrderDetailCache;
 import com.star.truffle.module.order.constant.DeleteUserTypeEnum;
@@ -35,12 +36,14 @@ import com.star.truffle.module.order.constant.DeliveryTypeEnum;
 import com.star.truffle.module.order.constant.OrderProductStateEnum;
 import com.star.truffle.module.order.constant.OrderStateEnum;
 import com.star.truffle.module.order.constant.OrderTypeEnum;
+import com.star.truffle.module.order.domain.DistributorTotal;
 import com.star.truffle.module.order.domain.Order;
 import com.star.truffle.module.order.domain.OrderDetail;
 import com.star.truffle.module.order.dto.req.OrderDetailRequestDto;
 import com.star.truffle.module.order.dto.req.OrderRequestDto;
 import com.star.truffle.module.order.dto.req.ShoppingCartRequestDto;
 import com.star.truffle.module.order.dto.res.DeliveryAddressResponseDto;
+import com.star.truffle.module.order.dto.res.DistributorTotalResponseDto;
 import com.star.truffle.module.order.dto.res.OrderDetailResponseDto;
 import com.star.truffle.module.order.dto.res.OrderResponseDto;
 import com.star.truffle.module.order.dto.res.OrderTotal;
@@ -72,6 +75,8 @@ public class OrderService implements ChooseDataIntf {
   private ProductService productService;
   @Autowired
   private ShoppingCartService shoppingCartService;
+  @Autowired
+  private DistributorTotalCache distributorTotalCache;
   
   
   public Long saveOrder(Order order) {
@@ -106,6 +111,7 @@ public class OrderService implements ChooseDataIntf {
     }
     Integer totalMoney = 0;
     Integer totalBrokerage = 0;
+    Integer totalBrokerageFirst = 0;
     List<OrderDetail> details = orderRequestDto.getDetails();
     for (OrderDetail detail : details) {
       ProductResponseDto product = this.productService.getProduct(detail.getProductId());
@@ -117,17 +123,20 @@ public class OrderService implements ChooseDataIntf {
       detail.setOriginalPrice(product.getOriginalPrice());
       detail.setPrice(product.getPrice());
       detail.setBrokerage(product.getBrokerageType() == BrokerageTypeEnum.money.type() ? product.getBrokerageValue() : Double.valueOf((product.getPrice() / 100.0) * (product.getBrokerageValue() / 100.0) * 100).intValue());
+      detail.setBrokerageFirst(product.getBrokerageFirst());
       detail.setPickupTime(product.getPickupTime());
       detail.setSpecification(product.getSpecification());
       detail.setProductInfo(starJson.obj2string(product));
       totalMoney += detail.getPrice() * detail.getCount();
       totalBrokerage += detail.getBrokerage() * detail.getCount();
+      totalBrokerageFirst += detail.getBrokerageFirst() * detail.getCount();
     }
     orderRequestDto.setTotalMoney(totalMoney);
     if (totalMoney >= orderProperties.getDespatchLimit()) {
       orderRequestDto.setDespatchMoney(0);
     }
     orderRequestDto.setTotalBrokerage(totalBrokerage);
+    orderRequestDto.setTotalBrokerageFirst(totalBrokerageFirst);
     orderRequestDto.setRegionId(distributor.getRegionId());
     String aname = "";
     if (StringUtils.isNotBlank(distributor.getProvinceName())) {
@@ -194,6 +203,7 @@ public class OrderService implements ChooseDataIntf {
     }
     Integer totalMoney = 0;
     Integer totalBrokerage = 0;
+    Integer totalBrokerageFirst = 0;
     List<OrderDetail> details = orderRequestDto.getDetails();
     for (OrderDetail detail : details) {
       ProductResponseDto product = this.productService.getProduct(detail.getProductId());
@@ -205,17 +215,20 @@ public class OrderService implements ChooseDataIntf {
       detail.setOriginalPrice(product.getOriginalPrice());
       detail.setPrice(product.getPrice());
       detail.setBrokerage(product.getBrokerageType() == BrokerageTypeEnum.money.type() ? product.getBrokerageValue() : Double.valueOf((product.getPrice() / 100.0) * (product.getBrokerageValue() / 100.0) * 100).intValue());
+      detail.setBrokerageFirst(product.getBrokerageFirst());
       detail.setPickupTime(product.getPickupTime());
       detail.setSpecification(product.getSpecification());
       detail.setProductInfo(starJson.obj2string(product));
       totalMoney += detail.getPrice() * detail.getCount();
       totalBrokerage += detail.getBrokerage() * detail.getCount();
+      totalBrokerageFirst += detail.getBrokerageFirst() * detail.getCount();
     }
     orderRequestDto.setTotalMoney(totalMoney);
     if (totalMoney >= orderProperties.getDespatchLimit()) {
       orderRequestDto.setDespatchMoney(0);
     }
     orderRequestDto.setTotalBrokerage(totalBrokerage);
+    orderRequestDto.setTotalBrokerageFirst(totalBrokerageFirst);
     orderRequestDto.setRegionId(distributor.getRegionId());
     String aname = "";
     if (StringUtils.isNotBlank(distributor.getProvinceName())) {
@@ -576,4 +589,22 @@ public class OrderService implements ChooseDataIntf {
     this.orderCache.updateOrder(orderRequestDto);
   }
 
+  public void orderTotalJob() {
+    List<DistributorTotalResponseDto> list = orderCache.totalOrderByDistributor(null, 1);
+    if (null != list && list.size() > 0) {
+      List<DistributorTotal> distributorTotals = new ArrayList<>();
+      for (DistributorTotalResponseDto distributorTotalResponseDto : list) {
+        distributorTotals.add(distributorTotalResponseDto);
+      }
+      distributorTotalCache.batchSaveDistributorTotal(distributorTotals);
+    }
+  }
+
+  public List<DistributorTotalResponseDto> getDistributorTotal(Long distributorId, Integer day) {
+    if (null == day) {
+      day = 0;
+    }
+    List<DistributorTotalResponseDto> list = orderCache.totalOrderByDistributor(distributorId, day);
+    return list;
+  }
 }

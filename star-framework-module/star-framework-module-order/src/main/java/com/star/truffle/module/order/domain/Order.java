@@ -41,8 +41,10 @@ public class Order {
   private Integer despatchMoney; 
   // 总金额 不包含运费
   private Integer totalMoney;
-  // 总提成
+  // 直属分销商总提成
   private Integer totalBrokerage;
+  // 上级分销商总提成
+  private Integer totalBrokerageFirst;
   // 分销区域
   private Long regionId;
   // 分销商

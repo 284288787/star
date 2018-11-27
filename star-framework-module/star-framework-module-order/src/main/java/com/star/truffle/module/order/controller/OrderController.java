@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -24,12 +25,14 @@ import com.star.truffle.core.jdbc.Page;
 import com.star.truffle.core.jdbc.Page.OrderType;
 import com.star.truffle.core.web.ApiCode;
 import com.star.truffle.core.web.ApiResult;
-import lombok.extern.slf4j.Slf4j;
 import com.star.truffle.module.order.domain.Order;
 import com.star.truffle.module.order.domain.OrderDetail;
-import com.star.truffle.module.order.service.OrderService;
 import com.star.truffle.module.order.dto.req.OrderRequestDto;
+import com.star.truffle.module.order.dto.res.DistributorTotalResponseDto;
 import com.star.truffle.module.order.dto.res.OrderResponseDto;
+import com.star.truffle.module.order.service.OrderService;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Controller
@@ -191,7 +194,7 @@ public class OrderController {
       return ApiResult.fail(ApiCode.SYSTEM_ERROR);
     }
   }
-
+  
   @ResponseBody
   @RequestMapping(value = "/getDistributorIds", method = RequestMethod.POST)
   public ApiResult<List<Map<String, Object>>> getDistributorIds(String beginTime, String endTime, String states, String transportStates) {
@@ -205,5 +208,18 @@ public class OrderController {
       return ApiResult.fail(ApiCode.SYSTEM_ERROR);
     }
   }
-
+  
+  @ResponseBody
+  @RequestMapping(value = "/getDistributorTotal", method = RequestMethod.POST)
+  public ApiResult<List<DistributorTotalResponseDto>> getDistributorTotal(Long distributorId, Integer day) {
+    try {
+      List<DistributorTotalResponseDto> dtrd = orderService.getDistributorTotal(distributorId, day);
+      return ApiResult.success(dtrd);
+    } catch (StarServiceException e) {
+      return ApiResult.fail(e.getCode(), e.getMsg());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return ApiResult.fail(ApiCode.SYSTEM_ERROR);
+    }
+  }
 }

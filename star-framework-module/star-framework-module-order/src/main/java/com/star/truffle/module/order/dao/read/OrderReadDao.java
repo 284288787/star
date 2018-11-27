@@ -10,6 +10,7 @@ import org.apache.ibatis.annotations.Param;
 import com.star.truffle.core.jdbc.Page;
 import com.star.truffle.module.order.dto.req.OrderDetailRequestDto;
 import com.star.truffle.module.order.dto.req.OrderRequestDto;
+import com.star.truffle.module.order.dto.res.DistributorTotalResponseDto;
 import com.star.truffle.module.order.dto.res.OrderResponseDto;
 import com.star.truffle.module.order.dto.res.OrderTotal;
 
@@ -39,4 +40,11 @@ public interface OrderReadDao {
   public Map<String, Object> orderNum(Long memberId);
 
   public List<Map<String, Object>> getDistributorIds(OrderDetailRequestDto orderDetailRequestDto);
+  
+  /**
+   * @param distributorId 为空表示统计所有分销商的
+   * @param day  统计几天前的  0表示今天 1昨天 2 前天
+   * @return
+   */
+  public List<DistributorTotalResponseDto> totalOrderByDistributor(@Param("distributorId") Long distributorId, @Param("day") Integer day);
 }

@@ -2,15 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.star.truffle.module.order.dao.write.OrderWriteDao">
   <insert id="saveOrder" useGeneratedKeys="true" keyProperty="orderId" parameterType="com.star.truffle.module.order.domain.Order">
-    insert into `order`(remark, order_code, type, member_id, open_id, `name`, mobile, delivery_type, province_name, city_name, area_name, delivery_address, delivery_name, delivery_mobile, despatch_money, total_money, total_brokerage, region_id, distributor_id, shop_address, shop_name, shop_mobile, state, pickup_code, create_time, deleted)
-    values(#{remark}, #{orderCode}, #{type}, #{memberId}, #{openId}, #{name}, #{mobile}, #{deliveryType}, #{provinceName}, #{cityName}, #{areaName}, #{deliveryAddress}, #{deliveryName}, #{deliveryMobile}, #{despatchMoney}, #{totalMoney}, #{totalBrokerage}, #{regionId}, #{distributorId}, #{shopAddress}, #{shopName}, #{shopMobile}, #{state}, #{pickupCode}, #{createTime}, 0)
+    insert into `order`(remark, order_code, type, member_id, open_id, `name`, mobile, delivery_type, province_name, city_name, area_name, delivery_address, delivery_name, delivery_mobile, despatch_money, total_money, total_brokerage, total_brokerage_first, region_id, distributor_id, shop_address, shop_name, shop_mobile, state, pickup_code, create_time, deleted)
+    values(#{remark}, #{orderCode}, #{type}, #{memberId}, #{openId}, #{name}, #{mobile}, #{deliveryType}, #{provinceName}, #{cityName}, #{areaName}, #{deliveryAddress}, #{deliveryName}, #{deliveryMobile}, #{despatchMoney}, #{totalMoney}, #{totalBrokerage}, #{totalBrokerageFirst}, #{regionId}, #{distributorId}, #{shopAddress}, #{shopName}, #{shopMobile}, #{state}, #{pickupCode}, #{createTime}, 0)
   </insert>
 
   <insert id="batchSaveOrder" parameterType="java.util.List">
-    insert into `order`(remark, order_code, type, member_id, open_id, `name`, mobile, delivery_type, province_name, city_name, area_name, delivery_address, delivery_name, delivery_mobile, despatch_money, total_money, total_brokerage, region_id, distributor_id, shop_address, shop_name, shop_mobile, state, pickup_code, create_time, deleted)
+    insert into `order`(remark, order_code, type, member_id, open_id, `name`, mobile, delivery_type, province_name, city_name, area_name, delivery_address, delivery_name, delivery_mobile, despatch_money, total_money, total_brokerage, total_brokerage_first, region_id, distributor_id, shop_address, shop_name, shop_mobile, state, pickup_code, create_time, deleted)
     values
     <foreach collection="list" item="item" index="index" separator=",">
-      (#{item.remark}, #{item.orderCode}, #{item.type}, #{item.memberId}, #{item.openId}, #{item.name}, #{item.mobile}, #{item.deliveryType}, #{item.provinceName}, #{item.cityName}, #{item.areaName}, #{item.deliveryAddress}, #{item.deliveryName}, #{item.deliveryMobile}, #{despatchMoney}, #{item.totalMoney}, #{item.totalBrokerage}, #{item.regionId}, #{item.distributorId}, #{item.shopAddress}, #{item.shopName}, #{item.shopMobile}, #{item.state}, #{item.pickupCode}, #{item.createTime}, 0)
+      (#{item.remark}, #{item.orderCode}, #{item.type}, #{item.memberId}, #{item.openId}, #{item.name}, #{item.mobile}, #{item.deliveryType}, #{item.provinceName}, #{item.cityName}, #{item.areaName}, #{item.deliveryAddress}, #{item.deliveryName}, #{item.deliveryMobile}, #{despatchMoney}, #{item.totalMoney}, #{item.totalBrokerage}, #{item.totalBrokerageFirst}, #{item.regionId}, #{item.distributorId}, #{item.shopAddress}, #{item.shopName}, #{item.shopMobile}, #{item.state}, #{item.pickupCode}, #{item.createTime}, 0)
     </foreach>
   </insert>
 
@@ -34,6 +34,7 @@
       <if test="despatchMoney != null">despatch_money = #{despatchMoney},</if>
       <if test="totalMoney != null">total_money = #{totalMoney},</if>
       <if test="totalBrokerage != null">total_brokerage = #{totalBrokerage},</if>
+      <if test="totalBrokerageFirst != null">total_brokerage_first = #{totalBrokerageFirst},</if>
       <if test="regionId != null">region_id = #{regionId},</if>
       <if test="distributorId != null">distributor_id = #{distributorId},</if>
       <if test="shopAddress != null and shopAddress != ''">shop_address = #{shopAddress},</if>
@@ -87,7 +88,7 @@
   </resultMap>
 
   <sql id="sql_column">
-    `order`.express_number, `order`.transport_state, `order`.remark, `order`.deleted, `order`.delete_user, order_id, order_code, `order`.type, member_id, `order`.open_id, `order`.`name`, `order`.mobile, delivery_type, `order`.province_name, `order`.city_name, `order`.area_name, delivery_address, delivery_name, delivery_mobile, despatch_money, total_money, total_brokerage, `order`.region_id, `order`.distributor_id, `order`.shop_address, `order`.shop_name, `order`.shop_mobile, `order`.state, pickup_code, `order`.create_time
+    `order`.express_number, `order`.transport_state, `order`.remark, `order`.deleted, `order`.delete_user, order_id, order_code, `order`.type, member_id, `order`.open_id, `order`.`name`, `order`.mobile, delivery_type, `order`.province_name, `order`.city_name, `order`.area_name, delivery_address, delivery_name, delivery_mobile, despatch_money, total_money, total_brokerage, total_brokerage_first, `order`.region_id, `order`.distributor_id, `order`.shop_address, `order`.shop_name, `order`.shop_mobile, `order`.state, pickup_code, `order`.create_time
     , r.`name` region_name, p.areaId regionProvinceId, ifnull(p.shortName, p.areaName) regionProvinceName, c.areaId regionCityId, ifnull(c.shortName, c.areaName) regionCityName, a.areaId regionAreaId, ifnull(a.shortName, a.areaName) regionAreaName, t.areaId regionTownId, ifnull(t.shortName, t.areaName) regionTownName
     , d.`name` distributor_name,
     (select a.state from order_aftersale a where a.order_id = `order`.order_id) saleAfterState

@@ -25,6 +25,8 @@ public class OrderDetail {
   private Integer price;
   // 单件提成
   private Integer brokerage;
+  // 单件提成
+  private Integer brokerageFirst;
   // 提货时间
   private Date pickupTime;
   // 供应规格

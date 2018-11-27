@@ -17,6 +17,7 @@ import com.star.truffle.module.order.dao.write.OrderWriteDao;
 import com.star.truffle.module.order.domain.Order;
 import com.star.truffle.module.order.dto.req.OrderDetailRequestDto;
 import com.star.truffle.module.order.dto.req.OrderRequestDto;
+import com.star.truffle.module.order.dto.res.DistributorTotalResponseDto;
 import com.star.truffle.module.order.dto.res.OrderResponseDto;
 import com.star.truffle.module.order.dto.res.OrderTotal;
 
@@ -86,5 +87,9 @@ public class OrderCache {
 
   public List<Map<String, Object>> getDistributorIds(OrderDetailRequestDto orderDetailRequestDto) {
     return orderReadDao.getDistributorIds(orderDetailRequestDto);
+  }
+
+  public List<DistributorTotalResponseDto> totalOrderByDistributor(Long distributorId, int day) {
+    return orderReadDao.totalOrderByDistributor(distributorId, day);
   }
 }

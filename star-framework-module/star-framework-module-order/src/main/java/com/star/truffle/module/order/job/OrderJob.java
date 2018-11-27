@@ -30,8 +30,15 @@ public class OrderJob {
    */
   @Scheduled(cron = "0 * * * * ?")   //每分
   public void deleteOrderJob() {
-    log.info("开始执行任务：deleteOrder, 订单创建30分钟后删除");
+    log.info("开始执行任务：deleteOrderJob");
     orderService.deleteOrderJob();
-    log.info("停止执行任务：deleteOrder, 订单创建30分钟后删除");
+    log.info("停止执行任务：deleteOrderJob");
+  }
+  
+  @Scheduled(cron = "0 0 2 * * ? ")   //每天 凌晨 2点
+  public void orderTotalJob() {
+    log.info("开始执行任务：orderTotalJob");
+    orderService.orderTotalJob();
+    log.info("停止执行任务：orderTotalJob");
   }
 }
