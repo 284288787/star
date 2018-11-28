@@ -33,7 +33,7 @@ var distributorHandle = new ListHandle({
           if(today){
             for(var k in today){
               var txt = today[k];
-              if(k == 'kickbackSecond' || k == 'kickbackFirst')
+              if(k == 'kickbackSecond' || k == 'kickbackFirst' || k == 'payMoneyOfProduct' || k == 'payMoneyOfDespatch')
                 txt = (txt / 100.0).toFixed(2);
               $(".infoDiv .today ." + k).text(txt);
             }
@@ -42,7 +42,7 @@ var distributorHandle = new ListHandle({
           if(yesterday){
             for(var k in yesterday){
               var txt = yesterday[k];
-              if(k == 'kickbackSecond' || k == 'kickbackFirst')
+              if(k == 'kickbackSecond' || k == 'kickbackFirst' || k == 'payMoneyOfProduct' || k == 'payMoneyOfDespatch')
                 txt = (txt / 100.0).toFixed(2);
               $(".infoDiv .yesterday ." + k).text(txt);
             }
