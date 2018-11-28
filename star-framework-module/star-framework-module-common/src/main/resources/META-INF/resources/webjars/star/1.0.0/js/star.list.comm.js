@@ -54,6 +54,7 @@ function ListHandle(options, funcs) {
       caption : config.caption,
       editurl: config.editurl || '',
       width: config.width || '',
+      sortorder: config.sortorder || 'asc',
       serializeRowData: config.serializeRowData,
       gridComplete : function() {
         // var

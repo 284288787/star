@@ -67,6 +67,12 @@
       <groupId>com.star.truffle</groupId>
       <artifactId>star-framework-module-product</artifactId>
       <version>0.0.5-MODULE</version>
+      <exclusions>
+        <exclusion>
+          <groupId>com.star.truffle</groupId>
+          <artifactId>star-framework-module-order</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>

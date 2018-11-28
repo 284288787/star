@@ -51,6 +51,7 @@
       <a star:authorize-uri="/product/disabled" onclick="productHandle.disabled()" class="button yellow">禁用</a>
       <a star:authorize-uri="/product/deleted" onclick="productHandle.remove()" class="button red">删除</a> 
       <a star:authorize-uri="/product/sortBySoldNumber" onclick="productHandle.sortBySoldNumber()" class="button purple">按销量降序排列</a> 
+      <a star:authorize-uri="/product/sortBySoldNumber" onclick="productHandle.exportProduct()" class="button gblue">导出</a> 
     </div>
     <div class="data-container">
       <table id="grid-table"></table>

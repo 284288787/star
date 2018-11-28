@@ -79,10 +79,11 @@
   <resultMap id="buyRecordTotalResult" type="HashMap">  
 		<result column="members" property="members"/>  
     <result column="counts" property="counts" />
+    <result column="money" property="money" />
 	</resultMap>
 
   <select id="buyRecordTotal" resultMap="buyRecordTotalResult">
-    SELECT count(DISTINCT o.member_id) members, SUM(d.count) counts
+    SELECT count(DISTINCT o.member_id) members, SUM(d.count) counts, ifnull(sum(d.count * d.price),0) money
     from order_detail d 
     LEFT JOIN `order` o on d.order_id = o.order_id
     where 

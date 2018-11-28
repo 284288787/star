@@ -66,6 +66,6 @@ $(function(){
   var rowList = [10, 20, 30, 50];
   var rownumbers = true;
   var multiselect = false;
-  var config={rowNum: 50, caption: "每天统计明细列表", colNames: colNames, colModel: colModel, rowList: rowList, rownumbers: rownumbers, multiselect: multiselect};
+  var config={sortorder: 'desc', rowNum: 50, caption: "每天统计明细列表", colNames: colNames, colModel: colModel, rowList: rowList, rownumbers: rownumbers, multiselect: multiselect};
   distributorTotalHandle.init(config);
 });

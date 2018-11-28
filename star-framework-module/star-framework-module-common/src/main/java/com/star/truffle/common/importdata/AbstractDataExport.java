@@ -21,7 +21,7 @@ import com.star.truffle.core.web.config.SpringContextConfig;
 public abstract class AbstractDataExport<T> {
 
   public static final String tempDir = "/opt/temp";
-  private int pageSize = 10;
+  private int pageSize = 5000;
   private Map<String, Object> params;
   private Excel excel;
   
