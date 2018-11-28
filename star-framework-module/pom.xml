@@ -21,6 +21,7 @@
 		<module>star-framework-module-member</module>
 		<module>star-framework-module-order</module>
 		<module>star-framework-module-product</module>
+		<module>star-framework-module-order-product</module>
 		<module>star-framework-module-common</module>
 		<module>star-framework-module-user</module>
 		<module>star-framework-module-weixin</module>
