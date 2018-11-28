@@ -33,10 +33,12 @@ $(function(){
         nonceStr: data.nonceStr,
         signature: data.signature,
         jsApiList: [
-          'onMenuShareTimeline',
           'onMenuShareAppMessage',
-          'onMenuShareQQ',
-          'updateAppMessageShareData'
+          'onMenuShareTimeline',
+          'showOptionMenu',
+          'updateAppMessageShareData',
+          'updateTimelineShareData',
+          'onMenuShareWeibo'
         ]
       });
     }
