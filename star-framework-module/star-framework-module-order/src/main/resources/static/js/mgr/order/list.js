@@ -107,7 +107,7 @@ $(function(){
   var states={1:'待付款',2:'待提货',3:'已提货',4:'已退货',5:'已删除'};
   var transportStates={1:'待发货',2:'已发货',3:'已完成'};
   var colors={1:'#e87108',2:'#ad30de',3:'green',4:'red',5:'gray'}
-  var colNames = ['操作', '订单ID', '订单状态', '运输状态', '快递单号', '订单编号', '总金额', '总提成', '提货码', '订单类型', '用户姓名', '用户手机号', '订单备注', '收货类型', '收货地址', '收件人', '收件人手机', '分销区域', '分销商', '店铺名称', '店铺电话', '店铺地址', '创建日期'];
+  var colNames = ['操作', '订单ID', '订单状态', '运输状态', '删除状态', '快递单号', '订单编号', '总金额', '总提成', '提货码', '订单类型', '用户姓名', '用户手机号', '订单备注', '收货类型', '收货地址', '收件人', '收件人手机', '分销区域', '分销商', '店铺名称', '店铺电话', '店铺地址', '创建日期'];
   var colModel = [
     {align: "center", width: "130px", editable: false, sortable: false, frozen: true, formatter: function(cellvalue, options, rowObject){
       var temp = '';
@@ -135,6 +135,7 @@ $(function(){
       if(!cellvalue) return "";
       return '<span style="color:'+colors[cellvalue]+'">'+transportStates[cellvalue]+'</span>';
     }}, 
+    {name: 'deleted', index: 'deleted', width: "60px", align: "center", formatter: 'select', editoptions: {value:'1:已删除;0:未删除'}},
     {name: 'expressNumber', index: 'express_number', width: "140px", align: "left", formatter: function(cellvalue, options, rowObject){
       var val = cellvalue?cellvalue:"";
       return "<button class='editExpressNumber button grey' data-expr='"+val+"' data-oid='"+rowObject.orderId+"'>修改</button><div style='word-wrap: break-word;word-break:break-all;white-space:normal'>" + val + "</div>";
@@ -182,7 +183,7 @@ $(function(){
   var rowList = [10, 20, 30, 50];
   var rownumbers = true;
   var multiselect = true;
-  var config={rowNum: 50, datatype:'local', caption: "订单列表", autowidth: false, colNames: colNames, colModel: colModel, rowList: rowList, rownumbers: rownumbers, multiselect: multiselect, callback: function(){
+  var config={rowNum: 50, dataType:'local', caption: "订单列表", autowidth: false, colNames: colNames, colModel: colModel, rowList: rowList, rownumbers: rownumbers, multiselect: multiselect, callback: function(){
     $(".editExpressNumber").click(function(){
       var orderId = $(this).attr("data-oid");
       var value = $(this).attr("data-expr");

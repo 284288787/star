@@ -38,6 +38,9 @@ public class OrderRequestDto extends Order {
   private Date endCreateTime;
   private Integer time;       //0今天 1本周 2本月 3全部
   
+  private Long productId;
+  private String productName;
+  
   public boolean checkMemberSave() {
     if (null != getOrderId() || null == getMemberId() || null == getDeliveryType()
         || null == getDistributorId() || null == details || details.isEmpty()

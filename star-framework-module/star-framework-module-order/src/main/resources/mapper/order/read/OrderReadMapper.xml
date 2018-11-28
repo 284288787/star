@@ -126,6 +126,12 @@
       <if test="brokerage0 != null and brokerage0 == 0">
         and `order`.total_brokerage &gt; 0
       </if>
+      <if test="productName != null and productName == ''">
+        and exists (select 1 from order_detail d, product p where d.order_id = `order`.order_id and p.product_id = d.product_id and p.title like "%"#{productName}"%")
+      </if>
+      <if test="productId != null">
+        and exists (select 1 from order_detail d, product p where d.order_id = `order`.order_id and p.product_id = d.product_id and p.product_id = #{productId})
+      </if>
     </trim>
   </sql>
 

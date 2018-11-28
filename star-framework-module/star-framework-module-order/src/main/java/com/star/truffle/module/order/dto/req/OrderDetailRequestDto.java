@@ -37,4 +37,6 @@ public class OrderDetailRequestDto extends OrderDetail {
   private String pickupCode;
   // 快递单号
   private String expressNumber;
+  private Long productId;
+  private String productName;
 }

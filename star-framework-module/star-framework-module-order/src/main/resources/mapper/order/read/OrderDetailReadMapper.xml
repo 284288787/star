@@ -138,6 +138,12 @@
     <if test="endCreateTime != null">
       and o.create_time &lt;= #{endCreateTime}
     </if>
+    <if test="productName != null and productName == ''">
+      and exists (select 1 from product p where p.product_id = d.product_id and p.title like "%"#{productName}"%")
+    </if>
+    <if test="productId != null">
+      and exists (select 1 from product p where p.product_id = d.product_id and p.product_id = #{productId})
+    </if>
     order by o.delivery_type, o.create_time asc
     <if test="pager != null and pager.pageSize!=null and pager.startIndex!=null">
       limit #{pager.startIndex}, #{pager.pageSize}
