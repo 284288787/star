@@ -28,6 +28,7 @@ import com.star.truffle.core.web.ApiResult;
 import com.star.truffle.module.order.domain.Order;
 import com.star.truffle.module.order.domain.OrderDetail;
 import com.star.truffle.module.order.dto.req.OrderRequestDto;
+import com.star.truffle.module.order.dto.res.OrderDetailResponseDto;
 import com.star.truffle.module.order.dto.res.OrderResponseDto;
 import com.star.truffle.module.order.service.OrderService;
 
@@ -84,7 +85,7 @@ public class OrderController {
   public Map<String, Object> listDetails(OrderDetail orderDetail, Integer page, Integer rows, String sord, String sidx) {
     Page pager = new Page(page, rows, sidx, OrderType.desc.name().equals(sord) ? OrderType.desc : OrderType.asc);
 //    OrderResponseDto orderResponseDto = this.orderService.getOrder(orderDetail.getOrderId());
-    List<OrderDetail> list = orderService.getDetails(orderDetail.getOrderId());
+    List<OrderDetailResponseDto> list = orderService.getDetails(orderDetail.getOrderId());
     int count = 0;
     if (null != list && ! list.isEmpty()) {
       count = list.size();

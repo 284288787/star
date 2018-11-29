@@ -1,7 +1,6 @@
 /**create by liuhua at 2018年11月21日 下午9:51:33**/
 package com.star.truffle.module.order.service;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -22,6 +21,7 @@ import com.star.truffle.module.order.constant.OrderTypeEnum;
 import com.star.truffle.module.order.domain.Order;
 import com.star.truffle.module.order.dto.req.OrderDetailRequestDto;
 import com.star.truffle.module.order.dto.res.OrderDetailResponseDto;
+import com.star.truffle.module.product.constant.ProductConstant;
 
 public class ExportOrder extends AbstractDataExport<Order> {
   private OrderDetailCache orderDetailCache;
@@ -66,14 +66,14 @@ public class ExportOrder extends AbstractDataExport<Order> {
         }
         address += detail.getDeliveryAddress();
         if (detail.getDeliveryType() == DeliveryTypeEnum.self.type()) {
-          name = detail.getShopName();
+          name = detail.getDistributorName();
           mobile = detail.getShopMobile();
           address = detail.getShopAddress();
         }
-        DecimalFormat decimalFormat = new DecimalFormat("0.00");  
+        //订单编号,订单状态,提货号,代客下单,收货类型,收货人,联系电话,收货地址,购买数量,购买单价,小计(数量*单价),商品名称,商品规格,店铺名称,下单日期,会员姓名,会员手机,订单备注
         String[] arr = {orderCode, state, pickupCode, typeName, deliveryType, name, mobile, address, detail.getCount() + "",
-            decimalFormat.format(detail.getPrice() / 100.0), decimalFormat.format((detail.getPrice() * detail.getCount()) / 100.0), 
-            detail.getTitle(), detail.getShopName(), DateUtils.formatDateTime(detail.getCreateTime()), detail.getName(), 
+            ProductConstant.formatMoney(detail.getPrice()), ProductConstant.formatMoney(detail.getPrice() * detail.getCount()), 
+            detail.getTitle(), detail.getSpecification(), detail.getShopName(), DateUtils.formatDateTime(detail.getCreateTime()), detail.getName(), 
             detail.getMobile(), detail.getRemark()};
         list.add(arr);
       }

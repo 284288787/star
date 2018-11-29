@@ -28,7 +28,13 @@
        </tr>
        <tr>
        	 <td>分销区域：</td>
-         <td th:text="${orderResponseDto.regionName}"></td>
+         <td>
+          (<span th:text="${orderResponseDto.regionProvinceName == null ? '' : orderResponseDto.regionProvinceName}"></span>
+          <span th:text="${orderResponseDto.regionCityName == null ? '' : orderResponseDto.regionCityName}"></span>
+          <span th:text="${orderResponseDto.regionAreaName == null ? '' : orderResponseDto.regionAreaName}"></span>
+          <span th:text="${orderResponseDto.regionTownName == null ? '' : orderResponseDto.regionTownName}"></span>)
+          <span th:text="${orderResponseDto.regionName == null ? '' : orderResponseDto.regionName}"></span>
+         </td>
          <td>分销商：</td>
          <td th:text="${orderResponseDto.distributorName}"></td>
        </tr>
@@ -57,7 +63,7 @@
 	  pagerId: '#grid-pager',
 	  formId: '#queryForm',
 	  entityName: '订单商品列表',
-	  winWidth: '900px',
+	  winWidth: '1000px',
 	  winHeight: '700px',
 	  primaryKey: 'orderId',
 	  urls:{
@@ -65,10 +71,15 @@
 	  }
 	},{});
 	$(function(){
-		  var colNames = [ 'productId', '供应标题', '供应原价', '供应售价', '单件提成', '购买数量', '总价', '总提成', '提货时间'];
+		  var colNames = [ '商品ID', '供应标题', '供应规格', '供应原价', '供应售价', '单件提成', '会员姓名', '会员电话', '购买时间', '购买数量', '总价', '总提成', '提货时间'];
 		  var colModel = [
 		    {name: 'productId', index: 'productId', width: 50, align: "center"}, 
-		    {name: 'title', index: 'title', align: "center"}, 
+		    {name: 'title', index: 'title', align: "center", width: 80, formatter: function(cellvalue, options, rowObject){
+		      return "<div style='word-wrap: break-word;word-break:break-all;white-space:normal'>" + cellvalue + "</div>";
+		    }}, 
+		    {name: 'specification', index: 'specification', width: 50, align: "center", formatter: function(cellvalue, options, rowObject){
+		      return "<div style='word-wrap: break-word;word-break:break-all;white-space:normal'>" + cellvalue + "</div>";
+		    }}, 
 		    {name: 'originalPrice', index: 'originalPrice', width: 50, align: "center", formatter: function(cellvalue, options, rowObject){
 		        return (cellvalue / 100.0).toFixed(2);
 		      }}, 
@@ -78,6 +89,11 @@
 		    {name: 'brokerage', index: 'brokerage', width: 50, align: "center", formatter: function(cellvalue, options, rowObject){
 		        return (cellvalue / 100.0).toFixed(2);
 		    }}, 
+		    {name: 'name', index: 'name', width: 50, align: "center", formatter: function(cellvalue, options, rowObject){
+		      return "<div style='word-wrap: break-word;word-break:break-all;white-space:normal'>" + cellvalue + "</div>";
+		    }}, 
+		    {name: 'mobile', index: 'mobile', width: 70, align: "center"}, 
+		    {name: 'createTime', index: 'createTime', width: 60, align: "center", formatter:'date', formatoptions: {srcformat:'Y-m-d H:i:s',newformat:'Y-m-d\nH:i:s'}}, 
 		    {name: 'count', index: 'count', width: 50, align: "center"}, 
 		    {name: 'price', index: 'price', width: 50, align: "center", formatter: function(cellvalue, options, rowObject){
 		        return (cellvalue / 100.0 * rowObject.count).toFixed(2);
@@ -85,7 +101,7 @@
 		    {name: 'brokerage', index: 'brokerage', width: 50, align: "center", formatter: function(cellvalue, options, rowObject){
 		        return (cellvalue / 100.0 * rowObject.count).toFixed(2);
 		    }}, 
-		    {name: 'pickupTime', index: 'pickupTime', width: 50, align: "center", formatter:'date', formatoptions: {newformat:'Y-m-d H:i:s'}}, 
+		    {name: 'pickupTime', index: 'pickupTime', width: 60, align: "center", formatter:'date', formatoptions: {srcformat:'Y-m-d H点',newformat:'Y-m-d\nH点'}}, 
 		  ];
 		  var rowList = [10, 20, 30, 50];
 		  var rownumbers = true;

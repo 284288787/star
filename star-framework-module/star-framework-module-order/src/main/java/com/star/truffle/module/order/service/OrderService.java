@@ -507,8 +507,10 @@ public class OrderService implements ChooseDataIntf {
     this.orderCache.updateOrder(orderRequestDto);
   }
 
-  public List<OrderDetail> getDetails(Long orderId) {
-    List<OrderDetail> details = orderDetailCache.getOrderDetails(orderId);
+  public List<OrderDetailResponseDto> getDetails(Long orderId) {
+    OrderDetailRequestDto orderDetailRequestDto = new OrderDetailRequestDto();
+    orderDetailRequestDto.setOrderId(orderId);
+    List<OrderDetailResponseDto> details = this.orderDetailCache.queryOrderDetail(orderDetailRequestDto);
     return details;
   }
 

@@ -23,6 +23,7 @@ import com.star.truffle.module.order.constant.OrderProductStateEnum;
 import com.star.truffle.module.order.constant.OrderStateEnum;
 import com.star.truffle.module.order.domain.OrderDetail;
 import com.star.truffle.module.order.dto.req.OrderRequestDto;
+import com.star.truffle.module.order.dto.res.OrderDetailResponseDto;
 import com.star.truffle.module.order.dto.res.OrderResponseDto;
 import com.star.truffle.module.order.service.OrderService;
 import com.star.truffle.module.product.cache.DistributionRegionCache;
@@ -130,7 +131,7 @@ public class PayService {
           }
           orderService.updateOrder(orderRequestDto);
           log.info("updateProductSoldNumber: pid-> update end");
-          List<OrderDetail> details = orderService.getDetails(order.getOrderId());
+          List<OrderDetailResponseDto> details = orderService.getDetails(order.getOrderId());
           int count = 0;
           if (null != details && ! details.isEmpty()) {
             log.info("updateProductSoldNumber: pid->" + details.size());

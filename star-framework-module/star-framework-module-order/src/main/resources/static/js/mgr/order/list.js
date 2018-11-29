@@ -5,7 +5,7 @@ var orderHandle = new ListHandle({
   pagerId: '#grid-pager',
   formId: '#queryForm',
   entityName: '订单',
-  winWidth: '900px',
+  winWidth: '1300px',
   winHeight: '550px',
   primaryKey: 'orderId',
   urls:{
