@@ -72,7 +72,7 @@ public class ProductApiController {
       return ApiResult.fail(ApiCode.SYSTEM_ERROR);
     }
   }
-
+  
   @RequestMapping(value = "/queryProductCount", method = RequestMethod.POST)
   @ApiOperation(value = "根据条件获取商品信息数量", notes = "根据条件获取商品信息数量", httpMethod = "POST", response = ApiResult.class)
   @ApiImplicitParams({
@@ -86,6 +86,20 @@ public class ProductApiController {
       productRequestDto.setStates("1,2,3");
       Long count = productService.queryProductCount(productRequestDto);
       return ApiResult.success(count);
+    } catch (StarServiceException e) {
+      return ApiResult.fail(e.getCode(), e.getMsg());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return ApiResult.fail(ApiCode.SYSTEM_ERROR);
+    }
+  }
+
+  @RequestMapping(value = "/syncProductState", method = RequestMethod.POST)
+  @ApiOperation(value = "根据条件获取商品信息数量", notes = "根据条件获取商品信息数量", httpMethod = "POST", response = ApiResult.class)
+  public ApiResult<Void> syncProductState() {
+    try {
+      productService.syncProductState();
+      return ApiResult.success();
     } catch (StarServiceException e) {
       return ApiResult.fail(e.getCode(), e.getMsg());
     } catch (Exception e) {
