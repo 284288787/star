@@ -72,7 +72,7 @@ var productHandle = new ListHandle({
   exportProduct: function(){
     var params = productHandle.getQueryParams();
     params["key"] = "product";
-    params["handle"] = "com.star.truffle.module.product.service.ExportProduct";
+    params["handle"] = "com.star.truffle.module.order.service.ExportProduct";
     var url = '/download/excel/data?params=';
     url+=encodeURI(JSON.stringify(params));
     window.open(url);

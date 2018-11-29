@@ -84,18 +84,6 @@
       </exclusions>
       <!-- <scope>provided</scope> -->
     </dependency>
-    <dependency>
-      <groupId>com.star.truffle</groupId>
-      <artifactId>star-framework-module-order</artifactId>
-      <version>0.0.5-MODULE</version>
-      <exclusions>
-        <exclusion>
-          <groupId>com.star.truffle</groupId>
-          <artifactId>star-framework-module-product</artifactId>
-        </exclusion>
-      </exclusions>
-      <!-- <scope>provided</scope> -->
-    </dependency>
   </dependencies>
 
 </project>
