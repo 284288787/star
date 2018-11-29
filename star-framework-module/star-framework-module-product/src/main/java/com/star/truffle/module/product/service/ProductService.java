@@ -337,4 +337,8 @@ public class ProductService {
     productCache.sortBySoldNumber();
   }
 
+  public void syncProductSoldNumber() {
+    productCache.syncProductSoldNumber();
+  }
+
 }

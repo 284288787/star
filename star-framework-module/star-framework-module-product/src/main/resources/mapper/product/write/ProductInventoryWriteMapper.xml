@@ -27,5 +27,16 @@
     </trim>
     where id = #{id}
   </update>
+
+  <update id="syncProductSoldNumber">
+    update product_inventory i, (
+			SELECT d.product_id, SUM(d.count) counts 
+    	from order_detail d 
+    	LEFT JOIN `order` o on d.order_id = o.order_id
+    	where 
+      	o.state in (2,3) GROUP BY d.product_id) b 
+    set i.sold_number = b.counts 
+    where i.product_id = b.product_id
+  </update>
   
 </mapper>

@@ -15,4 +15,6 @@ public interface ProductInventoryWriteDao {
 
   public int updateProductInventory(ProductInventory productInventory);
 
+  public int syncProductSoldNumber();
+
 }

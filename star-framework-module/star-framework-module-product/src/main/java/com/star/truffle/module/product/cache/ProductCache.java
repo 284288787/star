@@ -86,4 +86,8 @@ public class ProductCache {
     productWriteDao.sortBySoldNumber();
   }
 
+  public void syncProductSoldNumber() {
+    productInventoryWriteDao.syncProductSoldNumber();
+  }
+
 }
