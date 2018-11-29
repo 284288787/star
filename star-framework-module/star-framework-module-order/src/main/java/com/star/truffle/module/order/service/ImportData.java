@@ -21,6 +21,7 @@ import com.star.truffle.module.order.constant.OrderTypeEnum;
 import com.star.truffle.module.order.domain.Order;
 import com.star.truffle.module.order.dto.req.OrderDetailRequestDto;
 import com.star.truffle.module.order.dto.res.OrderDetailResponseDto;
+import com.star.truffle.module.product.constant.ProductConstant;
 
 public class ImportData extends AbstractDataExport<Order> {
 
@@ -65,7 +66,7 @@ public class ImportData extends AbstractDataExport<Order> {
     if (null != details && ! details.isEmpty()) {
       for (OrderDetailResponseDto detail : details) {
         String pickupCode = StringUtils.isBlank(detail.getPickupCode()) ? "" : detail.getPickupCode();
-        String typeName = detail.getType() == OrderTypeEnum.self.type() ? OrderTypeEnum.self.caption() : OrderTypeEnum.behalf.caption();
+//        String typeName = detail.getType() == OrderTypeEnum.self.type() ? OrderTypeEnum.self.caption() : OrderTypeEnum.behalf.caption();
         String name = detail.getDeliveryName();
         String mobile = detail.getDeliveryMobile();
         String address = "";
@@ -80,12 +81,13 @@ public class ImportData extends AbstractDataExport<Order> {
         }
         address += detail.getDeliveryAddress();
         if (detail.getDeliveryType() == DeliveryTypeEnum.self.type()) {
-          name = detail.getShopName();
+          name = detail.getDistributorName();
           mobile = detail.getShopMobile();
           address = detail.getShopAddress();
         }
-        DecimalFormat decimalFormat = new DecimalFormat("0.00");  
-        String[] arr = {pickupCode, typeName, name, mobile, address, detail.getCount() + "", decimalFormat.format(detail.getPrice() / 100.0), ""};
+        String[] arr = {detail.getTitle(), detail.getSpecification(), detail.getOrderCode(), pickupCode, detail.getRemark(), 
+            name, mobile, address, detail.getCount() + "", ProductConstant.formatMoney(detail.getPrice()), 
+            ProductConstant.formatMoney(detail.getCount() * detail.getPrice()), ""};
         list.add(arr);
       }
     }

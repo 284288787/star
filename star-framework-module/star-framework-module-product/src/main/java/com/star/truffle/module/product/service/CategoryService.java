@@ -71,8 +71,12 @@ public class CategoryService implements ChooseDataIntf {
   @Override
   public GridPagerResponse getDatas(Map<String, Object> condition, Page pager) {
     CategoryRequestDto categoryRequestDto = starJson.str2obj(starJson.obj2string(condition), CategoryRequestDto.class);
-    List<CategoryResponseDto> list = categoryCache.queryCategory(categoryRequestDto);
+    categoryRequestDto.setPager(pager);
     Long count = categoryCache.queryCategoryCount(categoryRequestDto);
+    List<CategoryResponseDto> list = new ArrayList<>();
+    if (count > 0) {
+      list = categoryCache.queryCategory(categoryRequestDto);
+    }
     long total = count % pager.getPageSize() == 0 ? count / pager.getPageSize() : count / pager.getPageSize() + 1;
     return new GridPagerResponse(pager.getPageNum(), total, count, list);
   }

@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import java.util.Date;
 
+import com.mysql.fabric.xmlrpc.base.Struct;
+
 @Getter
 @Setter
 public class Order {
@@ -12,7 +14,7 @@ public class Order {
   // 主键
   private Long orderId;
   // 订单编号
-  private Long orderCode;
+  private String orderCode;
   // 订单类型 1自主下单 2代客下单
   private Integer type;
   // 用户ID

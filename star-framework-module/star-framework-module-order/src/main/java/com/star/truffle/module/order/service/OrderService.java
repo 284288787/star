@@ -171,7 +171,7 @@ public class OrderService implements ChooseDataIntf {
     
     OrderRequestDto param = new OrderRequestDto();
     param.setOrderId(orderId);
-    param.setOrderCode(8000000 + orderId);
+    param.setOrderCode(String.valueOf(8000000 + orderId));
     this.orderCache.updateOrder(param);
     
     //删除购物车里相关的商品
@@ -261,7 +261,7 @@ public class OrderService implements ChooseDataIntf {
     
     OrderRequestDto param = new OrderRequestDto();
     param.setOrderId(orderId);
-    param.setOrderCode(1000000 + orderId);
+    param.setOrderCode(String.valueOf(8000000 + orderId));
     this.orderCache.updateOrder(param);
     return orderId;
   }
@@ -532,6 +532,7 @@ public class OrderService implements ChooseDataIntf {
     String states = condition.get("states") + "";
     String transportStates = condition.get("transportStates") + "";
     OrderDetailRequestDto orderDetailRequestDto = new OrderDetailRequestDto();
+    orderDetailRequestDto.setPager(pager);
     orderDetailRequestDto.setStates(states);
     orderDetailRequestDto.setTransportStates(transportStates);
     if (StringUtils.isNotBlank(beginTime) && beginTime.length() > 4) {
@@ -540,9 +541,18 @@ public class OrderService implements ChooseDataIntf {
     if (StringUtils.isNotBlank(endTime) && endTime.length() > 4) {
       orderDetailRequestDto.setEndCreateTime(DateUtils.toDateYmdHms(endTime + " 23:59:59"));
     }
+    
     List<Map<String, Object>> list = this.orderCache.getDistributorIds(orderDetailRequestDto);
     int count = list.size();
     long total = count % pager.getPageSize() == 0 ? count / pager.getPageSize() : count / pager.getPageSize() + 1;
+    if (total > 1) {
+      int a = (pager.getPageNum() - 1) * pager.getPageSize();
+      int b = a + pager.getPageSize();
+      if (b > count) {
+        b = count;
+      }
+      list = list.subList(a, b);
+    }
     return new GridPagerResponse(pager.getPageNum(), total, count, list);
   }
 

@@ -47,7 +47,7 @@
         and order_id = #{orderId}
       </if>
       <if test="orderCode != null">
-        and order_code = #{orderCode}
+        and order_code like "%"#{orderCode}"%"
       </if>
       <if test="type != null">
         and `order`.type = #{type}
@@ -126,7 +126,7 @@
       <if test="brokerage0 != null and brokerage0 == 0">
         and `order`.total_brokerage &gt; 0
       </if>
-      <if test="productName != null and productName == ''">
+      <if test="productName != null and productName != ''">
         and exists (select 1 from order_detail d, product p where d.order_id = `order`.order_id and p.product_id = d.product_id and p.title like "%"#{productName}"%")
       </if>
       <if test="productId != null">

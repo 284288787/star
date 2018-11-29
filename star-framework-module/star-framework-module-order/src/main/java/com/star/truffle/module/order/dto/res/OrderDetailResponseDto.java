@@ -18,6 +18,7 @@ public class OrderDetailResponseDto extends OrderDetail {
   private String head;
   private Date createTime;
   
+  private String distributorName;
   private String orderCode;
   //订单状态 1待付款 2待提货 3已提货 4已退货
   private Integer state;

@@ -72,8 +72,9 @@ public class ProductTagService implements ChooseDataIntf {
   @Override
   public GridPagerResponse getDatas(Map<String, Object> condition, Page pager) {
     ProductTagRequestDto productTagRequestDto = starJson.str2obj(starJson.obj2string(condition), ProductTagRequestDto.class);
-    List<ProductTagResponseDto> list = productTagCache.queryProductTag(productTagRequestDto);
+    productTagRequestDto.setPager(pager);
     Long count = productTagCache.queryProductTagCount(productTagRequestDto);
+    List<ProductTagResponseDto> list = productTagCache.queryProductTag(productTagRequestDto);
     long total = count % pager.getPageSize() == 0 ? count / pager.getPageSize() : count / pager.getPageSize() + 1;
     return new GridPagerResponse(pager.getPageNum(), total, count, list);
   }

@@ -58,8 +58,12 @@ public class DistributionRegionService implements ChooseDataIntf {
   @Override
   public GridPagerResponse getDatas(Map<String, Object> condition, Page pager) {
     DistributionRegionRequestDto distributionRegionRequestDto = starJson.str2obj(starJson.obj2string(condition), DistributionRegionRequestDto.class);
-    List<DistributionRegionResponseDto> list = distributionRegionCache.queryDistributionRegion(distributionRegionRequestDto);
+    distributionRegionRequestDto.setPager(pager);
     Long count = distributionRegionCache.queryDistributionRegionCount(distributionRegionRequestDto);
+    List<DistributionRegionResponseDto> list = new ArrayList<>();
+    if (count > 0) {
+      list = distributionRegionCache.queryDistributionRegion(distributionRegionRequestDto);
+    }
     long total = count % pager.getPageSize() == 0 ? count / pager.getPageSize() : count / pager.getPageSize() + 1;
     return new GridPagerResponse(pager.getPageNum(), total, count, list);
   }
