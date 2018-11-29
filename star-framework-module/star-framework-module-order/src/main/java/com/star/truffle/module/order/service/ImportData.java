@@ -1,7 +1,6 @@
 /**create by liuhua at 2018年11月16日 下午8:50:52**/
 package com.star.truffle.module.order.service;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -17,7 +16,6 @@ import com.star.truffle.module.member.dto.res.DistributorResponseDto;
 import com.star.truffle.module.member.service.DistributorService;
 import com.star.truffle.module.order.cache.OrderDetailCache;
 import com.star.truffle.module.order.constant.DeliveryTypeEnum;
-import com.star.truffle.module.order.constant.OrderTypeEnum;
 import com.star.truffle.module.order.domain.Order;
 import com.star.truffle.module.order.dto.req.OrderDetailRequestDto;
 import com.star.truffle.module.order.dto.res.OrderDetailResponseDto;
@@ -92,11 +90,6 @@ public class ImportData extends AbstractDataExport<Order> {
       }
     }
     return list;
-  }
-  
-  @Override
-  public int getPageSize() {
-    return 30;
   }
 
   @Override
