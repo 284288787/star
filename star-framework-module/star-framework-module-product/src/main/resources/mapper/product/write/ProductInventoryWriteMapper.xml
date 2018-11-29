@@ -29,6 +29,7 @@
   </update>
 
   <update id="syncProductSoldNumber">
+  	update product_inventory set sold_number = 0;
     update product_inventory i, (
 			SELECT d.product_id, SUM(d.count) counts 
     	from order_detail d 
