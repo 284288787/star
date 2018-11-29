@@ -103,7 +103,7 @@ public class ProductService {
     }else if(product.getState() != ProductEnum.presell.state()) {
       product.setState(ProductEnum.onshelf.state());
     }
-    if (2 == product.getProductInventory().getNumberType() && null != product.getProductInventory().getSoldNumber() && product.getProductInventory().getNumber() <= product.getProductInventory().getSoldNumber()) { //库存为0 表示售罄
+    if (product.getState() == ProductEnum.onshelf.state() && 2 == product.getProductInventory().getNumberType() && null != product.getProductInventory().getSoldNumber() && product.getProductInventory().getNumber() <= product.getProductInventory().getSoldNumber()) { //库存为0 表示售罄
       product.setState(ProductEnum.sellout.state());
     }
     String updateUser = "无登录测试";
@@ -249,7 +249,7 @@ public class ProductService {
         }else if(product.getState() != ProductEnum.presell.state()) {
           dto.setState(ProductEnum.onshelf.state());
         }
-        if (2 == product.getNumberType() && product.getNumber() <= product.getSoldNumber()) { //库存为0 表示售罄
+        if (dto.getState() == ProductEnum.onshelf.state() && 2 == product.getNumberType() && product.getNumber() <= product.getSoldNumber()) { //库存为0 表示售罄
           dto.setState(ProductEnum.sellout.state());
         }
         this.productCache.updateProduct(dto);
@@ -283,7 +283,7 @@ public class ProductService {
         }else if(product.getState() != ProductEnum.presell.state()) {
           dto.setState(ProductEnum.onshelf.state());
         }
-        if (2 == product.getNumberType() && product.getNumber() <= product.getSoldNumber()) { // 
+        if (dto.getState() == ProductEnum.onshelf.state() && 2 == product.getNumberType() && product.getNumber() <= product.getSoldNumber()) { // 
           dto.setState(ProductEnum.sellout.state());
         }
         this.productCache.updateProduct(dto);
