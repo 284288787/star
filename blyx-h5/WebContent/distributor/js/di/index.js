@@ -1,5 +1,9 @@
 var user = getLoginInfo();
 $(function(){
+  $(".headlink").on("tap", function(){
+    document.location.href='http://yx.hnkbmd.com/index.html?py='+user.py;
+    return false;
+  });
   ajax({
     url: '/weixin/ticket/jssdk',
     data: {

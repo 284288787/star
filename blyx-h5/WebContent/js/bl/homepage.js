@@ -129,16 +129,16 @@ function initShopInfo(){
           }
         });
         wx.updateTimelineShareData({
-          title: "五杂优选（今日爆品），" + user.shopName,
-          link: 'http://yx.hnkbmd.com/index.html?py='+user.py,
+          title: "五杂优选（今日爆品），" + distributor.shopName,
+          link: document.location.href,
           imgUrl: 'http://yx.hnkbmd.com/photo/shop.jpg',
           success: function () {
           }
         });
         wx.onMenuShareWeibo({
-          title: "五杂优选（今日爆品），" + user.shopName,
+          title: "五杂优选（今日爆品），" + distributor.shopName,
           desc: '亲，所有单品高性价比，正品保证，售后无忧！',
-          link: 'http://yx.hnkbmd.com/index.html?py='+user.py,
+          link: document.location.href,
           imgUrl: 'http://yx.hnkbmd.com/photo/shop.jpg',
           success: function () {
           },
