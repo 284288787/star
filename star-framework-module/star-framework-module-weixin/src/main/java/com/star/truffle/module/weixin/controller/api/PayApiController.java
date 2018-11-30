@@ -2,6 +2,7 @@
 package com.star.truffle.module.weixin.controller.api;
 
 import java.io.InputStream;
+import java.util.Enumeration;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -83,6 +84,15 @@ public class PayApiController {
   })
   public String callback(HttpServletRequest request, HttpServletResponse response) throws Exception {
     log.info(".................微信支付返回:" );
+    String url = request.getRequestURL().toString();
+    log.info(url);
+    Enumeration<String> headers = request.getHeaderNames();
+    if (null != headers) {
+      while (headers.hasMoreElements()) {
+        String string = (String) headers.nextElement();
+        log.info("-->" + string + "\t" + request.getHeader(string));
+      }
+    }
     InputStream is = request.getInputStream();
     StringBuffer sBuffer = new StringBuffer();
     byte[] b = new byte[1024];

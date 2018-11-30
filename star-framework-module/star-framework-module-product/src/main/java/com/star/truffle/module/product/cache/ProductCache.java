@@ -86,6 +86,7 @@ public class ProductCache {
     productWriteDao.sortBySoldNumber();
   }
 
+  @CacheEvict(value = "module-product-product", allEntries = true)
   public void syncProductSoldNumber() {
     productInventoryWriteDao.syncProductSoldNumber();
   }

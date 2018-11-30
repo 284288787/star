@@ -95,7 +95,7 @@ public class ProductApiController {
   }
   
   @RequestMapping(value = "/syncProductState", method = RequestMethod.POST)
-  @ApiOperation(value = "根据条件获取商品信息数量", notes = "根据条件获取商品信息数量", httpMethod = "POST", response = ApiResult.class)
+  @ApiOperation(value = "2", notes = "2", httpMethod = "POST", response = ApiResult.class)
   public ApiResult<Void> syncProductState() {
     try {
       productService.syncProductState();
@@ -109,7 +109,7 @@ public class ProductApiController {
   }
 
   @RequestMapping(value = "/syncProductSoldNumber", method = RequestMethod.POST)
-  @ApiOperation(value = "根据条件获取商品信息数量", notes = "根据条件获取商品信息数量", httpMethod = "POST", response = ApiResult.class)
+  @ApiOperation(value = "1", notes = "1", httpMethod = "POST", response = ApiResult.class)
   public ApiResult<Void> syncProductSoldNumber() {
     try {
       productService.syncProductSoldNumber();

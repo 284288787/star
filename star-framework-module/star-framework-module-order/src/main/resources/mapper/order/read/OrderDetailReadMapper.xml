@@ -98,6 +98,9 @@
 		  o.shop_address, o.shop_name, o.shop_mobile, o.delivery_type, o.order_code, o.state, o.create_time, o.`name`, o.mobile, o.remark,
       (select `name` from distributor a where a.distributor_id = o.distributor_id) distributor_name
 		from order_detail d, `order` o where d.order_id = o.order_id
+		<if test="orderId != null">
+      and d.order_id = #{orderId}
+    </if>
 		<if test="distributorId != null">
       and o.distributor_id = #{distributorId}
     </if>
