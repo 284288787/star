@@ -90,7 +90,8 @@ function loadData(self, pageNum, pageSize, state){
                 </p>\
                 <p class="pbox clearfix">';
           if(item.state > 1){
-            ele +='<em>提货单号：'+item.pickupCode+'</em>';
+            if(item.pickupCode) ele +='<em>提货单号：'+item.pickupCode+'</em>';
+            else ele +='<em>&nbsp;</em>';
             if(item.state==2){
               ele +='<button data-orderId="'+item.orderId+'" class="fl mui-btn mui-btn-danger mui-btn-outlined enterorder" size="small" plain>确认提货</button>';
             }
