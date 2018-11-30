@@ -183,7 +183,7 @@ $(function(){
   var rowList = [10, 20, 30, 50];
   var rownumbers = true;
   var multiselect = true;
-  var config={rowNum: 50, dataType:'local', caption: "订单列表", autowidth: false, colNames: colNames, colModel: colModel, rowList: rowList, rownumbers: rownumbers, multiselect: multiselect, callback: function(){
+  var config={sortorder: "desc", rowNum: 50, dataType:'local', caption: "订单列表", autowidth: false, colNames: colNames, colModel: colModel, rowList: rowList, rownumbers: rownumbers, multiselect: multiselect, callback: function(){
     $(".editExpressNumber").click(function(){
       var orderId = $(this).attr("data-oid");
       var value = $(this).attr("data-expr");
