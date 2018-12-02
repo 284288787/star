@@ -113,6 +113,8 @@ public class OrderService implements ChooseDataIntf {
     Integer totalMoney = 0;
     Integer totalBrokerage = 0;
     Integer totalBrokerageFirst = 0;
+    Integer profitHan = 0;
+    Integer profitWei = 0;
     List<OrderDetail> details = orderRequestDto.getDetails();
     for (OrderDetail detail : details) {
       ProductResponseDto product = this.productService.getProduct(detail.getProductId());
@@ -128,9 +130,13 @@ public class OrderService implements ChooseDataIntf {
       detail.setPickupTime(product.getPickupTime());
       detail.setSpecification(product.getSpecification());
       detail.setProductInfo(starJson.obj2string(product));
+      detail.setPriceHan(product.getPriceHan());
+      detail.setPriceWei(product.getPriceWei());
       totalMoney += detail.getPrice() * detail.getCount();
       totalBrokerage += detail.getBrokerage() * detail.getCount();
       totalBrokerageFirst += detail.getBrokerageFirst() * detail.getCount();
+      profitHan += (detail.getPrice() - detail.getPriceHan() - detail.getBrokerageFirst() - detail.getBrokerage()) * detail.getCount();
+      profitWei += (detail.getPrice() - detail.getPriceWei() - detail.getBrokerageFirst() - detail.getBrokerage()) * detail.getCount();
     }
     orderRequestDto.setTotalMoney(totalMoney);
     if (totalMoney >= orderProperties.getDespatchLimit()) {
@@ -138,6 +144,8 @@ public class OrderService implements ChooseDataIntf {
     }
     orderRequestDto.setTotalBrokerage(totalBrokerage);
     orderRequestDto.setTotalBrokerageFirst(totalBrokerageFirst);
+    orderRequestDto.setProfitHan(profitHan);
+    orderRequestDto.setProfitWei(profitWei);
     orderRequestDto.setRegionId(distributor.getRegionId());
     String aname = "";
     if (StringUtils.isNotBlank(distributor.getProvinceName())) {
@@ -205,6 +213,8 @@ public class OrderService implements ChooseDataIntf {
     Integer totalMoney = 0;
     Integer totalBrokerage = 0;
     Integer totalBrokerageFirst = 0;
+    Integer profitHan = 0;
+    Integer profitWei = 0;
     List<OrderDetail> details = orderRequestDto.getDetails();
     for (OrderDetail detail : details) {
       ProductResponseDto product = this.productService.getProduct(detail.getProductId());
@@ -220,9 +230,13 @@ public class OrderService implements ChooseDataIntf {
       detail.setPickupTime(product.getPickupTime());
       detail.setSpecification(product.getSpecification());
       detail.setProductInfo(starJson.obj2string(product));
+      detail.setPriceHan(product.getPriceHan());
+      detail.setPriceWei(product.getPriceWei());
       totalMoney += detail.getPrice() * detail.getCount();
       totalBrokerage += detail.getBrokerage() * detail.getCount();
       totalBrokerageFirst += detail.getBrokerageFirst() * detail.getCount();
+      profitHan += (detail.getPrice() - detail.getPriceHan() - detail.getBrokerageFirst() - detail.getBrokerage()) * detail.getCount();
+      profitWei += (detail.getPrice() - detail.getPriceWei() - detail.getBrokerageFirst() - detail.getBrokerage()) * detail.getCount();
     }
     orderRequestDto.setTotalMoney(totalMoney);
     if (totalMoney >= orderProperties.getDespatchLimit()) {
@@ -230,6 +244,8 @@ public class OrderService implements ChooseDataIntf {
     }
     orderRequestDto.setTotalBrokerage(totalBrokerage);
     orderRequestDto.setTotalBrokerageFirst(totalBrokerageFirst);
+    orderRequestDto.setProfitHan(profitHan);
+    orderRequestDto.setProfitWei(profitWei);
     orderRequestDto.setRegionId(distributor.getRegionId());
     String aname = "";
     if (StringUtils.isNotBlank(distributor.getProvinceName())) {

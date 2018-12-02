@@ -1,11 +1,10 @@
 /**create by framework at 2018年09月21日 15:21:35**/
 package com.star.truffle.module.order.domain;
 
-import lombok.Getter;
-import lombok.Setter;
 import java.util.Date;
 
-import com.mysql.fabric.xmlrpc.base.Struct;
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
@@ -73,4 +72,8 @@ public class Order {
   private String remark;
   // 快递单号
   private String expressNumber;
+  // 含税价的利润
+  private Integer profitHan;
+  // 未税价的利润
+  private Integer profitWei;
 }

@@ -35,4 +35,8 @@ public class OrderDetail {
   private Integer count;
   // 供应信息
   private String productInfo;
+  //含税价
+  private Integer priceHan;
+  // 未税价
+  private Integer priceWei;
 }

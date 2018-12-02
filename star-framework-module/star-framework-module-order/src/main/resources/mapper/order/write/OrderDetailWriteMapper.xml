@@ -3,10 +3,12 @@
 <mapper namespace="com.star.truffle.module.order.dao.write.OrderDetailWriteDao">
 
   <insert id="batchSaveOrderDetail" parameterType="java.util.List">
-    insert into order_detail(order_id, product_id, title, main_picture_url, original_price, price, brokerage, brokerage_first, pickup_time, specification, count, product_info)
+    insert into order_detail(order_id, product_id, title, main_picture_url, original_price, price, brokerage, brokerage_first, 
+    	pickup_time, specification, count, product_info, price_han, price_wei)
     values
     <foreach collection="list" item="item" index="index" separator=",">
-      (#{item.orderId}, #{item.productId}, #{item.title}, #{item.mainPictureUrl}, #{item.originalPrice}, #{item.price}, #{item.brokerage}, #{item.brokerageFirst}, #{item.pickupTime}, #{item.specification}, #{item.count}, #{item.productInfo})
+      (#{item.orderId}, #{item.productId}, #{item.title}, #{item.mainPictureUrl}, #{item.originalPrice}, #{item.price}, #{item.brokerage}, 
+      	#{item.brokerageFirst}, #{item.pickupTime}, #{item.specification}, #{item.count}, #{item.productInfo}, #{item.priceHan}, #{item.priceWei})
     </foreach>
   </insert>
 </mapper>
