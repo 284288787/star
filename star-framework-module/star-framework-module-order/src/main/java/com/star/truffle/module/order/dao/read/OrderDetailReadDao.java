@@ -15,7 +15,7 @@ public interface OrderDetailReadDao {
 
   public List<OrderDetail> getOrderDetails(Long orderId);
 
-  public Long getProductNoPayNumber(@Param("productId") Long productId, @Param("state") int state);
+  public Long getProductNoPayNumber(@Param("productId") Long productId, @Param("orderId") Long orderId, @Param("state") int state);
 
   public List<OrderDetailResponseDto> buyRecord(@Param("productId") Long productId, @Param("pager") Page pager);
   
@@ -23,6 +23,6 @@ public interface OrderDetailReadDao {
 
   public List<OrderDetailResponseDto> queryOrderDetail(OrderDetailRequestDto orderDetailRequestDto);
 
-  public Integer getBuyTimes(@Param("memberId") Long memberId, @Param("productId") Long productId);
+  public Integer getBuyTimes(@Param("memberId") Long memberId, @Param("productId") Long productId, @Param("orderId") Long orderId);
 
 }

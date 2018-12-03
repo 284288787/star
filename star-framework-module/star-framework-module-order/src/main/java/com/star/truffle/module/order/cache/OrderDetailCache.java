@@ -36,8 +36,8 @@ public class OrderDetailCache {
     return details;
   }
 
-  public Long getProductNoPayNumber(Long productId, int state) {
-    return this.orderDetailReadDao.getProductNoPayNumber(productId, state);
+  public Long getProductNoPayNumber(Long productId, Long orderId, int state) {
+    return this.orderDetailReadDao.getProductNoPayNumber(productId, orderId, state);
   }
 
   public List<OrderDetailResponseDto> buyRecord(Long productId, Page page) {
@@ -52,7 +52,7 @@ public class OrderDetailCache {
     return orderDetailReadDao.queryOrderDetail(orderDetailRequestDto);
   }
 
-  public Integer getBuyTimes(Long memberId, Long productId) {
-    return orderDetailReadDao.getBuyTimes(memberId, productId);
+  public Integer getBuyTimes(Long memberId, Long productId, Long orderId) {
+    return orderDetailReadDao.getBuyTimes(memberId, productId, orderId);
   }
 }

@@ -27,6 +27,8 @@ import com.star.truffle.module.order.dto.res.OrderDetailResponseDto;
 import com.star.truffle.module.order.dto.res.OrderResponseDto;
 import com.star.truffle.module.order.service.OrderService;
 import com.star.truffle.module.product.cache.DistributionRegionCache;
+import com.star.truffle.module.product.constant.ProductEnum;
+import com.star.truffle.module.product.dto.res.ProductResponseDto;
 import com.star.truffle.module.product.service.ProductService;
 import com.star.truffle.module.weixin.dao.WeiXinApiDao;
 import com.star.truffle.module.weixin.dao.write.PayDetailInfoWriteDao;
@@ -68,11 +70,15 @@ public class PayService {
     if (null == order) {
       throw new StarServiceException(ApiCode.PARAM_ERROR, "订单不存在");
     }
+    List<OrderDetail> details = order.getDetails();
+    if (null == details || details.isEmpty()) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR, "无效订单，请重新下单");
+    }
     if (order.getDeleted() == DeletedEnum.delete.val()) {
-      throw new StarServiceException(ApiCode.PARAM_ERROR, "该订单不能支付，已失效");
+      throw new StarServiceException(ApiCode.PARAM_ERROR, "订单已失效，不能支付");
     }
     if (order.getState() != OrderStateEnum.nopay.state()) {
-      throw new StarServiceException(ApiCode.PARAM_ERROR, "该订单不能支付，可能已支付");
+      throw new StarServiceException(ApiCode.PARAM_ERROR, "订单已支付");
     }
     if (order.getMemberId() == -1) { //分销商 代客下单
       DistributorResponseDto distributor = distributorCache.getDistributor(memberId);
@@ -92,6 +98,28 @@ public class PayService {
       }
       if (!openId.equals(member.getOpenId())) {
         throw new StarServiceException(ApiCode.PARAM_ERROR, "会员与openId不匹配");
+      }
+    }
+    
+    for (OrderDetail detail : details) {
+      ProductResponseDto product = this.productService.getProduct(detail.getProductId());
+      if (null == product || product.getState() != ProductEnum.onshelf.state()) {
+        throw new StarServiceException(ApiCode.PARAM_ERROR, "供应已下架或已售罄或预售中");
+      }
+      if (product.getTimes() > 0) {
+        if (detail.getCount() > product.getTimes()) {
+          throw new StarServiceException(ApiCode.PARAM_ERROR, "添加了"+detail.getCount()+"份，该商品只能购买" + product.getTimes() + "份");
+        }
+        Integer buyTimes = this.orderService.getBuyTimes(memberId, detail.getProductId(), orderId);
+        if (buyTimes >= product.getTimes()) {
+          throw new StarServiceException(ApiCode.PARAM_ERROR, "该商品只能购买" + product.getTimes() + "份");
+        }
+      }
+      if (product.getNumberType() == 2) {
+        Long number = this.orderService.getProductNoPayNumber(detail.getProductId(), orderId);
+        if(product.getSoldNumber() + detail.getCount() + number > product.getNumber()) {
+          throw new StarServiceException(ApiCode.PARAM_ERROR, "商品["+product.getTitle()+"]库存不足");
+        }
       }
     }
     

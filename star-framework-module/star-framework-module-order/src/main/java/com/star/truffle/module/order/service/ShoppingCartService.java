@@ -174,13 +174,13 @@ public class ShoppingCartService {
         if (shoppingCartResponseDto.getNum() > productResponseDto.getTimes()) {
           throw new StarServiceException(ApiCode.PARAM_ERROR, "添加了"+shoppingCartResponseDto.getNum()+"份，该商品只能购买" + productResponseDto.getTimes() + "份");
         }
-        Integer buyTimes = this.orderService.getBuyTimes(memberId, shoppingCartResponseDto.getProductId());
+        Integer buyTimes = this.orderService.getBuyTimes(memberId, shoppingCartResponseDto.getProductId(), null);
         if (buyTimes >= productResponseDto.getTimes()) {
           throw new StarServiceException(ApiCode.PARAM_ERROR, "该商品只能购买" + productResponseDto.getTimes() + "份");
         }
       }
       if (productResponseDto.getNumberType() == 2) {
-        Long number = orderService.getProductNoPayNumber(shoppingCartResponseDto.getProductId());
+        Long number = orderService.getProductNoPayNumber(shoppingCartResponseDto.getProductId(), null);
         if(productResponseDto.getSoldNumber() + shoppingCartResponseDto.getNum() + number > productResponseDto.getNumber()) {
           throw new StarServiceException(ApiCode.PARAM_ERROR, "商品["+productResponseDto.getTitle()+"]库存不足");
         }
@@ -207,13 +207,13 @@ public class ShoppingCartService {
         if (shoppingCartResponseDto.getNum() > productResponseDto.getTimes()) {
           throw new StarServiceException(ApiCode.PARAM_ERROR, "添加了"+shoppingCartResponseDto.getNum()+"份，该商品只能购买" + productResponseDto.getTimes() + "份");
         }
-        Integer buyTimes = this.orderService.getBuyTimes(memberId, shoppingCartResponseDto.getProductId());
+        Integer buyTimes = this.orderService.getBuyTimes(memberId, shoppingCartResponseDto.getProductId(), null);
         if (buyTimes >= productResponseDto.getTimes()) {
           throw new StarServiceException(ApiCode.PARAM_ERROR, "该商品只能购买" + productResponseDto.getTimes() + "份");
         }
       }
       if (productResponseDto.getNumberType() == 2) {
-        Long number = orderService.getProductNoPayNumber(shoppingCartResponseDto.getProductId());
+        Long number = orderService.getProductNoPayNumber(shoppingCartResponseDto.getProductId(), null);
         if (productResponseDto.getSoldNumber() + shoppingCartResponseDto.getNum() + number > productResponseDto.getNumber()) {
           throw new StarServiceException(ApiCode.PARAM_ERROR, "商品[" + productResponseDto.getTitle() + "]库存不足");
         }
@@ -248,13 +248,13 @@ public class ShoppingCartService {
       if (num > productResponseDto.getTimes()) {
         throw new StarServiceException(ApiCode.PARAM_ERROR, "添加了"+num+"份，该商品只能购买" + productResponseDto.getTimes() + "份");
       }
-      Integer buyTimes = this.orderService.getBuyTimes(memberId, productId);
+      Integer buyTimes = this.orderService.getBuyTimes(memberId, productId, null);
       if (buyTimes >= productResponseDto.getTimes()) {
         throw new StarServiceException(ApiCode.PARAM_ERROR, "该商品只能购买" + productResponseDto.getTimes() + "次");
       }
     }
     if (productResponseDto.getNumberType() == 2) {
-      Long number = orderService.getProductNoPayNumber(productId);
+      Long number = orderService.getProductNoPayNumber(productId, null);
       if (productResponseDto.getSoldNumber() + num + number > productResponseDto.getNumber()) {
         throw new StarServiceException(ApiCode.PARAM_ERROR, "商品[" + productResponseDto.getTitle() + "]库存不足");
       }
@@ -273,13 +273,13 @@ public class ShoppingCartService {
       if (num > productResponseDto.getTimes()) {
         throw new StarServiceException(ApiCode.PARAM_ERROR, "添加了"+num+"份，该商品只能购买" + productResponseDto.getTimes() + "份");
       }
-      Integer buyTimes = this.orderService.getBuyTimes(memberId, productId);
+      Integer buyTimes = this.orderService.getBuyTimes(memberId, productId, null);
       if (buyTimes >= productResponseDto.getTimes()) {
         throw new StarServiceException(ApiCode.PARAM_ERROR, "该商品只能购买" + productResponseDto.getTimes() + "次");
       }
     }
     if (productResponseDto.getNumberType() == 2) {
-      Long number = orderService.getProductNoPayNumber(productId);
+      Long number = orderService.getProductNoPayNumber(productId, null);
       if (productResponseDto.getSoldNumber() + num + number > productResponseDto.getNumber()) {
         throw new StarServiceException(ApiCode.PARAM_ERROR, "商品[" + productResponseDto.getTitle() + "]库存不足");
       }

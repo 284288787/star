@@ -362,12 +362,13 @@ public class OrderService implements ChooseDataIntf {
   }
 
   /**
-   * 查询没有支付的供应的总数量
+   * 查询没有支付的供应的总数量 除开orderid代表的订单
    * @param productId
+   * @param orderId 
    * @return
    */
-  public Long getProductNoPayNumber(Long productId) {
-    return orderDetailCache.getProductNoPayNumber(productId, OrderStateEnum.nopay.state());
+  public Long getProductNoPayNumber(Long productId, Long orderId) {
+    return orderDetailCache.getProductNoPayNumber(productId, orderId, OrderStateEnum.nopay.state());
   }
 
   public void deleteOrderJob() {
@@ -603,8 +604,8 @@ public class OrderService implements ChooseDataIntf {
     this.orderCache.updateOrder(orderRequestDto);
   }
 
-  public Integer getBuyTimes(Long memberId, Long productId) {
-    return this.orderDetailCache.getBuyTimes(memberId, productId);
+  public Integer getBuyTimes(Long memberId, Long productId, Long orderId) {
+    return this.orderDetailCache.getBuyTimes(memberId, productId, orderId);
   }
 
   public void updateRemark(Long orderId, String remark) {
