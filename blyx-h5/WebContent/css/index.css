@@ -1,17 +1,73 @@
-.xfq{
+.category{
+  position: absolute;
+  width: 100%;
+  right:0;
+  top: 107px;
+  background: #efefef;
+  color: #0f0606;
+  font-size: 12px !important;
+  z-index: 888;
+  padding: 10px;
+  border: 1px solid lightgray;
+  word-break:normal; display: inline-block;word-wrap : break-word ;
+  display:none;
+}
+.category .title{
+  height: 30px;
+  font-weight: bold;
+}
+.category span.cateitem{
+  padding: 3px 6px;
+  border: 1px solid green;
+  margin: 1px;
+  word-break:normal; display: inline-block; white-space:pre-wrap;word-wrap : break-word ;
+  background-color: #fff;
+}
+.category span.close{
+  float:right;padding-right:10px
+}
+.categorydiv{
+  right: 10px;
+  top: 107px;
+  position: absolute;
+  background: #d8edd;
+  color: #0f0606;
+  font-size: 12px !important;
+  z-index: 888;
+  width: 35px;
+  text-align:center;
+}
+.categorydiv .cate{
+  display:none;
+  background: #d8edd;
+  border: 1px solid #32ae4f;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.xfqdiv{
   right: 10px;
   bottom: 70px;
   position: absolute;
   background: #d8edd;
-  border: 1px solid #32ae4f;
   color: #0f0606;
   font-size: 12px !important;
   z-index: 888;
+  width: 35px;
+  text-align:center;
+}
+.xfq{
+  position: initial;
+  background: #d8edd;
+  border: 1px solid #32ae4f;
+  color: #0f0606;
+  font-size: 12px !important;
   border-radius: 55px;
   height: 35px;
   width: 35px;
   line-height: 35px;
   text-align:center;
+  margin-top: 5px;
 }
 .xf{
   right:0px;
@@ -141,6 +197,9 @@
     vertical-align: middle;
     margin-right: 0px;
 }
+.main {
+    padding-top: 54px !important;
+}
 .shop p.t{
     padding-right: 60px;
 }
@@ -157,14 +216,12 @@
       top: 10px;
       color: #999;
       font-size: 12px;
-      
-    
   }
   .shop span.fr b {
     color: #ff0000;
   }
   #pullrefresh{
-     top: 54px !important;
+     top: 107px !important;
      bottom: 20px;
   }
   .mui-table-view:before,.mui-table-view:after{
