@@ -66,9 +66,10 @@ $(function() {
     }
   });
   
+  var param;
   $("#mean3").on("tap", function(){
     var deliveryType = $("#item1").hasClass("mui-active") ? 1 : 2;
-    var param = {memberId: user.memberId, distributorId: distributor.distributorId, deliveryType: deliveryType};
+    param = {memberId: user.memberId, distributorId: distributor.distributorId, deliveryType: deliveryType};
     if(deliveryType == 1){
       var name = $("input[name=name]").val();
       var mobile = $("input[name=mobile]").val();
@@ -99,6 +100,27 @@ $(function() {
     }
     param['details'] = details;
     param['remark'] = $("input[name=remark]").val();
+    $("#ok .shopName b").text(distributor.shopName);
+    if(param.deliveryType==1){
+      var a = ""; 
+      if(distributor.provinceName) a += distributor.provinceName;
+      if(distributor.cityName) a += distributor.cityName;
+      if(distributor.areaName) a += distributor.areaName;
+      if(distributor.townName) a += distributor.townName;
+      $("#ok .addr b").text(a + ' ' + distributor.address);
+      $("#ok .info").text(distributor.shopName + " " + distributor.mobile);
+    }else{
+      $("#ok .addr").html('收货地址：<b>'+$(".deliveryaddr").text()+'</b>');
+      $("#ok .info").text($(".deliveryname").text() + " " + $(".deliverymobile").text());
+    }
+    mui('#ok').popover('show');
+    return false;
+  });
+  $("#ok .cancel").on("tap", function(){
+    mui('#ok').popover('hide');
+    return false;
+  });
+  $("#ok .sbmit").on("tap", function(){
     ajax({
       contentType: 'application/json',
       url: '/api/order/saveMemberOrder',

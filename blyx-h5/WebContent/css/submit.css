@@ -57,15 +57,18 @@
 }
 .padd{
   color: #999;
+  text-align: left;
 }
 .padd b{
   color: #333;
 }
 .paddn{
   color: #999;
+  text-align: left;
 }
 .pred{
-  color: red;
+  color: red !important;
+  text-align: left;
 }
 .address{
   padding: 10px;  
