@@ -16,7 +16,11 @@ var distributorHandle = new ListHandle({
     disabled: basePath+'distributor/disabled',
     deleted: basePath+'distributor/deleted',
   }
-},{});
+},{
+  ewm: function(distributorId){
+    window.open(basePath+"download/shopewm/"+distributorId);
+  }
+});
 new UtilsHandle({
   basePath: basePath,
   chooseArea: {items: [
@@ -77,8 +81,9 @@ new UtilsHandle({
 $(function(){
   var colNames = ['操作', '是否可用', 'distributorId', '姓名', '店铺名称', '店铺编码', '手机号', '粉丝数', '已售件数', '分销区域拼音', '分销区域', '街道地址', '更新日期', 'openid', '营业执照', '食品流通许可证', '营业面积', '开户行', '开户名', '银行卡号'];
   var colModel = [
-    {align: "center", width: '80px', editable: false, sortable: false, frozen: true, formatter: function(cellvalue, options, rowObject){
+    {align: "center", width: '150px', editable: false, sortable: false, frozen: true, formatter: function(cellvalue, options, rowObject){
       var temp = '';
+      temp += '<a class="linetaga" href="javascript: distributorHandle.ewm(\'' + rowObject.distributorId.toFixed(0) + '\');" >二维码</a>';
       if(hasAuthorize('distributor-editBefore')){
         temp += '<a class="linetaga" href="javascript: distributorHandle.edit(\'' + rowObject.distributorId.toFixed(0) + '\');" >编辑</a>';
       }

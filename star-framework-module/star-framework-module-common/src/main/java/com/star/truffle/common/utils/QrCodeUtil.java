@@ -5,11 +5,14 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 import javax.imageio.ImageIO;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.BinaryBitmap;
@@ -38,8 +41,8 @@ public class QrCodeUtil {
   private static final int QRCOLOR = 0xFF000000; // 默认是黑色
   private static final int BGWHITE = 0xFFFFFFFF; // 背景颜色
 
-  private static final int WIDTH = 300; // 二维码宽
-  private static final int HEIGHT = 300; // 二维码高
+  private static final int WIDTH = 170; // 二维码宽
+  private static final int HEIGHT = 170; // 二维码高
 
   private static Map<EncodeHintType, Object> hints = new HashMap<EncodeHintType, Object>() {
     private static final long serialVersionUID = 1L;
@@ -63,21 +66,31 @@ public class QrCodeUtil {
         }
       }
 
-      int width = image.getWidth();
-      int height = image.getHeight();
-      File logoFile = new File(logoPath);
-      if (Objects.nonNull(logoFile) && logoFile.exists()) {
-        // 构建绘图对象
-        Graphics2D g = image.createGraphics();
+      if (StringUtils.isNotBlank(logoPath)) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+        
         // 读取Logo图片
-        BufferedImage logo = ImageIO.read(logoFile);
-        // 开始绘制logo图片
-        g.drawImage(logo, width * 2 / 5, height * 2 / 5, width * 2 / 10, height * 2 / 10, null);
-        g.dispose();
-        logo.flush();
+        File logoFile = new File(logoPath);
+        BufferedImage logo = null;
+        if (! logoFile.exists()) {
+          URL url = new URL(logoPath);
+          InputStream in = url.openStream();
+          logo = ImageIO.read(in);
+        }else {
+          logo = ImageIO.read(logoFile);
+        }
+        if (Objects.nonNull(logo)) {
+          // 构建绘图对象
+          Graphics2D g = image.createGraphics();
+          // 开始绘制logo图片
+          g.drawImage(logo, width * 3 / 10, height * 3 / 10, width * 4 / 10, height * 4 / 10, null);
+          g.dispose();
+          logo.flush();
+        }
       }
       image.flush();
-      ImageIO.write(image, "png", out);
+      ImageIO.write(image, "jpeg", out);
     } catch (Exception e) {
       e.printStackTrace();
     }

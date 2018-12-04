@@ -1,6 +1,7 @@
 /**create by liuhua at 2018年6月5日 上午11:48:40**/
 package com.star.truffle.core;
 
+import com.star.truffle.core.web.ApiCode;
 import com.star.truffle.core.web.ApiCodeIntf;
 import lombok.Getter;
 
@@ -9,7 +10,11 @@ public class StarServiceException extends RuntimeException {
   private static final long serialVersionUID = 1L;
   
   private String msg;
-  private int code = -1;
+  private int code = ApiCode.SYSTEM_ERROR.getCode();
+  
+  public StarServiceException() {
+    super(ApiCode.SYSTEM_ERROR.getMsg());
+  }
   
   public StarServiceException(String msg) {
     super(msg);

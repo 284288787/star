@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.Method;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,13 +26,18 @@ import com.star.truffle.common.importdata.ExcelUtil;
 import com.star.truffle.common.properties.Excel;
 import com.star.truffle.common.properties.ExcelTemplate;
 import com.star.truffle.common.service.ExcelService;
+import com.star.truffle.core.StarInterface;
 import com.star.truffle.core.StarServiceException;
 import com.star.truffle.core.jackson.StarJson;
 import com.star.truffle.core.util.DateUtils;
 import com.star.truffle.core.util.ParamHandler;
 import com.star.truffle.core.web.ApiCode;
 import com.star.truffle.core.web.ApiResult;
+import com.star.truffle.core.web.config.SpringContextConfig;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping("/download")
 public class FileDownloadController {
@@ -177,4 +183,22 @@ public class FileDownloadController {
     }
   }
 
+  
+  @RequestMapping(value = "/shopewm/{distributorId}", method = RequestMethod.GET)
+  public void shopewm(@PathVariable Long distributorId, HttpServletResponse response) throws IOException {
+    try {
+      StarInterface starInterface = SpringContextConfig.getBean("distributorService", StarInterface.class);
+      Method method = starInterface.getClass().getMethod("shopEwm", Long.class, HttpServletResponse.class);
+      method.invoke(starInterface, distributorId, response);
+    } catch (Throwable e) {
+      Throwable t = e.getCause();
+      if (null != t) {
+        e = t;
+      }
+      log.error(e.getMessage(), e);
+      response.setContentType("application/json;charset=UTF-8");
+      response.getWriter().write(e.getMessage());
+      response.getWriter().flush();
+    }
+  }
 }

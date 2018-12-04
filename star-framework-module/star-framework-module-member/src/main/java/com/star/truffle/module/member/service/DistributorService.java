@@ -1,11 +1,15 @@
 /**create by framework at 2018年09月18日 11:52:26**/
 package com.star.truffle.module.member.service;
 
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +19,8 @@ import com.star.truffle.common.choosedata.ChooseDataIntf;
 import com.star.truffle.common.choosedata.GridColumn;
 import com.star.truffle.common.choosedata.GridPagerResponse;
 import com.star.truffle.common.constants.EnabledEnum;
+import com.star.truffle.common.utils.QrCodeUtil;
+import com.star.truffle.core.StarInterface;
 import com.star.truffle.core.StarServiceException;
 import com.star.truffle.core.jackson.StarJson;
 import com.star.truffle.core.jdbc.Page;
@@ -26,7 +32,7 @@ import com.star.truffle.module.member.dto.req.DistributorRequestDto;
 import com.star.truffle.module.member.dto.res.DistributorResponseDto;
 
 @Service
-public class DistributorService implements ChooseDataIntf {
+public class DistributorService implements ChooseDataIntf, StarInterface {
 
   @Autowired
   private StarJson starJson;
@@ -34,6 +40,27 @@ public class DistributorService implements ChooseDataIntf {
   private DistributorCache distributorCache;
   @Autowired
   private SmsIdentityService smsIdentityService;
+  
+  public void shopEwm(Long distributorId, HttpServletResponse response) {
+    DistributorResponseDto distributorResponseDto = this.distributorCache.getDistributor(distributorId);
+    if (null == distributorResponseDto) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR, "分销商不存在");
+    }
+    try {
+      response.setContentType("image/jpeg");
+      // 禁止图像缓存。
+      response.setHeader("Pragma", "no-cache");
+      response.setHeader("Cache-Control", "no-cache");
+      response.setDateHeader("Expires", 0);
+//      String filename = distributorResponseDto.getShopName() + ".jpg";
+//      filename = URLEncoder.encode(filename, "UTF-8");
+//      response.setHeader("Content-Disposition", "attachment; filename=" + filename);
+      QrCodeUtil.create("http://yx.hnkbmd.com/photo/shop.png", "http://yx.hnkbmd.com/index.html?py=" + distributorResponseDto.getPy(), response.getOutputStream());
+    } catch (IOException e) {
+      e.printStackTrace();
+      throw new StarServiceException();
+    }
+  }
 
   @Override
   public String getPrimaryKey() {
