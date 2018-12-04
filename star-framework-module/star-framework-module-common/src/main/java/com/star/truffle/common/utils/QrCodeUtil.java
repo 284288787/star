@@ -41,8 +41,8 @@ public class QrCodeUtil {
   private static final int QRCOLOR = 0xFF000000; // 默认是黑色
   private static final int BGWHITE = 0xFFFFFFFF; // 背景颜色
 
-  private static final int WIDTH = 170; // 二维码宽
-  private static final int HEIGHT = 170; // 二维码高
+  private static final int WIDTH = 480; // 二维码宽
+  private static final int HEIGHT = 480; // 二维码高
 
   private static Map<EncodeHintType, Object> hints = new HashMap<EncodeHintType, Object>() {
     private static final long serialVersionUID = 1L;
