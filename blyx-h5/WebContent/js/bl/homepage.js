@@ -8,11 +8,13 @@ mui.init({
     up : {
       auto : true,
       contentrefresh : '正在加载...',
+      contentnomore:'没有更多商品了',
       callback : pullupRefresh
     }
   }
 });
 var pageNum = 1, pageSize = 10;
+var cateId = null;
 var py = getParam("py");
 var user = getLoginInfo();
 var userCartNum;
@@ -42,6 +44,7 @@ $(function(){
     }
   });
   initShopInfo();
+  initCategory();
   initCartNum();
   $("#search").on("input", function(){
     pulldownRefresh();
@@ -128,6 +131,34 @@ function initCartNum(){
   }
 }
 
+function initCategory(){
+  ajax({
+    url: '/api/category/queryCategory',
+    success: function(data){
+      for(var i in data){
+        $(".category .cates").append('<span class="cateitem" data-cateid="'+data[i].cateId+'" data-catename="'+data[i].cateName+'">'+data[i].cateName+'</span>');
+      }
+      $(".category .cates span").on("tap", function(){
+        cateId = $(this).attr("data-cateid");
+        cateName = $(this).attr("data-catename");
+        if(! cateId) cateId = null;
+        if(cateName){
+          $(".categorydiv .cate").text(cateName);
+        }else{
+          $(".categorydiv .cate").text("全部分类");
+        }
+        $(".categorydiv .cate").show();  
+        $(".category").fadeOut();
+        $(".category .close").off();
+        mui('#pullrefresh').scroll().scrollTo(0,0,1);
+        mui('#pullrefresh').pullRefresh().enablePullupToRefresh();
+        mui('#pullrefresh').pullRefresh().endPullupToRefresh(false);
+        pulldownRefresh();
+      });
+    }
+  });
+}
+
 function initShopInfo(){
   if(!py) py = getLocalData('py')
   if(!py) py = 'wygc';
@@ -185,6 +216,7 @@ function pulldownRefresh() {
     var title = $("#search").val();
     $(".itemlist").html("");
     loadData(pageNum, pageSize, title);
+    mui('#pullrefresh').pullRefresh().refresh(true);
     mui('#pullrefresh').pullRefresh().endPulldownToRefresh(true);
     pageNum++;
   }, 10);
@@ -199,7 +231,7 @@ function pullupRefresh() {
 function loadData(pageNum, pageSize, title){
   ajax({
     url: '/api/product/queryProduct',
-    data: {'title': title, 'pager.pageNum': pageNum, 'pager.pageSize': pageSize},
+    data: {'title': title, 'pager.pageNum': pageNum, 'pager.pageSize': pageSize, 'cateId': cateId},
     success: function(items){
       if(null != items && items.length > 0){
         mui('#pullrefresh').pullRefresh().endPullupToRefresh(false);

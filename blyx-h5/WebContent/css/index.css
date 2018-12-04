@@ -18,7 +18,7 @@
 }
 .category span.cateitem{
   padding: 3px 6px;
-  border: 1px solid green;
+  border: 1px solid lightgray;
   margin: 1px;
   word-break:normal; display: inline-block; white-space:pre-wrap;word-wrap : break-word ;
   background-color: #fff;
