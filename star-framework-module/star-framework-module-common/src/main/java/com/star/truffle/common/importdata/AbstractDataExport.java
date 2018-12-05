@@ -24,6 +24,7 @@ public abstract class AbstractDataExport<T> {
   private int pageSize = 5000;
   private Map<String, Object> params;
   private Excel excel;
+  private boolean full;
   
   public AbstractDataExport() {
     super();
@@ -59,8 +60,11 @@ public abstract class AbstractDataExport<T> {
     style.setBorderTop(BorderStyle.THIN);//上边框    
     style.setBorderRight(BorderStyle.THIN);//右边框  
     while(true) {
-      Map<String, Object> args = getTemplateDatas();
-      excel = ExcelUtil.fullExcel(excel, args);
+      if (! full) {
+        full = true;
+        Map<String, Object> args = getTemplateDatas();
+        excel = ExcelUtil.fullExcel(excel, args);
+      }
       List<String[]> datas = getRecordsData(params, pageNumber, getPageSize());
       if (null == datas || datas.isEmpty()) {
         break;
