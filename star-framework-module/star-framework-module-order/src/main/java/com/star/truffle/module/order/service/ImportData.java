@@ -62,6 +62,7 @@ public class ImportData extends AbstractDataExport<Order> {
     orderDetailRequestDto.setPager(pager);
     List<OrderDetailResponseDto> details = this.orderDetailCache.queryOrderDetail(orderDetailRequestDto);
     if (null != details && ! details.isEmpty()) {
+      int index = 1;
       for (OrderDetailResponseDto detail : details) {
         String pickupCode = StringUtils.isBlank(detail.getPickupCode()) ? "" : detail.getPickupCode();
 //        String typeName = detail.getType() == OrderTypeEnum.self.type() ? OrderTypeEnum.self.caption() : OrderTypeEnum.behalf.caption();
@@ -83,9 +84,11 @@ public class ImportData extends AbstractDataExport<Order> {
           mobile = detail.getShopMobile();
           address = detail.getShopAddress();
         }
-        String[] arr = {detail.getTitle(), detail.getSpecification(), detail.getOrderCode(), pickupCode, detail.getRemark(), 
-            name, mobile, address, detail.getCount() + "", ProductConstant.formatMoney(detail.getPrice()), 
-            ProductConstant.formatMoney(detail.getCount() * detail.getPrice()), ""};
+        //商品名称,商品规格,订单号,提货号,收货人,收货电话,收货地址,会员姓名,会员电话,下单日期,单价,小计,数量,订单备注
+        String[] arr = {"" + index++, detail.getTitle(), detail.getSpecification(), detail.getOrderCode(), pickupCode, 
+            name, mobile, address, detail.getName(), detail.getMobile(), DateUtils.formatDateTime(detail.getCreateTime()), 
+            ProductConstant.formatMoney(detail.getPrice()), 
+            ProductConstant.formatMoney(detail.getCount() * detail.getPrice()), detail.getCount() + "", detail.getRemark()};
         list.add(arr);
       }
     }

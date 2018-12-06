@@ -21,6 +21,7 @@ import com.star.truffle.common.importdata.AbstractDataImport;
 import com.star.truffle.common.importdata.ExcelUtil;
 import com.star.truffle.common.importdata.ImportResult;
 import com.star.truffle.core.util.ClassUtils;
+import com.star.truffle.core.util.DateUtils;
 
 @Service
 public class ExcelService {
@@ -41,11 +42,13 @@ public class ExcelService {
 
   public void exportExcel(List<ExcelExportParam> eeps, HttpServletResponse response) throws IOException {
     Map<String, String> excelFiles = new LinkedHashMap<>();
+    int idx = 1;
     for (ExcelExportParam excelExportParam : eeps) {
       AbstractDataExport<?> dataExport = (AbstractDataExport<?>) ClassUtils.getInstance(excelExportParam.getHandle(), null, null);
 //      AbstractDataExport<?> dataExport = SpringContextConfig.getBean(excelExportParam.getHandle(), AbstractDataExport.class);
       dataExport.setExcel(excelExportParam.getExcel());
       dataExport.setParams(excelExportParam.getParams());
+      dataExport.setIdx(idx++);
       String filePath = dataExport.exportData();
       String filename = filePath.substring(filePath.lastIndexOf(File.separator) + 1);
       filename = URLEncoder.encode(filename, "UTF-8");
@@ -67,7 +70,7 @@ public class ExcelService {
         File temp = new File(ef.getValue());
         srcfile.add(temp);
       }
-      ExcelUtil.downZipFile(response, "star-all.zip", srcfile);
+      ExcelUtil.downZipFile(response, DateUtils.formatNow("MM月dd日HH点mm分") + ".zip", srcfile);
     }
   }
 }

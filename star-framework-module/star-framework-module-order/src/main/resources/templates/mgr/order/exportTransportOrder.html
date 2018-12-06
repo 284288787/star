@@ -42,6 +42,8 @@
        <tr>
          <td >选择分销商：</td>
          <td >
+           <input type="radio" name="radiodis" id="dis1" checked><label for="dis1">满足以上条件的所有分销商</label><br>
+           <input type="radio" name="radiodis" id="dis2">
            <input type="text" name="distributorNames" class="ipt300" placeholder="选择分销商">
            <input type="hidden" name="distributorIds">
          </td>
@@ -114,33 +116,43 @@
 		    transportStates += (i==0 ? "" : ",") + this.value;
 		  });
 		  var params = {"key": 'transportOrder', "handle": 'com.star.truffle.module.order.service.ImportData', 'beginTime': beginTime, 'endTime': endTime, 'states': states, 'transportStates': transportStates};
-		  var distributorIds = $("input[name=distributorIds]").val();
-		  if(! distributorIds) {artDialog.alert("请选择分销商"); return false;}
-// 		  $.ajax({
-// 		    url: '/order/getDistributorIds',
-// 		    data: params,
-// 		    type: 'post',
-// 		    dataType: 'json',
-// 		    success: function(res){
-// 		      if(res.code == 0){
-		        //var ids = res.data;
-		        //if(ids.length == 0){
-		        //  artDialog.alert("没有满足条件的订单可以导出");
-		        //  return false;
-		        //}
-		        var ids = distributorIds.split(",");
-		        for(var i in ids){
-		          params['distributorId'] = ids[i];
-		          var url = '/download/excel/data?params=';
-		    		  url+=encodeURI(JSON.stringify(params));
-		    		  window.open(url);
-		        }
-// 		      }else{
-// 		        artDialog.alert(res.msg);
-// 		      }
-// 		    }
-// 		  });
 		  
+		  var dis1 = $("#dis1")[0].checked;
+		  if(dis1){
+		    $.ajax({
+	        url: '/order/getDistributorIds',
+	        data: params,
+	        type: 'post',
+	        dataType: 'json',
+	        success: function(res){
+	          if(res.code == 0){
+	            var ids = res.data;
+	            if(ids.length == 0){
+	              artDialog.alert("没有满足条件的订单可以导出");
+	              return false;
+	            }
+	            var distributorIds = "";
+	            for(var i in ids){
+	              distributorIds += "," + ids[i].distributorId;
+	            }
+	            var ids = distributorIds.substr(1);
+	            params['templateRepetition'] = {"key":["distributorId", "abc"], "value": [ids, ids]};
+	            var url = '/download/excel/data?params=';
+	            url+=encodeURI(JSON.stringify(params));
+	            window.open(url);
+	          }else{
+	            artDialog.alert(res.msg);
+	          }
+	        }
+	      });
+		  }else{
+  		  var distributorIds = $("input[name=distributorIds]").val();
+  		  if(! distributorIds) {artDialog.alert("请选择分销商"); return false;}
+  		  params['templateRepetition'] = {"key":["distributorId", "abc"], "value": [distributorIds, distributorIds]};
+        var url = '/download/excel/data?params=';
+        url+=encodeURI(JSON.stringify(params));
+        window.open(url);
+		  }
 		});
 	});
 	</script>

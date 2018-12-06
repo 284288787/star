@@ -25,6 +25,7 @@ public abstract class AbstractDataExport<T> {
   private Map<String, Object> params;
   private Excel excel;
   private boolean full;
+  private Integer idx;
   
   public AbstractDataExport() {
     super();
@@ -74,7 +75,7 @@ public abstract class AbstractDataExport<T> {
       ExcelUtil.createXlsxExcelSheetData(sheet, excel, columnWidth, datas, style);
       pageNumber ++;
     }
-    String filename = ExcelUtil.fullDateOfNow(excel.getFileName()) + ".xlsx";
+    String filename = ExcelUtil.fullDateOfNow(idx + ". " + excel.getFileName()) + ".xlsx";
     String filePath = tempDir + File.separator + filename;
     File xlsFile = new File(filePath);
     FileOutputStream fileOutputStream = new FileOutputStream(xlsFile);
@@ -99,5 +100,13 @@ public abstract class AbstractDataExport<T> {
 
   public void setExcel(Excel excel) {
     this.excel = excel;
+  }
+
+  public Integer getIdx() {
+    return idx;
+  }
+
+  public void setIdx(Integer idx) {
+    this.idx = idx;
   }
 }

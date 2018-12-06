@@ -49,37 +49,27 @@ public class FileDownloadController {
   @Autowired
   private ExcelService excelService;
   
-  @RequestMapping(value = "/excel/data", method = RequestMethod.GET)
+  /**
+   * key 模板名称
+   * handle 导出处理类
+   * 
+   * templateRepetition: {"key": ["distributorId", "regionId"], "value": ["1,23,3", "1,3,45"]}
+   * distributorId 对应 1,23,3
+   * regionId 对应 1,3,45
+   * 个数相同，key handle 只能有一个
+   */
+  @RequestMapping(value = "/excel/data" )
   public void exportData(String params, HttpServletResponse response) throws IOException {
     try {
       ParamHandler paramHandler = ParamHandler.ofParam(params, starJson);
       List<ExcelExportParam> eeps = new ArrayList<>();
       String key = paramHandler.getString("key");
-      if (key.indexOf(",") != -1) {
-        String[] keys = key.split(",");
-        String handle = paramHandler.getString("handle");
-        String[] handles = handle.split(",");
-        if (keys.length != handles.length) {
-          ApiResult<Void> apiResult = ApiResult.fail(ApiCode.PARAM_ERROR.getCode(), "参数错误");
-          response.setContentType("application/json;charset=UTF-8");
-          response.getWriter().write(starJson.obj2string(apiResult));
-          response.getWriter().flush();
-          return;
-        }
-        for (int i = 0; i < keys.length; i ++) {
-          Excel excel = excelTemplate.getExcel().get(keys[i]);
-          if (null == excel) {
-            ApiResult<Void> apiResult = ApiResult.fail(ApiCode.PARAM_ERROR.getCode(), "模板[" + keys[i] + "]不存在");
-            response.setContentType("application/json;charset=UTF-8");
-            response.getWriter().write(starJson.obj2string(apiResult));
-            response.getWriter().flush();
-            return;
-          }
-          Map<String, Object> param = paramHandler.getMapExcept("key", "handle");
-          ExcelExportParam eep = ExcelExportParam.of(handles[i], excel, param);
-          eeps.add(eep);
-        }
-      } else {
+      String handle = paramHandler.getString("handle");
+      
+      Map<String, Object> templateRepetition = paramHandler.getMap("templateRepetition");
+      if (null != templateRepetition) {
+        List<String> repkey = (ArrayList<String>) templateRepetition.get("key");
+        List<String> repvalue = (ArrayList<String>) templateRepetition.get("value");
         Excel excel = excelTemplate.getExcel().get(key);
         if (null == excel) {
           ApiResult<Void> apiResult = ApiResult.fail(ApiCode.PARAM_ERROR.getCode(), "模板不存在");
@@ -88,10 +78,54 @@ public class FileDownloadController {
           response.getWriter().flush();
           return;
         }
-        String handle = paramHandler.getString("handle");
-        Map<String, Object> param = paramHandler.getMapExcept("key", "handle");
-        ExcelExportParam eep = ExcelExportParam.of(handle, excel, param);
-        eeps.add(eep);
+        String[] values = repvalue.get(0).split(",");
+        Map<String, Object> param = paramHandler.getMapExcept("key", "handle", "templateRepetition");
+        for (int i = 0; i < values.length; i++) {
+          Map<String, Object> args = new HashMap<>(param);
+          for (int j = 0; j < repkey.size(); j++) {
+            String[] val = repvalue.get(j).split(",");
+            args.put(repkey.get(j), val[i]);
+          }
+          ExcelExportParam eep = ExcelExportParam.of(handle, excel, args);
+          eeps.add(eep);
+        }
+      }else {
+        if (key.indexOf(",") != -1) {
+          String[] keys = key.split(",");
+          String[] handles = handle.split(",");
+          if (keys.length != handles.length) {
+            ApiResult<Void> apiResult = ApiResult.fail(ApiCode.PARAM_ERROR.getCode(), "参数错误");
+            response.setContentType("application/json;charset=UTF-8");
+            response.getWriter().write(starJson.obj2string(apiResult));
+            response.getWriter().flush();
+            return;
+          }
+          for (int i = 0; i < keys.length; i ++) {
+            Excel excel = excelTemplate.getExcel().get(keys[i]);
+            if (null == excel) {
+              ApiResult<Void> apiResult = ApiResult.fail(ApiCode.PARAM_ERROR.getCode(), "模板[" + keys[i] + "]不存在");
+              response.setContentType("application/json;charset=UTF-8");
+              response.getWriter().write(starJson.obj2string(apiResult));
+              response.getWriter().flush();
+              return;
+            }
+            Map<String, Object> param = paramHandler.getMapExcept("key", "handle");
+            ExcelExportParam eep = ExcelExportParam.of(handles[i], excel, param);
+            eeps.add(eep);
+          }
+        } else {
+          Excel excel = excelTemplate.getExcel().get(key);
+          if (null == excel) {
+            ApiResult<Void> apiResult = ApiResult.fail(ApiCode.PARAM_ERROR.getCode(), "模板不存在");
+            response.setContentType("application/json;charset=UTF-8");
+            response.getWriter().write(starJson.obj2string(apiResult));
+            response.getWriter().flush();
+            return;
+          }
+          Map<String, Object> param = paramHandler.getMapExcept("key", "handle");
+          ExcelExportParam eep = ExcelExportParam.of(handle, excel, param);
+          eeps.add(eep);
+        }
       }
       
       excelService.exportExcel(eeps, response);

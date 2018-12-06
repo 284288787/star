@@ -158,13 +158,22 @@ public class ParamHandler {
     }
     return null;
   }
-
+  
   public String getString(String name) {
     Object object = getObject(name);
     if (null == object) {
       return null;
     }
     return object.toString().trim();
+  }
+
+  @SuppressWarnings("unchecked")
+  public Map<String, Object> getMap(String name) {
+    Object object = getObject(name);
+    if (null == object) {
+      return null;
+    }
+    return (Map<String, Object>) object;
   }
 
   public Object getObject(String name) {

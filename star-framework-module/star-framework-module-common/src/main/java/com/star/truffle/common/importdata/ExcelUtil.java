@@ -27,12 +27,14 @@ import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.FillPatternType;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFFont;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -351,7 +353,15 @@ public class ExcelUtil {
     Integer rowNum = excel.getFieldsRowNum();
     Map<Integer, Double> total = new HashMap<>();
     int contentLen = 0;
+    XSSFCellStyle style1 = (XSSFCellStyle) style.clone();
+    XSSFColor color1 = new XSSFColor(new java.awt.Color(183, 230, 213));
+    style1.setFillForegroundColor(color1); // 前景色
+    style1.setFillPattern(FillPatternType.SOLID_FOREGROUND);
     
+    XSSFCellStyle style2 = (XSSFCellStyle) style.clone();
+    XSSFColor color2 = new XSSFColor(new java.awt.Color(213, 230, 183));
+    style2.setFillForegroundColor(color2); // 前景色
+    style2.setFillPattern(FillPatternType.SOLID_FOREGROUND);
     if (contentList != null && contentList.size() > 0) {
       XSSFRow contentRow = null;
       XSSFCell contentCell = null;
@@ -370,7 +380,7 @@ public class ExcelUtil {
             contentCell = null;
             contentCell = contentRow.createCell(iCell);
             contentCell.setCellValue(content[iCell]);
-            contentCell.setCellStyle(style);
+            contentCell.setCellStyle(iRow % 2 == 0 ? style1 : style2);
             if (null != excel.getColTotal()) {
               Integer[] cols = excel.getColTotal().getCols();
               for (Integer col : cols) {
@@ -575,9 +585,10 @@ public class ExcelUtil {
   }
 
   public static Map<Integer, Integer> createXlsxExcelSheetHead(XSSFSheet sheet, Excel excel, XSSFCellStyle style) {
+    Map<Integer, Integer> columnWidth = new HashMap<>();
     String[] titles = excel.getFields();
     Integer titlesLen = null != titles ? (titles.length - 1) : 0;
-    
+    XSSFCellStyle style1 = (XSSFCellStyle) style.clone();
     String tableCaption = excel.getTableCaption();
     if (StringUtils.isNotBlank(tableCaption)) {
       XSSFRow xrow = sheet.createRow(0);
@@ -606,21 +617,33 @@ public class ExcelUtil {
           }
           XSSFCell cell = xrow.getCell(i);
           cell.setCellValue(rd[i]);
+          if (i != rd.length - 1) {
+            int width = (int) (40 * len(rd[i]) * 20);
+            columnWidth.put(i, width);
+            sheet.setColumnWidth(i, width);
+          }
         }
       }
     }
-    Map<Integer, Integer> columnWidth = new HashMap<>();
+    
     if (titles != null && titles.length > 0) {
+      XSSFColor color = new XSSFColor(new java.awt.Color(226, 220, 220));
+//      style1.setFillBackgroundColor(color);
+//      style1.setFillPattern(FillPatternType.ALT_BARS);
+      style1.setFillForegroundColor(color); // 前景色
+      style1.setFillPattern(FillPatternType.SOLID_FOREGROUND);
       int row = null == excel.getFieldsRowNum() ? 0 : (excel.getFieldsRowNum() - 1);
       XSSFRow titleRow = sheet.createRow(row);
       XSSFCell titleCell = null;
       for (int i = 0; i < titles.length; i++) {
         titleCell = titleRow.createCell(i);
         titleCell.setCellValue(titles[i]);
-        titleCell.setCellStyle(style);
-        int width = (int) (40 * len(titles[i]) * 20);
-        columnWidth.put(i, width);
-        sheet.setColumnWidth(i, width);
+        titleCell.setCellStyle(style1);
+        if (null == columnWidth.get(i)) {
+          int width = (int) (40 * len(titles[i]) * 20);
+          columnWidth.put(i, width);
+          sheet.setColumnWidth(i, width);
+        }
       }
     }
     return columnWidth;
