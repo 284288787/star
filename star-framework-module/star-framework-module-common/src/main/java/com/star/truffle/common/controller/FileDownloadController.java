@@ -58,6 +58,7 @@ public class FileDownloadController {
    * regionId 对应 1,3,45
    * 个数相同，key handle 只能有一个
    */
+  @SuppressWarnings("unchecked")
   @RequestMapping(value = "/excel/data" )
   public void exportData(String params, HttpServletResponse response) throws IOException {
     try {
