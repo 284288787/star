@@ -350,7 +350,10 @@ public class ExcelUtil {
   }
 
   public static Integer createXlsxExcelSheetData(XSSFSheet sheet, Excel excel, Map<Integer, Integer> columnWidth, List<String[]> contentList, XSSFCellStyle style) throws IOException {
+    style = (XSSFCellStyle) style.clone();
+    style.setWrapText(true);
     Integer rowNum = excel.getFieldsRowNum();
+    Integer[] fieldWidths = excel.getFieldsWidth();
     Map<Integer, Double> total = new HashMap<>();
     int contentLen = 0;
     XSSFCellStyle style1 = (XSSFCellStyle) style.clone();
@@ -372,10 +375,14 @@ public class ExcelUtil {
           contentRow = sheet.createRow(rowNum ++);
           for (int iCell = 0; iCell < content.length; iCell++) {
             int w = (int) (35.7 * len(content[iCell]) * 15);
-            int ow = columnWidth.get(iCell);
-            if (w > ow) {
-              columnWidth.put(iCell, w);
-              sheet.setColumnWidth(iCell, w);
+            if (null != fieldWidths) {
+              sheet.setColumnWidth(iCell, fieldWidths[iCell]);
+            }else {
+              int ow = columnWidth.get(iCell);
+              if (w > ow) {
+                columnWidth.put(iCell, w);
+                sheet.setColumnWidth(iCell, w);
+              }
             }
             contentCell = null;
             contentCell = contentRow.createCell(iCell);
@@ -525,15 +532,19 @@ public class ExcelUtil {
       res.setTableCaption(fullParams(excel.getTableCaption(), context));
       res.setFieldsRowNum(excel.getFieldsRowNum());
       res.setColTotal(excel.getColTotal());
+      res.setFieldsWidth(excel.getFieldsWidth());
       List<RowData> rowDatas = excel.getRowDatas();
       List<RowData> rowDatas2 = new ArrayList<>();
       if (null != rowDatas && ! rowDatas.isEmpty()) {
         for (RowData rowData : rowDatas) {
-          String[] ds = rowData.getDatas();
-          String[] ds2 = new String[ds.length];
+          List<Map<String, String>> ds = rowData.getRows();
+          List<Map<String, String>> ds2 = new ArrayList<>();
           if (null != ds) {
-            for (int i = 0; i < ds.length; i++) {
-              ds2[i] = fullParams(ds[i], context);
+            for (int i = 0; i < ds.size(); i++) {
+              Map<String, String> temp = new HashMap<>();
+              temp.put("value", fullParams(ds.get(i).get("value"), context));
+              temp.put("col", ds.get(i).get("col"));
+              ds2.add(temp);
             }
           }
           rowDatas2.add(new RowData(rowData.getRowNum(), ds2));
@@ -587,6 +598,7 @@ public class ExcelUtil {
   public static Map<Integer, Integer> createXlsxExcelSheetHead(XSSFSheet sheet, Excel excel, XSSFCellStyle style) {
     Map<Integer, Integer> columnWidth = new HashMap<>();
     String[] titles = excel.getFields();
+    Integer[] fieldWidths = excel.getFieldsWidth();
     Integer titlesLen = null != titles ? (titles.length - 1) : 0;
     XSSFCellStyle style1 = (XSSFCellStyle) style.clone();
     String tableCaption = excel.getTableCaption();
@@ -610,18 +622,29 @@ public class ExcelUtil {
           XSSFCell xc = xrow.createCell(i);
           xc.setCellStyle(style);
         }
-        String[] rd = rowData.getDatas();
-        for (int i = 0; i < rd.length; i++) {
-          if (i == rd.length - 1 && i < titlesLen) {
-            sheet.addMergedRegion(new CellRangeAddress(r, r, i, titlesLen));// 开始行，结束行，开始列，结束列
+        List<Map<String, String>> rd = rowData.getRows();
+        int cbegin = 0;
+        int cend = 0;
+        for (int i = 0; i < rd.size(); i++) {
+          Map<String, String> row = rd.get(i);
+          String value = row.get("value");
+          String col = row.get("col");
+          if (i == rd.size() - 1 && i < titlesLen && StringUtils.isBlank(col)) {
+            cend = titlesLen;
+            sheet.addMergedRegion(new CellRangeAddress(r, r, cbegin, cend));// 开始行，结束行，开始列，结束列
+          }
+          if (StringUtils.isNotBlank(col)) {
+            cend = cbegin + Integer.parseInt(col) - 1;
+            sheet.addMergedRegion(new CellRangeAddress(r, r, cbegin, cend));
+            cbegin = cend + 1;
           }
           XSSFCell cell = xrow.getCell(i);
-          cell.setCellValue(rd[i]);
-          if (i != rd.length - 1) {
-            int width = (int) (40 * len(rd[i]) * 20);
-            columnWidth.put(i, width);
-            sheet.setColumnWidth(i, width);
-          }
+          cell.setCellValue(value);
+//          if (i != rd.size() - 1) {
+//            int width = (int) (40 * len(value) * 20);
+//            columnWidth.put(i, width);
+//            sheet.setColumnWidth(i, width);
+//          }
         }
       }
     }
@@ -639,10 +662,14 @@ public class ExcelUtil {
         titleCell = titleRow.createCell(i);
         titleCell.setCellValue(titles[i]);
         titleCell.setCellStyle(style1);
-        if (null == columnWidth.get(i)) {
-          int width = (int) (40 * len(titles[i]) * 20);
-          columnWidth.put(i, width);
-          sheet.setColumnWidth(i, width);
+        if (null != fieldWidths) {
+          sheet.setColumnWidth(i, fieldWidths[i]);
+        }else {
+          if (null == columnWidth.get(i)) {
+            int width = (int) (40 * len(titles[i]) * 20);
+            columnWidth.put(i, width);
+            sheet.setColumnWidth(i, width);
+          }
         }
       }
     }

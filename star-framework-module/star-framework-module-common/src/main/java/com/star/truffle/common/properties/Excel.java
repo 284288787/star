@@ -14,6 +14,7 @@ public class Excel {
   private List<RowData> rowDatas;   //指定行的内容
   private Integer fieldsRowNum = 0;        //表头所在行
   private String[] fields;
+  private Integer[] fieldsWidth;    //列对应的宽度
   private ColTotal colTotal;
   
 }

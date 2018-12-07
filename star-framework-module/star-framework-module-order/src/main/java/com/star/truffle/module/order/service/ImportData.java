@@ -85,8 +85,8 @@ public class ImportData extends AbstractDataExport<Order> {
           address = detail.getShopAddress();
         }
         //商品名称,商品规格,订单号,提货号,收货人,收货电话,收货地址,会员姓名,会员电话,下单日期,单价,小计,数量,订单备注
-        String[] arr = {"" + index++, detail.getTitle(), detail.getSpecification(), detail.getOrderCode(), pickupCode, 
-            name, mobile, address, detail.getName(), detail.getMobile(), DateUtils.formatDateTime(detail.getCreateTime()), 
+        String[] arr = {"" + index++, detail.getOrderCode(), pickupCode, detail.getTitle(), detail.getSpecification(), 
+            name, mobile, address, detail.getName(), detail.getMobile(), DateUtils.formatDate(detail.getCreateTime(), "MM/dd\r\nHH点mm分"), 
             ProductConstant.formatMoney(detail.getPrice()), 
             ProductConstant.formatMoney(detail.getCount() * detail.getPrice()), detail.getCount() + "", detail.getRemark()};
         list.add(arr);
