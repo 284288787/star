@@ -19,6 +19,14 @@ var distributorHandle = new ListHandle({
 },{
   ewm: function(distributorId){
     window.open(basePath+"download/shopewm/"+distributorId);
+  },
+  exportDistributor: function(){
+    var params = distributorHandle.getQueryParams();
+    params["key"] = "distributor";
+    params["handle"] = "com.star.truffle.module.member.service.ExportDistributor";
+    var url = '/download/excel/data?params=';
+    url+=encodeURI(JSON.stringify(params));
+    window.open(url);
   }
 });
 new UtilsHandle({
