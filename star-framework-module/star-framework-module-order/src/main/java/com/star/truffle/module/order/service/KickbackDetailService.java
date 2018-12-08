@@ -172,9 +172,11 @@ public class KickbackDetailService {
       beginTime = DateUtils.toDateYmd("2018-10-10"); //这个时间项目还没上线
     }
     Map<String, Object> totalMoney = orderCache.totalMoney(distributorId, beginTime);
+    Map<String, Object> totalMoneyYun = orderCache.totalMoneyYun(distributorId, beginTime);
     map.put("auditingMoney", auditingMoney);
     map.put("beginTime", beginTime);
     map.put("totalMoeny", totalMoney.get("totalMoney"));
+    map.put("totalMoneyYun", totalMoneyYun.get("totalMoney"));
     map.put("state", state);
     return map;
   }

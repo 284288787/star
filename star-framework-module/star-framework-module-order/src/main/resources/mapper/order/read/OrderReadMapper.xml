@@ -82,6 +82,9 @@
       <if test="distributorId != null">
         and `order`.distributor_id = #{distributorId}
       </if>
+      <if test="parentDistributorId != null">
+        and `order`.distributor_id in (select distributor_id from distributor where parent_distributor_id = #{parentDistributorId})
+      </if>
       <if test="shopName != null and shopName != ''">
         and `order`.shop_name like "%"#{shopName}"%"
       </if>
@@ -124,7 +127,12 @@
         and `order`.create_time &lt;= #{endCreateTime}
       </if>
       <if test="brokerage0 != null and brokerage0 == 0">
+        <if test="distributorId != null">
         and `order`.total_brokerage &gt; 0
+        </if>
+        <if test="parentDistributorId != null">
+        and `order`.total_brokerage_first &gt; 0
+        </if>
       </if>
       <if test="productName != null and productName != ''">
         and exists (select 1 from order_detail d, product p where d.order_id = `order`.order_id and p.product_id = d.product_id and p.title like "%"#{productName}"%")
@@ -176,9 +184,21 @@
   </select>
 
   <select id="sumBrokerage" resultType="java.lang.Long">
-  	set names utf8mb4;
     select
       ifNull(sum(`order`.total_brokerage), 0)
+    from `order`
+		INNER JOIN distributor d on d.distributor_id = `order`.distributor_id
+		INNER JOIN distribution_region r on `order`.region_id = r.region_id
+		INNER JOIN sys_area p on p.areaId = r.province_id
+		LEFT JOIN sys_area c on c.areaId = r.city_id
+		LEFT JOIN sys_area a on a.areaId = r.area_id
+		LEFT JOIN sys_area t on t.areaId = r.town_id
+    <include refid="sql_where" />
+  </select>
+
+  <select id="sumBrokerageYun" resultType="java.lang.Long">
+    select
+      ifNull(sum(`order`.total_brokerage_first), 0)
     from `order`
 		INNER JOIN distributor d on d.distributor_id = `order`.distributor_id
 		INNER JOIN distribution_region r on `order`.region_id = r.region_id
@@ -249,6 +269,15 @@
   
   <select id="totalMoney" resultMap="totalMoneyMap">
     select IFNULL(SUM(o.total_brokerage), 0) totalMoney, IFNULL(DATE_FORMAT(max(o.create_time),'%Y-%m-%d %H:%i:%s'), '2018-10-10 00:00:00') time from `order` o where o.distributor_id = #{distributorId} and o.state in (2,3)
+    <if test="beginTime != null">
+      and o.create_time &gt; #{beginTime}
+    </if>
+  </select>
+  
+  <select id="totalMoneyYun" resultMap="totalMoneyMap">
+    select IFNULL(SUM(o.total_brokerage_first), 0) totalMoney, IFNULL(DATE_FORMAT(max(o.create_time),'%Y-%m-%d %H:%i:%s'), '2018-10-10 00:00:00') time from `order` o where 
+    o.distributor_id in (select distributor_id from distributor where parent_distributor_id = #{parentDistributorId})
+    and o.state in (2,3)
     <if test="beginTime != null">
       and o.create_time &gt; #{beginTime}
     </if>

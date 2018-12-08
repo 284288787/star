@@ -30,10 +30,13 @@ public interface OrderReadDao {
    * @return
    */
   public Map<String, Object> totalMoney(@Param("distributorId") Long distributorId, @Param("beginTime") Date beginTime);
+  public Map<String, Object> totalMoneyYun(@Param("parentDistributorId") Long parentDistributorId, @Param("beginTime") Date beginTime);
 
   public Long totalOrderNumOfToday();
 
   public Long sumBrokerage(OrderRequestDto orderRequestDto);
+  
+  public Long sumBrokerageYun(OrderRequestDto orderRequestDto);
 
   public List<Map<String, Object>> seeUser(@Param("distributorId") Long distributorId, @Param("keyword") String keyword, @Param("pager") Page pager);
 
@@ -49,4 +52,5 @@ public interface OrderReadDao {
   public List<DistributorTotalResponseDto> totalOrderByDistributor(@Param("distributorId") Long distributorId, @Param("day") Integer day);
 
   public DistributorTotalResponseDto totalOrderBy(@Param("day") Integer day);
+
 }

@@ -478,6 +478,30 @@ public class OrderService implements ChooseDataIntf {
     Long sum = this.orderCache.sumBrokerage(orderRequestDto);
     return sum;
   }
+  
+  public Long sumBrokerageYun(OrderRequestDto orderRequestDto) {
+    if (null != orderRequestDto.getTime()) {
+      orderRequestDto.setBeginCreateTime(null);
+      orderRequestDto.setEndCreateTime(null);
+      switch (orderRequestDto.getTime()) {
+      case 0: //今天
+        orderRequestDto.setBeginCreateTime(new Date(LocalDateTime.of(LocalDate.now(), LocalTime.ofNanoOfDay(0)).toInstant(ZoneOffset.of("+8")).toEpochMilli()));
+        break;
+      case 1: //本周
+        Date date = DateUtils.getMondayOfThisWeek();
+        orderRequestDto.setBeginCreateTime(new Date(LocalDateTime.of(date.toInstant().atOffset(ZoneOffset.of("+8")).toLocalDate(), LocalTime.ofNanoOfDay(0)).toInstant(ZoneOffset.of("+8")).toEpochMilli()));
+        break;
+      case 2: //本月
+        Date date2 = DateUtils.getFirstOfThisMonth();
+        orderRequestDto.setBeginCreateTime(new Date(LocalDateTime.of(date2.toInstant().atOffset(ZoneOffset.of("+8")).toLocalDate(), LocalTime.ofNanoOfDay(0)).toInstant(ZoneOffset.of("+8")).toEpochMilli()));
+        break;
+      default: //全部
+        break;
+      }
+    }
+    Long sum = this.orderCache.sumBrokerageYun(orderRequestDto);
+    return sum;
+  }
 
   public List<Map<String, Object>> seeUser(Long distributorId, String keyword, Integer pageNum, Integer pageSize) {
     Page pager = new Page(null == pageNum ? 1 : pageNum, pageSize, null, null);

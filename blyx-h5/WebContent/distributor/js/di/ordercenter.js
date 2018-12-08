@@ -1,12 +1,12 @@
 var user = getLoginInfo();
-
 $(function(){
   ajax({
     url: '/api/kickbackDetail/getDistributorMoney',
     data: {'distributorId': user.distributorId},
     success: function(data){
-      $("p.rbm b").text((data.totalMoeny / 100.0).toFixed(2));
-      $("p.total").text(((data.totalMoeny + data.auditingMoney) / 100.0).toFixed(2));
+      $("p.rbm b").text(((data.totalMoeny + data.totalMoneyYun) / 100.0).toFixed(2));
+      $("p.totalFirst").text((data.totalMoneyYun / 100.0).toFixed(2));
+      $("p.total").text((data.totalMoeny / 100.0).toFixed(2));
       $("p.auditing").text((data.auditingMoney / 100.0).toFixed(2));
       $(".mui-btn-link").on("tap", function(){
         document.location.href="mingxi.html?beginTime="+data.beginTime;

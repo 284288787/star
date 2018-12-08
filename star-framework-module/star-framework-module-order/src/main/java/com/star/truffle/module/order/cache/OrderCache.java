@@ -69,12 +69,20 @@ public class OrderCache {
     return orderReadDao.totalMoney(distributorId, beginTime);
   }
 
+  public Map<String, Object> totalMoneyYun(Long distributorId, Date beginTime) {
+    return orderReadDao.totalMoneyYun(distributorId, beginTime);
+  }
+  
   public Long totalOrderNumOfToday() {
     return orderReadDao.totalOrderNumOfToday();
   }
-
+  
   public Long sumBrokerage(OrderRequestDto orderRequestDto) {
     return orderReadDao.sumBrokerage(orderRequestDto);
+  }
+
+  public Long sumBrokerageYun(OrderRequestDto orderRequestDto) {
+    return orderReadDao.sumBrokerageYun(orderRequestDto);
   }
 
   public List<Map<String, Object>> seeUser(Long distributorId, String keyword, Page pager) {
