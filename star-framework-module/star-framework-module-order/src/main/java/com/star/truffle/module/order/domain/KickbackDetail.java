@@ -19,6 +19,8 @@ public class KickbackDetail {
   private Date pointEndTime;
   // 总金额
   private Integer totalMoney;
+  // 总金额一级提成
+  private Integer totalMoneyYun;
   // 创建日期
   private Date createTime;
   // 订单状态  1审核中 2汇款中 3未通过 4已完成

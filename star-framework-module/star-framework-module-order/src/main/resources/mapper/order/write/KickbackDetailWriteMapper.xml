@@ -2,15 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.star.truffle.module.order.dao.write.KickbackDetailWriteDao">
   <insert id="saveKickbackDetail" useGeneratedKeys="true" keyProperty="id" parameterType="com.star.truffle.module.order.domain.KickbackDetail">
-    insert into kickback_detail(id, distributor_id, point_begin_time, point_end_time, total_money, create_time, state, reject, update_time)
-    values(#{id}, #{distributorId}, #{pointBeginTime}, #{pointEndTime}, #{totalMoney}, #{createTime}, #{state}, #{reject}, #{updateTime})
+    insert into kickback_detail(id, distributor_id, point_begin_time, point_end_time, total_money, total_money_yun, create_time, state, reject, update_time)
+    values(#{id}, #{distributorId}, #{pointBeginTime}, #{pointEndTime}, #{totalMoney}, #{totalMoneyYun}, #{createTime}, #{state}, #{reject}, #{updateTime})
   </insert>
 
   <insert id="batchSaveKickbackDetail" parameterType="java.util.List">
-    insert into kickback_detail(id, distributor_id, point_begin_time, point_end_time, total_money, create_time, state, reject, update_time)
+    insert into kickback_detail(id, distributor_id, point_begin_time, point_end_time, total_money, total_money_yun, create_time, state, reject, update_time)
     values
     <foreach collection="list" item="item" index="index" separator=",">
-      (#{item.id}, #{item.distributorId}, #{item.pointBeginTime}, #{item.pointEndTime}, #{item.totalMoney}, #{item.createTime}, #{item.state}, #{item.reject}, #{updateTime})
+      (#{item.id}, #{item.distributorId}, #{item.pointBeginTime}, #{item.pointEndTime}, #{item.totalMoney}, #{item.totalMoneyYun}, #{item.createTime}, #{item.state}, #{item.reject}, #{updateTime})
     </foreach>
   </insert>
 
@@ -48,7 +48,7 @@
 
   <sql id="sql_column">
     kickback_detail.id, kickback_detail.distributor_id, point_begin_time, point_end_time, kickback_detail.total_money, 
-    kickback_detail.create_time, kickback_detail.update_time, kickback_detail.state, 
+    kickback_detail.create_time, kickback_detail.update_time, kickback_detail.state, kickback_detail.total_money_yun, 
     kickback_detail.reject, d.`name` distributor_name, d.mobile distributor_mobile, 
     r.`name` region_name, ifnull(p.shortName, p.areaName) province_name, ifnull(c.shortName, c.areaName) city_name,
     ifnull(a.shortName, a.areaName) area_name, ifnull(t.shortName, t.areaName) town_name

@@ -50,8 +50,10 @@ public class KickbackDetailService {
       beginTime = DateUtils.toDateYmd("2018-10-10"); //这个时间项目还没上线
     }
     Map<String, Object> map = orderCache.totalMoney(distributorId, beginTime);
+    Map<String, Object> mapYun = orderCache.totalMoneyYun(distributorId, beginTime);
     Integer totalMoney = Integer.parseInt(map.get("totalMoney").toString());
-    if (totalMoney < orderProperties.getKickbackMoney()) {
+    Integer totalMoneyYun = Integer.parseInt(mapYun.get("totalMoney").toString());
+    if (totalMoney + totalMoneyYun < orderProperties.getKickbackMoney()) {
       DecimalFormat decimalFormat = new DecimalFormat("0.00");
       throw new StarServiceException(ApiCode.PARAM_ERROR, "暂不可提现，可提现金额须达到" + decimalFormat.format(orderProperties.getKickbackMoney() / 100.0)+ "元。");
     }
@@ -61,6 +63,7 @@ public class KickbackDetailService {
     kickbackDetail.setPointBeginTime(beginTime);
     kickbackDetail.setPointEndTime(pointEndTime);
     kickbackDetail.setTotalMoney(totalMoney);
+    kickbackDetail.setTotalMoneyYun(totalMoneyYun);
     kickbackDetail.setState(KickbackStateEnum.auditing.state());
     kickbackDetail.setCreateTime(new Date());
     kickbackDetail.setUpdateTime(kickbackDetail.getCreateTime());
