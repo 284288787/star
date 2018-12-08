@@ -636,10 +636,10 @@ public class ExcelUtil {
           if (StringUtils.isNotBlank(col)) {
             cend = cbegin + Integer.parseInt(col) - 1;
             sheet.addMergedRegion(new CellRangeAddress(r, r, cbegin, cend));
-            cbegin = cend + 1;
           }
-          XSSFCell cell = xrow.getCell(i);
+          XSSFCell cell = xrow.getCell(cbegin);
           cell.setCellValue(value);
+          cbegin = cend + 1;
 //          if (i != rd.size() - 1) {
 //            int width = (int) (40 * len(value) * 20);
 //            columnWidth.put(i, width);
