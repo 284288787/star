@@ -62,4 +62,24 @@ public class AreaApiController {
       return ApiResult.fail(ApiCode.SYSTEM_ERROR);
     }
   }
+  
+  @RequestMapping(value = "/getAreaByAreaName", method = RequestMethod.POST)
+  @ApiOperation(value = "根据地区名称获取地区信息", notes = "根据地区名称获取地区信息", httpMethod = "POST", response = ApiResult.class)
+  @ApiImplicitParams({
+    @ApiImplicitParam(name = "provinceName", value = "省", dataType = "String", required = true, paramType = "query"),
+    @ApiImplicitParam(name = "cityName", value = "市", dataType = "String", required = true, paramType = "query"),
+    @ApiImplicitParam(name = "areaName", value = "区县", dataType = "String", required = true, paramType = "query"),
+    @ApiImplicitParam(name = "townName", value = "乡镇", dataType = "String", required = false, paramType = "query"),
+  })
+  public ApiResult<Long> getAreaByAreaNames(String provinceName, String cityName, String areaName, String townName){
+    try {
+      Long areaId = this.areaService.getAreaByAreaNames(provinceName, cityName, areaName, townName);
+      return ApiResult.success(areaId);
+    } catch (StarServiceException e) {
+      return ApiResult.fail(e.getCode(), e.getMsg());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return ApiResult.fail(ApiCode.SYSTEM_ERROR);
+    }
+  }
 }

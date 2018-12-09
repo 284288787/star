@@ -127,4 +127,9 @@ public class AreaService {
   public void deleteArea(String ids) {
     throw new StarServiceException(ApiCode.PARAM_ERROR.getCode(), "删除功能未开放");
   }
+
+  public Long getAreaByAreaNames(String provinceName, String cityName, String areaName, String townName) {
+    Long areaId = this.areaCache.getAreaByAreaNames(provinceName, cityName, areaName, townName);
+    return areaId;
+  }
 }

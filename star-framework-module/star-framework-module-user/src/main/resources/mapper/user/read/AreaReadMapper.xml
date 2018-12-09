@@ -59,6 +59,20 @@
     from sys_area
     <include refid="sql_where" />
   </select>
+
+  <select id="getAreaByAreaNames" resultType="java.lang.Long">
+    select a.areaId
+			from sys_area p
+			INNER JOIN sys_area c on p.areaId = c.parentId
+			INNER JOIN sys_area a on c.areaId = a.parentId
+			where (p.areaName = #{provinceName} or p.shortName = #{provinceName})
+			<if test="cityName != null and cityName != ''">
+        and (c.areaName = #{cityName} or c.shortName = #{cityName})
+      </if>
+			<if test="areaName != null and areaName != ''">
+        and (a.areaName = #{areaName} or a.shortName = #{areaName})
+      </if>
+  </select>
   
   <select id="queryArea" resultMap="areaResultMap">
     select

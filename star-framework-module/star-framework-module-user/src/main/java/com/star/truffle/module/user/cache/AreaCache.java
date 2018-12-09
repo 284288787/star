@@ -92,4 +92,8 @@ public class AreaCache {
     areaWriteDao.updateArea(area);
     return areaReadDao.getById(area.getAreaId());
   }
+
+  public Long getAreaByAreaNames(String provinceName, String cityName, String areaName, String townName) {
+    return areaReadDao.getAreaByAreaNames(provinceName, cityName, areaName, townName);
+  }
 }
