@@ -76,4 +76,6 @@ public class Order {
   private Integer profitHan;
   // 未税价的利润
   private Integer profitWei;
+  // 优惠金额
+  private Integer discountedPrice;
 }

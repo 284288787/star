@@ -681,4 +681,26 @@ public class OrderService implements ChooseDataIntf {
     }
     return res;
   }
+
+  public void setDiscountedPrice(Long orderId, Double price) {
+    if (null == orderId || null == price) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR);
+    }
+    OrderResponseDto order = this.orderCache.getOrder(orderId);
+    if (null == order) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR, "订单不存在");
+    }
+    if (order.getState() >= OrderStateEnum.nosend.state()) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR, "未付款的订单才可以设置优惠");
+    }
+    int o = order.getTotalMoney() + (null == order.getDespatchMoney() ? 0 : order.getDespatchMoney());
+    int t = Double.valueOf(price * 100).intValue();
+    if (o <= t) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR, "优惠金额不得多于应付金额(总金额+运费)");
+    }
+    OrderRequestDto orderRequestDto = new OrderRequestDto();
+    orderRequestDto.setOrderId(orderId);
+    orderRequestDto.setDiscountedPrice(Double.valueOf(price * 100).intValue());
+    this.orderCache.updateOrder(orderRequestDto);
+  }
 }

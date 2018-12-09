@@ -170,6 +170,20 @@ public class OrderController {
   }
   
   @ResponseBody
+  @RequestMapping(value = "/setDiscountedPrice", method = RequestMethod.POST)
+  public ApiResult<Void> setDiscountedPrice(Long orderId, Double price) {
+    try {
+      orderService.setDiscountedPrice(orderId, price);
+      return ApiResult.success();
+    } catch (StarServiceException e) {
+      return ApiResult.fail(e.getCode(), e.getMsg());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return ApiResult.fail(ApiCode.SYSTEM_ERROR);
+    }
+  }
+  
+  @ResponseBody
   @RequestMapping(value = "/updateRemark", method = RequestMethod.POST)
   public ApiResult<Void> updateRemark(Long orderId, String remark) {
     try {

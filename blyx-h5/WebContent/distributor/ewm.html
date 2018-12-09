@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta name="applicable-device" content="mobile">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="format-detection" content="telephone=no,email=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="full-screen" content="yes">
+<meta name="x5-fullscreen" content="true">
+<title>商家二维码</title>
+<link rel="stylesheet" href="css/mui.min.css">
+<link rel="stylesheet" href="css/common.css">
+<script src="js/jquery.min.js"></script>
+<script src="js/mui.min.js"></script>
+<style type="text/css">
+body{
+  background-color:#FFF;
+}
+.main{
+  text-align:center;
+}
+</style>
+<script type="text/javascript">
+function getParam(name){
+  var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");     
+  var r = window.location.search.substr(1).match(reg);
+  //search,查询？后面的参数，并匹配正则    
+  if(r!=null)
+    return  unescape(r[2]); 
+  return null;
+}
+$(function(){
+  $("#ewm").attr("src","http://mgr.hnkbmd.com/download/shopewm/" + getParam("did"));
+});
+</script>
+</head>
+<body>
+  <header id="header" class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left headlink"></a>
+    <h1 class="mui-title">商家二维码</h1>
+  </header>
+  <div class="main">
+    <img id="ewm" width="90%">
+  </div>
+</body>
+</html>

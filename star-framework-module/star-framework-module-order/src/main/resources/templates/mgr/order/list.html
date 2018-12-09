@@ -126,6 +126,9 @@
   <script type="text/javascript" th:inline="javascript" star:authorize-uri="/order/editBefore/*">
   addAuthorize("order-editBefore", true);
   </script>
+  <script type="text/javascript" th:inline="javascript" star:authorize-uri="/order/setDiscountedPrice">
+  addAuthorize("order-setDiscountedPrice", true);
+  </script>
   <script type="text/javascript" th:src="@{/webjars/My97DatePicker/WdatePicker.js}"></script>
   <script type="text/javascript" th:src="@{/webjars/star/js/star.list.comm.js}"></script>
   <script type="text/javascript" th:src="@{/webjars/star/js/star.utils.js}"></script>

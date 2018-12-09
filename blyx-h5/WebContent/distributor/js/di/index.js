@@ -4,6 +4,10 @@ $(function(){
     document.location.href='http://yx.hnkbmd.com/index.html?py='+user.py;
     return false;
   });
+  $(".erweima").on("tap", function(){
+    document.location.href='ewm.html?did='+user.distributorId;
+    return false;
+  });
   ajax({
     url: '/weixin/ticket/jssdk',
     data: {
@@ -100,7 +104,7 @@ $(function(){
               name : '我的订单数('+data.orderNumOfToday+')'
             }, {
               value : data.totalOrderNumOfToday - data.orderNumOfToday,
-              name : '其他商家订单数总和('+(data.totalOrderNumOfToday - data.orderNumOfToday)+')'
+              name : '其他商家订单数('+(data.totalOrderNumOfToday - data.orderNumOfToday)+')'
             } ]
           } ]
         }
