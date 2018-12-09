@@ -72,7 +72,7 @@ var kickbackDetailHandle = new ListHandle({
   }
 });
 $(function(){
-  var colNames = ['主键', '分销商', '分销商电话', '分销区域', '区域名称', '起始日期', '终止日期', '总金额', '创建日期', '订单状态', '未通过原因', '操作'];
+  var colNames = ['主键', '分销商', '分销商电话', '分销区域', '区域名称', '起始日期', '终止日期', '总金额 = 运营提成 + 分销提成', '创建日期', '订单状态', '未通过原因', '操作'];
   var colModel = [
     {name: 'id', hidden: true, index: 'id', width: 50, align: "center", formatter: function(cellvalue, options, rowObject){
       return cellvalue.toFixed(0);
@@ -89,8 +89,9 @@ $(function(){
     {name: 'regionName', index: 'regionName', sortable: false, width: 70, align: "center"}, 
     {name: 'pointBeginTime', index: 'point_begin_time', width: 80, align: "center", formatter:'date', formatoptions: {srcformat: 'Y-m-d H:i:s', newformat:'Y-m-d H:i:s'}}, 
     {name: 'pointEndTime', index: 'point_end_time', width: 80, align: "center", formatter:'date', formatoptions: {srcformat: 'Y-m-d H:i:s', newformat:'Y-m-d H:i:s'}}, 
-    {name: 'totalMoney', index: 'total_money', width: 50, align: "center", formatter: function(cellvalue, options, rowObject){
-      return (cellvalue / 100.0).toFixed(2);
+    {name: 'totalMoney', index: 'total_money', width: 150, align: "center", formatter: function(cellvalue, options, rowObject){
+      var s = (rowObject.totalMoneyYun / 100.0).toFixed(2) + ' + ' + (rowObject.totalMoney / 100.0).toFixed(2);
+      return (cellvalue / 100.0).toFixed(2) + ' = ' + s;
     }}, 
     {name: 'createTime', index: 'create_time', width: 80, align: "center", formatter:'date', formatoptions: {srcformat: 'Y-m-d H:i:s', newformat:'Y-m-d H:i:s'}}, 
     {name: 'state', index: 'state', width: 50, align: "center", formatter: 'select', editoptions: {value:'1:审核中;2:汇款中;3:未通过;4:已完成'}}, 
