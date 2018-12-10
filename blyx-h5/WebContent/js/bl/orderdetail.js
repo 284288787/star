@@ -71,10 +71,11 @@ function initOrderDetail(){
         return false;
       });
       $(".totaldiv .productNum").text(num);
-      $(".totaldiv .productMoney").text(totalMoney.toFixed(2));
-      $(".totaldiv .productOriginalPrice").text(originalPrice.toFixed(2));
+      $(".totaldiv .productMoney").text("￥" + totalMoney.toFixed(2));
+      $(".totaldiv .productOriginalPrice").text("￥" + originalPrice.toFixed(2));
       if(data.deliveryType==2){
-        $(".totaldiv .despatchMoney").text((data.despatchMoney/100.0).toFixed(2));
+        totalMoney += data.despatchMoney/100.0;
+        $(".totaldiv .despatchMoney").text("￥" + (data.despatchMoney/100.0).toFixed(2));
         $("#item2").append('<p>收件人：'+ data.deliveryName + '</p>');
         $("#item2").append('<p>收件人电话：'+ data.deliveryMobile + '</p>');
         $("#item2").append('<p>收件人地址：'+ data.provinceName + data.cityName + data.areaName + data.deliveryAddress + '</p>');
@@ -89,7 +90,10 @@ function initOrderDetail(){
         $("#item2").append('<p>店铺名称：'+ data.shopName + '</p>');
       }
       $("#item2").removeClass("mui-hidden");
-      $(".totaldiv .productTotalMoney").text(totalMoney.toFixed(2));
+      $(".totaldiv .discountedPrice").text("￥" + (data.discountedPrice/100.0).toFixed(2));
+      $(".totaldiv .productTotalMoney").text("￥" + totalMoney.toFixed(2));
+      totalMoney -= data.discountedPrice/100.0;
+      $(".totaldiv .productTotalMoney2").text("￥" + totalMoney.toFixed(2));
       $(".ordercode span").text(data.orderCode);
       $(".ordertime span").text(data.createTime);
     }

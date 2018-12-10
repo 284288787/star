@@ -44,6 +44,7 @@ $(function() {
     success: function(order){
       var money = order.totalMoney;
       if(order.despatchMoney) money += order.despatchMoney;
+      if(order.discountedPrice) money -= order.discountedPrice;
       $("p.num b").text((money / 100.0).toFixed(2));
       var m = (order.createTime.gapSeconds(30 * 60) / 60).toFixed(0);
       if(m <= 0){

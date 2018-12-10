@@ -85,7 +85,7 @@ function loadData(self, pageNum, pageSize, state){
           ele += '</div>\
                 <p class="price">'+item.createTime+'\
                     <span>共'+num+'件商品\
-                        <b>￥'+((item.totalMoney + (item.deliveryType == 2 ? item.despatchMoney : 0)) / 100.0).toFixed(2)+'</b>\
+                        <b>￥'+((item.totalMoney + (item.deliveryType == 2 ? item.despatchMoney : 0) - (item.discountedPrice? item.discountedPrice : 0)) / 100.0).toFixed(2)+'</b>\
                     </span>\
                 </p>\
                 <p class="pbox clearfix">';
