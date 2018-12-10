@@ -26,6 +26,7 @@ import com.star.truffle.module.product.constant.DistributionRegionStateEnum;
 import com.star.truffle.module.product.domain.DistributionRegion;
 import com.star.truffle.module.product.dto.req.DistributionRegionRequestDto;
 import com.star.truffle.module.product.dto.res.DistributionRegionResponseDto;
+import com.star.truffle.module.user.cache.AreaCache;
 
 @Service
 public class DistributionRegionService implements ChooseDataIntf {
@@ -36,6 +37,8 @@ public class DistributionRegionService implements ChooseDataIntf {
   private DistributionRegionCache distributionRegionCache;
   @Autowired
   private DistributorCache distributorCache;
+  @Autowired
+  private AreaCache areaCache;
 
   @Override
   public String getPrimaryKey() {
@@ -170,7 +173,53 @@ public class DistributionRegionService implements ChooseDataIntf {
   }
   
   public List<DistributionRegionResponseDto> queryDistributionRegion(DistributionRegionRequestDto distributionRegionRequestDto) {
-    return this.distributionRegionCache.queryDistributionRegion(distributionRegionRequestDto);
+    if (StringUtils.isNotBlank(distributionRegionRequestDto.getProvinceName()) && 
+        StringUtils.isNotBlank(distributionRegionRequestDto.getCityName()) &&
+        StringUtils.isNotBlank(distributionRegionRequestDto.getAreaName())) {
+      Long areaId = areaCache.getAreaByAreaNames(distributionRegionRequestDto.getProvinceName(), distributionRegionRequestDto.getCityName(), distributionRegionRequestDto.getAreaName(), null);
+      if (null != areaId) {
+        distributionRegionRequestDto.setAreaId(areaId);
+      }else {
+        areaId = areaCache.getAreaByAreaNames(distributionRegionRequestDto.getProvinceName(), distributionRegionRequestDto.getCityName(), null, null);
+        if (null != areaId) {
+          distributionRegionRequestDto.setCityId(areaId);
+        }else {
+          areaId = areaCache.getAreaByAreaNames(distributionRegionRequestDto.getProvinceName(), null, null, null);
+          distributionRegionRequestDto.setProvinceId(areaId);
+        }
+      }
+    }
+    List<DistributionRegionResponseDto> res = new ArrayList<>();
+    List<DistributionRegionResponseDto> list = this.distributionRegionCache.queryDistributionRegion(distributionRegionRequestDto);
+    if (null != list && ! list.isEmpty()) {
+      for (DistributionRegionResponseDto distributionRegionResponseDto : list) {
+        if (null != distributionRegionResponseDto) {
+          String viewAreaName = "";
+          if (StringUtils.isNotBlank(distributionRegionResponseDto.getProvinceName())) {
+            viewAreaName += distributionRegionResponseDto.getProvinceName();
+          }
+          if (StringUtils.isNotBlank(distributionRegionResponseDto.getCityName())) {
+            viewAreaName += " - " + distributionRegionResponseDto.getCityName();
+          }
+          if (StringUtils.isNotBlank(distributionRegionResponseDto.getAreaName())) {
+            viewAreaName += " - " + distributionRegionResponseDto.getAreaName();
+          }
+          if (StringUtils.isNotBlank(distributionRegionResponseDto.getTownName())) {
+            viewAreaName += " - " + distributionRegionResponseDto.getTownName();
+          }
+          distributionRegionResponseDto.setViewAreaName(viewAreaName);
+          DistributorRequestDto distributorRequestDto = new DistributorRequestDto();
+          distributorRequestDto.setRegionId(distributionRegionResponseDto.getRegionId());
+          distributorRequestDto.setEnabled(EnabledEnum.enabled.val());
+          List<DistributorResponseDto> distributorList = this.distributorCache.queryDistributor(distributorRequestDto);
+          if (null != distributorList && ! distributorList.isEmpty()) {
+            distributionRegionResponseDto.setDistributor(distributorList.get(0));
+            res.add(distributionRegionResponseDto);
+          }
+        }
+      }
+    }
+    return res;
   }
 
   public Long queryDistributionRegionCount(DistributionRegionRequestDto distributionRegionRequestDto) {

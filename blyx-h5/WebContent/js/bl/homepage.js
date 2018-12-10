@@ -169,7 +169,7 @@ function initShopInfo(){
       var distributor = data.distributor;
       setShopInfo(distributor);
       document.title = distributor.shopName + " - 五杂优选";
-      $('.userimg').attr("src", distributor.head);
+      $('.userimg').attr("src", distributor.head ? ((distributor.head.indexOf("http")==0 ? '' : IMAGE_PREFIX) + distributor.head) : 'images/head.png');
       $('.shopcode').text(distributor.shopCode);
       $('.shopname').text(distributor.shopName);
       var a = ""; 

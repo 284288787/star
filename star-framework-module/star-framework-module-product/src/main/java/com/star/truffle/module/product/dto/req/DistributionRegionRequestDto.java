@@ -13,4 +13,9 @@ public class DistributionRegionRequestDto extends DistributionRegion {
   private Page pager;
   
   private String states;
+  
+  private String provinceName;
+  private String cityName;
+  private String areaName;
+  private String townName;
 }

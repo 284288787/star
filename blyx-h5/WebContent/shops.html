@@ -13,13 +13,85 @@
 <title>选择店铺</title>
 <link rel="stylesheet" href="css/mui.min.css">
 <link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/mycar.css">
 <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=C8NbafnvE2mQiWemwKQuzEaNu6V2SR70"></script>
 <script src="js/jquery.min.js"></script>
 <script src="js/mui.min.js"></script>
 <style type="text/css">
-body{
-  background-color:#FFF;
+#allmap{
+  display:none
 }
+.local{
+  height:25px;
+  line-height: 25px;
+  padding-left:10px;
+  background-color:#FFF;
+  font-size:14px;
+}
+.local span{
+  font-size:12px;
+  color: #fdfef;
+}
+.mui-scroll-wrapper {
+  top: 74px;
+}
+.mui-table-view {
+  background-color: #efeff4;
+}
+.main li {
+  margin: 0px 0px 3px 0px;
+}
+.shop{
+    background: #fff;
+    padding: 0 10px;
+    position: relative;
+    font-size: 12px;
+}
+.shop img{
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    float: left;
+    display: block;
+}
+.shop p{
+    padding-left: 70px;
+    line-height: 18px;
+    margin-bottom: 3px;
+    font-size: 12px;
+    color: #333333;
+}
+.shop p label{
+    color: #999;
+}
+.shop p .mui-icon{
+    font-size: 13px;
+    vertical-align: middle;
+    margin-right: 0px;
+}
+.shop p.t{
+    padding-right: 60px;
+}
+.shop p.t label{
+    display: inline-block;
+    height: 18px;
+    float: left;
+}
+.shop span.fr{
+        line-height: 15px;
+      text-align: right;
+      position: absolute;
+      right: 10px;
+      top: 1px;
+      color: #999;
+      font-size: 12px;
+  }
+  .shop span.fr b {
+    color: #ff0000;
+  }
+  .rg{
+    float: right;
+  }
 </style>
 </head>
 <body>
@@ -27,65 +99,15 @@ body{
     <h1 class="mui-title">选择店铺</h1>
   </header>
   <div class="main">
-    <div class="local">你的位置:<span></span></div>
+    <div class="local">你的位置：<span></span><span class="rg">上拉可加载更多</span></div>
+    <div id="pullrefresh" class="mui-content mui-scroll-wrapper">
+    <div class="mui-scroll">
+      <ul class="mui-table-view mui-table-view-chevron itemlist">
+      </ul>
+    </div>
+  </div>
   </div>
   <div id="allmap"></div>
-  <script type="text/javascript">
-  var map = new BMap.Map("allmap");
-  var point = new BMap.Point(116.331398,39.897445);
-  map.centerAndZoom(point,12);
-  
-  var geolocation = new BMap.Geolocation();    
-  var gc = new BMap.Geocoder();   
-     geolocation.getCurrentPosition( function(r) {   //定位结果对象会传递给r变量  
-      if(this.getStatus() == BMAP_STATUS_SUCCESS) {  //通过Geolocation类的getStatus()可以判断是否成功定位。  
-          var pt = r.point;   
-          map.panTo(pt);//移动地图中心点
-          //alert(r.point.lng);//X轴
-       		//alert(r.point.lat);//Y轴 
-          gc.getLocation(pt, function(rs){    
-              var addComp = rs.addressComponents;
-               alert(addComp.city);
-              //alert(addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber);    
-          });  
-      } else {
-          //关于状态码    
-          //BMAP_STATUS_SUCCESS   检索成功。对应数值“0”。    
-          //BMAP_STATUS_CITY_LIST 城市列表。对应数值“1”。    
-          //BMAP_STATUS_UNKNOWN_LOCATION  位置结果未知。对应数值“2”。    
-          //BMAP_STATUS_UNKNOWN_ROUTE 导航结果未知。对应数值“3”。    
-          //BMAP_STATUS_INVALID_KEY   非法密钥。对应数值“4”。    
-          //BMAP_STATUS_INVALID_REQUEST   非法请求。对应数值“5”。    
-          //BMAP_STATUS_PERMISSION_DENIED 没有权限。对应数值“6”。(自 1.1 新增)    
-          //BMAP_STATUS_SERVICE_UNAVAILABLE   服务不可用。对应数值“7”。(自 1.1 新增)    
-          //BMAP_STATUS_TIMEOUT   超时。对应数值“8”。(自 1.1 新增)    
-          switch( this.getStatus() ) {  
-              case 2:  
-                  alert( '位置结果未知 获取位置失败.' );  
-              break;  
-              case 3:  
-                  alert( '导航结果未知 获取位置失败..' );  
-              break;  
-              case 4:  
-                  alert( '非法密钥 获取位置失败.' );  
-              break;  
-              case 5:  
-                  alert( '对不起,非法请求位置  获取位置失败.' );  
-              break;  
-              case 6:  
-                  alert( '对不起,当前 没有权限 获取位置失败.' );  
-              break;  
-              case 7:  
-                  alert( '对不起,服务不可用 获取位置失败.' );  
-              break;  
-              case 8:  
-                  alert( '对不起,请求超时 获取位置失败.' );  
-              break;  
-          }  
-      }          
-  },  
-    {enableHighAccuracy: true}  
-  )
-  </script>
+  <script src="js/bl/shops.js"></script>
 </body>
 </html>
