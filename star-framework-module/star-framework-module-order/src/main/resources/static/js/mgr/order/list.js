@@ -76,10 +76,11 @@ var orderHandle = new ListHandle({
         artDialog.alert("请填写优惠金额");
         return false;
       }
-//      if (!/^(([1-9]\\d*)|0)(\\.\\d{1,2}){0,1}$/.test(price)) {
-//        artDialog.tips("请填写正确的金额");
-//        return false;
-//      }
+      var reg = new RegExp("^(([1-9]\\d*)|0)(\\.\\d{1,2}){0,1}$");
+      if(! reg.test(price)){
+        artDialog.tips("请填写正确的金额");
+        return false;
+      }
       orderHandle.ajax({
         url : '/order/setDiscountedPrice',
         data: {orderId: orderId, price: price},
@@ -132,7 +133,7 @@ $(function(){
   var states={1:'待付款',2:'待提货',3:'已提货',4:'已退货',5:'已删除'};
   var transportStates={1:'待发货',2:'已发货',3:'已完成'};
   var colors={1:'#e87108',2:'#ad30de',3:'green',4:'red',5:'gray'}
-  var colNames = ['操作', '订单ID', '订单状态', '运输状态', '删除状态', '快递单号', '订单编号', '邮费', '优惠金额', '总金额', '总提成', '提货码', '订单类型', '用户姓名', '用户手机号', '订单备注', '收货类型', '收货地址', '收件人', '收件人手机', '分销区域', '分销商', '店铺名称', '店铺电话', '店铺地址', '创建日期'];
+  var colNames = ['操作', '订单ID', '订单状态', '运输状态', '删除状态', '快递单号', '订单编号', '邮费', '优惠金额', '应付金额', '实付金额', '运营提成', '分销提成', '提货码', '订单类型', '用户姓名', '用户手机号', '订单备注', '收货类型', '收货地址', '收件人', '收件人手机', '分销区域', '分销商', '店铺名称', '店铺电话', '店铺地址', '创建日期'];
   var colModel = [
     {align: "center", width: "130px", editable: false, sortable: false, frozen: true, formatter: function(cellvalue, options, rowObject){
       var temp = '';
@@ -178,7 +179,16 @@ $(function(){
       return (cellvalue / 100.0).toFixed(2);
     }}, 
     {name: 'totalMoney', index: 'total_money', width: "70px", align: "center", formatter: function(cellvalue, options, rowObject){
-        return (cellvalue / 100.0).toFixed(2);
+      return (cellvalue / 100.0).toFixed(2);
+    }}, 
+    {width: "70px", align: "center", formatter: function(cellvalue, options, rowObject){
+      var money = rowObject.totalMoney;
+      if(rowObject.despatchMoney) money+=rowObject.despatchMoney;
+      if(rowObject.discountedPrice) money-=rowObject.discountedPrice;
+      return (money / 100.0).toFixed(2);
+    }}, 
+    {name: 'totalBrokerageFirst', index: 'total_brokerage_first', width: "70px", align: "center", formatter: function(cellvalue, options, rowObject){
+      return (cellvalue / 100.0).toFixed(2);
     }}, 
     {name: 'totalBrokerage', index: 'total_brokerage', width: "70px", align: "center", formatter: function(cellvalue, options, rowObject){
         return (cellvalue / 100.0).toFixed(2);

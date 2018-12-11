@@ -2,6 +2,44 @@ var basePath="/";
 var parentParams=artDialog.data('params');
 var screenHeight = parentParams.getScreenHeight();
 $(function(){
+  $("#cal1").click(function(){
+    var price = $("input[name=price]").val();
+    var bfb = $("input[name=brokerageFirstbfb]").val();
+    if(price && bfb){
+      var reg = new RegExp("^(([1-9]\\d*)|0)(\\.\\d{1,2}){0,1}$");
+      if(! reg.test(price)){
+        artDialog.tips("请填写正确的金额");
+        return false;
+      }
+      var reg = new RegExp("^(([1-9]\\d*)|0)(\\.\\d{1}){0,1}$");
+      if(! reg.test(bfb)){
+        artDialog.tips("请填写正确的百分比");
+        return false;
+      }
+      $("input[name=brokerageFirst]").val((price * (bfb / 100.0)).toFixed(2));
+    }else{
+      artDialog.tips("必须有值才能计算");
+    }
+  });
+  $("#cal2").click(function(){
+    var price = $("input[name=price]").val();
+    var bfb = $("input[name=brokeragebfb]").val();
+    if(price && bfb){
+      var reg = new RegExp("^(([1-9]\\d*)|0)(\\.\\d{1,2}){0,1}$");
+      if(! reg.test(price)){
+        artDialog.tips("请填写正确的金额");
+        return false;
+      }
+      var reg = new RegExp("^(([1-9]\\d*)|0)(\\.\\d{1}){0,1}$");
+      if(! reg.test(bfb)){
+        artDialog.tips("请填写正确的百分比");
+        return false;
+      }
+      $("input[name=brokerageValue]").val((price * (bfb / 100.0)).toFixed(2));
+    }else{
+      artDialog.tips("必须有值才能计算");
+    }
+  });
   var contentEditor;
   new UtilsHandle({
     basePath: "/",
