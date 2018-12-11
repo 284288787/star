@@ -3,22 +3,22 @@
   <insert id="saveOrder" useGeneratedKeys="true" keyProperty="orderId" parameterType="com.star.truffle.module.order.domain.Order">
     insert into `order`(remark, order_code, type, member_id, open_id, `name`, mobile, delivery_type, province_name, city_name, area_name, delivery_address, 
     	delivery_name, delivery_mobile, despatch_money, total_money, total_brokerage, total_brokerage_first, region_id, distributor_id, shop_address, shop_name, 
-    	shop_mobile, state, pickup_code, create_time, deleted, profit_han, profit_wei, discounted_price)
+    	shop_mobile, state, transport_state, pickup_code, create_time, deleted, profit_han, profit_wei, discounted_price)
     values(#{remark}, #{orderCode}, #{type}, #{memberId}, #{openId}, #{name}, #{mobile}, #{deliveryType}, #{provinceName}, #{cityName}, #{areaName}, 
     	#{deliveryAddress}, #{deliveryName}, #{deliveryMobile}, #{despatchMoney}, #{totalMoney}, #{totalBrokerage}, #{totalBrokerageFirst}, #{regionId}, 
-    	#{distributorId}, #{shopAddress}, #{shopName}, #{shopMobile}, #{state}, #{pickupCode}, #{createTime}, 0, #{profitHan}, #{profitWei}, #{discountedPrice})
+    	#{distributorId}, #{shopAddress}, #{shopName}, #{shopMobile}, #{state}, #{transportState}, #{pickupCode}, #{createTime}, 0, #{profitHan}, #{profitWei}, #{discountedPrice})
   </insert>
 
   <insert id="batchSaveOrder" parameterType="java.util.List">
     insert into `order`(remark, order_code, type, member_id, open_id, `name`, mobile, delivery_type, province_name, city_name, area_name, delivery_address, 
     	delivery_name, delivery_mobile, despatch_money, total_money, total_brokerage, total_brokerage_first, region_id, distributor_id, shop_address, shop_name, 
-    	shop_mobile, state, pickup_code, create_time, deleted, profit_han, profit_wei, discounted_price)
+    	shop_mobile, state, transport_state, pickup_code, create_time, deleted, profit_han, profit_wei, discounted_price)
     values
     <foreach collection="list" item="item" index="index" separator=",">
       (#{item.remark}, #{item.orderCode}, #{item.type}, #{item.memberId}, #{item.openId}, #{item.name}, #{item.mobile}, #{item.deliveryType}, #{item.provinceName}, 
       	#{item.cityName}, #{item.areaName}, #{item.deliveryAddress}, #{item.deliveryName}, #{item.deliveryMobile}, #{despatchMoney}, #{item.totalMoney}, 
       	#{item.totalBrokerage}, #{item.totalBrokerageFirst}, #{item.regionId}, #{item.distributorId}, #{item.shopAddress}, #{item.shopName}, #{item.shopMobile}, 
-      	#{item.state}, #{item.pickupCode}, #{item.createTime}, 0, #{item.profitHan}, #{item.profitWei}, #{item.discountedPrice})
+      	#{item.state}, #{item.transportState}, #{item.pickupCode}, #{item.createTime}, 0, #{item.profitHan}, #{item.profitWei}, #{item.discountedPrice})
     </foreach>
   </insert>
 

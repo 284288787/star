@@ -90,9 +90,10 @@ function initOrderDetail(){
         $("#item2").append('<p>店铺名称：'+ data.shopName + '</p>');
       }
       $("#item2").removeClass("mui-hidden");
-      $(".totaldiv .discountedPrice").text("￥" + (data.discountedPrice/100.0).toFixed(2));
+      var dp = data.discountedPrice ? data.discountedPrice : 0;
+      $(".totaldiv .discountedPrice").text("￥" + (dp/100.0).toFixed(2));
       $(".totaldiv .productTotalMoney").text("￥" + totalMoney.toFixed(2));
-      totalMoney -= data.discountedPrice/100.0;
+      totalMoney -= dp/100.0;
       $(".totaldiv .productTotalMoney2").text("￥" + totalMoney.toFixed(2));
       $(".ordercode span").text(data.orderCode);
       $(".ordertime span").text(data.createTime);
