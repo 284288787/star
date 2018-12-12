@@ -3,8 +3,14 @@
 <mapper namespace="com.star.truffle.module.weixin.dao.write.PayDetailInfoWriteDao">
 
   <insert id="savePayDetailInfo" useGeneratedKeys="true" keyProperty="id" parameterType="com.star.truffle.module.weixin.domain.PayDetailInfo">
-    INSERT INTO pay_detail_info(return_code, return_msg, mch_id, err_code, nonce_str, err_code_des, device_info, openid, is_subscribe, trade_type, bank_type, appid, result_code, total_fee, sign, fee_type, cash_fee, attach, coupon_count, out_trade_no, time_end, coupon_fee, cash_fee_type, transaction_id) 
-    values(#{return_code}, #{return_msg}, #{mch_id}, #{err_code}, #{nonce_str}, #{err_code_des}, #{device_info}, #{openid}, #{is_subscribe}, #{trade_type}, #{bank_type}, #{appid}, #{result_code}, #{total_fee}, #{sign}, #{fee_type}, #{cash_fee}, #{attach}, #{coupon_count}, #{out_trade_no}, #{time_end}, #{coupon_fee}, #{cash_fee_type}, #{transaction_id})
+    INSERT INTO pay_detail_info(return_code, return_msg, mch_id, err_code, nonce_str, err_code_des, device_info, openid, is_subscribe, 
+    trade_type, bank_type, appid, result_code, total_fee, sign, fee_type, cash_fee, attach, coupon_count, out_trade_no, time_end, 
+    coupon_fee, cash_fee_type, transaction_id, sign_type, coupon_type_0, coupon_type_1, coupon_id_0, coupon_id_1, coupon_fee_0,
+    coupon_fee_1, settlement_total_fee) 
+    values(#{return_code}, #{return_msg}, #{mch_id}, #{err_code}, #{nonce_str}, #{err_code_des}, #{device_info}, #{openid}, 
+    #{is_subscribe}, #{trade_type}, #{bank_type}, #{appid}, #{result_code}, #{total_fee}, #{sign}, #{fee_type}, #{cash_fee}, 
+    #{attach}, #{coupon_count}, #{out_trade_no}, #{time_end}, #{coupon_fee}, #{cash_fee_type}, #{transaction_id}, #{sign_type},
+    #{coupon_type_0}, #{coupon_type_1}, #{coupon_id_0}, #{coupon_id_1}, #{coupon_fee_0}, #{coupon_fee_1}, #{settlement_total_fee})
   </insert>
 
 </mapper>
