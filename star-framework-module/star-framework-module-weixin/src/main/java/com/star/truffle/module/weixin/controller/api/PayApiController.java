@@ -106,39 +106,4 @@ public class PayApiController {
       return "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[FAIL]]></return_msg></xml>";
     }
   }
-  
-  @RequestMapping(value = "/callback2", method = RequestMethod.GET)
-  public String callback2(HttpServletRequest request, HttpServletResponse response) throws Exception {
-    String resXml = "<com.star.truffle.module.weixin.domain.PayDetailInfo><appid><![CDATA[wx8a05f2d3eb34111f]]></appid>\r\n" + 
-        "<attach><![CDATA[1626]]></attach>\r\n" + 
-        "<bank_type><![CDATA[CFT]]></bank_type>\r\n" + 
-        "<cash_fee><![CDATA[3954]]></cash_fee>\r\n" + 
-        "<coupon_count><![CDATA[1]]></coupon_count>\r\n" + 
-        "<coupon_fee>6</coupon_fee>\r\n" + 
-        "<coupon_fee_0><![CDATA[6]]></coupon_fee_0>\r\n" + 
-        "<coupon_id_0><![CDATA[2000000064794819197]]></coupon_id_0>\r\n" + 
-        "<fee_type><![CDATA[CNY]]></fee_type>\r\n" + 
-        "<is_subscribe><![CDATA[Y]]></is_subscribe>\r\n" + 
-        "<mch_id><![CDATA[1518623831]]></mch_id>\r\n" + 
-        "<nonce_str><![CDATA[7030a7227e934db987f316f9acdd646d]]></nonce_str>\r\n" + 
-        "<openid><![CDATA[ooQ_o1Sk1f_KjJRxVM_o2wo1Snlw]]></openid>\r\n" + 
-        "<out_trade_no><![CDATA[1b941a40d7a24cbeb3a282310ce31403]]></out_trade_no>\r\n" + 
-        "<result_code><![CDATA[SUCCESS]]></result_code>\r\n" + 
-        "<return_code><![CDATA[SUCCESS]]></return_code>\r\n" + 
-        "<sign><![CDATA[3F447EADA5FECCBC14837B92E88F4FB5]]></sign>\r\n" + 
-        "<time_end><![CDATA[20181212125628]]></time_end>\r\n" + 
-        "<total_fee>3960</total_fee>\r\n" + 
-        "<trade_type><![CDATA[JSAPI]]></trade_type>\r\n" + 
-        "<transaction_id><![CDATA[4200000208201812123486625781]]></transaction_id>\r\n" + 
-        "</com.star.truffle.module.weixin.domain.PayDetailInfo>";
-    log.info(resXml);
-    XStream xStreamForRequestPostData = new XStream(new DomDriver("UTF-8", new XmlFriendlyNameCoder("-_", "_")));
-    PayDetailInfo payOrder = (PayDetailInfo) xStreamForRequestPostData.fromXML(resXml);
-    boolean bool = payService.payCallback(payOrder);
-    if (bool) {
-      return "<xml><return_code><![CDATA[SUCCESS]]></return_code><return_msg><![CDATA[OK]]></return_msg></xml>";
-    } else {
-      return "<xml><return_code><![CDATA[FAIL]]></return_code><return_msg><![CDATA[FAIL]]></return_msg></xml>";
-    }
-  }
 }
