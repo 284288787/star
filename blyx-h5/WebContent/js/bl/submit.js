@@ -168,7 +168,7 @@ function initOrder(){
               <span><img src="'+IMAGE_PREFIX+item.mainPictureUrl+'" alt=""></span>\
               <p>'+item.title+'</p>\
               <p>'+item.specification+'</p>' +
-              '<p class="red">'+(item.pickupTime != null ? item.pickupTime.formatDate('M月d日 h点') : '随时')+'可提货</p>' +
+              '<p class="red">'+(item.pickupTime != null ? item.pickupTime.formatDate('M月d日 h点')+'可提货' : '&nbsp;')+'</p>' +
               '<p class="price">￥<b>'+((item.price / 100.0).toFixed(2))+'</b>\
                 <del>$'+((item.originalPrice / 100.0).toFixed(2))+'</del>\
                 <span class="fl">x'+item.num+'</span>\
