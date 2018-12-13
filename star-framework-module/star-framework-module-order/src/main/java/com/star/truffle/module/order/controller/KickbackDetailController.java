@@ -38,17 +38,20 @@ public class KickbackDetailController {
   }
 
   @ResponseBody
-  @RequestMapping(value = "/detail/{id}", method = {RequestMethod.POST, RequestMethod.GET})
-  public Map<String, Object> detail(@PathVariable Long id, Integer page, Integer rows, String sord, String sidx) {
+  @RequestMapping(value = "/detail/{id}/{type}", method = {RequestMethod.POST, RequestMethod.GET})
+  public Map<String, Object> detail(@PathVariable Long id, @PathVariable Integer type, Integer page, Integer rows, String sord, String sidx) {
     Page pager = new Page(page, rows, sidx, null);
-    List<OrderResponseDto> list = kickbackDetailService.detail(id, pager);
-    Long count = kickbackDetailService.detailCount(id, pager);
-
+    Long count = kickbackDetailService.detailCount(id, type, pager);
+    
     Map<String, Object> map = new HashMap<>();
     map.put("page", pager.getPageNum());
     map.put("total", count % pager.getPageSize() == 0 ? count / pager.getPageSize() : count / pager.getPageSize() + 1);
     map.put("records", count);
-    map.put("rows", list);
+    
+    if (count > 0) {
+      List<OrderResponseDto> list = kickbackDetailService.detail(id, type, pager);
+      map.put("rows", list);
+    }
     return map;
   }
 

@@ -117,7 +117,7 @@ public class KickbackDetailService {
     this.kickbackDetailCache.updateKickbackDetail(kickbackDetailRequestDto);
   }
 
-  public List<OrderResponseDto> detail(Long id, Page pager) {
+  public List<OrderResponseDto> detail(Long id, Integer type, Page pager) {
     if (null == id) {
       throw new StarServiceException(ApiCode.PARAM_ERROR);
     }
@@ -128,7 +128,11 @@ public class KickbackDetailService {
     OrderRequestDto orderRequestDto = new OrderRequestDto();
     orderRequestDto.setPager(pager);
     orderRequestDto.setStates(OrderStateEnum.nosend.state() + "," + OrderStateEnum.success.state());
-    orderRequestDto.setDistributorId(responseDto.getDistributorId());
+    if (type == 1) {
+      orderRequestDto.setParentDistributorId(responseDto.getDistributorId());
+    }else {
+      orderRequestDto.setDistributorId(responseDto.getDistributorId());
+    }
     orderRequestDto.setBeginCreateTime(responseDto.getPointBeginTime());
     orderRequestDto.setEndCreateTime(responseDto.getPointEndTime());
     orderRequestDto.setBrokerage0(0);
@@ -136,7 +140,7 @@ public class KickbackDetailService {
     return orders;
   }
 
-  public Long detailCount(Long id, Page pager) {
+  public Long detailCount(Long id, Integer type, Page pager) {
     if (null == id) {
       throw new StarServiceException(ApiCode.PARAM_ERROR);
     }
@@ -147,7 +151,11 @@ public class KickbackDetailService {
     OrderRequestDto orderRequestDto = new OrderRequestDto();
     orderRequestDto.setPager(pager);
     orderRequestDto.setStates(OrderStateEnum.nosend.state() + "," + OrderStateEnum.success.state());
-    orderRequestDto.setDistributorId(responseDto.getDistributorId());
+    if (type == 1) {
+      orderRequestDto.setParentDistributorId(responseDto.getDistributorId());
+    }else {
+      orderRequestDto.setDistributorId(responseDto.getDistributorId());
+    }
     orderRequestDto.setBeginCreateTime(responseDto.getPointBeginTime());
     orderRequestDto.setEndCreateTime(responseDto.getPointEndTime());
     Long count = orderCache.queryOrderCount(orderRequestDto);

@@ -27,32 +27,50 @@
   <script type="text/javascript">
   var basePath = "/";
   var param=artDialog.data("params");
+  var type=param.type;
   var detailHandle = new ListHandle({
     basePath: basePath,
     tableId: '#grid-table',
     pagerId: '#grid-pager',
     formId: '#queryForm',
-    entityName: '提成明细',
+    entityName: type==1 ? '运营提成明细' : '分销提成明细',
     winWidth: '500px',
     winHeight: '400px',
     primaryKey: 'id',
     urls:{
-      list: basePath+'kickbackDetail/detail/' + param.id,
+      list: basePath+'kickbackDetail/detail/' + param.id + '/' + type,
     }
   },{});
   $(function(){
-    var colNames = ['orderId', '订单编号', '订单日期', '总金额', '总提成', '分销区域', '分销商', '店铺名称', '订单类型', '用户姓名', '用户手机号'];
+    var colNames = ['orderId', '订单编号', '订单日期', '邮费', '优惠金额', '应付金额', '实付金额', '运营提成', '分销区域', '分销商', '店铺名称', '订单类型', '用户姓名', '用户手机号'];
+    if(type == 2){
+      colNames = ['orderId', '订单编号', '订单日期', '邮费', '优惠金额', '应付金额', '实付金额', '分销提成', '分销区域', '分销商', '店铺名称', '订单类型', '用户姓名', '用户手机号'];
+    }
     var colModel = [
       {name: 'orderId', hidden: true, index: 'orderId', width: 50, align: "center", formatter: function(cellvalue, options, rowObject){
         return cellvalue.toFixed(0);
       }}, 
       {name: 'orderCode', index: 'orderCode', width: 50, align: "center"}, 
       {name: 'createTime', index: 'create_time', width: 50, align: "center", formatter:'date', formatoptions: {newformat:'Y-m-d H:i:s'}}, 
-      {name: 'totalMoney', index: 'total_money', width: 50, align: "center", formatter: function(cellvalue, options, rowObject){
+      {name: 'despatchMoney', index: 'despatch_money', width: "70px", align: "center", formatter: function(cellvalue, options, rowObject){
+        if(!cellvalue) return '0.00';
         return (cellvalue / 100.0).toFixed(2);
       }}, 
-      {name: 'totalBrokerage', index: 'total_brokerage', width: 50, align: "center", formatter: function(cellvalue, options, rowObject){
-          return (cellvalue / 100.0).toFixed(2);
+      {name: 'discountedPrice', index: 'discounted_price', width: "70px", align: "center", formatter: function(cellvalue, options, rowObject){
+        if(!cellvalue) return '0.00';
+        return (cellvalue / 100.0).toFixed(2);
+      }}, 
+      {name: 'totalMoney', index: 'total_money', width: "70px", align: "center", formatter: function(cellvalue, options, rowObject){
+        return (cellvalue / 100.0).toFixed(2);
+      }}, 
+      {width: "70px", align: "center", formatter: function(cellvalue, options, rowObject){
+        var money = rowObject.totalMoney;
+        if(rowObject.despatchMoney) money+=rowObject.despatchMoney;
+        if(rowObject.discountedPrice) money-=rowObject.discountedPrice;
+        return (money / 100.0).toFixed(2);
+      }}, 
+      {name: 'totalBrokerageFirst', index: 'total_brokerage_first', width: "70px", align: "center", formatter: function(cellvalue, options, rowObject){
+        return (cellvalue / 100.0).toFixed(2);
       }}, 
       {name: 'regionName', index: 'region_id', width: 50, align: "center"}, 
       {name: 'distributorName', index: 'distributor_id', width: 50, align: "center"}, 
@@ -61,6 +79,41 @@
       {name: 'name', index: 'name', width: 50, align: "center"}, 
       {name: 'mobile', index: 'mobile', width: 50, align: "center"}, 
     ];
+    if(type == 2){
+      colModel = [
+        {name: 'orderId', hidden: true, index: 'orderId', width: 50, align: "center", formatter: function(cellvalue, options, rowObject){
+          return cellvalue.toFixed(0);
+        }}, 
+        {name: 'orderCode', index: 'orderCode', width: 50, align: "center"}, 
+        {name: 'createTime', index: 'create_time', width: 50, align: "center", formatter:'date', formatoptions: {newformat:'Y-m-d H:i:s'}}, 
+        {name: 'despatchMoney', index: 'despatch_money', width: "70px", align: "center", formatter: function(cellvalue, options, rowObject){
+          if(!cellvalue) return '0.00';
+          return (cellvalue / 100.0).toFixed(2);
+        }}, 
+        {name: 'discountedPrice', index: 'discounted_price', width: "70px", align: "center", formatter: function(cellvalue, options, rowObject){
+          if(!cellvalue) return '0.00';
+          return (cellvalue / 100.0).toFixed(2);
+        }}, 
+        {name: 'totalMoney', index: 'total_money', width: "70px", align: "center", formatter: function(cellvalue, options, rowObject){
+          return (cellvalue / 100.0).toFixed(2);
+        }}, 
+        {width: "70px", align: "center", formatter: function(cellvalue, options, rowObject){
+          var money = rowObject.totalMoney;
+          if(rowObject.despatchMoney) money+=rowObject.despatchMoney;
+          if(rowObject.discountedPrice) money-=rowObject.discountedPrice;
+          return (money / 100.0).toFixed(2);
+        }}, 
+        {name: 'totalBrokerage', index: 'total_brokerage', width: "70px", align: "center", formatter: function(cellvalue, options, rowObject){
+            return (cellvalue / 100.0).toFixed(2);
+        }}, 
+        {name: 'regionName', index: 'region_id', width: 50, align: "center"}, 
+        {name: 'distributorName', index: 'distributor_id', width: 50, align: "center"}, 
+        {name: 'shopName', index: 'shop_name', width: 50, align: "center"}, 
+        {name: 'type', index: 'type', width: 50, align: "center", formatter: 'select', editoptions: {value:'1:自主下单;2:代客下单'}},
+        {name: 'name', index: 'name', width: 50, align: "center"}, 
+        {name: 'mobile', index: 'mobile', width: 50, align: "center"}, 
+      ];
+    }
     var rowList = [10, 20, 30, 50];
     var rownumbers = true;
     var multiselect = true;

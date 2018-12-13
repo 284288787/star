@@ -59,10 +59,10 @@ var kickbackDetailHandle = new ListHandle({
       });
     });
   },
-  detail: function(id){
-    artDialog.data("params", {'id':id});
+  detail: function(id, t){
+    artDialog.data("params", {'id':id, 'type': t});
     artDialog.open("/common/mgr/kickbackDetail/detail", {
-      title : "提成明细",
+      title : t==1 ? '运营提成明细' : '分销提成明细',
       width : "90%",
       height : "600px",
       drag : true,
@@ -90,7 +90,8 @@ $(function(){
     {name: 'pointBeginTime', index: 'point_begin_time', width: 80, align: "center", formatter:'date', formatoptions: {srcformat: 'Y-m-d H:i:s', newformat:'Y-m-d H:i:s'}}, 
     {name: 'pointEndTime', index: 'point_end_time', width: 80, align: "center", formatter:'date', formatoptions: {srcformat: 'Y-m-d H:i:s', newformat:'Y-m-d H:i:s'}}, 
     {name: 'totalMoney', index: 'total_money', width: 150, align: "center", formatter: function(cellvalue, options, rowObject){
-      var s = (rowObject.totalMoneyYun / 100.0).toFixed(2) + ' + ' + (rowObject.totalMoney / 100.0).toFixed(2);
+      var s = '<a class="linetaga" href="javascript: kickbackDetailHandle.detail(\'' + rowObject.id.toFixed(0) + '\', 1);" >' + (rowObject.totalMoneyYun / 100.0).toFixed(2) + 
+       '</a> + <a class="linetaga" href="javascript: kickbackDetailHandle.detail(\'' + rowObject.id.toFixed(0) + '\', 2);" >' + (rowObject.totalMoney / 100.0).toFixed(2) + '</a>';
       return (cellvalue / 100.0).toFixed(2) + ' = ' + s;
     }}, 
     {name: 'createTime', index: 'create_time', width: 80, align: "center", formatter:'date', formatoptions: {srcformat: 'Y-m-d H:i:s', newformat:'Y-m-d H:i:s'}}, 
@@ -101,7 +102,6 @@ $(function(){
     }}, 
     {align: "center", editable: false, width: 130, sortable: false, formatter: function(cellvalue, options, rowObject){
       var temp = '';
-      temp += '<a class="linetaga" href="javascript: kickbackDetailHandle.detail(\'' + rowObject.id.toFixed(0) + '\');" >查看明细</a>';
       if(hasAuthorize('kickbackDetail-pass')){
         temp += '<a class="linetaga" href="javascript: kickbackDetailHandle.pass(\'' + rowObject.id.toFixed(0) + '\');" >审核通过</a>';
       }
