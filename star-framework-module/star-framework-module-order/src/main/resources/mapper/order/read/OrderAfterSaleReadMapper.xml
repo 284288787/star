@@ -77,7 +77,7 @@
     order by
     <choose>
       <when test="pager != null and pager.orderBy != null and pager.orderBy != ''">${pager.orderBy}</when>
-      <otherwise>c.create_time</otherwise>
+      <otherwise>c.detail_id</otherwise>
     </choose>
     <if test="pager != null and pager.orderType != null and pager.orderType != ''">${pager.orderType}</if>
     <if test="pager != null and pager.pageSize!=null and pager.startIndex!=null">
