@@ -4,6 +4,7 @@ package com.star.truffle.module.order.controller.api;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -35,10 +36,9 @@ public class OrderAfterSaleApiController {
   @ApiOperation(value = "根据条件获取订单售后列表", notes = "根据条件获取订单售后列表", httpMethod = "POST", response = ApiResult.class)
   @ApiImplicitParams({
     @ApiImplicitParam(name = "distributorId", value = "分销商ID", dataType = "Long", required = true, paramType = "query"),
-    @ApiImplicitParam(name = "orderId", value = "订单ID", dataType = "Long", required = false, paramType = "query"),
     @ApiImplicitParam(name = "afterCode", value = "售后单号", dataType = "Long", required = false, paramType = "query"),
     @ApiImplicitParam(name = "mobile", value = "分销商手机号", dataType = "String", required = false, paramType = "query"),
-    @ApiImplicitParam(name = "state", value = "售后状态", dataType = "int", required = false, paramType = "query"),
+    @ApiImplicitParam(name = "state", value = "售后状态  1待处理 2通过 3不通过 4已取消 5已删除 0查询可以售后的列表", dataType = "int", required = false, paramType = "query"),
     @ApiImplicitParam(name = "page.pageNum", value = "页码，页码如果没有则查询满足条件的所有记录", dataType = "int", required = false, paramType = "query"),
     @ApiImplicitParam(name = "page.pageSize", value = "一页最大记录数，当页码有值时，该值没有指定则默认为10", dataType = "int", required = false, paramType = "query"),
     @ApiImplicitParam(name = "page.orderBy", value = "排序字段，必须和数据库的字段一致", dataType = "String", required = false, paramType = "query"),
@@ -46,6 +46,9 @@ public class OrderAfterSaleApiController {
   })
   public ApiResult<List<OrderAfterSaleResponseDto>> queryOrderAfterSale(@ApiIgnore OrderAfterSaleRequestDto orderAfterSaleRequestDto) {
     try {
+      if (null == orderAfterSaleRequestDto || null == orderAfterSaleRequestDto.getDistributorId()) {
+        throw new StarServiceException(ApiCode.PARAM_ERROR);
+      }
       List<OrderAfterSaleResponseDto> list = orderAfterSaleService.queryOrderAfterSale(orderAfterSaleRequestDto);
       return ApiResult.success(list);
     } catch (StarServiceException e) {
@@ -81,13 +84,15 @@ public class OrderAfterSaleApiController {
   @ApiOperation(value = "新增订单售后", notes = "新增订单售后", httpMethod = "POST", response = ApiResult.class)
   @ApiImplicitParams({
     @ApiImplicitParam(name = "orderId", value = "订单ID", dataType = "Long", required = true, paramType = "query"),
+    @ApiImplicitParam(name = "type", value = "售后类型 1退货 2换货", dataType = "int", required = true, paramType = "query"),
+    @ApiImplicitParam(name = "detailIds", value = "订单详情Ids", dataType = "array", required = true, paramType = "query"),
     @ApiImplicitParam(name = "distributorId", value = "分销商id", dataType = "Long", required = true, paramType = "query"),
     @ApiImplicitParam(name = "remark", value = "申请售后说明", dataType = "String", required = true, paramType = "query"),
   })
-  public ApiResult<Long> saveOrderAfterSale(@ApiIgnore OrderAfterSaleRequestDto orderAfterSale) {
+  public ApiResult<Void> saveOrderAfterSale(@RequestBody @ApiIgnore OrderAfterSaleRequestDto orderAfterSale) {
     try {
-      Long id = orderAfterSaleService.saveOrderAfterSale(orderAfterSale);
-      return ApiResult.success(id);
+      orderAfterSaleService.saveOrderAfterSale(orderAfterSale);
+      return ApiResult.success();
     } catch (StarServiceException e) {
       return ApiResult.fail(e.getCode(), e.getMsg());
     } catch (Exception e) {

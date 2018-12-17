@@ -1,28 +1,28 @@
 /**create by framework at 2018年09月21日 15:21:35**/
 package com.star.truffle.module.order.dto.res;
 
-import lombok.Getter;
-import lombok.Setter;
-
-import java.util.List;
+import java.util.Date;
 
 import com.star.truffle.module.order.domain.OrderAfterSale;
-import com.star.truffle.module.order.domain.OrderDetail;
+
+import lombok.Getter;
+import lombok.Setter;
 
 @Getter
 @Setter
 public class OrderAfterSaleResponseDto extends OrderAfterSale {
 
-  // 分销商姓名
-  private String name;
-  // 分销商手机号
-  private String mobile;
-  // 快递费 单位分
-  private Integer despatchMoney;
-  // 总金额 不包含运费
-  private Integer totalMoney;
-  // 总提成
-  private Integer totalBrokerage;
-  
-  private List<OrderDetail> details;
+  private Long productId;
+  private String title;
+  private String mainPictureUrl;
+  private Integer price;
+  private Integer detailCount;
+  private Integer days;
+  private Date orderCreateTime;
+  private Long distributorId;
+  private String distributorName;
+  private String distributorMobile;
+  private Long memberId;
+  private String memberName;
+  private String memberMobile;
 }

@@ -12,8 +12,13 @@ public class OrderAfterSaleRequestDto extends OrderAfterSale {
 
   private Page pager;
 
-  // 分销商id
   private Long distributorId;
+  private String distributorName;
+  private String distributorMobile;
+  private String memberName;
+  private String memberMobile;
   
   private String states;
+  
+  private Long[] detailIds;
 }

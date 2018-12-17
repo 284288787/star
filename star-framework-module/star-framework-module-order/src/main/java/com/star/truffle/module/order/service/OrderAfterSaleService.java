@@ -1,6 +1,7 @@
 /**create by framework at 2018年09月21日 15:21:35**/
 package com.star.truffle.module.order.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,10 +15,12 @@ import com.star.truffle.module.order.cache.OrderAfterSaleCache;
 import com.star.truffle.module.order.cache.OrderCache;
 import com.star.truffle.module.order.cache.OrderDetailCache;
 import com.star.truffle.module.order.constant.AfterSaleEnum;
+import com.star.truffle.module.order.constant.AfterSaleTypeEnum;
 import com.star.truffle.module.order.constant.OrderStateEnum;
-import com.star.truffle.module.order.domain.OrderDetail;
+import com.star.truffle.module.order.domain.OrderAfterSale;
 import com.star.truffle.module.order.dto.req.OrderAfterSaleRequestDto;
 import com.star.truffle.module.order.dto.res.OrderAfterSaleResponseDto;
+import com.star.truffle.module.order.dto.res.OrderDetailResponseDto;
 import com.star.truffle.module.order.dto.res.OrderResponseDto;
 
 @Service
@@ -30,10 +33,14 @@ public class OrderAfterSaleService {
   @Autowired
   private OrderDetailCache orderDetailCache;
 
-  public Long saveOrderAfterSale(OrderAfterSaleRequestDto orderAfterSale) {
-    if (null == orderAfterSale || null == orderAfterSale.getOrderId() 
-        || null == orderAfterSale.getDistributorId() || StringUtils.isBlank(orderAfterSale.getRemark())) {
+  public void saveOrderAfterSale(OrderAfterSaleRequestDto orderAfterSale) {
+    if (null == orderAfterSale || null == orderAfterSale.getOrderId() || null == orderAfterSale.getDetailIds() 
+        || orderAfterSale.getDetailIds().length == 0 || null == orderAfterSale.getDistributorId() 
+        || StringUtils.isBlank(orderAfterSale.getRemark()) || null == orderAfterSale.getType()) {
       throw new StarServiceException(ApiCode.PARAM_ERROR);
+    }
+    if (orderAfterSale.getType() != AfterSaleTypeEnum.back.getType() && orderAfterSale.getType() != AfterSaleTypeEnum.exchange.getType()) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR, "只能是换货或退货");
     }
     OrderResponseDto order = orderCache.getOrder(orderAfterSale.getOrderId());
     if (null == order || order.getState() == OrderStateEnum.nopay.state() || order.getState() == OrderStateEnum.back.state()) {
@@ -42,11 +49,25 @@ public class OrderAfterSaleService {
     if (order.getDistributorId().longValue() != orderAfterSale.getDistributorId()) {
       throw new StarServiceException(ApiCode.PARAM_ERROR, "不是自己下面的订单不能操作申请售后");
     }
-    orderAfterSale.setAfterCode(900000 + order.getOrderId());
-    orderAfterSale.setState(AfterSaleEnum.pending.state());
-    orderAfterSale.setCreateTime(new Date());
-    this.orderAfterSaleCache.saveOrderAfterSale(orderAfterSale);
-    return orderAfterSale.getId();
+    List<OrderAfterSale> list = new ArrayList<>();
+    Long[] detailIds = orderAfterSale.getDetailIds();
+    for (Long detailId : detailIds) {
+      OrderDetailResponseDto orderDetail = orderDetailCache.getOrderDetail(detailId);
+      if (null == orderDetail || orderDetail.getOrderId() != orderAfterSale.getOrderId().longValue()) {
+        throw new StarServiceException(ApiCode.PARAM_ERROR, "商品不存在，或不属于该订单");
+      }
+      OrderAfterSale item = new OrderAfterSale();
+      item.setDetailId(detailId);
+      item.setCount(orderAfterSale.getCount());
+      item.setOrderId(orderAfterSale.getOrderId());
+      item.setType(orderAfterSale.getType());
+      item.setRemark(orderAfterSale.getRemark());
+      item.setAfterCode(String.valueOf(900000 + order.getOrderId()) + detailId);
+      item.setState(AfterSaleEnum.pending.state());
+      item.setCreateTime(new Date());
+      list.add(item);
+    }
+    this.orderAfterSaleCache.batchSaveOrderAfterSale(list);
   }
 
   public void updateOrderAfterSale(OrderAfterSaleRequestDto orderAfterSaleRequestDto) {
@@ -75,12 +96,6 @@ public class OrderAfterSaleService {
 
   public List<OrderAfterSaleResponseDto> queryOrderAfterSale(OrderAfterSaleRequestDto orderAfterSaleRequestDto) {
     List<OrderAfterSaleResponseDto> list = this.orderAfterSaleCache.queryOrderAfterSale(orderAfterSaleRequestDto);
-    if (null != list && ! list.isEmpty()) {
-      for (OrderAfterSaleResponseDto orderResponseDto : list) {
-        List<OrderDetail> details = orderDetailCache.getOrderDetails(orderResponseDto.getOrderId());
-        orderResponseDto.setDetails(details);
-      }
-    }
     return list;
   }
 
