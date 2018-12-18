@@ -80,13 +80,17 @@ function loadSaleAfterData(self, index, pageNum, pageSize){
           if(item.state){
             if(item.state == 1){
               ele+='<span class="txt">申请时间：'+item.createTime.formatDate("yy年MM月dd日 hh点mm分")+'</span><span class="mui-right"><input type="button" class="cancelBtn pl mui-btn mui-btn-danger mui-btn-outlined" data-id="'+item.id+'" value="取消售后"></span>'
-            }else if(item.state == 2){
-              ele+='<span class="mui-right"><input type="button" class="exprBtn pl mui-btn mui-btn-danger mui-btn-outlined" data-id="'+item.id+'" value="填写快递信息"></span>'
+            }else if(item.state == 2 || item.state == 4){
+              ele+='<span class="mui-right"><input type="button" class="exprBtn pl mui-btn mui-btn-danger mui-btn-outlined" data-id="'+item.id+'" value="'+(item.state==2 ? '填写' : '修改')+'快递信息"></span>'
             }else if(item.state == 3){
               ele+='<span class="txt">'+item.reason+'</span>';
-            }else if(item.state == 4){
-              ele+='<span class="txt">已取消</span>';
             }else if(item.state == 5){
+              ele+='<span class="txt">处理中</span>';
+            }else if(item.state == 6){
+              ele+='<span class="txt">已完成</span>';
+            }else if(item.state == 7){
+              ele+='<span class="txt">已取消</span>';
+            }else if(item.state == 8){
               ele+='<span class="txt">已删除</span>';
             }
           }else{
@@ -155,13 +159,14 @@ $(function(){
       mui.toast("售后原因必填");
       return false;
     }
-    var params={"orderId": orderId, "type": type, "detailIds": [detailId], "distributorId": distributor.distributorId, "remark": reason};
+    var params={"orderId": orderId, "type": type, "count": count, "detailIds": [detailId], "distributorId": distributor.distributorId, "remark": reason};
     ajax({
       url: '/api/orderAfterSale/saveOrderAfterSale',
       data: JSON.stringify(params),
       contentType:"application/json",
       success: function(res){
-        alert(res)
+        mui.toast("提交成功，请等待审核");
+        mui('#ok').popover('hide');
       }
     });
   }); 

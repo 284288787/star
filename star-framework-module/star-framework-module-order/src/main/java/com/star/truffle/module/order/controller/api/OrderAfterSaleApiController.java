@@ -79,7 +79,7 @@ public class OrderAfterSaleApiController {
       return ApiResult.fail(ApiCode.SYSTEM_ERROR);
     }
   }
-
+  
   @RequestMapping(value = "/saveOrderAfterSale", method = RequestMethod.POST)
   @ApiOperation(value = "新增订单售后", notes = "新增订单售后", httpMethod = "POST", response = ApiResult.class)
   @ApiImplicitParams({
@@ -92,6 +92,25 @@ public class OrderAfterSaleApiController {
   public ApiResult<Void> saveOrderAfterSale(@RequestBody @ApiIgnore OrderAfterSaleRequestDto orderAfterSale) {
     try {
       orderAfterSaleService.saveOrderAfterSale(orderAfterSale);
+      return ApiResult.success();
+    } catch (StarServiceException e) {
+      return ApiResult.fail(e.getCode(), e.getMsg());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return ApiResult.fail(ApiCode.SYSTEM_ERROR);
+    }
+  }
+
+  @RequestMapping(value = "/setExpressage", method = RequestMethod.POST)
+  @ApiOperation(value = "填写快递信息", notes = "填写快递信息", httpMethod = "POST", response = ApiResult.class)
+  @ApiImplicitParams({
+    @ApiImplicitParam(name = "id", value = "ID", dataType = "Long", required = true, paramType = "query"),
+    @ApiImplicitParam(name = "expressageCompany", value = "快递公司", dataType = "String", required = true, paramType = "query"),
+    @ApiImplicitParam(name = "expressageNumber", value = "快递单号", dataType = "String", required = true, paramType = "query"),
+  })
+  public ApiResult<Void> setExpressage(@ApiIgnore OrderAfterSaleRequestDto orderAfterSale) {
+    try {
+      orderAfterSaleService.setExpressage(orderAfterSale);
       return ApiResult.success();
     } catch (StarServiceException e) {
       return ApiResult.fail(e.getCode(), e.getMsg());

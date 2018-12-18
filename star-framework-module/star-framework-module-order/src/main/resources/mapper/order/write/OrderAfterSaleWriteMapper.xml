@@ -2,15 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.star.truffle.module.order.dao.write.OrderAfterSaleWriteDao">
   <insert id="saveOrderAfterSale" useGeneratedKeys="true" keyProperty="id" parameterType="com.star.truffle.module.order.domain.OrderAfterSale">
-    insert into order_aftersale(detail_id, order_id, after_code, remark, state, reason, create_time, update_time)
-    values(#{detailId}, #{orderId}, #{afterCode}, #{remark}, #{state}, #{reason}, #{createTime}, #{createTime})
+    insert into order_aftersale(type, count, detail_id, order_id, after_code, remark, state, reason, create_time, update_time)
+    values(#{type}, #{count}, #{detailId}, #{orderId}, #{afterCode}, #{remark}, #{state}, #{reason}, #{createTime}, #{createTime})
   </insert>
 
   <insert id="batchSaveOrderAfterSale" parameterType="java.util.List">
-    insert into order_aftersale(detail_id, order_id, after_code, remark, state, reason, create_time, update_time)
+    insert into order_aftersale(type, count, detail_id, order_id, after_code, remark, state, reason, create_time, update_time)
     values
     <foreach collection="list" item="item" index="index" separator=",">
-      (#{item.detailId}, #{item.orderId}, #{item.afterCode}, #{item.remark}, #{item.state}, #{item.reason}, #{item.createTime}, #{item.createTime})
+      (#{item.type}, #{item.count}, #{item.detailId}, #{item.orderId}, #{item.afterCode}, #{item.remark}, #{item.state}, #{item.reason}, #{item.createTime}, #{item.createTime})
     </foreach>
   </insert>
 
@@ -20,6 +20,13 @@
       <if test="state != null">state = #{state},</if>
       <if test="reason != null and reason != ''">reason = #{reason},</if>
       <if test="updateTime != null">update_time = #{updateTime},</if>
+      <if test="effectiveTime != null">effective_time = #{effectiveTime},</if>
+      <if test="expressageTime != null">expressage_time = #{expressageTime},</if>
+      <if test="addressee != null and addressee != ''">addressee = #{addressee},</if>
+      <if test="addresseeMobile != null and addresseeMobile != ''">addressee_mobile = #{addresseeMobile},</if>
+      <if test="addresseeAddress != null and addresseeAddress != ''">addressee_address = #{addresseeAddress},</if>
+      <if test="expressageCompany != null and expressageCompany != ''">expressage_company = #{expressageCompany},</if>
+      <if test="expressageNumber != null and expressageNumber != ''">expressage_number = #{expressageNumber},</if>
     </trim>
     where id = #{id}
   </update>
@@ -28,35 +35,26 @@
     delete from order_aftersale where id = #{id}
   </delete>
 
-  <resultMap id="orderAfterSaleResponseDtoResultMap" type="com.star.truffle.module.order.dto.res.OrderAfterSaleResponseDto">
-    <result column="id" property="id" />
-    <result column="order_id" property="orderId" />
-    <result column="after_code" property="afterCode" />
-    <result column="name" property="name" />
-    <result column="mobile" property="mobile" />
-    <result column="despatch_money" property="despatchMoney" />
-    <result column="total_money" property="totalMoney" />
-    <result column="total_brokerage" property="totalBrokerage" />
-    <result column="remark" property="remark" />
-    <result column="state" property="state" />
-    <result column="reason" property="reason" />
-    <result column="create_time" property="createTime" />
-    <result column="update_time" property="updateTime" />
-  </resultMap>
-
-  <sql id="sql_column">
-    order_aftersale.id, order_aftersale.detail_id, order_aftersale.order_id, order_aftersale.after_code, d.`name`, d.mobile, o.total_money, 
-    order_aftersale.remark, order_aftersale.state, order_aftersale.reason, order_aftersale.create_time, order_aftersale.update_time,
-    o.despatch_money, o.total_brokerage
-  </sql>
-
   <select id="getOrderAfterSale" resultType="com.star.truffle.module.order.dto.res.OrderAfterSaleResponseDto">
-    select
-    <include refid="sql_column" />
-    from order_aftersale
-    left JOIN `order` o on order_aftersale.order_id = o.order_id
-    LEFT JOIN distributor d on d.distributor_id = o.distributor_id
-    where order_aftersale.id = #{id}
+    select a.id, c.detail_id, c.order_id, a.after_code, a.remark, a.state, a.reason, a.create_time, a.update_time, a.type, a.count,
+      c.product_id, c.title, c.main_picture_url, c.price, c.count detail_count, c.days, c.create_time order_create_time, 
+      c.distributor_name, c.distributor_mobile, c.member_id, c.member_mobile, c.member_name, c.distributor_id
+    from order_aftersale a 
+    RIGHT JOIN (
+      select d.id detail_id, d.order_id, d.product_id, d.title, d.main_picture_url, d.price, d.count, e.create_time, e.distributor_name, e.distributor_mobile, 
+        TO_DAYS( NOW() ) - TO_DAYS(e.create_time) days, e.member_id, e.member_name, e.member_mobile, e.distributor_id
+      from order_detail d
+      INNER JOIN (
+        select o.order_id, o.member_id, m.`name` member_name, m.mobile member_mobile, d.`name` distributor_name, d.mobile distributor_mobile, o.create_time, d.distributor_id 
+        from `order` o, distributor d, member_info m 
+        where o.state = 3 and o.member_id = m.member_id and d.distributor_id = o.distributor_id
+        <if test="distributorId != null">
+          and o.distributor_id = #{distributorId}
+        </if> 
+      ) e on d.order_id = e.order_id
+      order by days
+    ) c on a.detail_id = c.detail_id
+    where a.id = #{id}
   </select>
 
 </mapper>

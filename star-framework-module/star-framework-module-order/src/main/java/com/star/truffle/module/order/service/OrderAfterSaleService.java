@@ -35,7 +35,7 @@ public class OrderAfterSaleService {
 
   public void saveOrderAfterSale(OrderAfterSaleRequestDto orderAfterSale) {
     if (null == orderAfterSale || null == orderAfterSale.getOrderId() || null == orderAfterSale.getDetailIds() 
-        || orderAfterSale.getDetailIds().length == 0 || null == orderAfterSale.getDistributorId() 
+        || orderAfterSale.getDetailIds().length == 0 || null == orderAfterSale.getDistributorId() || null == orderAfterSale.getCount() 
         || StringUtils.isBlank(orderAfterSale.getRemark()) || null == orderAfterSale.getType()) {
       throw new StarServiceException(ApiCode.PARAM_ERROR);
     }
@@ -68,6 +68,15 @@ public class OrderAfterSaleService {
       list.add(item);
     }
     this.orderAfterSaleCache.batchSaveOrderAfterSale(list);
+  }
+  
+  public void setExpressage(OrderAfterSaleRequestDto orderAfterSaleRequestDto) {
+    if (null == orderAfterSaleRequestDto || StringUtils.isBlank(orderAfterSaleRequestDto.getExpressageCompany()) 
+        || StringUtils.isBlank(orderAfterSaleRequestDto.getExpressageNumber()) || null == orderAfterSaleRequestDto.getId()) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR);
+    }
+    orderAfterSaleRequestDto.setExpressageTime(new Date());
+    this.orderAfterSaleCache.updateOrderAfterSale(orderAfterSaleRequestDto);
   }
 
   public void updateOrderAfterSale(OrderAfterSaleRequestDto orderAfterSaleRequestDto) {

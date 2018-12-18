@@ -25,6 +25,5 @@ public class OrderResponseDto extends Order {
   private Long regionTownId;
   private String regionTownName;
   
-  private Integer saleAfterState;           //售后状态 1待处理 2通过 3不通过 4已取消 5已删除
   private List<OrderDetail> details;
 }

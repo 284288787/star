@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -50,15 +51,18 @@ public class OrderAfterSaleController {
   public Map<String, Object> list(OrderAfterSaleRequestDto orderAfterSaleRequestDto, Integer page, Integer rows, String sord, String sidx) {
     Page pager = new Page(page, rows, sidx, OrderType.desc.name().equals(sord) ? OrderType.desc : OrderType.asc);
     orderAfterSaleRequestDto.setPager(pager);
-    orderAfterSaleRequestDto.setStates("1,2,3");
-    List<OrderAfterSaleResponseDto> list = orderAfterSaleService.queryOrderAfterSale(orderAfterSaleRequestDto);
+    if (StringUtils.isBlank(orderAfterSaleRequestDto.getStates())) {
+      orderAfterSaleRequestDto.setStates("1,2,3,4,5,6");
+    }
     Long count = orderAfterSaleService.queryOrderAfterSaleCount(orderAfterSaleRequestDto);
-
     Map<String, Object> map = new HashMap<>();
     map.put("page", pager.getPageNum());
     map.put("total", count % pager.getPageSize() == 0 ? count / pager.getPageSize() : count / pager.getPageSize() + 1);
     map.put("records", count);
-    map.put("rows", list);
+    if (count > 0) {
+      List<OrderAfterSaleResponseDto> list = orderAfterSaleService.queryOrderAfterSale(orderAfterSaleRequestDto);
+      map.put("rows", list);
+    }
     return map;
   }
 

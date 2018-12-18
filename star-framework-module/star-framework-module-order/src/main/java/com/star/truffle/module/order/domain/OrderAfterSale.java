@@ -23,7 +23,7 @@ public class OrderAfterSale {
   private String afterCode;
   // 申请备注
   private String remark;
-  // 售后状态 1待处理 2通过 3不通过 4已填单号 5完成 6已取消 7已删除
+  // 售后状态 1待处理 2通过 3不通过 4已寄件 5处理中 6完成 7已取消 8已删除
   // 0查询可以售后的列表
   private Integer state;
   // openid
@@ -33,11 +33,12 @@ public class OrderAfterSale {
   // 更新日期
   private Date updateTime;
   
-  private String addressee;//收件人
-  private String addresseeMobile; //收件人电话
-  private String addresseeAddress; //收件人地址
-  private Date effectiveTime;    //寄件有效截止时间
+  private String addressee;         //收件人
+  private String addresseeMobile;   //收件人电话
+  private String addresseeAddress;  //收件人地址
+  private Date effectiveTime;       //寄件有效截止时间
   
   private String expressageCompany; //快递公司
   private String expressageNumber;  //快递单号
+  private Date expressageTime;      //快递信息填写时间
 }
