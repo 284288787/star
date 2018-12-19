@@ -52,7 +52,7 @@ $(function() {
       mui.toast("请填写电话号码");
       return false;
     }
-    if (!/^1[34578]\d{9}$/.test(mobile)) {
+    if (!/^1[345789]\d{9}$/.test(mobile)) {
       mui.toast("手机号码错误");
       return false;
     }

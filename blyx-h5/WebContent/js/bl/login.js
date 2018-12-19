@@ -39,7 +39,7 @@ $(function() {
   
   $("#send").on("tap", function(){
     var mobile=$(".phone").val();
-    if (!/^1[34578]\d{9}$/.test(mobile)) {
+    if (!/^1[345789]\d{9}$/.test(mobile)) {
       mui.toast("请填写正确的手机号");
       return false;
     }
