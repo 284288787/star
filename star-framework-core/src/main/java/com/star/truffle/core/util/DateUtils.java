@@ -3,12 +3,38 @@ package com.star.truffle.core.util;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.temporal.TemporalUnit;
 import java.util.Calendar;
 import java.util.Date;
 
 public class DateUtils {
-
   
+  public static Date plusNow(long amountToAdd, TemporalUnit unit) {
+    ZoneId zone = ZoneId.systemDefault();
+    Instant instant = LocalDateTime.now().plus(amountToAdd, unit).atZone(zone).toInstant();
+    return Date.from(instant);
+  }
+  
+  public static Date plusDate(Date date, long amountToAdd, TemporalUnit unit) {
+    ZoneId zone = ZoneId.systemDefault();
+    Instant instant = LocalDateTime.ofInstant(date.toInstant(), zone).plus(amountToAdd, unit).atZone(zone).toInstant();
+    return Date.from(instant);
+  }
+  
+  public static Date minusNow(long amountToSubtract, TemporalUnit unit) {
+    ZoneId zone = ZoneId.systemDefault();
+    Instant instant = LocalDateTime.now().minus(amountToSubtract, unit).atZone(zone).toInstant();
+    return Date.from(instant);
+  }
+
+  public static Date minusDate(Date date, long amountToSubtract, TemporalUnit unit) {
+    ZoneId zone = ZoneId.systemDefault();
+    Instant instant = LocalDateTime.ofInstant(date.toInstant(), zone).minus(amountToSubtract, unit).atZone(zone).toInstant();
+    return Date.from(instant);
+  }
   
   /**
    * 得到本周周一

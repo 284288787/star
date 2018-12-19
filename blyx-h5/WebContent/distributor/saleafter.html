@@ -36,12 +36,14 @@
 .mui-right{
   float:right;
 }
+.mui-right .mui-btn{
+  margin-top:7px;
+}
 .line .txt{
   float:left;
   padding-right:10px;
   font-size:12px;
   color:gray;
-  vertical-align: -webkit-baseline-middle;
 }
 .box{
   background: #fff !important;
@@ -141,6 +143,18 @@
       <span><input type="radio" name="saletype" id="type_2"><label for="type_2">换货</label></span>
     </b></p>
     <p class="padd addr"><input type="text" name="reason" placeholder="申请原因"></p>
+    </div>
+    <div>
+      <button type="button" class="mui-btn cancel">取消提交</button>
+      <button type="button" class="mui-btn sbmit">确认提交</button>
+    </div>
+  </div>
+  <div id="expr" class="box mui-popover mui-popover-action mui-popover-bottom">
+    <p class="ptitle">填写快递单号</p>
+    <div>
+    <p class="padd msg"><b>打算发得分</b></p>
+    <p class="padd company"><input type="text" name="company" placeholder="快递公司"></p>
+    <p class="padd exprnumber"><input type="text" name="number" placeholder="快递单号"></p>
     </div>
     <div>
       <button type="button" class="mui-btn cancel">取消提交</button>

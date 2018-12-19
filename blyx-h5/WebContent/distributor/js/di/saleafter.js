@@ -57,7 +57,7 @@ function loadSaleAfterData(self, index, pageNum, pageSize){
     param['states'] = '1,2,3';
   }
   if(index==2){
-    param['states'] = '1,2,3,4,5';
+    param['states'] = '1,2,3,4,5,6,7';
   }
   ajax({
     url: '/api/orderAfterSale/queryOrderAfterSale',
@@ -81,21 +81,25 @@ function loadSaleAfterData(self, index, pageNum, pageSize){
             if(item.state == 1){
               ele+='<span class="txt">申请时间：'+item.createTime.formatDate("yy年MM月dd日 hh点mm分")+'</span><span class="mui-right"><input type="button" class="cancelBtn pl mui-btn mui-btn-danger mui-btn-outlined" data-id="'+item.id+'" value="取消售后"></span>'
             }else if(item.state == 2 || item.state == 4){
-              ele+='<span class="mui-right"><input type="button" class="exprBtn pl mui-btn mui-btn-danger mui-btn-outlined" data-id="'+item.id+'" value="'+(item.state==2 ? '填写' : '修改')+'快递信息"></span>'
+              if(item.state == 2 && ! item.effectiveTime.before(new Date())){
+                ele+='<span class="txt">请于'+item.effectiveTime.formatDate("MM月dd日")+'之前填写快递信息</span><span class="mui-right"><input type="button" class="pl mui-btn mui-btn-danger mui-btn-outlined mui-disabled" value="过期未填写快递信息"></span>'
+              }else{
+                ele+='<span class="txt">请于'+item.effectiveTime.formatDate("MM月dd日")+'之前填写快递信息</span><span class="mui-right"><input type="button" class="exprBtn pl mui-btn mui-btn-danger mui-btn-outlined" data-id="'+item.id+'" data-company="'+(item.expressageCompany?item.expressageCompany:"")+'" data-number="'+(item.expressageNumber?item.expressageNumber:"")+'" data-time="'+item.effectiveTime.formatDate("yyyy年MM月dd日 hh时mm分")+'" value="'+(item.state==2 ? '填写' : '修改')+'快递信息"></span>'
+              }
             }else if(item.state == 3){
-              ele+='<span class="txt">'+item.reason+'</span>';
+              ele+='<span class="txt">未通过原因：'+item.reason+'</span>';
             }else if(item.state == 5){
-              ele+='<span class="txt">处理中</span>';
+              ele+='<span class="mui-right">处理中</span>';
             }else if(item.state == 6){
-              ele+='<span class="txt">已完成</span>';
+              ele+='<span class="mui-right">已完成</span>';
             }else if(item.state == 7){
-              ele+='<span class="txt">已取消</span>';
+              ele+='<span class="mui-right">已取消</span>';
             }else if(item.state == 8){
-              ele+='<span class="txt">已删除</span>';
+              ele+='<span class="mui-right">已删除</span>';
             }
           }else{
             ele += (item.days>17? '<span class="txt">售后期已过</span><span class="mui-right">\
-                <input type="button" class="applyBtn pl mui-btn mui-btn-danger mui-btn-outlined mui-disabled" value="申请售后"></span>\
+                <input type="button" class="pl mui-btn mui-btn-danger mui-btn-outlined mui-disabled" value="申请售后"></span>\
                 ':'<span class="mui-right"><input type="button" class="applyBtn pl mui-btn mui-btn-danger mui-btn-outlined" data-count="'+item.detailCount+'" data-detailid="'+item.detailId+'" data-orderid="'+item.orderId+'" value="申请售后"></span>');
           }
         ele+= '</div>\
@@ -115,6 +119,90 @@ function loadSaleAfterData(self, index, pageNum, pageSize){
           $("#ok input[name=reason]").val("");
           $("#ok .sbmit").attr({"data-detailid": detailId, "data-orderid": orderId});
           mui('#ok').popover('show');
+          $("#ok .cancel").off().on("tap", function(){
+            mui('#ok').popover('hide');
+          }); 
+          $("#ok .sbmit").off().on("tap", function(){
+            var detailId = $(this).attr("data-detailid");
+            var orderId = $(this).attr("data-orderid");
+            var count = $("#ok input.mui-input-numbox").val();
+            var t1 = $("#ok #type_1")[0].checked;
+            var t2 = $("#ok #type_2")[0].checked;
+            var reason = $.trim($("#ok input[name=reason]").val());
+            if(!count){
+              mui.toast("售后数量必填");
+              return false;
+            }
+            if(!t1 && !t2){
+              mui.toast("售后方式必选");
+              return false;
+            }
+            type = t1 ? 1 : 2;
+            if(!reason){
+              mui.toast("售后原因必填");
+              return false;
+            }
+            var params={"orderId": orderId, "type": type, "count": count, "detailIds": [detailId], "distributorId": distributor.distributorId, "remark": reason};
+            ajax({
+              url: '/api/orderAfterSale/saveOrderAfterSale',
+              data: JSON.stringify(params),
+              contentType:"application/json",
+              success: function(res){
+                mui.toast("提交成功，请等待审核");
+                mui('#ok').popover('hide');
+                document.location.reload();
+              }
+            });
+          }); 
+          return false;
+        });
+        $(".exprBtn").off().on('tap', function(){
+          var id = $(this).attr("data-id");
+          var time = $(this).attr("data-time");
+          var company = $.trim($(this).attr("data-company"));
+          var number = $.trim($(this).attr("data-number"));
+          $("#expr .msg b").html("请于<span style='color:red'>"+time+"</span>之前填写快递信息");
+          $("#expr input[name=company]").val(company);
+          $("#expr input[name=number]").val(number);
+          $("#expr .sbmit").attr({"data-id": id});
+          mui('#expr').popover('show');
+          $("#expr .sbmit").off().on("tap", function(){
+            var company = $("#expr input[name=company]").val();
+            var number = $("#expr input[name=number]").val();
+            if(!company || ! number){
+              mui.toast("快递公司，快递单号必填");
+              return false;
+            }
+            var params = {"id": id, "expressageNumber": number, "expressageCompany": company}
+            ajax({
+              url: '/api/orderAfterSale/setExpressage',
+              data: params,
+              success: function(res){
+                mui.toast("已取消售后申请");
+                document.location.reload();
+              }
+            });
+          });
+          $("#expr .cancel").off().on("tap", function(){
+            mui('#expr').popover('hide');
+          });
+          return false;
+        });
+        $(".cancelBtn").off().on('tap', function(){
+          var id = $(this).attr("data-id");
+          mui.confirm('', '是否确定取消售后申请?', ['否', '是'], function(e) {
+            if (e.index == 1) {
+              var params={"id":id, "distributorId": distributor.distributorId};
+              ajax({
+                url: '/api/orderAfterSale/cancelOrderAfterSale',
+                data: params,
+                success: function(res){
+                  mui.toast("已取消售后申请");
+                  document.location.reload();
+                }
+              });
+            }
+          })
           return false;
         });
         if(items.length < 2 && pageNum == 1){
@@ -135,39 +223,3 @@ function loadSaleAfterData(self, index, pageNum, pageSize){
     }
   });
 }
-$(function(){
-  $("#ok .cancel").on("tap", function(){
-    mui('#ok').popover('hide');
-  }); 
-  $("#ok .sbmit").on("tap", function(){
-    var detailId = $(this).attr("data-detailid");
-    var orderId = $(this).attr("data-orderid");
-    var count = $("#ok input.mui-input-numbox").val();
-    var t1 = $("#ok #type_1")[0].checked;
-    var t2 = $("#ok #type_2")[0].checked;
-    var reason = $.trim($("#ok input[name=reason]").val());
-    if(!count){
-      mui.toast("售后数量必填");
-      return false;
-    }
-    if(!t1 && !t2){
-      mui.toast("售后方式必选");
-      return false;
-    }
-    type = t1 ? 1 : 2;
-    if(!reason){
-      mui.toast("售后原因必填");
-      return false;
-    }
-    var params={"orderId": orderId, "type": type, "count": count, "detailIds": [detailId], "distributorId": distributor.distributorId, "remark": reason};
-    ajax({
-      url: '/api/orderAfterSale/saveOrderAfterSale',
-      data: JSON.stringify(params),
-      contentType:"application/json",
-      success: function(res){
-        mui.toast("提交成功，请等待审核");
-        mui('#ok').popover('hide');
-      }
-    });
-  }); 
-});

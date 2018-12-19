@@ -67,10 +67,10 @@ public class OrderAfterSaleController {
   }
 
   @ResponseBody
-  @RequestMapping(value = "/pass/{id}", method = RequestMethod.POST)
-  public ApiResult<Void> pass(@PathVariable Long id) {
+  @RequestMapping(value = "/pass", method = RequestMethod.POST)
+  public ApiResult<Void> pass(OrderAfterSaleRequestDto orderAfterSaleRequestDto) {
     try {
-      orderAfterSaleService.changeState(id, AfterSaleEnum.pass.state(), null);
+      orderAfterSaleService.pass(orderAfterSaleRequestDto);
       return ApiResult.success();
     } catch (StarServiceException e) {
       return ApiResult.fail(e.getCode(), e.getMsg());
@@ -85,6 +85,34 @@ public class OrderAfterSaleController {
   public ApiResult<Void> nopass(@PathVariable Long id, String reject) {
     try {
       orderAfterSaleService.changeState(id, AfterSaleEnum.nopass.state(), reject);
+      return ApiResult.success();
+    } catch (StarServiceException e) {
+      return ApiResult.fail(e.getCode(), e.getMsg());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return ApiResult.fail(ApiCode.SYSTEM_ERROR);
+    }
+  }
+  
+  @ResponseBody
+  @RequestMapping(value = "/doing/{id}", method = RequestMethod.POST)
+  public ApiResult<Void> doing(@PathVariable Long id) {
+    try {
+      orderAfterSaleService.changeState(id, AfterSaleEnum.doing.state(), null);
+      return ApiResult.success();
+    } catch (StarServiceException e) {
+      return ApiResult.fail(e.getCode(), e.getMsg());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return ApiResult.fail(ApiCode.SYSTEM_ERROR);
+    }
+  }
+  
+  @ResponseBody
+  @RequestMapping(value = "/finish/{id}", method = RequestMethod.POST)
+  public ApiResult<Void> finish(@PathVariable Long id) {
+    try {
+      orderAfterSaleService.changeState(id, AfterSaleEnum.finish.state(), null);
       return ApiResult.success();
     } catch (StarServiceException e) {
       return ApiResult.fail(e.getCode(), e.getMsg());

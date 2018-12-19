@@ -1,6 +1,7 @@
 /**create by framework at 2018年09月21日 15:21:35**/
 package com.star.truffle.module.order.service;
 
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.star.truffle.core.StarServiceException;
+import com.star.truffle.core.util.DateUtils;
 import com.star.truffle.core.web.ApiCode;
 import com.star.truffle.module.order.cache.OrderAfterSaleCache;
 import com.star.truffle.module.order.cache.OrderCache;
@@ -75,8 +77,17 @@ public class OrderAfterSaleService {
         || StringUtils.isBlank(orderAfterSaleRequestDto.getExpressageNumber()) || null == orderAfterSaleRequestDto.getId()) {
       throw new StarServiceException(ApiCode.PARAM_ERROR);
     }
-    orderAfterSaleRequestDto.setExpressageTime(new Date());
-    this.orderAfterSaleCache.updateOrderAfterSale(orderAfterSaleRequestDto);
+    OrderAfterSaleResponseDto orderAfterSaleResponseDto = this.orderAfterSaleCache.getOrderAfterSale(orderAfterSaleRequestDto.getId());
+    if (null == orderAfterSaleResponseDto) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR, "信息不存在");
+    }
+    if (orderAfterSaleResponseDto.getState() == AfterSaleEnum.pass.state() || orderAfterSaleResponseDto.getState() == AfterSaleEnum.send.state()) {
+      orderAfterSaleRequestDto.setExpressageTime(new Date());
+      orderAfterSaleRequestDto.setState(AfterSaleEnum.send.state());
+      this.orderAfterSaleCache.updateOrderAfterSale(orderAfterSaleRequestDto);
+    }else {
+      throw new StarServiceException(ApiCode.PARAM_ERROR, "审核通过才可以填写快递单号");
+    }
   }
 
   public void updateOrderAfterSale(OrderAfterSaleRequestDto orderAfterSaleRequestDto) {
@@ -139,15 +150,21 @@ public class OrderAfterSaleService {
     if (null == responseDto) {
       throw new StarServiceException(ApiCode.PARAM_ERROR, "记录不存在");
     }
-    if (responseDto.getState() == AfterSaleEnum.pending.state() || responseDto.getState() == AfterSaleEnum.pass.state() || responseDto.getState() == AfterSaleEnum.nopass.state()) {
-      OrderAfterSaleRequestDto orderAfterSaleRequestDto = new OrderAfterSaleRequestDto();
-      orderAfterSaleRequestDto.setId(id);
-      orderAfterSaleRequestDto.setState(state);
-      orderAfterSaleRequestDto.setReason(reject);
-      this.orderAfterSaleCache.updateOrderAfterSale(orderAfterSaleRequestDto);
-    }else {
-      throw new StarServiceException(ApiCode.PARAM_ERROR, "该记录已被处理，请刷新页面");
+    OrderAfterSaleRequestDto orderAfterSaleRequestDto = new OrderAfterSaleRequestDto();
+    orderAfterSaleRequestDto.setId(id);
+    orderAfterSaleRequestDto.setState(state);
+    orderAfterSaleRequestDto.setReason(reject);
+    this.orderAfterSaleCache.updateOrderAfterSale(orderAfterSaleRequestDto);
+  }
+
+  public void pass(OrderAfterSaleRequestDto orderAfterSaleRequestDto) {
+    if (null == orderAfterSaleRequestDto || null == orderAfterSaleRequestDto.getId() || StringUtils.isBlank(orderAfterSaleRequestDto.getAddressee())
+        || StringUtils.isBlank(orderAfterSaleRequestDto.getAddresseeAddress()) || StringUtils.isBlank(orderAfterSaleRequestDto.getAddresseeMobile())) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR, "参数错误");
     }
+    orderAfterSaleRequestDto.setEffectiveTime(DateUtils.plusNow(7, ChronoUnit.DAYS));
+    orderAfterSaleRequestDto.setState(AfterSaleEnum.pass.state());
+    this.orderAfterSaleCache.updateOrderAfterSale(orderAfterSaleRequestDto);
   }
 
 }

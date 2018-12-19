@@ -44,6 +44,7 @@
 
   <select id="getOrderAfterSale" resultType="com.star.truffle.module.order.dto.res.OrderAfterSaleResponseDto">
     select a.id, c.detail_id, c.order_id, a.after_code, a.remark, a.state, a.reason, a.create_time, a.update_time, a.type, a.count,
+      a.addressee, a.addressee_mobile, a.addressee_address, a.effective_time, a.expressage_company, a.expressage_number, a.expressage_time,
       c.product_id, c.title, c.main_picture_url, c.price, c.count detail_count, c.days, c.create_time order_create_time, 
       c.distributor_name, c.distributor_mobile, c.member_id, c.member_mobile, c.member_name, c.distributor_id
     from order_aftersale a 
@@ -54,7 +55,7 @@
       INNER JOIN (
         select o.order_id, o.member_id, m.`name` member_name, m.mobile member_mobile, d.`name` distributor_name, d.mobile distributor_mobile, o.create_time, d.distributor_id 
         from `order` o, distributor d, member_info m 
-        where o.state = 3 and o.member_id = m.member_id and d.distributor_id = o.distributor_id and o.distributor_id = #{distributorId}
+        where o.state = 3 and o.member_id = m.member_id and d.distributor_id = o.distributor_id
       ) e on d.order_id = e.order_id
       order by days
     ) c on a.detail_id = c.detail_id
@@ -63,6 +64,7 @@
 
   <select id="queryOrderAfterSale" resultMap="orderAfterSaleResponseDtoResultMap">
     select a.id, c.detail_id, c.order_id, a.after_code, a.remark, a.state, a.reason, a.create_time, a.update_time, a.type, a.count,
+      a.addressee, a.addressee_mobile, a.addressee_address, a.effective_time, a.expressage_company, a.expressage_number, a.expressage_time,
       c.product_id, c.title, c.main_picture_url, c.price, c.count detail_count, c.days, c.create_time order_create_time, 
       c.distributor_name, c.distributor_mobile, c.member_id, c.member_mobile, c.member_name, c.distributor_id
     from order_aftersale a 
