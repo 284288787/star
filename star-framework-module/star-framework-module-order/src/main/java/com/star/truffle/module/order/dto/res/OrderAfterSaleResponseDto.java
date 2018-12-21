@@ -16,6 +16,8 @@ public class OrderAfterSaleResponseDto extends OrderAfterSale {
   private String title;
   private String mainPictureUrl;
   private Integer price;
+  private Integer brokerage;
+  private Integer brokerageFirst;
   private Integer detailCount;
   private Integer days;
   private Date orderCreateTime;

@@ -35,9 +35,9 @@
   </resultMap>
 
   <sql id="sql_column">
-    `order`.discounted_price, `order`.express_number, `order`.transport_state, `order`.remark, `order`.deleted, `order`.delete_user, order_id, order_code, `order`.type, member_id, `order`.open_id, `order`.`name`, `order`.mobile, delivery_type, `order`.province_name, `order`.city_name, `order`.area_name, delivery_address, delivery_name, delivery_mobile, despatch_money, total_money, total_brokerage, total_brokerage_first, `order`.region_id, `order`.distributor_id, `order`.shop_address, `order`.shop_name, `order`.shop_mobile, `order`.state, pickup_code, `order`.create_time
+    `order`.discounted_price, `order`.express_number, `order`.transport_state, `order`.remark, `order`.deleted, `order`.delete_user, order_id, order_code, `order`.type, member_id, `order`.open_id, `order`.`name`, `order`.mobile, delivery_type, `order`.province_name, `order`.city_name, `order`.area_name, delivery_address, delivery_name, delivery_mobile, despatch_money, total_money, (total_brokerage - back_brokerage) total_brokerage, (total_brokerage_first - back_brokerage_first) total_brokerage_first, `order`.region_id, `order`.distributor_id, `order`.shop_address, `order`.shop_name, `order`.shop_mobile, `order`.state, pickup_code, `order`.create_time
    	, r.`name` region_name, p.areaId regionProvinceId, ifnull(p.shortName, p.areaName) regionProvinceName, c.areaId regionCityId, ifnull(c.shortName, c.areaName) regionCityName, a.areaId regionAreaId, ifnull(a.shortName, a.areaName) regionAreaName, t.areaId regionTownId, ifnull(t.shortName, t.areaName) regionTownName
-		,	d.`name` distributor_name
+		,	d.`name` distributor_name, `order`.back_brokerage, `order`.back_brokerage_first
   </sql>
 
   <sql id="sql_where">
@@ -267,14 +267,14 @@
   </resultMap>
   
   <select id="totalMoney" resultMap="totalMoneyMap">
-    select IFNULL(SUM(o.total_brokerage), 0) totalMoney, IFNULL(DATE_FORMAT(max(o.create_time),'%Y-%m-%d %H:%i:%s'), '2018-10-10 00:00:00') time from `order` o where o.distributor_id = #{distributorId} and o.state in (2,3)
+    select IFNULL(SUM(o.total_brokerage - o.back_brokerage), 0) totalMoney, IFNULL(DATE_FORMAT(max(o.create_time),'%Y-%m-%d %H:%i:%s'), '2018-10-10 00:00:00') time from `order` o where o.distributor_id = #{distributorId} and o.state in (2,3)
     <if test="beginTime != null">
       and o.create_time &gt; #{beginTime}
     </if>
   </select>
   
   <select id="totalMoneyYun" resultMap="totalMoneyMap">
-    select IFNULL(SUM(o.total_brokerage_first), 0) totalMoney, IFNULL(DATE_FORMAT(max(o.create_time),'%Y-%m-%d %H:%i:%s'), '2018-10-10 00:00:00') time from `order` o where 
+    select IFNULL(SUM(o.total_brokerage_first - o.back_brokerage_first), 0) totalMoney, IFNULL(DATE_FORMAT(max(o.create_time),'%Y-%m-%d %H:%i:%s'), '2018-10-10 00:00:00') time from `order` o where 
     o.distributor_id in (select distributor_id from distributor where parent_distributor_id = #{parentDistributorId})
     and o.state in (2,3)
     <if test="beginTime != null">
@@ -299,7 +299,7 @@
     select 
       m.mobile, m.`name`, a.orderNum, a.totalMoney, a.totalBrokergae
     from
-      (SELECT o.member_id, count(1) orderNum, SUM(o.total_money) totalMoney, SUM(o.total_brokerage) totalBrokergae 
+      (SELECT o.member_id, count(1) orderNum, SUM(o.total_money) totalMoney, SUM(o.total_brokerage - o.back_brokerage) totalBrokergae 
         FROM `order` o where o.distributor_id = #{distributorId} GROUP BY o.member_id
       ) a
        , member_info m where m.member_id = a.member_id
@@ -360,7 +360,7 @@
 		  IFNULL(sum(r.total_brokerage),0) kickback_second, IFNULL(sum(r.total_brokerage_first),0) kickback_first
     from (
       SELECT 
-        o.order_id, o.type, o.member_id, o.delivery_type, o.distributor_id, o.total_money, o.despatch_money, o.total_brokerage, o.total_brokerage_first, o.create_time, DATE_FORMAT(o.create_time, '%Y-%m-%d') create_date
+        o.order_id, o.type, o.member_id, o.delivery_type, o.distributor_id, o.total_money, o.despatch_money, o.total_brokerage-o.back_brokerage total_brokerage, o.total_brokerage_first-o.back_brokerage_first total_brokerage_first, o.create_time, DATE_FORMAT(o.create_time, '%Y-%m-%d') create_date
       from `order` o where o.state in (2, 3) and TO_DAYS( NOW() ) - TO_DAYS(o.create_time) = #{day}
       <if test="distributorId != null">
         and o.distributor_id = #{distributorId}
@@ -383,7 +383,7 @@
 		  IFNULL(sum(r.total_brokerage),0) kickback_second, IFNULL(sum(r.total_brokerage_first),0) kickback_first
     from (
       SELECT 
-        o.order_id, o.type, o.member_id, o.delivery_type, o.distributor_id, o.total_money, o.despatch_money, o.total_brokerage, o.total_brokerage_first, o.create_time, DATE_FORMAT(o.create_time, '%Y-%m-%d') create_date
+        o.order_id, o.type, o.member_id, o.delivery_type, o.distributor_id, o.total_money, o.despatch_money, o.total_brokerage-o.back_brokerage total_brokerage, o.total_brokerage_first-o.back_brokerage_first total_brokerage_first, o.create_time, DATE_FORMAT(o.create_time, '%Y-%m-%d') create_date
       from `order` o where o.state in (2, 3) and TO_DAYS( NOW() ) - TO_DAYS(o.create_time) = #{day}
     ) r
     INNER JOIN (

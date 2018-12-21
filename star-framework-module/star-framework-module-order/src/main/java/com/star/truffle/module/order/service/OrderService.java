@@ -711,6 +711,8 @@ public class OrderService implements ChooseDataIntf {
     orderRequestDto.setTotalBrokerageFirst(f);
     orderRequestDto.setTotalBrokerage(s);
     orderRequestDto.setDiscountedPrice(t);
+    orderRequestDto.setProfitHan(order.getProfitHan() - t + (order.getTotalBrokerage() - s) + (order.getTotalBrokerageFirst() - f));
+    orderRequestDto.setProfitWei(order.getProfitWei() - t + (order.getTotalBrokerage() - s) + (order.getTotalBrokerageFirst() - f));
     this.orderCache.updateOrder(orderRequestDto);
   }
 }

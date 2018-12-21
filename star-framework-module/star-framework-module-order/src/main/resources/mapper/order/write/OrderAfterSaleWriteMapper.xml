@@ -39,16 +39,16 @@
     select a.id, c.detail_id, c.order_id, a.after_code, a.remark, a.state, a.reason, a.create_time, a.update_time, a.type, a.count,
       a.addressee, a.addressee_mobile, a.addressee_address, a.effective_time, a.expressage_company, a.expressage_number, a.expressage_time,
       c.product_id, c.title, c.main_picture_url, c.price, c.count detail_count, c.days, c.create_time order_create_time, 
-      c.distributor_name, c.distributor_mobile, c.member_id, c.member_mobile, c.member_name, c.distributor_id
+      c.distributor_name, c.distributor_mobile, c.member_id, c.member_mobile, c.member_name, c.distributor_id, c.brokerage, c.brokerage_first
     from order_aftersale a 
     RIGHT JOIN (
       select d.id detail_id, d.order_id, d.product_id, d.title, d.main_picture_url, d.price, d.count, e.create_time, e.distributor_name, e.distributor_mobile, 
-        TO_DAYS( NOW() ) - TO_DAYS(e.create_time) days, e.member_id, e.member_name, e.member_mobile, e.distributor_id
+        TO_DAYS( NOW() ) - TO_DAYS(e.create_time) days, e.member_id, e.member_name, e.member_mobile, e.distributor_id, d.brokerage, d.brokerage_first
       from order_detail d
       INNER JOIN (
         select o.order_id, o.member_id, m.`name` member_name, m.mobile member_mobile, d.`name` distributor_name, d.mobile distributor_mobile, o.create_time, d.distributor_id 
         from `order` o, distributor d, member_info m 
-        where o.state = 3 and o.member_id = m.member_id and d.distributor_id = o.distributor_id
+        where o.state in (2, 3) and o.member_id = m.member_id and d.distributor_id = o.distributor_id
       ) e on d.order_id = e.order_id
       order by days
     ) c on a.detail_id = c.detail_id

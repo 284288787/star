@@ -98,7 +98,7 @@ function loadSaleAfterData(self, index, pageNum, pageSize){
               ele+='<span class="mui-right">已删除</span>';
             }
           }else{
-            ele += (item.days>17? '<span class="txt">售后期已过</span><span class="mui-right">\
+            ele += (item.days>7? '<span class="txt">售后期已过</span><span class="mui-right">\
                 <input type="button" class="pl mui-btn mui-btn-danger mui-btn-outlined mui-disabled" value="申请售后"></span>\
                 ':'<span class="mui-right"><input type="button" class="applyBtn pl mui-btn mui-btn-danger mui-btn-outlined" data-count="'+item.detailCount+'" data-detailid="'+item.detailId+'" data-orderid="'+item.orderId+'" value="申请售后"></span>');
           }

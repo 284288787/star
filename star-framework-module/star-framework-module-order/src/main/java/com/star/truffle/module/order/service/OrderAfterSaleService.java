@@ -21,6 +21,7 @@ import com.star.truffle.module.order.constant.AfterSaleTypeEnum;
 import com.star.truffle.module.order.constant.OrderStateEnum;
 import com.star.truffle.module.order.domain.OrderAfterSale;
 import com.star.truffle.module.order.dto.req.OrderAfterSaleRequestDto;
+import com.star.truffle.module.order.dto.req.OrderRequestDto;
 import com.star.truffle.module.order.dto.res.OrderAfterSaleResponseDto;
 import com.star.truffle.module.order.dto.res.OrderDetailResponseDto;
 import com.star.truffle.module.order.dto.res.OrderResponseDto;
@@ -155,6 +156,14 @@ public class OrderAfterSaleService {
     orderAfterSaleRequestDto.setState(state);
     orderAfterSaleRequestDto.setReason(reject);
     this.orderAfterSaleCache.updateOrderAfterSale(orderAfterSaleRequestDto);
+    if (responseDto.getState() == AfterSaleEnum.pass.state() && state == AfterSaleEnum.nopass.state()) {
+      OrderResponseDto order = this.orderCache.getOrder(responseDto.getOrderId());
+      OrderRequestDto orderRequestDto = new OrderRequestDto();
+      orderRequestDto.setOrderId(responseDto.getOrderId());
+      orderRequestDto.setBackBrokerage(order.getBackBrokerage() - (responseDto.getCount() * responseDto.getBrokerage()));
+      orderRequestDto.setBackBrokerageFirst(order.getBackBrokerageFirst() - (responseDto.getCount() * responseDto.getBrokerageFirst()));
+      this.orderCache.updateOrder(orderRequestDto);
+    }
   }
 
   public void pass(OrderAfterSaleRequestDto orderAfterSaleRequestDto) {
@@ -162,9 +171,21 @@ public class OrderAfterSaleService {
         || StringUtils.isBlank(orderAfterSaleRequestDto.getAddresseeAddress()) || StringUtils.isBlank(orderAfterSaleRequestDto.getAddresseeMobile())) {
       throw new StarServiceException(ApiCode.PARAM_ERROR, "参数错误");
     }
+    OrderAfterSaleResponseDto oasrd = orderAfterSaleCache.getOrderAfterSale(orderAfterSaleRequestDto.getId());
+    if (null == oasrd) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR, "记录不存在");
+    }
     orderAfterSaleRequestDto.setEffectiveTime(DateUtils.plusNow(7, ChronoUnit.DAYS));
     orderAfterSaleRequestDto.setState(AfterSaleEnum.pass.state());
     this.orderAfterSaleCache.updateOrderAfterSale(orderAfterSaleRequestDto);
+    if (oasrd.getState() == AfterSaleEnum.pending.state() || oasrd.getState() == AfterSaleEnum.nopass.state()) {
+      OrderResponseDto order = this.orderCache.getOrder(oasrd.getOrderId());
+      OrderRequestDto orderRequestDto = new OrderRequestDto();
+      orderRequestDto.setOrderId(oasrd.getOrderId());
+      orderRequestDto.setBackBrokerage(order.getBackBrokerage() + (oasrd.getCount() * oasrd.getBrokerage()));
+      orderRequestDto.setBackBrokerageFirst(order.getBackBrokerageFirst() + (oasrd.getCount() * oasrd.getBrokerageFirst()));
+      this.orderCache.updateOrder(orderRequestDto);
+    }
   }
 
 }
