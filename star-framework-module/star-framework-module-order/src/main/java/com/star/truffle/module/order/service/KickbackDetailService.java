@@ -2,6 +2,7 @@
 package com.star.truffle.module.order.service;
 
 import java.text.DecimalFormat;
+import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -184,10 +185,15 @@ public class KickbackDetailService {
     }
     Map<String, Object> totalMoney = orderCache.totalMoney(distributorId, beginTime);
     Map<String, Object> totalMoneyYun = orderCache.totalMoneyYun(distributorId, beginTime);
+    Date before7 = DateUtils.minusNow(7, ChronoUnit.DAYS);
+    Map<String, Object> totalMoney7 = orderCache.totalMoney(distributorId, before7);
+    Map<String, Object> totalMoneyYun7 = orderCache.totalMoneyYun(distributorId, before7);
     map.put("auditingMoney", auditingMoney);
     map.put("beginTime", beginTime);
-    map.put("totalMoeny", totalMoney.get("totalMoney"));
+    map.put("totalMoney", totalMoney.get("totalMoney"));
     map.put("totalMoneyYun", totalMoneyYun.get("totalMoney"));
+    map.put("totalMoney7", totalMoney7.get("totalMoney"));
+    map.put("totalMoneyYun7", totalMoneyYun7.get("totalMoney"));
     map.put("state", state);
     return map;
   }

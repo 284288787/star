@@ -156,12 +156,12 @@ public class OrderAfterSaleService {
     orderAfterSaleRequestDto.setState(state);
     orderAfterSaleRequestDto.setReason(reject);
     this.orderAfterSaleCache.updateOrderAfterSale(orderAfterSaleRequestDto);
-    if (responseDto.getState() == AfterSaleEnum.pass.state() && state == AfterSaleEnum.nopass.state()) {
+    if (responseDto.getType() == AfterSaleTypeEnum.back.getType() && responseDto.getState() == AfterSaleEnum.pass.state() && state == AfterSaleEnum.nopass.state()) {
       OrderResponseDto order = this.orderCache.getOrder(responseDto.getOrderId());
       OrderRequestDto orderRequestDto = new OrderRequestDto();
       orderRequestDto.setOrderId(responseDto.getOrderId());
-      orderRequestDto.setBackBrokerage(order.getBackBrokerage() - (responseDto.getCount() * responseDto.getBrokerage()));
-      orderRequestDto.setBackBrokerageFirst(order.getBackBrokerageFirst() - (responseDto.getCount() * responseDto.getBrokerageFirst()));
+      orderRequestDto.setBackBrokerage(order.getBackBrokerage() > 0 ? order.getBackBrokerage() - (responseDto.getCount() * responseDto.getBrokerage()) : 0);
+      orderRequestDto.setBackBrokerageFirst(order.getBackBrokerageFirst() > 0 ? order.getBackBrokerageFirst() - (responseDto.getCount() * responseDto.getBrokerageFirst()) : 0);
       this.orderCache.updateOrder(orderRequestDto);
     }
   }
@@ -178,12 +178,12 @@ public class OrderAfterSaleService {
     orderAfterSaleRequestDto.setEffectiveTime(DateUtils.plusNow(7, ChronoUnit.DAYS));
     orderAfterSaleRequestDto.setState(AfterSaleEnum.pass.state());
     this.orderAfterSaleCache.updateOrderAfterSale(orderAfterSaleRequestDto);
-    if (oasrd.getState() == AfterSaleEnum.pending.state() || oasrd.getState() == AfterSaleEnum.nopass.state()) {
+    if (oasrd.getType() == AfterSaleTypeEnum.back.getType() && oasrd.getState() == AfterSaleEnum.pending.state() || oasrd.getState() == AfterSaleEnum.nopass.state()) {
       OrderResponseDto order = this.orderCache.getOrder(oasrd.getOrderId());
       OrderRequestDto orderRequestDto = new OrderRequestDto();
       orderRequestDto.setOrderId(oasrd.getOrderId());
-      orderRequestDto.setBackBrokerage(order.getBackBrokerage() + (oasrd.getCount() * oasrd.getBrokerage()));
-      orderRequestDto.setBackBrokerageFirst(order.getBackBrokerageFirst() + (oasrd.getCount() * oasrd.getBrokerageFirst()));
+      orderRequestDto.setBackBrokerage(order.getTotalBrokerage() > 0 ? order.getBackBrokerage() + (oasrd.getCount() * oasrd.getBrokerage()) : 0);
+      orderRequestDto.setBackBrokerageFirst(order.getTotalBrokerageFirst() > 0 ? order.getBackBrokerageFirst() + (oasrd.getCount() * oasrd.getBrokerageFirst()) : 0);
       this.orderCache.updateOrder(orderRequestDto);
     }
   }

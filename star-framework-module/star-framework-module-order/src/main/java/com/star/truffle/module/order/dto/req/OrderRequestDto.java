@@ -42,6 +42,7 @@ public class OrderRequestDto extends Order {
   
   private Long productId;
   private String productName;
+  private Boolean apiquery;
   
   public boolean checkMemberSave() {
     if (null != getOrderId() || null == getMemberId() || null == getDeliveryType()

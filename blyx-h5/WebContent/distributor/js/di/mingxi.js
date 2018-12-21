@@ -43,7 +43,7 @@ var beginTime = getParam("beginTime");
 })(mui);
 
 function loadData(index, self, pageNum, pageSize, beginTime){
-  var params = {'beginCreateTime': beginTime, 'states': '2,3', 'pager.pageNum': pageNum, 'pager.pageSize': pageSize};
+  var params = {'beginCreateTime': beginTime, 'apiquery': true, 'states': '2,3', 'pager.pageNum': pageNum, 'pager.pageSize': pageSize};
   if(index) params["distributorId"] = user.distributorId;
   else{
     params["parentDistributorId"] = user.distributorId;
@@ -62,7 +62,7 @@ function loadData(index, self, pageNum, pageSize, beginTime){
             <li class="mui-table-view-cell">\
               <div class="oitem">\
                 <p class="pbox">交易时间：'+item.createTime.formatDate('M月d日h点m分')+'<span>交易单号：'+item.orderCode+'</span></p>\
-                <p class="pbox">商品金额：￥'+(item.totalMoney / 100.0).toFixed(2)+'<span>提成金额：￥'+(item.totalBrokerage / 100.0).toFixed(2)+'</span></p>\
+                <p class="pbox">商品金额：￥'+(item.totalMoney / 100.0).toFixed(2)+'<span>提成金额：￥'+((index ? item.totalBrokerage:item.totalBrokerageFirst) / 100.0).toFixed(2)+'</span></p>\
               </div>\
             </li>';
           ul.appendChild($(li)[0]);

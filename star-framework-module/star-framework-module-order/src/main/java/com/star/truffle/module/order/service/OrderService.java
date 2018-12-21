@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -339,6 +340,10 @@ public class OrderService implements ChooseDataIntf {
       default: //全部
         break;
       }
+    }
+    if (null != orderRequestDto.getApiquery() && orderRequestDto.getApiquery()) {
+      orderRequestDto.setBeginCreateTime(DateUtils.plusDate(orderRequestDto.getBeginCreateTime(), 1, ChronoUnit.SECONDS));
+      orderRequestDto.setEndCreateTime(DateUtils.minusNow(7, ChronoUnit.DAYS));
     }
     List<OrderResponseDto> orders = this.orderCache.queryOrder(orderRequestDto);
     if (null != orders && ! orders.isEmpty()) {

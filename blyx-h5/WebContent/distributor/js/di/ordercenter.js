@@ -4,14 +4,17 @@ $(function(){
     url: '/api/kickbackDetail/getDistributorMoney',
     data: {'distributorId': user.distributorId},
     success: function(data){
-      $("p.rbm b").text(((data.totalMoeny + data.totalMoneyYun) / 100.0).toFixed(2));
-      $("p.totalFirst").text((data.totalMoneyYun / 100.0).toFixed(2));
-      $("p.total").text((data.totalMoeny / 100.0).toFixed(2));
-      $("p.auditing").text((data.auditingMoney / 100.0).toFixed(2));
+      $("p.rbm b").text(((data.totalMoney + data.totalMoneyYun - data.totalMoney7 - data.totalMoneyYun7) / 100.0).toFixed(2));
+      $("p.totalFirst").text("￥"+(data.totalMoneyYun / 100.0).toFixed(2));
+      $("p.total").text("￥"+(data.totalMoney / 100.0).toFixed(2));
+      $("p.totalFirst2").text("￥"+((data.totalMoneyYun7) / 100.0).toFixed(2));
+      $("p.total2").text("￥"+((data.totalMoney7) / 100.0).toFixed(2));
+      $("p.totaldj").text("￥"+((data.totalMoney7 + data.totalMoneyYun7) / 100.0).toFixed(2));
+      $("p.auditing").text("￥"+(data.auditingMoney / 100.0).toFixed(2));
       $(".mui-btn-link").on("tap", function(){
         document.location.href="mingxi.html?beginTime="+data.beginTime;
       });
-      if(data.state == 1 || data.totalMoeny <= 0){
+      if(data.state == 1 || data.totalMoney <= 0){
         $("button.mui-btn-success").addClass("mui-disabled");
       }else{
         $("button.mui-btn-success").on("tap", function(){
