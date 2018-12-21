@@ -69,31 +69,50 @@ var orderHandle = new ListHandle({
       });
     });
   },
-  setDiscountedPrice: function(orderId, discountedPrice){
-    artDialog.prompt("填写优惠金额：", function(price) {
-      price = $.trim(price);
+  setDiscountedPrice: function(orderId, discountedPrice, totalBrokerageFirst, totalBrokerageSecond, totalMoney){
+    artDialog.confirm("<div class='dialog'>\
+      <div>设置优惠及提成</div>\
+      <p>订单金额："+(totalMoney / 100.0).toFixed(2)+"元，不包含运费和优惠</p>\
+      <p>优惠金额：<input class='price' type='text' placeholder='优惠金额' value='"+(discountedPrice / 100.0).toFixed(2)+"'></p>\
+      <p>运营提成：<input class='first' type='text' placeholder='一级运营商提成' value='"+(totalBrokerageFirst / 100.0).toFixed(2)+"'></p>\
+      <p>分销提成：<input class='second' type='text' placeholder='二级分销商提成' value='"+(totalBrokerageSecond / 100.0).toFixed(2)+"'></p>\
+    </div>", function(win) {
+          
+      var price = $(".dialog input.price", $(win.document)).val();
+      var first = $(".dialog input.first", $(win.document)).val();
+      var second = $(".dialog input.second", $(win.document)).val();
       if(! price){
         artDialog.alert("请填写优惠金额");
         return false;
       }
+      if(!first)first=0;
+      if(!second)second=0;
       var reg = new RegExp("^(([1-9]\\d*)|0)(\\.\\d{1,2}){0,1}$");
       if(! reg.test(price)){
-        artDialog.tips("请填写正确的金额");
+        artDialog.tips("请填写正确的优惠金额");
+        return false;
+      }
+      if(! reg.test(first)){
+        artDialog.tips("请填写正确的运营提成");
+        return false;
+      }
+      if(! reg.test(second)){
+        artDialog.tips("请填写正确的分销提成");
         return false;
       }
       orderHandle.ajax({
         url : '/order/setDiscountedPrice',
-        data: {orderId: orderId, price: price},
+        data: {orderId: orderId, price: price, first: first, second: second},
         success : function(res) {
           if (res.code == 0) {
-            artDialog.tips("设置优惠金额成功")
+            artDialog.tips("设置优惠成功")
             orderHandle.query();
           } else {
             artDialog.alert(res.msg)
           }
         }
       });
-    }, (discountedPrice / 100.0).toFixed(2));
+    });
   },
 });
 new UtilsHandle({
@@ -149,7 +168,8 @@ $(function(){
         }
       }
       if(hasAuthorize('order-setDiscountedPrice')){
-        temp += '<a class="linetaga" href="javascript: orderHandle.setDiscountedPrice(\'' + rowObject.orderId.toFixed(0) + '\',\''+rowObject.discountedPrice+'\');" >设置优惠</a>';
+        if(rowObject.state == 1)
+        temp += '<a class="linetaga" href="javascript: orderHandle.setDiscountedPrice(\'' + rowObject.orderId.toFixed(0) + '\',\''+(rowObject.discountedPrice?rowObject.discountedPrice:0)+'\',\''+(rowObject.totalBrokerageFirst?rowObject.totalBrokerageFirst:0)+'\',\''+(rowObject.totalBrokerage?rowObject.totalBrokerage:0)+'\',\''+(rowObject.totalMoney?rowObject.totalMoney:0)+'\');" >设置优惠</a>';
       }
       temp += '<a class="linetaga" href="javascript: orderHandle.view(\'' + rowObject.orderId.toFixed(0) + '\');" >查看详情</a>';
       return temp;

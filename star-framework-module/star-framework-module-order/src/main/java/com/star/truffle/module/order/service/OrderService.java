@@ -682,8 +682,8 @@ public class OrderService implements ChooseDataIntf {
     return res;
   }
 
-  public void setDiscountedPrice(Long orderId, Double price) {
-    if (null == orderId || null == price) {
+  public void setDiscountedPrice(Long orderId, Double price, Double first, Double second) {
+    if (null == orderId || null == price || null == first || null == second) {
       throw new StarServiceException(ApiCode.PARAM_ERROR);
     }
     OrderResponseDto order = this.orderCache.getOrder(orderId);
@@ -698,9 +698,19 @@ public class OrderService implements ChooseDataIntf {
     if (o <= t) {
       throw new StarServiceException(ApiCode.PARAM_ERROR, "优惠金额不得多于应付金额(总金额+运费)");
     }
+    int f = Double.valueOf(first * 100).intValue();
+    int s = Double.valueOf(second * 100).intValue();
+    if (f > order.getTotalBrokerageFirst()) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR, "运营提成不得大于默认运营提成");
+    }
+    if (s > order.getTotalBrokerage()) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR, "分销提成不得大于默认分销提成");
+    }
     OrderRequestDto orderRequestDto = new OrderRequestDto();
     orderRequestDto.setOrderId(orderId);
-    orderRequestDto.setDiscountedPrice(Double.valueOf(price * 100).intValue());
+    orderRequestDto.setTotalBrokerageFirst(f);
+    orderRequestDto.setTotalBrokerage(s);
+    orderRequestDto.setDiscountedPrice(t);
     this.orderCache.updateOrder(orderRequestDto);
   }
 }

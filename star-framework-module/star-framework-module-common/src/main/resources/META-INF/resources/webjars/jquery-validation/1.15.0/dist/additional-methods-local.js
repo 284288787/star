@@ -25,7 +25,7 @@
 	}, "帐号格式错误");
 
 	jQuery.validator.addMethod("mobile", function(value, element) {
-		var moblieReg = new RegExp("^(13|14|15|17|18|16)[0-9]{9}$");
+		var moblieReg = new RegExp("^(13|14|15|17|18|16|19)[0-9]{9}$");
 		return this.optional(element) || (moblieReg.test(value));
 	}, "请填写正确的手机号");
 

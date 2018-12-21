@@ -81,7 +81,7 @@ $(function() {
         mui.toast("请填写收货人手机号码");
         return false;
       }
-      if (!/^1[345789]\d{9}$/.test(mobile)) {
+      if (!/^1[3456789]\d{9}$/.test(mobile)) {
         mui.toast("收货人手机号码错误");
         return false;
       }

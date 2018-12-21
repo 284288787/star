@@ -171,9 +171,9 @@ public class OrderController {
   
   @ResponseBody
   @RequestMapping(value = "/setDiscountedPrice", method = RequestMethod.POST)
-  public ApiResult<Void> setDiscountedPrice(Long orderId, Double price) {
+  public ApiResult<Void> setDiscountedPrice(Long orderId, Double price, Double first, Double second) {
     try {
-      orderService.setDiscountedPrice(orderId, price);
+      orderService.setDiscountedPrice(orderId, price, first, second);
       return ApiResult.success();
     } catch (StarServiceException e) {
       return ApiResult.fail(e.getCode(), e.getMsg());

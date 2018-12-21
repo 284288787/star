@@ -23,10 +23,10 @@ var orderAfterSaleHandle = new ListHandle({
         <input class='name' type='text' placeholder='收件人' value=''><br>\
         <input class='mobile' type='text' placeholder='收件人电话' value=''><br>\
         <input class='address' type='text' placeholder='收件地址' value=''>\
-      </div>", function() {
-        var name = $(".dialog .name").val();
-        var mobile = $(".dialog .mobile").val();
-        var address = $(".dialog .address").val();
+      </div>", function(win) {
+        var name = $(".dialog .name", $(win.document)).val();
+        var mobile = $(".dialog .mobile", $(win.document)).val();
+        var address = $(".dialog .address", $(win.document)).val();
         if(!name || !mobile || ! address){
           artDialog.tips("收件人，收件人电话，收件地址必填")
           return false;
