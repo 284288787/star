@@ -113,7 +113,7 @@ $(function(){
         if(rowObject.type==1){
           temp += '<a class="linetaga" href="javascript: orderAfterSaleHandle.finish(\'' + rowObject.id.toFixed(0) + '\');" >退货完成</a>';
         }else{
-          temp += '<a class="linetaga" href="javascript: orderAfterSaleHandle.doing(\'' + rowObject.id.toFixed(0) + '\');" >换货处理中</a>';
+          temp += '<a class="linetaga" href="javascript: orderAfterSaleHandle.doing(\'' + rowObject.id.toFixed(0) + '\');" >换货处理</a>';
         }
       }else if(rowObject.state == 5){
         temp += '<a class="linetaga" href="javascript: orderAfterSaleHandle.finish(\'' + rowObject.id.toFixed(0) + '\');" >换货完成</a>';

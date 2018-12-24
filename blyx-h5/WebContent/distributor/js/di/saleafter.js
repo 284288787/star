@@ -82,9 +82,9 @@ function loadSaleAfterData(self, index, pageNum, pageSize){
               ele+='<span class="txt">申请时间：'+item.createTime.formatDate("yy年MM月dd日 hh点mm分")+'</span><span class="mui-right"><input type="button" class="cancelBtn pl mui-btn mui-btn-danger mui-btn-outlined" data-id="'+item.id+'" value="取消售后"></span>'
             }else if(item.state == 2 || item.state == 4){
               if(item.state == 2 && ! item.effectiveTime.before(new Date())){
-                ele+='<span class="txt">请于'+item.effectiveTime.formatDate("MM月dd日")+'之前填写快递信息</span><span class="mui-right"><input type="button" class="pl mui-btn mui-btn-danger mui-btn-outlined mui-disabled" value="过期未填写快递信息"></span>'
+                ele+='<span class="txt">请于'+item.effectiveTime.formatDate("MM月dd日")+'之前</span><span class="mui-right"><input data-name="'+item.addressee+'" data-mobile="'+item.addresseeMobile+'" data-addr="'+item.addresseeAddress+'" type="button" class="viewjsbtn pl mui-btn mui-btn-danger mui-btn-outlined" value="寄送点"></span><span class="mui-right"><input type="button" class="pl mui-btn mui-btn-danger mui-btn-outlined mui-disabled" value="过期未填写快递信息"></span>'
               }else{
-                ele+='<span class="txt">请于'+item.effectiveTime.formatDate("MM月dd日")+'之前填写快递信息</span><span class="mui-right"><input type="button" class="exprBtn pl mui-btn mui-btn-danger mui-btn-outlined" data-id="'+item.id+'" data-company="'+(item.expressageCompany?item.expressageCompany:"")+'" data-number="'+(item.expressageNumber?item.expressageNumber:"")+'" data-time="'+item.effectiveTime.formatDate("yyyy年MM月dd日 hh时mm分")+'" value="'+(item.state==2 ? '填写' : '修改')+'快递信息"></span>'
+                ele+='<span class="txt">请于'+item.effectiveTime.formatDate("MM月dd日")+'之前</span><span class="mui-right"><input data-name="'+item.addressee+'" data-mobile="'+item.addresseeMobile+'" data-addr="'+item.addresseeAddress+'" type="button" class="viewjsbtn pl mui-btn mui-btn-danger mui-btn-outlined" value="寄送点"></span><span class="mui-right"><input type="button" class="exprBtn pl mui-btn mui-btn-danger mui-btn-outlined" data-id="'+item.id+'" data-company="'+(item.expressageCompany?item.expressageCompany:"")+'" data-number="'+(item.expressageNumber?item.expressageNumber:"")+'" data-time="'+item.effectiveTime.formatDate("yyyy年MM月dd日 hh时mm分")+'" value="'+(item.state==2 ? '填写' : '修改')+'快递信息"></span>'
               }
             }else if(item.state == 3){
               ele+='<span class="txt">未通过原因：'+item.reason+'</span>';
@@ -203,6 +203,19 @@ function loadSaleAfterData(self, index, pageNum, pageSize){
               });
             }
           })
+          return false;
+        });
+        $(".viewjsbtn").off().on('tap', function(){
+          var name = $(this).attr("data-name");
+          var mobile = $(this).attr("data-mobile");
+          var addr = $(this).attr("data-addr");
+          $("#viewexpr .name b").text(name);
+          $("#viewexpr .mobile b").text(mobile);
+          $("#viewexpr .addr b").text(addr);
+          mui('#viewexpr').popover('show');
+          $("#viewexpr .cancel").off().on("tap", function(){
+            mui('#viewexpr').popover('hide');
+          }); 
           return false;
         });
         if(items.length < 2 && pageNum == 1){
