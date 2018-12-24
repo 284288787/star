@@ -247,8 +247,9 @@
         o.distributor_id, count(1) totalOrderNum, IFNULL(SUM(o.total_money),0) totalOrderMoney, IFNULL(SUM(o.total_brokerage),0) totalOrderBrokerage, IFNULL(SUM(o.despatch_money),0) totalDespatchMoney
         from `order` o where o.state in (2, 3) and to_days(o.create_time) = to_days(now()) GROUP BY o.distributor_id
       ) b
-      LEFT JOIN distributor d on d.distributor_id = b.distributor_id order by totalOrderNum desc
+      LEFT JOIN distributor d on d.distributor_id = b.distributor_id order by totalOrderNum desc limit 99999999
       ) t, (select @i:=0) t2
+      order by totalOrderNum desc 
     ) z
     <if test="distributorId != null">
      where z.distributor_id = #{distributorId}
