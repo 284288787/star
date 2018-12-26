@@ -18,21 +18,7 @@ $(function() {
   mui('.mui-scroll-wrapper').scroll({
     deceleration: 0.0005
   });
-  if(location.href.indexOf("#item2") != -1){
-    var item = getLocalData("chooseAddress");
-    if(item){
-      var deliveryAddress = JSON.parse(item);
-      $("#deliveryAddressId").val(deliveryAddress.id);
-      $(".deliveryname").text(deliveryAddress.name);
-      $(".deliverymobile").text(deliveryAddress.mobile);
-      $(".deliveryaddr").text(deliveryAddress.provinceName + deliveryAddress.cityName + deliveryAddress.areaName + deliveryAddress.address);
-      delLocalData("chooseAddress");
-    }
-    $("a[href='#item1']").removeClass("mui-active");
-    $("a[href='#item2']").addClass("mui-active");
-    $("#item1").removeClass("mui-active");
-    $("#item2").addClass("mui-active");
-  }
+  
   $(".totaldiv .despatch").hide();
   $(".totaldiv .despatchLimit").hide();
   $(".myself input[name=name]").val(user.name);
@@ -44,7 +30,23 @@ $(function() {
   if(distributor.townName) a += distributor.townName;
   $("#item1 .blank span").text(a + ' ' + distributor.address);
   $("#item1 .red span").text(distributor.shopName + " " + distributor.mobile);
-  initOrder();
+  initOrder(function(){
+    if(location.href.indexOf("#item2") != -1){
+      var item = getLocalData("chooseAddress");
+      if(item){
+        var deliveryAddress = JSON.parse(item);
+        $("#deliveryAddressId").val(deliveryAddress.id);
+        $(".deliveryname").text(deliveryAddress.name);
+        $(".deliverymobile").text(deliveryAddress.mobile);
+        $(".deliveryaddr").text(deliveryAddress.provinceName + deliveryAddress.cityName + deliveryAddress.areaName + deliveryAddress.address);
+        delLocalData("chooseAddress");
+      }
+      $("a[href='#item1']").removeClass("mui-active");
+      $("a[href='#item2']").addClass("mui-active");
+      $("#item1").removeClass("mui-active");
+      $("#item2").addClass("mui-active");
+    }
+  });
   $(".mui-control-item").on("tap", function(){
     var href=$(this).attr("href");
     if(href=='#item1'){
@@ -134,7 +136,7 @@ $(function() {
   });
 });
 
-function initOrder(){
+function initOrder(callback){
   ajax({
     url: '/api/shoppingCart/enterOrder',
     data: {'memberId' : user.memberId},
@@ -186,6 +188,7 @@ function initOrder(){
       $(".totaldiv .despatchLimit b.despatchMoney").text("-￥"+(despatchMoney/100.0).toFixed(2));
       $(".totaldiv .productTotalMoney").text("￥"+totalMoney.toFixed(2));
       $("#mean2 .red").text("￥"+totalMoney.toFixed(2));
+      callback();
     }
   });
 }

@@ -11,28 +11,33 @@ var despatchLimit = 0;
 var deliveryAddress = null;
 var originalPrice = 0;
 var totalMoney = 0;
-var num = 0;
+var tnum = 0;
+var pid = getParam('pid');
+var num = getParam('num');
 var details = new Array();
 
 $(function() {
   mui('.mui-scroll-wrapper').scroll({
     deceleration: 0.0005
   });
-  if(location.href.indexOf("#item2") != -1){
-    var item = getLocalData("chooseAddress");
-    if(item){
-      var deliveryAddress = JSON.parse(item);
-      $("#deliveryAddressId").val(deliveryAddress.id);
-      $(".deliveryname").text(deliveryAddress.name);
-      $(".deliverymobile").text(deliveryAddress.mobile);
-      $(".deliveryaddr").text(deliveryAddress.provinceName + deliveryAddress.cityName + deliveryAddress.areaName + deliveryAddress.address);
-      delLocalData("chooseAddress");
+  initOrder(function(){
+    if(location.href.indexOf("#item2") != -1){
+      var item = getLocalData("chooseAddress");
+      if(item){
+        var deliveryAddress = JSON.parse(item);
+        $("#deliveryAddressId").val(deliveryAddress.id);
+        $(".deliveryname").text(deliveryAddress.name);
+        $(".deliverymobile").text(deliveryAddress.mobile);
+        $(".deliveryaddr").text(deliveryAddress.provinceName + deliveryAddress.cityName + deliveryAddress.areaName + deliveryAddress.address);
+        delLocalData("chooseAddress");
+      }
+      $("a[href='#item1']").removeClass("mui-active");
+      $("a[href='#item2']").addClass("mui-active");
+      $("#item1").removeClass("mui-active");
+      $("#item2").addClass("mui-active");
     }
-    $("a[href='#item1']").removeClass("mui-active");
-    $("a[href='#item2']").addClass("mui-active");
-    $("#item1").removeClass("mui-active");
-    $("#item2").addClass("mui-active");
-  }
+  });
+  
   $(".totaldiv .despatch").hide();
   $(".totaldiv .despatchLimit").hide();
   $(".myself input[name=name]").val(user.name);
@@ -44,7 +49,6 @@ $(function() {
   if(distributor.townName) a += distributor.townName;
   $("#item1 .blank span").text(a + ' ' + distributor.address);
   $("#item1 .red span").text(distributor.shopName + " " + distributor.mobile);
-  initOrder();
   $(".mui-control-item").on("tap", function(){
     var href=$(this).attr("href");
     if(href=='#item1'){
@@ -134,9 +138,7 @@ $(function() {
   });
 });
 
-function initOrder(){
-  var pid = getParam('pid');
-  var num = getParam('num');
+function initOrder(callback){
   ajax({
     url: '/api/shoppingCart/buyNow',
     data: {'memberId' : user.memberId, 'productId': pid, 'num': num},
@@ -165,7 +167,7 @@ function initOrder(){
           var item = items[o];
           originalPrice += item.originalPrice / 100.0 * item.num;
           totalMoney += item.price / 100.0 * item.num;
-          num += item.num;
+          tnum += item.num * 1;
           $(".goodslist ul").append('<li>\
               <span><img src="'+IMAGE_PREFIX+item.mainPictureUrl+'" alt=""></span>\
               <p>'+item.title+'</p>\
@@ -180,7 +182,7 @@ function initOrder(){
         }
         
       }
-      $(".totaldiv .productNum").text(num);
+      $(".totaldiv .productNum").text(tnum);
       $(".totaldiv .productMoney").text("￥"+totalMoney.toFixed(2));
       $(".totaldiv .productOriginalPrice").text("￥"+originalPrice.toFixed(2));
       $(".totaldiv .despatchMoney").text("￥"+(despatchMoney/100.0).toFixed(2));
@@ -188,6 +190,7 @@ function initOrder(){
       $(".totaldiv .despatchLimit b.despatchMoney").text("-￥"+(despatchMoney/100.0).toFixed(2));
       $(".totaldiv .productTotalMoney").text("￥"+totalMoney.toFixed(2));
       $("#mean2 .red").text("￥"+totalMoney.toFixed(2));
+      callback();
     }
   });
 }
