@@ -13,6 +13,7 @@ mui.init({
     }
   }
 });
+var browsepid = getLocalData("browsepid");
 var pageNum = 1, pageSize = 10;
 var cateId = null;
 var py = getParam("py");
@@ -215,33 +216,54 @@ function pulldownRefresh() {
     pageNum = 1;
     var title = $("#search").val();
     $(".itemlist").html("");
-    loadData(pageNum, pageSize, title);
-    mui('#pullrefresh').pullRefresh().refresh(true);
-    mui('#pullrefresh').pullRefresh().endPulldownToRefresh(true);
-    pageNum++;
+    loadData(pageNum, pageSize, title, function(){
+      pageNum++;
+      mui('#pullrefresh').pullRefresh().refresh(true);
+      mui('#pullrefresh').pullRefresh().endPulldownToRefresh(true);
+    });
   }, 10);
 }
+var times=0;
+var cb = function(cont){
+  console.log(browsepid + " " + (++times))
+  pageNum++;
+  if(cont){
+    var title = $("#search").val();
+    loadData(pageNum, pageSize, title, cb);
+  }else if(browsepid){
+    mui('.mui-scroll-wrapper').scroll().reLayout();
+    var current_top = mui('.mui-scroll-wrapper').scroll().y;
+    var y = $("#"+browsepid).offset().top-160;
+    y = parseInt(current_top - y);
+    if (y > 0) y = -y;
+    mui('.mui-scroll-wrapper').scroll().scrollTo(0, y , 100);
+    delLocalData("browsepid");
+  }
+};
 function pullupRefresh() {
   setTimeout(function() {
     var title = $("#search").val();
-    loadData(pageNum, pageSize, title);
-    pageNum++;
+    loadData(pageNum, pageSize, title, cb);
   }, 10);
 }
-function loadData(pageNum, pageSize, title){
+function loadData(pageNum, pageSize, title, callback){
   ajax({
     url: '/api/product/queryProduct',
     data: {'title': title, 'pager.pageNum': pageNum, 'pager.pageSize': pageSize, 'cateId': cateId},
     success: function(items){
       if(null != items && items.length > 0){
+        var cont = browsepid ? true : false;
         mui('#pullrefresh').pullRefresh().endPullupToRefresh(false);
         var productIds = "";
         for(var o in items){
           var item = items[o];
+          if(cont){
+            if(item.productId == browsepid) cont = false;
+          }
           productIds += "," + item.productId;
-          var li = '<li class="item" data-pid="'+item.productId+'">\
+          var li = '<li id="'+item.productId+'" class="item" data-pid="'+item.productId+'">\
             <p class="shoptitle">本商品由'+item.supplier+'专供</p>\
-            <p class="goodimg'+(item.state >= 3 ? ' sellover': '')+'"><a href="detail.html?py='+py+'&pid='+item.productId+'"><b  class="pos1">'+item.subtitle+'</b>';
+            <p class="goodimg'+(item.state >= 3 ? ' sellover': '')+'"><a class="pdetail" href="detail.html?py='+py+'&pid='+item.productId+'" data-pid="'+item.productId+'"><b  class="pos1">'+item.subtitle+'</b>';
           if(item.tag){
             li += '<b  class="pos2">'+item.tag+'</b>';
           }
@@ -274,6 +296,10 @@ function loadData(pageNum, pageSize, title){
           li += '</a></li>';
           $(".itemlist").append(li);
         }
+        $(".pdetail").off().on("tap", function(){
+          var pid = $(this).attr("data-pid");
+          if(pid) putLocalData("browsepid", pid);
+        });
         if(! userCartNum && user){
           userCartNum = {};
           ajax({
@@ -363,6 +389,7 @@ function loadData(pageNum, pageSize, title){
           }
           return false;
         });
+        callback(cont);
       }else{
         mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
       }
