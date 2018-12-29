@@ -23,10 +23,16 @@
 <script src="js/di/index.js"></script>
 <script src="js/echarts-all.js"></script>
 <title>商家首页</title>
+<style type="text/css">
+.mui-bar .mui-icon{
+  font-size:16px;
+  padding-top: 13px;
+}
+</style>
 </head>
 <body>
   <header id="header" class="mui-bar mui-bar-nav">
-    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left headlink"></a>
+    <a class="mui-action-back mui-icon  headlink">进入店铺</a>
     <h1 class="mui-title">首页</h1>
   </header>
   <div class="main mui-scroll-wrapper">
@@ -50,8 +56,8 @@
           <div class="chart" id="pieChart"></div>
         </div>
         <div class="result">
-          <p>今日收益（元）<span class="todayMoneyOfToday">0.00</span></p>
-          <p>累计收益（元）<span class="todayMoney">0.00</span></p>
+          <p>今日销售（元）<span class="todayMoneyOfToday">0.00</span></p>
+          <p>累计提成（元）<span class="todayMoney">0.00</span></p>
         </div>
       </div>
       <ul class="mui-table-view mui-grid-view mui-grid-9 menu">
