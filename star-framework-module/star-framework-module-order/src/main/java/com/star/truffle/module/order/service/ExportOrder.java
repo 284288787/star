@@ -47,6 +47,9 @@ public class ExportOrder extends AbstractDataExport<Order> {
     List<OrderDetailResponseDto> details = this.orderDetailCache.queryOrderDetail(orderDetailRequestDto);
     if (null != details && ! details.isEmpty()) {
       for (OrderDetailResponseDto detail : details) {
+        if (detail.getSaleafter() == 1) { //已退货/退货中 不导出
+          continue;
+        }
         String orderCode = detail.getOrderCode();
         String state = Arrays.stream(OrderStateEnum.values()).filter(en -> en.state() == detail.getState()).findFirst().get().caption();
         String pickupCode = StringUtils.isBlank(detail.getPickupCode()) ? "" : detail.getPickupCode();

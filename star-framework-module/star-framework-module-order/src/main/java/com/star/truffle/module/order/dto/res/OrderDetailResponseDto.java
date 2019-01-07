@@ -47,4 +47,6 @@ public class OrderDetailResponseDto extends OrderDetail {
   private String shopMobile;
   // 订单备注
   private String remark;
+  // 1已经售后处理 0未售后处理
+  private Integer saleafter;
 }

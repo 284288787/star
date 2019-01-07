@@ -27,4 +27,5 @@ public class OrderAfterSaleResponseDto extends OrderAfterSale {
   private Long memberId;
   private String memberName;
   private String memberMobile;
+  private String orderCode;
 }

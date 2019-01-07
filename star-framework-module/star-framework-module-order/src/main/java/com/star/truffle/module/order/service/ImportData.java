@@ -64,6 +64,9 @@ public class ImportData extends AbstractDataExport<Order> {
     if (null != details && ! details.isEmpty()) {
       int index = 1;
       for (OrderDetailResponseDto detail : details) {
+        if (detail.getSaleafter() == 1) { //已退货/退货中 不导出
+          continue;
+        }
         String pickupCode = StringUtils.isBlank(detail.getPickupCode()) ? "" : detail.getPickupCode();
 //        String typeName = detail.getType() == OrderTypeEnum.self.type() ? OrderTypeEnum.self.caption() : OrderTypeEnum.behalf.caption();
         String name = detail.getDeliveryName();

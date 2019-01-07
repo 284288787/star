@@ -92,7 +92,7 @@ var orderAfterSaleHandle = new ListHandle({
   }
 });
 $(function(){
-  var colNames = ['操作', '申请日期', '售后状态', '主键', '售后单号', '售后类型', '商品标题', '购买单价', '购买数量', '申请数量', '数量金额', '申请备注', '购买时间', '订单ID', '订单详情ID', '购买会员', '会员电话', '收件人', '收件人电话', '收件地址', '寄件截止时间', '快递公司', '快递单号', '单号填写时间'];
+  var colNames = ['操作', '申请日期', '售后状态', '主键', '售后单号', '售后类型', '商品标题', '购买单价', '购买数量', '申请数量', '数量金额', '申请备注', '购买时间', '订单ID', '订单编号', '订单详情ID', '购买会员', '会员电话', '收件人', '收件人电话', '收件地址', '寄件截止时间', '快递公司', '快递单号', '单号填写时间'];
   var colModel = [
     {align: "center", width:'180px', editable: false, sortable: false, formatter: function(cellvalue, options, rowObject){
       var temp = '';
@@ -141,6 +141,7 @@ $(function(){
     {name: 'remark', index: 'remark', width:'120px', align: "center"}, 
     {name: 'orderCreateTime', sortable: false, width:'120px', align: "center", formatter:'date', formatoptions: {srcformat: 'Y-m-d H:i:s', newformat:'Y-m-d H:i:s'}}, 
     {name: 'orderId', index: 'order_id', width:'80px', align: "center"}, 
+    {name: 'orderCode', index: 'order_code', width:'80px', align: "center"}, 
     {name: 'detailId', index: 'detail_id', width:'80px', align: "center"}, 
     {name: 'memberName', sortable: false, width:'100px', align: "center", formatter: function(cellvalue, options, rowObject){
       return "<div style='word-wrap: break-word;word-break:break-all;white-space:normal'>" + cellvalue + "</div>";

@@ -18,6 +18,7 @@ import com.star.truffle.module.order.cache.OrderCache;
 import com.star.truffle.module.order.cache.OrderDetailCache;
 import com.star.truffle.module.order.constant.AfterSaleEnum;
 import com.star.truffle.module.order.constant.AfterSaleTypeEnum;
+import com.star.truffle.module.order.constant.OrderProductStateEnum;
 import com.star.truffle.module.order.constant.OrderStateEnum;
 import com.star.truffle.module.order.domain.OrderAfterSale;
 import com.star.truffle.module.order.dto.req.OrderAfterSaleRequestDto;
@@ -175,11 +176,15 @@ public class OrderAfterSaleService {
     if (null == oasrd) {
       throw new StarServiceException(ApiCode.PARAM_ERROR, "记录不存在");
     }
+    OrderResponseDto order = this.orderCache.getOrder(oasrd.getOrderId());
     orderAfterSaleRequestDto.setEffectiveTime(DateUtils.plusNow(7, ChronoUnit.DAYS));
     orderAfterSaleRequestDto.setState(AfterSaleEnum.pass.state());
+    //如果订单未提货并且未发货 则直接完成
+    if (order.getState() == OrderStateEnum.nosend.state() && order.getTransportState() == OrderProductStateEnum.ready.state()) {
+      orderAfterSaleRequestDto.setState(AfterSaleEnum.finish.state());
+    }
     this.orderAfterSaleCache.updateOrderAfterSale(orderAfterSaleRequestDto);
-    if (oasrd.getType() == AfterSaleTypeEnum.back.getType() && oasrd.getState() == AfterSaleEnum.pending.state() || oasrd.getState() == AfterSaleEnum.nopass.state()) {
-      OrderResponseDto order = this.orderCache.getOrder(oasrd.getOrderId());
+    if (oasrd.getType() == AfterSaleTypeEnum.back.getType() && (oasrd.getState() == AfterSaleEnum.pending.state() || oasrd.getState() == AfterSaleEnum.finish.state() || oasrd.getState() == AfterSaleEnum.nopass.state())) {
       OrderRequestDto orderRequestDto = new OrderRequestDto();
       orderRequestDto.setOrderId(oasrd.getOrderId());
       orderRequestDto.setBackBrokerage(order.getTotalBrokerage() > 0 ? order.getBackBrokerage() + (oasrd.getCount() * oasrd.getBrokerage()) : 0);
