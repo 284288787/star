@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.star.truffle.module.user.dao.write.UserAccountWriteDao">
-  <resultMap id="userAccountResultMap" type="com.star.truffle.module.user.domain.UserAccount">
+  <resultMap id="userAccountResultMap" type="com.star.truffle.module.user.dto.UserAccountDto">
     <result column="userId" property="userId" />
     <result column="account" property="account" />
     <result column="password" property="password" />
@@ -23,7 +23,9 @@
 
   <select id="getUserAccountByUserId" resultType="com.star.truffle.module.user.dto.UserAccountDto">
     select
-    <include refid="sql_column" />
+    <include refid="sql_column" />,
+    (select GROUP_CONCAT(t.userType order by t.id) from sys_useraccounttype t where t.userId = sys_useraccount.userId) userType,
+    (select GROUP_CONCAT(t.typeName order by t.id) from sys_useraccounttype t where t.userId = sys_useraccount.userId) typeName
     from sys_useraccount left join sys_userInfo on sys_useraccount.userId = sys_userInfo.userId
     where sys_useraccount.userId = #{userId}
   </select>
