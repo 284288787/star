@@ -11,9 +11,17 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @RequestMapping("/report")
 public class ReportController {
-
-  @RequestMapping(value = "/lists", method = RequestMethod.GET)
-  public String list() {
-    return "mgr/order/list";
+  
+  /**
+   * 订单数量(商品数量，购买人数)，
+   * 未税金额，已税金额，商品金额，
+   * 运营提成，分销提成，
+   * 快递金额，优惠金额，到账金额(实付金额 = 商品金额+快递金额-优惠金额)
+   * @return
+   */
+  @RequestMapping(value = "/today", method = RequestMethod.GET)
+  public String today() {
+    return "mgr/report/today";
   }
+
 }
