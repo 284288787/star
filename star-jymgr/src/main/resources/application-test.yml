@@ -1,0 +1,108 @@
+star-swagger:
+  basePackage: com.star.truffle.module
+  enable: true 
+starMysql:
+  writeSupply:
+    username: root
+    password: uAiqwVwjJ8-i
+    url: jdbc:mysql://47.104.157.80:3306/jymgr?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&allowMultiQueries=true&useSSL=false
+    pool:
+      maxActive: 30
+    mybatisConfig: mapper/mybatis-config.xml
+    mapperLocation: classpath*:/mapper/**/write/*.xml
+    mapperScanner: com/star/truffle/module/**/dao/write
+    aliasPackage: com.star.truffle.module.**.domain
+ 
+  readSupply:
+    username: root
+    password: uAiqwVwjJ8-i
+    url: jdbc:mysql://47.104.157.80:3306/jymgr?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&failOverReadOnly=false&allowMultiQueries=true&useSSL=false
+    pool:
+      maxActive: 50
+    mybatisConfig: mapper/mybatis-config.xml
+    mapperLocation: classpath*:/mapper/**/read/*.xml
+    mapperScanner: com/star/truffle/module/**/dao/read
+    aliasPackage: com.star.truffle.module.**.domain
+
+logging:
+  file: ${spring.application.name}
+
+starSecurity:
+  ignore:
+    - /common/**
+    - /kindeditor/**
+    - /upload/**
+    - /choose/**
+    - /download/**
+    - /weixin/**
+    - /api/**
+
+###导出模板 示例
+template:
+  excel:
+    student:
+      fileName: 学生列表_{date:yyyy年MM月dd日}
+      sheetName: 学生列表
+      fields: 用户id,学生姓名,学生账号,手机号码1
+    teacher:
+      fileName: 教师列表_{date:yyyy年MM月dd日HH点}
+      sheetName: 教师列表
+      fields: 用户id,教师姓名,教师账号,手机号码
+    order:
+      fileName: 订单明细
+      sheetName: 对接订单
+      fieldsRowNum: 1
+      fields: 订单编号,订单状态,提货号,代客下单,收货类型,收货人,联系电话,收货地址,购买数量,购买单价,小计(数量*单价),商品名称,商品规格,店铺名称,下单日期,会员姓名,会员手机,订单备注
+    product:
+      fileName: 供应列表
+      sheetName: 供应列表
+      fieldsRowNum: 1
+      fields: 商品ID,状态,分类,标题,规格,预售时间,下架时间,供货商,供货商联系人,供货商电话,原价,未税价,含税价,售价,分销商提成,上级分销商提成,库存总量,已售数量,累计金额,购买人数
+    distributor:
+      fileName: 分销商列表
+      sheetName: 分销商列表
+      fieldsRowNum: 1
+      fields: 姓名,电话,地址
+    transportOrder:
+      fileName: "'（'+#shopCode+'）'+#shopName+'门店对接订单_'+#orderDate"
+      sheetName: 对接订单
+      tableCaption: "'（'+#shopCode+'）'+#shopName+'门店对接订单'"
+      rowDatas: 
+        - 
+          rowNum: 2
+          rows: 
+            -
+              value: 订单日期
+              col: 3
+            -
+              value: '#orderDate'
+        - 
+          rowNum: 3
+          rows: 
+            -
+              value: 门店电话
+              col: 3
+            -
+              value: '#shopMobile'
+        - 
+          rowNum: 4
+          rows: 
+            -
+              value: 门店地址
+              col: 3
+            -
+              value: '#shopAddress'
+      fieldsRowNum: 5
+      fields: 序号,订单号,提货号,商品名称,商品规格,收货人,收货电话,收货地址,会员姓名,会员电话,下单日期,单价,小计,数量,订单备注
+      fieldsWidth: 1152,1792,1152,3840,2112,1536,2816,4608,2048,2816,2048,1728,1728,768,2112
+      colTotal: 
+        caption: 合计
+        cols: 12,13,14
+  signName: 精茵体育
+  sms:
+    1:
+      templateCode: SMS_77245049
+      templateParam: '{"code": "%s"}'
+    2:
+      templateCode: SMS_77245049
+      templateParam: '{"code": "%s"}'
