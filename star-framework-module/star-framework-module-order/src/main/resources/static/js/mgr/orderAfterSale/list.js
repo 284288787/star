@@ -170,7 +170,7 @@ $(function(){
   var rowList = [10, 20, 30, 50];
   var rownumbers = true;
   var multiselect = true;
-  var config={caption: "订单售后列表", autowidth: false, dataType:'local', colNames: colNames, colModel: colModel, rowList: rowList, rownumbers: rownumbers, multiselect: multiselect};
+  var config={sortorder: 'desc', caption: "订单售后列表", autowidth: false, dataType:'local', colNames: colNames, colModel: colModel, rowList: rowList, rownumbers: rownumbers, multiselect: multiselect};
   orderAfterSaleHandle.init(config, {
     jsonReader: {
       repeatitems : false

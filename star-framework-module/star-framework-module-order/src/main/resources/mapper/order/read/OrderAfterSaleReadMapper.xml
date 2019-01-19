@@ -27,6 +27,9 @@
       <if test="state != null">
         and a.state = #{state}
       </if>
+      <if test="orderId != null">
+        and c.order_id = #{orderId}
+      </if>
       <if test="distributorName != null and distributorName != ''">
         and c.distributor_name = #{distributorName}
       </if>
@@ -88,7 +91,10 @@
       <when test="pager != null and pager.orderBy != null and pager.orderBy != ''">${pager.orderBy}</when>
       <otherwise>c.detail_id</otherwise>
     </choose>
-    <if test="pager != null and pager.orderType != null and pager.orderType != ''">${pager.orderType}</if>
+    <choose>
+      <when test="pager != null and pager.orderType != null and pager.orderType != ''">${pager.orderType}</when>
+      <otherwise>desc</otherwise>
+    </choose>
     <if test="pager != null and pager.pageSize!=null and pager.startIndex!=null">
       limit #{pager.startIndex}, #{pager.pageSize}
     </if>
