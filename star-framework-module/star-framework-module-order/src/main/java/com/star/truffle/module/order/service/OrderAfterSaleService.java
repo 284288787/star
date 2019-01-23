@@ -26,6 +26,13 @@ import com.star.truffle.module.order.dto.req.OrderRequestDto;
 import com.star.truffle.module.order.dto.res.OrderAfterSaleResponseDto;
 import com.star.truffle.module.order.dto.res.OrderDetailResponseDto;
 import com.star.truffle.module.order.dto.res.OrderResponseDto;
+import com.star.truffle.module.product.cache.ProductCache;
+import com.star.truffle.module.product.cache.ProductInventoryCache;
+import com.star.truffle.module.product.constant.ProductEnum;
+import com.star.truffle.module.product.constant.ProductInventoryTypeEnum;
+import com.star.truffle.module.product.domain.ProductInventory;
+import com.star.truffle.module.product.dto.req.ProductRequestDto;
+import com.star.truffle.module.product.dto.res.ProductResponseDto;
 
 @Service
 public class OrderAfterSaleService {
@@ -36,6 +43,10 @@ public class OrderAfterSaleService {
   private OrderCache orderCache;
   @Autowired
   private OrderDetailCache orderDetailCache;
+  @Autowired
+  private ProductCache productCache;
+  @Autowired
+  private ProductInventoryCache productInventoryCache;
 
   public void saveOrderAfterSale(OrderAfterSaleRequestDto orderAfterSale) {
     if (null == orderAfterSale || null == orderAfterSale.getOrderId() || null == orderAfterSale.getDetailIds() 
@@ -164,6 +175,26 @@ public class OrderAfterSaleService {
       orderRequestDto.setBackBrokerage(order.getBackBrokerage() > 0 ? order.getBackBrokerage() - (responseDto.getCount() * responseDto.getBrokerage()) : 0);
       orderRequestDto.setBackBrokerageFirst(order.getBackBrokerageFirst() > 0 ? order.getBackBrokerageFirst() - (responseDto.getCount() * responseDto.getBrokerageFirst()) : 0);
       this.orderCache.updateOrder(orderRequestDto);
+    }
+    //退货，并且完成后 把库存减一
+    if (responseDto.getType() == AfterSaleTypeEnum.back.getType() && responseDto.getState() == AfterSaleEnum.finish.state()) {
+      ProductInventory productInventory = this.productInventoryCache.getProductInventory(responseDto.getProductId(), ProductInventoryTypeEnum.product.type());
+      if (null != productInventory) {
+        if(productInventory.getNumberType() == 2 && productInventory.getNumber().intValue() == productInventory.getSoldNumber()) {
+          ProductResponseDto product = this.productCache.getProduct(responseDto.getProductId());
+          if (null != product && product.getState() == ProductEnum.sellout.state()) {
+            ProductRequestDto productRequestDto = new ProductRequestDto();
+            productRequestDto.setProductId(responseDto.getProductId());
+            productRequestDto.setState(ProductEnum.onshelf.state());
+            this.productCache.updateProduct(productRequestDto);
+          }
+        }
+        productInventory.setNumberType(productInventory.getNumberType());
+        productInventory.setNumber(productInventory.getNumber());
+        productInventory.setSoldNumber(productInventory.getSoldNumber() - responseDto.getCount());
+        productInventory.setTimes(productInventory.getTimes());
+        this.productInventoryCache.updateProductInventory(productInventory);
+      }
     }
   }
 
