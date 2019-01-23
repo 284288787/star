@@ -1,6 +1,11 @@
 /**create by liuhua at 2018年9月7日 上午9:51:26**/
 package com.star.truffle.module.weixin.controller.api;
 
+import java.io.InputStream;
+import java.util.Enumeration;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -63,7 +68,27 @@ public class TicketApiController {
   
   @RequestMapping(value = "/serverConfig", method = { RequestMethod.POST, RequestMethod.GET })
   @ApiOperation(value = "微信服务器配置认证", notes = "微信服务器配置认证", httpMethod = "POST", response = ApiResult.class)
-  public String serverConfig(String signature, String timestamp, String nonce, String echostr) throws Exception {
+  public String serverConfig(String signature, String timestamp, String nonce, String echostr, HttpServletRequest request) throws Exception {
+    log.info(".................微信服务器配置认证:");
+    String url = request.getRequestURL().toString();
+    log.info(url);
+    Enumeration<String> headers = request.getHeaderNames();
+    if (null != headers) {
+      while (headers.hasMoreElements()) {
+        String string = (String) headers.nextElement();
+        log.info("-->" + string + "\t" + request.getHeader(string));
+      }
+    }
+    InputStream is = request.getInputStream();
+    StringBuffer sBuffer = new StringBuffer();
+    byte[] b = new byte[1024];
+    int len = 0;
+    while ((len = is.read(b)) != -1) {
+      sBuffer.append(new String(b, 0, len));
+    }
+    String resXml = sBuffer.toString();
+    resXml = resXml.replace("<xml>", "<com.star.truffle.module.weixin.domain.PayDetailInfo>").replace("</xml>", "</com.star.truffle.module.weixin.domain.PayDetailInfo>");
+    log.info(resXml);
     if (ticketService.checkSignature(signature, timestamp, nonce)) {
       return echostr;
     }
