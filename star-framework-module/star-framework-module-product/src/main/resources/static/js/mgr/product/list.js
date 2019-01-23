@@ -105,7 +105,7 @@ $(function(){
     ],
   },{});
   
-  var colNames = ['操作', '主图', '商品分类', '商品ID', '商品状态', '单买最大量', '商品标题', '副标题', '商品标签', '预售时间', '下架时间', '提货时间', '原价', '含税价', '未税价', '售价', '一级分销提成', '二级分销提成', '库存数量', '已售数量', '供应商', '供应商联系人', '供应商电话', '商品品牌', '商品规格', '商品产地', '关注人数', '更新日期', '更新人'];
+  var colNames = ['操作', '主图', '商品分类', '商品ID', '商品状态', '单买最大量', '商品标题', '副标题', '商品标签', '预售时间', '下架时间', '提货时间', '原价', '含税价', '未税价', '售价', '一级分销提成', '二级分销提成', '库存总量', '已售数量', '实时库存', '供应商', '供应商联系人', '供应商电话', '商品品牌', '商品规格', '商品产地', '关注人数', '更新日期', '更新人'];
   var colModel = [
     {align: "center", width: '160px', editable: false, sortable: false, frozen: true, formatter: function(cellvalue, options, rowObject){
       var temp = '';
@@ -195,6 +195,10 @@ $(function(){
       return "<span style='color:lightgray'>不限库存</span>";
     }}, 
     {name: 'soldNumber', index: 'soldNumber', width: '90px', align: "center"}, 
+    {width: '90px', align: "center", formatter: function(cellvalue, options, rowObject){
+      if(rowObject.numberType==1)return "<span style='color:lightgray'>不限库存</span>";
+      return rowObject.number - rowObject.soldNumber;
+    }}, 
     {name: 'supplier', index: 'supplier', width: '90px', align: "center", formatter: function(cellvalue, options, rowObject){
       return "<div style='word-wrap: break-word;word-break:break-all;white-space:normal'>" + cellvalue + "</div>";
     }}, 
