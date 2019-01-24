@@ -10,11 +10,13 @@ import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
 
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.star.truffle.core.web.ApiResult;
 
 import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
@@ -22,12 +24,17 @@ import sun.reflect.generics.reflectiveObjects.ParameterizedTypeImpl;
 public class StarJson {
 
   private ObjectMapper objectMapper;
+  private ObjectMapper objectMapper2;
 
   public StarJson(ObjectMapper objectMapper) {
     this.objectMapper = objectMapper;
+    this.objectMapper2 = objectMapper.copy();
     objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    objectMapper2.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    objectMapper2.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+    objectMapper2.setSerializationInclusion(Include.NON_NULL);  
   }
-
+  
   /**
    * 将对象转换为json字符串
    */
@@ -37,6 +44,22 @@ public class StarJson {
         return "{}";
       }
       return objectMapper.writeValueAsString(t);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  /**
+   * 将对象转换为json字符串 转成减号
+   */
+  public <T> String obj2stringsnake(T t) {
+    try {
+      if (null == t) {
+        return "{}";
+      }
+      
+      String result = objectMapper2.writeValueAsString(t);
+      return result;
     } catch (IOException e) {
       throw new RuntimeException(e);
     }

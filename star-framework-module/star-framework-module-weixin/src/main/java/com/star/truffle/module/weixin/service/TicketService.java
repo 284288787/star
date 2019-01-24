@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -66,9 +67,14 @@ public class TicketService {
       return null;
     }
   }
-
+  
   public WeixinConfig jssdk(String url) {
     WeixinConfig config = this.weiXinApiDao.weixinConfig(url);
+    return config;
+  }
+
+  public WeixinConfig jssdkcard(String cardId, String openId, String code) {
+    WeixinConfig config = this.weiXinApiDao.weixinConfigCard(cardId, openId, code);
     return config;
   }
 }

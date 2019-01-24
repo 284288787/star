@@ -9,14 +9,24 @@ public class WeixinConfig {
 	private String nonceStr;
 	private String signature;
 	private String[] jsApiList;
+	private String cardId;
 	
 	public WeixinConfig(String appId, String noncestr, Long timestamp, String signature){
+	  this.debug = false;
+	  this.appId = appId;
+	  this.nonceStr = noncestr;
+	  this.timestamp = timestamp;
+	  this.jsApiList = new String[]{"onMenuShareTimeline","onMenuShareAppMessage", "onMenuShareQQ", 
+	      "onMenuShareWeibo", "onMenuShareQZone"};
+	  this.signature = signature;
+	}
+	
+	public WeixinConfig(String appId, String noncestr, Long timestamp, String signature, String cardId){
 		this.debug = false;
 		this.appId = appId;
 		this.nonceStr = noncestr;
 		this.timestamp = timestamp;
-		this.jsApiList = new String[]{"onMenuShareTimeline","onMenuShareAppMessage", "onMenuShareQQ", 
-				"onMenuShareWeibo", "onMenuShareQZone"};
+		this.cardId = cardId;
 		this.signature = signature;
 	}
 
@@ -67,4 +77,12 @@ public class WeixinConfig {
 	public void setNonceStr(String nonceStr) {
 		this.nonceStr = nonceStr;
 	}
+
+  public String getCardId() {
+    return cardId;
+  }
+
+  public void setCardId(String cardId) {
+    this.cardId = cardId;
+  }
 }

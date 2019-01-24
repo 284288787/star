@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Formatter;
 import java.util.HashMap;
@@ -75,7 +76,7 @@ public class WeiXinApiDao {
   private static Map<String, WeixinUserInfo> accessTokens = new HashMap<>();
 
   private final String accessTokenUrl = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s";
-  private final String jsapiTicketUrl = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=%s&type=jsapi";
+  private final String jsapiTicketUrl = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=%s&type=%s";
   private final String apiTicketUrl = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=%s&type=wx_card";
   private final String getUserInfoUrl = "https://api.weixin.qq.com/cgi-bin/user/info?access_token=%s&openid=%s&lang=zh_CN";
   private final String getUserInfoUrl2 = "https://api.weixin.qq.com/sns/userinfo?access_token=%s&openid=%s&lang=zh_CN";
@@ -90,7 +91,7 @@ public class WeiXinApiDao {
   private static String unifiedOrderUrl = "https://api.mch.weixin.qq.com/pay/unifiedorder";
 
   private AccessToken accessToken = null;
-  private JsapiTicket jsapiTicket = null;
+  private Map<String, JsapiTicket> jsapiTickets = new HashMap<>();
   private ApiTicket apiTicket = null;
 
   @Autowired
@@ -420,14 +421,16 @@ public class WeiXinApiDao {
     System.out.println(temp);
   }
 
-  public synchronized String getJsapiTicket() throws IOException {
+  public synchronized String getJsapiTicket(String type) throws IOException {
+    JsapiTicket jsapiTicket = jsapiTickets.get(type);
     if (null == jsapiTicket || !jsapiTicket.isExpires()) {
       String accessToken = getAccessToken();
       // System.out.println(Thread.currentThread().getName() +
       // "请求微信。。JsapiTicket");
-      String url = String.format(jsapiTicketUrl, accessToken);
+      String url = String.format(jsapiTicketUrl, accessToken, type);
       String res = this.starOkHttpClient.get(url);
       jsapiTicket = starJson.str2obj(res, JsapiTicket.class);
+      jsapiTickets.put(type, jsapiTicket);
     }
     return jsapiTicket.getTicket();
   }
@@ -443,10 +446,10 @@ public class WeiXinApiDao {
     }
     return apiTicket.getTicket();
   }
-
+  
   public WeixinConfig weixinConfig(String url) {
     try {
-      String jsapiTicket = getJsapiTicket();
+      String jsapiTicket = getJsapiTicket("jsapi");
       String noncestr = UUID.randomUUID().toString().replace("-", "");
       long now = System.currentTimeMillis() / 1000;
       String string1 = "jsapi_ticket=%s&noncestr=%s&timestamp=%s&url=%s";
@@ -454,6 +457,33 @@ public class WeiXinApiDao {
       MessageDigest crypt = MessageDigest.getInstance("SHA-1");
       crypt.reset();
       crypt.update(string1.getBytes("UTF-8"));
+      String signature = byteToHex(crypt.digest());
+      WeixinConfig config = new WeixinConfig(weixinConfig.getAppId(), noncestr, now, signature);
+      return config;
+    } catch (IOException e) {
+      log.error("", e);
+    } catch (NoSuchAlgorithmException e) {
+      log.error("", e);
+    }
+    return null;
+  }
+
+  public WeixinConfig weixinConfigCard(String cardId, String openId, String code) {
+    try {
+      if (StringUtils.isBlank(openId)) {
+        openId = "";
+      }
+      if (StringUtils.isBlank(code)) {
+        code = "";
+      }
+      String jsapiTicket = getJsapiTicket("wx_card");
+      String noncestr = UUID.randomUUID().toString().replace("-", "");
+      long now = System.currentTimeMillis() / 1000;
+      String[] args = new String[] {jsapiTicket, cardId, openId, code, noncestr, String.valueOf(now)};
+      Arrays.sort(args);
+      MessageDigest crypt = MessageDigest.getInstance("SHA-1");
+      crypt.reset();
+      crypt.update(StringUtils.join(args).getBytes("UTF-8"));
       String signature = byteToHex(crypt.digest());
       WeixinConfig config = new WeixinConfig(weixinConfig.getAppId(), noncestr, now, signature);
       return config;
