@@ -2,6 +2,7 @@
 package com.star.truffle.module.weixin.dao;
 
 import java.io.IOException;
+import java.nio.Buffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
@@ -50,6 +51,7 @@ public class QuanDao {
   private static final String getCardDetailUrl = "https://api.weixin.qq.com/card/get?access_token=%s";
   private static final String checkCardUrl = "https://api.weixin.qq.com/card/code/get?access_token=%s";
   private static final String consumeCardUrl = "https://api.weixin.qq.com/card/code/consume?access_token=%s";
+  private static final String uploadPictureUrl = "https://api.weixin.qq.com/cgi-bin/media/uploadimg?access_token=%s";
   private static final String createCardUrl = "https://api.weixin.qq.com/card/create?access_token=%s";
   
   private static final String createShelfUrl = "https://api.weixin.qq.com/card/landingpage/create?access_token=%s";
@@ -121,10 +123,17 @@ public class QuanDao {
     System.out.println(params);
 //    createCard(params);
 //    createShelf();
-    WeixinConfig config = weixinConfigCard("poQ_o1XQJyMvam39dk_5C8rx-0wY", "ooQ_o1eQ33P9zguW7U4BvrvUa4NY", null);
-    System.out.println(starJson.obj2string(config));
+//    WeixinConfig config = weixinConfigCard("poQ_o1XQJyMvam39dk_5C8rx-0wY", "ooQ_o1eQ33P9zguW7U4BvrvUa4NY", null);
+//    System.out.println(starJson.obj2string(config));
+    uploadPicture();
   }
   
+  public static void uploadPicture() throws IOException {
+    String filePath = "E:\\upload\\file\\abc.png";
+    String fileName = "abc.png";
+    String result = starOkHttpClient.uploadFile(String.format(uploadPictureUrl, getAccessToken()), filePath, fileName);
+    System.out.println(result);
+  }
   public static void createCard(String args) throws IOException {
     String result = starOkHttpClient.postJson(String.format(createCardUrl, getAccessToken()), args);
     System.out.println(result);
