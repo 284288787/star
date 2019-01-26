@@ -1,24 +1,12 @@
-mui.init({
-  pullRefresh : {
-    container : '#pullrefresh',
-    down : {
-      style : 'circle',
-      callback: pulldownRefresh
-    },
-    up : {
-      auto : true,
-      contentrefresh : '正在加载...',
-      contentnomore:'没有更多商品了',
-      callback : pullupRefresh
-    }
-  }
-});
+mui.init();
 var browsepid = getLocalData("browsepid");
-var pageNum = 1, pageSize = 10;
+var browsesnum = getLocalData("browsesnum");
 var cateId = null;
+var pageSize=10;
 var py = getParam("py");
 var user = getLoginInfo();
 var userCartNum;
+var selfs = new Array();
 if(py) putLocalData('py', py);
 $(function(){
   ajax({
@@ -44,7 +32,6 @@ $(function(){
       });
     }
   });
-  initCategory();
   initCartNum();
   $("#search").on("input", function(){
     pulldownRefresh();
@@ -85,36 +72,6 @@ $(function(){
       $(".xf .close").off();
     });
   });
-  $(".xfqdiv .zd").on("tap", function(){
-    mui('#pullrefresh').scroll().scrollTo(0,0,1000);
-    $(".xfqdiv .zd").css("visibility", "hidden");
-  });
-  $(".categorydiv .cate").on("tap", function(){
-    $(".categorydiv .cate").hide();
-    $(".category").fadeIn();
-    $(".category .close").on("tap", function(){
-      $(".categorydiv .cate").show();  
-      $(".category").fadeOut();
-      $(".category .close").off();
-    });
-  });
-  $("#pullrefresh").on("scrollend", function(e){
-    var scroll = mui('#pullrefresh').scroll();
-    if(scroll.y < -100){
-      //$(".category").fadeIn();
-      $(".categorydiv .cate").fadeIn();
-      $(".xfqdiv .zd").css("visibility", "visible");
-    }else{
-      //$(".category").fadeOut();
-      $(".categorydiv .cate").fadeOut();
-      $(".xfqdiv .zd").css("visibility", "hidden");
-    }
-  });
-  $("#pullrefresh").on("scrollstart", function(e){
-    $(".categorydiv .cate").show();  
-    $(".category").fadeOut();
-    $(".category .close").off();
-  });
 });
 
 function initCartNum(){
@@ -131,61 +88,111 @@ function initCartNum(){
   }
 }
 
-function initCategory(){
-  ajax({
-    url: '/api/category/queryCategory',
-    success: function(data){
-      var idx = 2;
-      for(var i in data){
-        $("#sliderSegmentedControl .mui-scroll").append('<a class="mui-control-item" href="#item'+(idx++)+'mobile">'+data[i].cateName+'</a>');
-        $("#slider .mui-slider-group").append('<div id="item'+(idx++)+'mobile" class="mui-slider-item mui-control-content">\
-          <div id="scroll1" class="mui-scroll-wrapper">\
-            <div class="mui-scroll">\
-              <div class="shop clearfix">\
-                <img src="images/qq.png" alt="" class="userimg">\
-                <p>\
-                  <label>ID：</label><span class="shopcode"></span>\
-                </p>\
-                <p>\
-                  <label> <span class="mui-icon mui-icon-home"></span>：\
-                  </label><span class="shopname"></span>\
-                </p>\
-                <p class="t">\
-                  <label> <span class="mui-icon mui-icon-location"></span>：\
-                  </label><span class="shopaddress"></span>\
-                </p>\
-                <span class="fr">购买指数<br><b class="soldNum">0</b><br>粉丝数<br><b class="fansNum">0</b></span>\
+(function($m) {
+  $m.ready(function() {
+    $m('.mui-scroll-wrapper').scroll({
+      indicators: true, //是否显示滚动条
+    });
+    ajax({
+      url: '/api/category/queryCategory',
+      success: function(data){
+        var idx = 1;
+        for(var i in data){
+          idx++;
+          $("#sliderSegmentedControl .mui-scroll").append('<a class="mui-control-item" href="#item'+(idx)+'mobile">'+data[i].cateName+'</a>');
+          $("#slider .mui-slider-group").append('<div id="item'+(idx)+'mobile" class="mui-slider-item mui-control-content">\
+            <div id="scroll'+idx+'" class="mui-scroll-wrapper">\
+              <div class="mui-scroll">\
+                <div class="shop clearfix">\
+                  <img src="images/qq.png" alt="" class="userimg">\
+                  <p>\
+                    <label>ID：</label><span class="shopcode"></span>\
+                  </p>\
+                  <p>\
+                    <label> <span class="mui-icon mui-icon-home"></span>：\
+                    </label><span class="shopname"></span>\
+                  </p>\
+                  <p class="t">\
+                    <label> <span class="mui-icon mui-icon-location"></span>：\
+                    </label><span class="shopaddress"></span>\
+                  </p>\
+                  <span class="fr">购买指数<br><b class="soldNum">0</b><br>粉丝数<br><b class="fansNum">0</b></span>\
+                </div>\
+                <ul class="mui-table-view" data-cateid="'+data[i].cateId+'" data-catemsg="'+data[i].cateName+'类商品">\
+                </ul>\
               </div>\
-              <ul class="mui-table-view">\
-              <li class="mui-table-view-cell">\
-                    第1个选项卡子项-1\
-                  </li>\
-              </ul>\
             </div>\
-          </div>\
-        </div>');
-      }
-      initShopInfo();
-      $(".category .cates span").on("tap", function(){
-        cateId = $(this).attr("data-cateid");
-        cateName = $(this).attr("data-catename");
-        if(! cateId) cateId = null;
-        if(cateName){
-          $(".categorydiv .cate").text(cateName);
-        }else{
-          $(".categorydiv .cate").text("全部分类");
+          </div>');
         }
-        $(".categorydiv .cate").show();  
-        $(".category").fadeOut();
-        $(".category .close").off();
-        mui('#pullrefresh').scroll().scrollTo(0,0,1);
-        mui('#pullrefresh').pullRefresh().enablePullupToRefresh();
-        mui('#pullrefresh').pullRefresh().endPullupToRefresh(false);
-        pulldownRefresh();
-      });
-    }
+        var slider = mui("#slider");
+        slider.slider({
+          interval:0
+        });
+        initShopInfo();
+        $m.each(document.querySelectorAll('.mui-slider-group .mui-scroll'), function(index, pullRefreshEl) {
+          var pageNum = 1;
+          $m(pullRefreshEl).pullToRefresh({
+            down: {
+              callback: function() {
+                var self = this;
+                setTimeout(function() {
+                  var ul = self.element.querySelector('.mui-table-view');
+                  ul.innerHTML = "";
+                  var title = $("#search").val();
+                  pageNum = 1;
+                  loadData(index, self, pageNum, pageSize, title, function(){
+                    //mui('#pullrefresh').pullRefresh().refresh(true);
+                    //mui('#pullrefresh').pullRefresh().endPulldownToRefresh(true);
+                  });
+                  pageNum++;
+                  self.refresh(true);
+                  self.endPullDownToRefresh();
+                }, 200);
+              }
+            },
+            up: {
+              auto: true, //默认执行一次上拉加载
+              //contentinit: '上拉可以加载更多信息哦',
+              //contentdown: '上拉加载结束啦',
+              //contentrefresh: '正在加载信息请稍等',
+              contentnomore: '已没有更多商品',
+              callback: function() {
+                var self = this;
+                selfs.push(self);
+                setTimeout(function() {
+                  var title = $("#search").val();
+                  loadData(index, self, pageNum, pageSize, title, function(index, self, productIds, fn){
+                    pageNum++;
+                    if(browsesnum) {
+                      mui("#slider").slider().gotoItem(browsesnum);
+                    }
+                    if(browsesnum == index && (productIds+",").indexOf(","+browsepid+",") != -1){
+                      self = selfs[browsesnum];
+                      mui(self.element.parentNode).scroll().reLayout();
+                      var current_top = mui(self.element.parentNode).scroll().y;
+                      var y = $("#"+browsepid).offset().top-160;
+                      y = parseInt(current_top - y);
+                      if (y > 0) y = -y;
+                      mui(self.element.parentNode).scroll().scrollTo(0, y , 100);
+                      delLocalData("browsepid");
+                      delLocalData("browsesnum");
+                      setTimeout(function(){
+                        mui("#slider").slider().gotoItem(browsesnum);
+                      }, 1000)
+                    }else if(browsesnum == index){
+                      var title = $("#search").val();
+                      loadData(index, self, pageNum, pageSize, title, fn);
+                    }
+                  });
+                }, 1);
+              }
+            }
+          });
+        });
+      }
+    });
   });
-}
+})(mui);
 
 function initShopInfo(){
   if(!py) py = getLocalData('py')
@@ -238,55 +245,32 @@ function initShopInfo(){
     }
   });
 }
-function pulldownRefresh() {
-  setTimeout(function() {
-    pageNum = 1;
-    var title = $("#search").val();
-    $(".itemlist").html("");
-    loadData(pageNum, pageSize, title, function(){
-      pageNum++;
-      mui('#pullrefresh').pullRefresh().refresh(true);
-      mui('#pullrefresh').pullRefresh().endPulldownToRefresh(true);
-    });
-  }, 10);
-}
-var times=0;
-var cb = function(cont){
-  console.log(browsepid + " " + (++times))
-  pageNum++;
-  if(cont){
-    var title = $("#search").val();
-    loadData(pageNum, pageSize, title, cb);
-  }else if(browsepid){
-    mui('.mui-scroll-wrapper').scroll().reLayout();
-    var current_top = mui('.mui-scroll-wrapper').scroll().y;
-    var y = $("#"+browsepid).offset().top-160;
-    y = parseInt(current_top - y);
-    if (y > 0) y = -y;
-    mui('.mui-scroll-wrapper').scroll().scrollTo(0, y , 100);
-    delLocalData("browsepid");
-  }
-};
-function pullupRefresh() {
-  setTimeout(function() {
-    var title = $("#search").val();
-    loadData(pageNum, pageSize, title, cb);
-  }, 10);
-}
-function loadData(pageNum, pageSize, title, callback){
+
+function loadData(index, self, pageNum, pageSize, title, callback){
+  $(self.element.parentNode).on("scrollend", function(e){
+    var scroll = mui(self.element.parentNode).scroll();
+    if(scroll.y < -100){
+      $(".xfqdiv .zd").css("visibility", "visible");
+      $(".xfqdiv .zd").off().on("tap", function(){
+        mui(self.element.parentNode).scroll().scrollTo(0,0,1000);
+        $(".xfqdiv .zd").css("visibility", "hidden");
+      });
+    }else{
+      $(".xfqdiv .zd").css("visibility", "hidden");
+    }
+  });
+  var ul = self.element.querySelector('.mui-table-view');
+  var cateId = ul.dataset.cateid;
+  var catemsg = ul.dataset.catemsg;
   ajax({
     url: '/api/product/queryProduct',
     data: {'title': title, 'pager.pageNum': pageNum, 'pager.pageSize': pageSize, 'cateId': cateId},
     success: function(items){
       if(null != items && items.length > 0){
-        var cont = browsepid ? true : false;
-        mui('#pullrefresh').pullRefresh().endPullupToRefresh(false);
+        self.endPullUpToRefresh(false);
         var productIds = "";
         for(var o in items){
           var item = items[o];
-          if(cont){
-            if(item.productId == browsepid) cont = false;
-          }
           productIds += "," + item.productId;
           var li = '<li id="'+item.productId+'" class="item" data-pid="'+item.productId+'">\
             <p class="shoptitle">本商品由'+item.supplier+'专供</p>\
@@ -321,11 +305,14 @@ function loadData(pageNum, pageSize, title, callback){
             li += '<span class="mui-icon"><span class="mui-badge" style="background:#2fa781">'+userCartNum[item.productId]+'</span></span>';
           }
           li += '</a></li>';
-          $(".itemlist").append(li);
+          ul.appendChild($(li)[0]);
         }
         $(".pdetail").off().on("tap", function(){
           var pid = $(this).attr("data-pid");
-          if(pid) putLocalData("browsepid", pid);
+          if(pid) {
+            putLocalData("browsesnum", mui("#slider").slider().getSlideNumber());
+            putLocalData("browsepid", pid);
+          }
         });
         if(! userCartNum && user){
           userCartNum = {};
@@ -355,8 +342,7 @@ function loadData(pageNum, pageSize, title, callback){
         }
         syncOtherInfo(productIds);
         
-//        $(".itemlist a.addCar:not(.disable)").off().on("tap", function(){
-        mui('body').on('tap','.itemlist a.addCar:not(.disable)',function(){
+        $(".itemlist a.addCar:not(.disable)").off().on("tap", function(){
           var thisObj=$(this);
           if(islogin()){
             var pid=thisObj.attr("data-pid");
@@ -416,9 +402,18 @@ function loadData(pageNum, pageSize, title, callback){
           }
           return false;
         });
-        callback(cont);
+        callback(index, self, productIds, callback);
       }else{
-        mui('#pullrefresh').pullRefresh().endPullupToRefresh(true);
+        if(pageNum == 1){
+          $(".mui-pull-bottom-tips", $(self.element).parent()).hide();
+          ul.appendChild($('<li>\
+              <div class="nocontent">\
+              <span class="mui-icon mui-icon-extra mui-icon-extra-notice"></span>\
+              <p>暂无'+catemsg+'，敬请期待！</p>\
+              </div>\
+          </li>')[0]);
+        }
+        self.endPullUpToRefresh(true);
       }
     }
   });

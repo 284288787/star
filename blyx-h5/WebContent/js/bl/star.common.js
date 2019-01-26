@@ -1,4 +1,4 @@
-var SERVICE_ADDRESS = 'http://mgr.hnkbmd.com';
+var SERVICE_ADDRESS = 'http://local.cnhnkj.cn:8082';
 var IMAGE_PREFIX = 'http://mgr.hnkbmd.com';
 function getParam(name){
   var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");     

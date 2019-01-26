@@ -184,6 +184,10 @@ public class ProductService {
     if (null == productRequestDto.getPager()) {
       productRequestDto.setPager(new Page(1, 10, "update_time", OrderType.desc));
     }
+    if (null != productRequestDto.getCateId() && productRequestDto.getCateId() == 0) {
+      productRequestDto.setCateId(null);
+      productRequestDto.setState(ProductEnum.presell.state());
+    }
     return this.productCache.queryProduct(productRequestDto);
   }
 

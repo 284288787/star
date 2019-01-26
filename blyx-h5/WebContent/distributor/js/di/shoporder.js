@@ -26,6 +26,7 @@ $(function(){
               pageNum = 1;
               loadData(self, pageNum, 10, index);
               pageNum++;
+              self.refresh(true);
               self.endPullDownToRefresh();
             }, 200);
           }
