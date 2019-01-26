@@ -57,7 +57,7 @@ public class ExportProduct extends AbstractDataExport<Product> {
     productRequestDto.setPager(pager);
     List<ProductResponseDto> products = this.productCache.queryProduct(productRequestDto);
     if (null != products && ! products.isEmpty()) {
-      //商品ID,状态,分类,标题,规格,预售时间,下架时间,供货商,供货商联系人,供货商电话,原价,未税价,含税价,售价,分销商提成,上级分销商提成,库存总量,已售数量,累计金额,购买人数
+      //商品ID,状态,分类,标题,规格,预售时间,下架时间,供货商,供货商联系人,供货商电话,原价,未税价,含税价,售价,分销商提成,上级分销商提成,库存总量,已售数量,实时库存,累计金额,购买人数
       for (ProductResponseDto product : products) {
         Map<String, Integer> buyTotal = this.orderDetailCache.buyRecordTotal(product.getProductId());
         String[] arr = {product.getProductId().toString(), ProductConstant.getCaption(product.getState()), categories.get(product.getCateId()).getCateName(), product.getTitle(),  
@@ -67,7 +67,7 @@ public class ExportProduct extends AbstractDataExport<Product> {
             product.getSupplier(), product.getSupplierName(), product.getSupplierMobile(),
             ProductConstant.formatMoney(product.getOriginalPrice()), ProductConstant.formatMoney(product.getPriceWei()), ProductConstant.formatMoney(product.getPriceHan()), 
             ProductConstant.formatMoney(product.getPrice()), ProductConstant.formatMoney(product.getBrokerageValue()), ProductConstant.formatMoney(product.getBrokerageFirst()),
-            String.valueOf(product.getNumber()), String.valueOf(product.getSoldNumber()), 
+            product.getNumberType() == 1 ? "不限库存" : String.valueOf(product.getNumber()), String.valueOf(product.getSoldNumber()), product.getNumberType() == 1 ? "不限库存" : String.valueOf(product.getNumber()-product.getSoldNumber()), 
             ProductConstant.formatMoney(String.valueOf(buyTotal.get("money"))), 
             String.valueOf(buyTotal.get("members"))};
         list.add(arr);
