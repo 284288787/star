@@ -2,7 +2,6 @@
 package com.star.truffle.module.weixin.dao;
 
 import java.io.IOException;
-import java.nio.Buffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
