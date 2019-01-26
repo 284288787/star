@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta name="applicable-device" content="mobile">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="format-detection" content="telephone=no,email=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="full-screen" content="yes">
+<meta name="x5-fullscreen" content="true">
+<link rel="stylesheet" href="css/mui.min.css">
+<link rel="stylesheet" href="css/icons-extra.css">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/pay.css">
+<script src="js/jquery.min.js"></script>
+<script src="js/mui.min.js"></script>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+<title>卡券</title>
+</head>
+<body>
+  <header id="header" class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">卡券</h1>
+  </header>
+  <div class="main">
+    <div class="mui-button-login">
+      <button type="button" class="mui-btn mui-btn-danger mui-btn-block btred btn">领取</button>
+    </div>
+  </div>
+  <script type="text/javascript" src="js/bl/star.common.js?19"></script>
+  <script type="text/javascript">
+  $(function() {
+    ajax({
+      url: '/weixin/ticket/jssdk',
+      data: {url: document.location.href},
+      success: function(data) {
+        //通过config接口注入权限验证配置
+        wx.config({
+          debug: true,
+          appId: 'wx8a05f2d3eb34111f',
+          timestamp: data.timestamp,
+          nonceStr: data.nonceStr,
+          signature: data.signature,
+          jsApiList: [
+            'addCard',
+          ]
+        });
+      }
+    });
+    $(".btn").on("tap", function(){
+      ajax({
+        url: '/weixin/ticket/jssdkcard',
+        data: {cardId: "poQ_o1XQJyMvam39dk_5C8rx-0wY,poQ_o1aE0KQT9wkU4aXMEw0s0Reo,poQ_o1YF61pNtXo3xcQuIxsOiExg"},
+        success: function(data) {
+          var list = new Array();
+          for(var i in data){
+            var item = data[i];
+            list.push({
+              cardId: item.cardId,
+              cardExt: {
+                "code": "",
+                "timestamp":item.timestamp,
+                "nonce_str":item.nonceStr,
+                "signature":item.signature
+              }
+            })
+          }
+          wx.addCard({
+            cardList: list, 
+            success: function (res) {
+              var cardList = res.cardList; // 添加的卡券列表信息
+              console.log(cardList)
+            }
+          });
+          
+        }
+      });
+    })
+  });
+  </script>
+</body>
+</html>

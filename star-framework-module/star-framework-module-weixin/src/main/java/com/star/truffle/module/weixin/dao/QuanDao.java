@@ -2,9 +2,16 @@
 package com.star.truffle.module.weixin.dao;
 
 import java.io.IOException;
+import java.nio.Buffer;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.Formatter;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -12,7 +19,20 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.star.truffle.core.jackson.StarJson;
 import com.star.truffle.core.okhttp.StarOkHttpClient;
+import com.star.truffle.module.weixin.constant.CardTypeEnum;
 import com.star.truffle.module.weixin.domain.CardList;
+import com.star.truffle.module.weixin.domain.WeixinConfig;
+import com.star.truffle.module.weixin.dto.Abstract;
+import com.star.truffle.module.weixin.dto.AdvancedInfo;
+import com.star.truffle.module.weixin.dto.BaseInfo;
+import com.star.truffle.module.weixin.dto.CardReq;
+import com.star.truffle.module.weixin.dto.Cash;
+import com.star.truffle.module.weixin.dto.DateInfo;
+import com.star.truffle.module.weixin.dto.Discount;
+import com.star.truffle.module.weixin.dto.Gift;
+import com.star.truffle.module.weixin.dto.Groupon;
+import com.star.truffle.module.weixin.dto.Sku;
+import com.star.truffle.module.weixin.dto.UseCondition;
 
 import okhttp3.OkHttpClient;
 
@@ -20,34 +40,120 @@ public class QuanDao {
   private static StarJson starJson = new StarJson(new ObjectMapper());
   private static StarOkHttpClient starOkHttpClient = new StarOkHttpClient(new OkHttpClient());
   private static AccessToken accessToken = null;
+  private static JsapiTicket jsapiTicket = null;
+  
   private static String appId = "wx8a05f2d3eb34111f";
   private static String appSecret = "e7de8670fa659ca9293fd8be95125919";
   private static final String accessTokenUrl = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=%s&secret=%s";
+  private static final String jsapiTicketUrl = "https://api.weixin.qq.com/cgi-bin/ticket/getticket?access_token=%s&type=%s";
   
   private static final String getCardListUrl = "https://api.weixin.qq.com/card/user/getcardlist?access_token=%s";
   private static final String getCardDetailUrl = "https://api.weixin.qq.com/card/get?access_token=%s";
   private static final String checkCardUrl = "https://api.weixin.qq.com/card/code/get?access_token=%s";
   private static final String consumeCardUrl = "https://api.weixin.qq.com/card/code/consume?access_token=%s";
+  private static final String uploadPictureUrl = "https://api.weixin.qq.com/cgi-bin/media/uploadimg?access_token=%s";
   private static final String createCardUrl = "https://api.weixin.qq.com/card/create?access_token=%s";
+  
+  private static final String createShelfUrl = "https://api.weixin.qq.com/card/landingpage/create?access_token=%s";
+  
   
   public static void main(String[] args) throws IOException {
 //    CardList cardList = getCardList("ooQ_o1eQ33P9zguW7U4BvrvUa4NY");
 //    System.out.println(starJson.obj2string(cardList));
 //    System.out.println(canConsume("607054664258"));
 //    System.out.println(starJson.obj2string(getCardDetail("poQ_o1Zl9PgJ1N9Ce8UKFKRmnPfU")));
-    createGroupon("双人套餐\\n -进口红酒一支。\\n孜然牛肉一份。");
+    BaseInfo baseInfo = BaseInfo.builder()
+        .logoUrl("http://mmbiz.qlogo.cn/mmbiz_jpg/fPINJCcdCoRKr8MZytt1GxVZt13xNyPcvNjALDeMONjKDBwXY8QDm5AVPMdakJwAj2r5QelLykNQjcQk7MmFiaA/0?wx_fmt=jpeg")
+        .codeType("CODE_TYPE_NONE")
+        .brandName("五杂优选")
+        .title("99元双人火锅套餐")
+        .color("Color030")
+        .notice("使用时向服务员出示此券")
+        .description("不可与其他优惠同享\n如需团购券发票，请在消费时向商户提出\n店内均可使用，仅限堂食")
+        .sku(Sku.builder().quantity(100).build())
+        .dateInfo(DateInfo.builder().type("DATE_TYPE_FIX_TERM").fixedBeginTerm(0).FixedTerm(3).build())
+        .centerTitle("去使用")
+        .centerSubTitle("可在下单时自动抵扣")
+        .centerUrl("http://yx.hnkbmd.com")
+        .getLimit(1)
+        .useLimit(3)
+        .canShare(true)
+        .canGiveFriend(true)
+        .build();
+    AdvancedInfo advancedInfo = AdvancedInfo.builder()
+        .useCondition(UseCondition.builder()
+            .canUseWithOtherDiscount(true)
+            .acceptCategory("水果类")
+            .rejectCategory("水果以外的类别")
+            .leastCost(200)
+            .build())
+        .abstracd(Abstract.builder().abstracd("ababab").iconUrlList(new String[] {"http://mmbiz.qpic.cn/mmbiz_png/fPINJCcdCoRGDibeB4OSZL48nB1lWGecxtNXmTQQDzER8oUCSp2drhulKfhT6Rvy7lA28KDnvlaS2CyHQZLPSWw/0?wx_fmt=png"}).build())
+        .build();
+    Groupon groupon = Groupon.builder()
+        .dealDetail("双人套餐\n -进口红酒一支。\n孜然牛肉一份。")
+        .baseInfo(baseInfo)
+        .advancedInfo(advancedInfo)
+        .build();
+    Cash cash = Cash.builder()
+        .leastCost(20000)
+        .reduceCost(10000)
+        .baseInfo(baseInfo)
+        .advancedInfo(advancedInfo)
+        .build();
+    Discount discount = Discount.builder()
+        .discount(40)
+        .baseInfo(baseInfo)
+        .advancedInfo(advancedInfo)
+        .build();
+    Gift gift = Gift.builder()
+        .gift("可兑换音乐木盒一个。")
+        .baseInfo(baseInfo)
+        .advancedInfo(advancedInfo)
+        .build();
+    CardReq card = CardReq.builder()
+        .groupon(groupon)
+        .cash(cash)
+        .discount(discount)
+        .gift(gift)
+        .cardType(CardTypeEnum.DISCOUNT.name())
+        .build();
+    Map<String, CardReq> cardMap = new LinkedHashMap<>();
+    cardMap.put("card", card);
+    String params = starJson.obj2stringsnake(cardMap);
+    System.out.println(params);
+//    createCard(params);
+//    createShelf();
+//    WeixinConfig config = weixinConfigCard("poQ_o1XQJyMvam39dk_5C8rx-0wY", "ooQ_o1eQ33P9zguW7U4BvrvUa4NY", null);
+//    System.out.println(starJson.obj2string(config));
+    uploadPicture();
   }
   
+  public static void uploadPicture() throws IOException {
+    String filePath = "E:\\upload\\file\\abc.png";
+    String fileName = "abc.png";
+    String result = starOkHttpClient.uploadFile(String.format(uploadPictureUrl, getAccessToken()), filePath, fileName);
+    System.out.println(result);
+  }
+  public static void createCard(String args) throws IOException {
+    String result = starOkHttpClient.postJson(String.format(createCardUrl, getAccessToken()), args);
+    System.out.println(result);
+  }
+  
+  //折扣券 poQ_o1XQJyMvam39dk_5C8rx-0wY
+  //代金券 poQ_o1aE0KQT9wkU4aXMEw0s0Reo
+  //团购券 poQ_o1YF61pNtXo3xcQuIxsOiExg
+  
   //团购券
+  @Deprecated
   public static void createGroupon(String dealDetail) throws IOException {
-    Map<String, Object> params = new HashMap<>();
+    Map<String, Object> params = new LinkedHashMap<>();
     {
-      Map<String, Object> card = new HashMap<>();
-      card.put("card_type", "GROUPON");
+      Map<String, Object> card = new LinkedHashMap<>();
+      card.put("card_type", CardTypeEnum.GROUPON.name());
       {
-        Map<String, Object> groupon = new HashMap<>();
+        Map<String, Object> groupon = new LinkedHashMap<>();
         {
-          Map<String, Object> baseinfo = new HashMap<>();
+          Map<String, Object> baseinfo = new LinkedHashMap<>();
           //必填信息开始
           baseinfo.put("logo_url", "http://mmbiz.qlogo.cn/mmbiz_jpg/fPINJCcdCoRKr8MZytt1GxVZt13xNyPcvNjALDeMONjKDBwXY8QDm5AVPMdakJwAj2r5QelLykNQjcQk7MmFiaA/0?wx_fmt=jpeg");
           baseinfo.put("code_type", "CODE_TYPE_NONE");
@@ -57,12 +163,12 @@ public class QuanDao {
           baseinfo.put("notice", "使用时向服务员出示此券");
           baseinfo.put("description", "不可与其他优惠同享\n如需团购券发票，请在消费时向商户提出\n店内均可使用，仅限堂食");
           {
-            Map<String, Object> sku = new HashMap<>();
+            Map<String, Object> sku = new LinkedHashMap<>();
             sku.put("quantity", 120);
             baseinfo.put("sku", sku);
           }
           {
-            Map<String, Object> dateinfo = new HashMap<>();
+            Map<String, Object> dateinfo = new LinkedHashMap<>();
             dateinfo.put("type", "DATE_TYPE_FIX_TERM");
             dateinfo.put("fixed_begin_term", 0);
             dateinfo.put("fixed_term", 3);
@@ -78,32 +184,32 @@ public class QuanDao {
           baseinfo.put("custom_url_name", "五杂优选");
           baseinfo.put("custom_url", "http://yx.hnkbmd.com");
           baseinfo.put("custom_url_sub_title", "正品，质保");
-          baseinfo.put("promotion_url_name", "产品介绍");
-          baseinfo.put("promotion_url_sub_title", "卖场大优惠");
-          baseinfo.put("promotion_url", "http://yx.hnkbmd.com");
+//          baseinfo.put("promotion_url_name", "产品介绍");
+//          baseinfo.put("promotion_url_sub_title", "卖场大优惠");
+//          baseinfo.put("promotion_url", "http://yx.hnkbmd.com");
           baseinfo.put("get_limit", 5); //每人可领券的数量限制,不填写默认为50。
           baseinfo.put("use_limit", 5); //每人可核销的数量限制,不填写默认为50。
           baseinfo.put("can_share", true); //卡券领取页面是否可分享。
           baseinfo.put("can_give_friend", false); //卡券是否可转赠。
           //非必填信息结束
           groupon.put("base_info", baseinfo);
-          Map<String, Object> advancedinfo = new HashMap<>();
+          Map<String, Object> advancedinfo = new LinkedHashMap<>();
           {
-            Map<String, Object> condition = new HashMap<>();
+            Map<String, Object> condition = new LinkedHashMap<>();
             condition.put("can_use_with_other_discount", false); //不可以与其他类型共享门槛 ，填写false时系统将在使用须知里 拼写“不可与其他优惠共享”， 填写true时系统将在使用须知里 拼写“可与其他优惠共享”， 默认为true
             advancedinfo.put("use_condition", condition);
           }
           {
-            Map<String, Object> abstrac = new HashMap<>();
+            Map<String, Object> abstrac = new LinkedHashMap<>();
             abstrac.put("abstract", "呵呵呵"); //封面描述
             abstrac.put("icon_url_list", new String[] {"http://mmbiz.qpic.cn/mmbiz_png/fPINJCcdCoRGDibeB4OSZL48nB1lWGecxtNXmTQQDzER8oUCSp2drhulKfhT6Rvy7lA28KDnvlaS2CyHQZLPSWw/0?wx_fmt=png"}); //封面图片
             advancedinfo.put("abstract", abstrac);
           }
           {
-            Map<String, Object> til1 = new HashMap<>();
+            Map<String, Object> til1 = new LinkedHashMap<>();
             til1.put("text", "此菜品精选食材，以独特的烹饪方法，最大程度地刺激食 客的味蕾"); //封面描述
             til1.put("image_url", "http://mmbiz.qpic.cn/mmbiz_png/fPINJCcdCoRGDibeB4OSZL48nB1lWGecxtNXmTQQDzER8oUCSp2drhulKfhT6Rvy7lA28KDnvlaS2CyHQZLPSWw/0?wx_fmt=png"); //封面图片
-            Map<String, Object> til2 = new HashMap<>();
+            Map<String, Object> til2 = new LinkedHashMap<>();
             til2.put("text", "多萨法撒旦方法"); //封面描述
             til2.put("image_url", "http://mmbiz.qpic.cn/mmbiz_png/fPINJCcdCoRGDibeB4OSZL48nB1lWGecxtNXmTQQDzER8oUCSp2drhulKfhT6Rvy7lA28KDnvlaS2CyHQZLPSWw/0?wx_fmt=png"); //封面图片
             advancedinfo.put("text_image_list", new Map[] {til1, til2});
@@ -119,8 +225,61 @@ public class QuanDao {
     }
     String args = starJson.obj2string(params);
     System.out.println(args);
-    String result = starOkHttpClient.postJson(String.format(createCardUrl, getAccessToken()), args);
-    System.out.println(result);
+//    String result = starOkHttpClient.postJson(String.format(createCardUrl, getAccessToken()), args);
+//    System.out.println(result);
+  }
+  
+  public static synchronized String getJsapiTicket(String type) throws IOException {
+    if (null == jsapiTicket || !jsapiTicket.isExpires()) {
+      String accessToken = getAccessToken();
+      // System.out.println(Thread.currentThread().getName() +
+      // "请求微信。。JsapiTicket");
+      if (StringUtils.isBlank(type)) {
+        type = "jsapi";
+      }
+      String url = String.format(jsapiTicketUrl, accessToken, type);
+      String res = starOkHttpClient.get(url);
+      jsapiTicket = starJson.str2obj(res, JsapiTicket.class);
+    }
+    return jsapiTicket.getTicket();
+  }
+  
+  public static WeixinConfig weixinConfigCard(String cardId, String openId, String code) {
+    try {
+      if (StringUtils.isBlank(openId)) {
+        openId = "";
+      }
+      if (StringUtils.isBlank(code)) {
+        code = "";
+      }
+      String jsapiTicket = getJsapiTicket("wx_card");
+      System.out.println(jsapiTicket);
+      String noncestr = UUID.randomUUID().toString().replace("-", "");
+      System.out.println(noncestr);
+      long now = System.currentTimeMillis() / 1000;
+      System.out.println(now);
+      String[] args = new String[] {jsapiTicket, cardId, openId, code, noncestr, String.valueOf(now)};
+      Arrays.sort(args);
+      MessageDigest crypt = MessageDigest.getInstance("SHA-1");
+      crypt.reset();
+      crypt.update(StringUtils.join(args).getBytes("UTF-8"));
+      String signature = byteToHex(crypt.digest());
+      WeixinConfig config = new WeixinConfig(appId, noncestr, now, signature);
+      return config;
+    } catch (IOException e) {
+    } catch (NoSuchAlgorithmException e) {
+    }
+    return null;
+  }
+  
+  private static String byteToHex(final byte[] hash) {
+    Formatter formatter = new Formatter();
+    for (byte b : hash) {
+      formatter.format("%02x", b);
+    }
+    String result = formatter.toString();
+    formatter.close();
+    return result;
   }
   
   public static synchronized String getAccessToken() throws IOException {
@@ -129,6 +288,25 @@ public class QuanDao {
       accessToken = starJson.str2obj(res, AccessToken.class);
     }
     return accessToken.getAccess_token();
+  }
+  
+  public static void createShelf() throws IOException {
+    Map<String, Object> params = new HashMap<>();
+    params.put("banner", "http://mmbiz.qpic.cn/mmbiz_png/fPINJCcdCoRGDibeB4OSZL48nB1lWGecxtNXmTQQDzER8oUCSp2drhulKfhT6Rvy7lA28KDnvlaS2CyHQZLPSWw/0?wx_fmt=png");
+    params.put("page_title", "优惠大派送");
+    params.put("can_share", true);
+    params.put("scene", "SCENE_NEAR_BY");
+    Map<String, Object> card1 = new HashMap<>();
+    card1.put("card_id", "poQ_o1XQJyMvam39dk_5C8rx-0wY");
+    card1.put("thumb_url", "http://mmbiz.qpic.cn/mmbiz_png/fPINJCcdCoRGDibeB4OSZL48nB1lWGecxtNXmTQQDzER8oUCSp2drhulKfhT6Rvy7lA28KDnvlaS2CyHQZLPSWw/0?wx_fmt=png");
+    Map<String, Object> card2 = new HashMap<>();
+    card2.put("card_id", "poQ_o1aE0KQT9wkU4aXMEw0s0Reo");
+    card2.put("thumb_url", "http://mmbiz.qpic.cn/mmbiz_png/fPINJCcdCoRGDibeB4OSZL48nB1lWGecxtNXmTQQDzER8oUCSp2drhulKfhT6Rvy7lA28KDnvlaS2CyHQZLPSWw/0?wx_fmt=png");
+    params.put("card_list", new Map[] {card1, card2});
+    String args = starJson.obj2string(params);
+    System.out.println(args);
+    String temp = starOkHttpClient.postJson(String.format(createShelfUrl, getAccessToken()), args);
+    System.out.println(temp);
   }
   
   /**
@@ -216,7 +394,7 @@ public class QuanDao {
    * @throws IOException
    */
   public static Map<String, Object> getCardDetail(String cardId) throws IOException {
-    Map<String, Object> res = new HashMap<>();
+    Map<String, Object> res = new LinkedHashMap<>();
     String data = "{\"card_id\": \"" + cardId + "\"}";
     String temp = starOkHttpClient.postJson(String.format(getCardDetailUrl, getAccessToken()), data);
     System.out.println(temp);

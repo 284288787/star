@@ -48,15 +48,34 @@ public class TicketApiController {
       return ApiResult.fail();
     }
   }
-
+  
   @RequestMapping(value = "/jssdk", method = RequestMethod.POST)
   @ApiOperation(value = "获取js sdk 参数", notes = "获取js sdk 参数", httpMethod = "POST", response = WeixinConfig.class)
   @ApiImplicitParams({
-      @ApiImplicitParam(name = "url", value = "当前打开页面的完整url", paramType = "query", required = true, dataType = "String"),
+    @ApiImplicitParam(name = "url", value = "当前打开页面的完整url", paramType = "query", required = true, dataType = "String"),
   })
   public ApiResult<WeixinConfig> ojssdk(String url) throws Exception {
     try {
       WeixinConfig config = ticketService.jssdk(url);
+      return ApiResult.success(config);
+    } catch (StarServiceException e) {
+      return ApiResult.fail(e);
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return ApiResult.fail();
+    }
+  }
+  
+  @RequestMapping(value = "/jssdkcard", method = RequestMethod.POST)
+  @ApiOperation(value = "获取js sdk card 参数", notes = "获取js sdk card 参数", httpMethod = "POST", response = WeixinConfig.class)
+  @ApiImplicitParams({
+    @ApiImplicitParam(name = "cardId", value = "cardId", paramType = "query", required = true, dataType = "String"),
+    @ApiImplicitParam(name = "code", value = "code", paramType = "query", required = false, dataType = "String"),
+    @ApiImplicitParam(name = "openId", value = "openid", paramType = "query", required = false, dataType = "String"),
+  })
+  public ApiResult<WeixinConfig> jssdkcard(String cardId, String openId, String code) throws Exception {
+    try {
+      WeixinConfig config = ticketService.jssdkcard(cardId, openId, code);
       return ApiResult.success(config);
     } catch (StarServiceException e) {
       return ApiResult.fail(e);

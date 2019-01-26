@@ -1,9 +1,12 @@
 package com.star.truffle.core.okhttp;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.ClassUtils;
@@ -16,6 +19,7 @@ import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Request.Builder;
@@ -100,6 +104,22 @@ public class StarOkHttpClient {
     }
     Builder builder = createRequestBuilder(url, headers);
     RequestBody body = RequestBody.create(JSON, json);
+    return execute(builder.post(body).build());
+  }
+  
+  public String uploadFile(String url, String filePath, String fileName) {
+    if (StringUtils.isBlank(url)) {
+      return null;
+    }
+    Map<String, String> headers = new HashMap<>();
+    headers.put("Authorization", "Client-ID " + UUID.randomUUID());
+    
+    Builder builder = createRequestBuilder(url, headers);
+    RequestBody body = new MultipartBody.Builder()
+        .setType(MultipartBody.FORM)
+        .addFormDataPart("file", fileName, RequestBody.create(MediaType.parse("multipart/form-data"), new File(filePath)))
+        .build();
+    
     return execute(builder.post(body).build());
   }
 

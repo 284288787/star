@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>创建优惠券</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jquery-ui/jquery-ui.min.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jqGrid/css/ui.jqgrid.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/artDialog/skins/simple-star.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/buttons.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/editEntityTable.css}" />
+</head>
+<body>
+  <div class="edit-container">
+    <form action="" id="editProductForm">
+      <table class="gy_table">
+        <tr>
+          <td class="titleTd"><strong>商品类目：</strong></td>
+          <td>
+            <input type="text" name="cateName" class="ipt300" placeholder="商品类目" readonly>
+            <input type="hidden" name="cateId">
+          </td>
+        </tr>
+        <tr>
+          <td class="titleTd"><strong>商品标题：</strong></td>
+          <td>
+            <input type="text" name="title" class="ipt500" maxlength="50" placeholder="商品标题">
+          </td>
+        </tr>
+        <tr>
+          <td class="titleTd"><strong>副标题：</strong></td>
+          <td>
+            <input type="text" name="subtitle" class="ipt400" maxlength="40" placeholder="悬浮在图片左下角的一行字，例如：老长沙月饼，儿时的味道">
+          </td>
+        </tr>
+        <tr>
+          <td class="titleTd"><strong>商品标签：</strong></td>
+          <td>
+            <input type="text" name="tag" class="ipt300" maxlength="4" placeholder="悬浮在图片右上角，4个字，例如：十点爆款">
+          </td>
+        </tr>
+        <tr>
+          <td class="titleTd"><strong>可售时间：</strong></td>
+          <td>
+            <input type="radio" class="radioIpt" name="sellType" id="sellType_1" value="1"><label for="sellType_1">现在有货</label>
+            <input type="radio" class="radioIpt" name="sellType" id="sellType_2" value="2" checked><label for="sellType_2">预售时间</label>
+            <input type="text" class="Wdate" id="presellTime" name="presellTime" placeholder="预售时间"
+                onclick="WdatePicker({minDate:'%y-%M-%d %H:%m:s',isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd HH:00:00'})"> 
+          </td>
+        </tr>
+        <tr>
+          <td class="titleTd"><strong>下架时间：</strong></td>
+          <td>
+            <input type="radio" class="radioIpt" name="expireType" id="expireType_1" value="1"><label for="expireType_1">永不下架</label>
+            <input type="radio" class="radioIpt" name="expireType" id="expireType_2" value="2" checked><label for="expireType_2">定时下架</label>
+            <input type="text" class="Wdate" id="offShelfTime" name="offShelfTime" placeholder="下架时间"
+                onclick="WdatePicker({minDate:'#F{$dp.$D(\'presellTime\')}',isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd HH:00:00'})"> 
+          </td>
+        </tr>
+        <tr>
+          <td class="titleTd"><strong>提货时间：</strong></td>
+          <td>
+            <input type="radio" class="radioIpt" name="pickupType" id="pickupType_1" value="1"><label for="pickupType_1">随时提货</label>
+            <input type="radio" class="radioIpt" name="pickupType" id="pickupType_2" value="2" checked><label for="pickupType_2">提货时间</label>
+            <input type="text" class="Wdate" id="pickupTime" name="pickupTime" placeholder="提货时间"
+                onclick="WdatePicker({minDate:'#F{$dp.$D(\'offShelfTime\')}',isShowClear:true,readOnly:true,dateFmt:'yyyy-MM-dd HH:00:00'})"> 
+          </td>
+        </tr>
+        <tr>
+          <td class="titleTd"><strong>库存数量：</strong></td>
+          <td>
+            <input type="radio" class="radioIpt" name="numberType" id="numberType_1" value="1"><label for="numberType_1">不限库存</label>
+            <input type="radio" class="radioIpt" name="numberType" id="numberType_2" value="2" checked><label for="numberType_2">库存数量</label>
+            <input type="text" name="number" maxlength="7" placeholder="库存数量，例如：5000"> 
+          </td>
+        </tr>
+        <tr>
+          <td class="titleTd"><strong>单买最大量：</strong></td>
+          <td>
+            <input type="text" name="times" maxlength="3" placeholder="0不限，1一次，2二次" th:value="0">
+          </td>
+        </tr>
+        <tr>
+          <td class="titleTd"><strong>商品原价：</strong></td>
+          <td>
+            <input type="text" name="originalPrice" maxlength="10" placeholder="商品原价">
+          </td>
+        </tr>
+        <tr>
+          <td class="titleTd"><strong>含税价：</strong></td>
+          <td>
+            <input type="text" name="priceHan" maxlength="10" placeholder="含税价">
+          </td>
+        </tr>
+        <tr>
+          <td class="titleTd"><strong>未税价：</strong></td>
+          <td>
+            <input type="text" name="priceWei" maxlength="10" placeholder="未税价">
+          </td>
+        </tr>
+        <tr>
+          <td class="titleTd"><strong>商品售价：</strong></td>
+          <td>
+            <input type="text" name="price" maxlength="10" placeholder="商品售价">
+            一级分销商提成百分比：<input type="text" name="brokerageFirstbfb" placeholder="不要输入百分号" value="7" style="width:90px">
+            <input type="button" value="计算" class="button gblue" id="cal1">
+            二级分销商提成百分比：<input type="text" name="brokeragebfb" placeholder="不要输入百分号" value="7" style="width:90px">
+            <input type="button" value="计算" class="button gblue" id="cal2">
+          </td>
+        </tr>
+        <tr>
+          <td class="titleTd"><strong>一级分销商提成：</strong></td>
+          <td>
+            <input type="text" name="brokerageFirst" placeholder="一级分销商提成金额">
+          </td>
+        </tr>
+        <tr>
+          <td class="titleTd"><strong>二级分销商提成：</strong></td>
+          <td>
+            <select name="brokerageType" style="display:none">
+              <option value="1">固定金额</option>
+              <option value="2">售价百分比</option>
+            </select>
+            <input type="text" name="brokerageValue" placeholder="二级分销商提成金额">
+          </td>
+        </tr>
+        <tr>
+          <td class="titleTd"><strong>供应商名称：</strong></td>
+          <td>
+            <input type="text" name="supplier" class="ipt200" maxlength="10" placeholder="供应商名称 例如：臻有味食品">
+          </td>
+        </tr>
+        <tr>
+          <td class="titleTd"><strong>供应商联系人：</strong></td>
+          <td>
+            <input type="text" name="supplierName" class="ipt200" maxlength="10" placeholder="供应商联系人，例如：张经理">
+          </td>
+        </tr>
+        <tr>
+          <td class="titleTd"><strong>供应商电话：</strong></td>
+          <td>
+            <input type="text" name="supplierMobile" class="ipt100" maxlength="11" placeholder="供应商电话">
+          </td>
+        </tr>
+        <tr>
+          <td class="titleTd"><strong>商品品牌：</strong></td>
+          <td>
+            <input type="text" name="brand" class="ipt300" maxlength="10" placeholder="商品品牌，没有可为空 例如：宏兴隆">
+          </td>
+        </tr>
+        <tr>
+          <td class="titleTd"><strong>商品规格：</strong></td>
+          <td>
+            <input type="text" name="specification" class="ipt400" maxlength="30" placeholder="规格 例如：1袋">
+          </td>
+        </tr>
+        <tr>
+          <td class="titleTd"><strong>商品产地：</strong></td>
+          <td>
+            <input type="text" name="originPlace" maxlength="10" placeholder="产地 例如：中国">
+          </td>
+        </tr>
+        <tr>
+          <td class="titleTd"><strong>商品图片：</strong></td>
+          <td>
+            <img th:src="@{/webjars/star/images/uploadBtn.png}" id="uploadPicBtn">
+            <span id="productPicturesDiv"></span>
+          </td>
+        </tr>
+        <tr>
+          <td class="titleTd topTd"><strong>商品描述：</strong></td>
+          <td>
+            <textarea name="description"></textarea>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <div class="btnGroup">
+              <input type="button" value="保存" class="button blue" id="saveBtn"> <input type="button" value="关闭" class="button grey" onclick="art.dialog.close();">
+            </div>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </div>
+  <script type="text/javascript" th:src="@{/webjars/star/js/jquery.min-1.11.3.js}"></script>
+  <script type="text/javascript" th:src="@{/webjars/artDialog/js/jquery.artDialog.js}"></script>
+  <script type="text/javascript" th:src="@{/webjars/artDialog/js/iframeTools.source.js}"></script>
+  <script type="text/javascript" th:src="@{/webjars/jquery-validation/dist/jquery.validate.min.js}"></script>
+  <script type="text/javascript" th:src="@{/webjars/jquery-validation/dist/additional-methods-local.js}"></script>
+  <script type="text/javascript" th:src="@{/webjars/My97DatePicker/WdatePicker.js}"></script>
+  <script type="text/javascript" th:src="@{/webjars/star/js/star.utils.js}"></script>
+</body>
+</html>
