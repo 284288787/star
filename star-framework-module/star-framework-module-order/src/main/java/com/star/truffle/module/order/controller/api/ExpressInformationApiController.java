@@ -76,6 +76,7 @@ public class ExpressInformationApiController {
       if(null == expressInformationRequestDto || StringUtils.isBlank(expressInformationRequestDto.getReceiverMobile())) {
         throw new StarServiceException(ApiCode.PARAM_ERROR);
       }
+      expressInformationRequestDto.setState(1);
       List<ExpressInformationResponseDto> list = expressInformationService.queryExpressInformation(expressInformationRequestDto);
       return ApiResult.success(list);
     } catch (StarServiceException e) {
