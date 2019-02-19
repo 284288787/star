@@ -96,8 +96,10 @@ function initCartNum(){
     ajax({
       url: '/api/category/queryCategory',
       success: function(data){
-        var idx = 0;
-        for(var i in data){
+        var idx = 1;
+        $("#sliderSegmentedControl .mui-scroll .mui-control-item:first").text(data[0].cateName);
+        $("#item1mobile ul").attr({'data-cateid':data[0].cateId, 'data-catemsg':data[0].cateName});
+        for(var i = 1; i < data.length; i++) {
           idx++;
           $("#sliderSegmentedControl .mui-scroll").append('<a class="mui-control-item '+(idx==1?'mui-active':'')+'" href="#item'+(idx)+'mobile">'+data[i].cateName+'</a>');
           $("#slider .mui-slider-group").append('<div id="item'+(idx)+'mobile" class="mui-slider-item mui-control-content">\
@@ -124,12 +126,8 @@ function initCartNum(){
             </div>\
           </div>');
         }
-        var slider = mui("#slider");
-        slider.slider({
-          interval:0,
-          stopped:true
-        });
-        mui("#slider").slider().stopped = true
+        var slider = mui("#slider").slider({interval:0});
+        slider.stopped = false;
         initShopInfo();
         $m.each(document.querySelectorAll('.mui-slider-group .mui-scroll'), function(index, pullRefreshEl) {
           var pageNum = 1;
