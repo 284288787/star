@@ -48,6 +48,9 @@ public class ExpressInformationService {
   }
 
   public List<ExpressInformationResponseDto> queryExpressInformation(ExpressInformationRequestDto expressInformationRequestDto) {
+    if(null == expressInformationRequestDto || StringUtils.isBlank(expressInformationRequestDto.getReceiverMobile())) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR);
+    }
     return this.expressInformationCache.queryExpressInformation(expressInformationRequestDto);
   }
 
