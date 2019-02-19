@@ -283,7 +283,7 @@ function UtilsHandle(options, funcs){
 	    $("#uploadExcelDiv").remove();
 	  }
 	  $("body").append('<div id="uploadExcelDiv" style="display:none"></div>');
-	  $("#uploadExcelDiv").html('<input type="file"'+(uploadExcels.multiple?' multiple="multiple" ':' ')+'name="'+uploadExcels.uploadFileId+'" id="'+uploadExcels.uploadFileId+'" accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">');
+	  $("#uploadExcelDiv").html('<input type="file"'+(uploadExcels.multiple?' multiple="multiple" ':' ')+'name="'+uploadExcels.uploadFileId+'" id="'+uploadExcels.uploadFileId+'" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">');
 	  $("#uploadExcelDiv #"+options.uploadExcels.uploadFileId).on("change", fileOnChangeFunc);
 	}
 	

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:star="http://star">
+<head>
+<title>物流信息列表</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jquery-ui/jquery-ui.min.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jqGrid/css/ui.jqgrid.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/artDialog/skins/simple-star.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/buttons.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/pageList.css}" />
+<script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/jquery-ui/jquery-ui.min.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/jqGrid/js/jquery.jqGrid.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/jqGrid/js/i18n/grid.locale-cn.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/artDialog/js/jquery.artDialog.js}"></script>
+<script type="text/javascript" th:src="@{/webjars/artDialog/js/iframeTools.js}"></script>
+</head>
+<body>
+  <div class="main-container data-container" id="main-container">
+    <div class="search-container">
+      <form id="queryForm">
+        <span>状态：
+          <select name="state">
+            <option value="">全部</option>
+            <option value="1">未删除</option>
+            <option value="2">已删除</option>
+          </select>
+        </span> 
+        <span>快递单号：
+          <input type="text" name="trackingNumber" placeholder="快递单号"/>
+        </span> 
+        <span>收件人：
+          <input type="text" name="receiver" placeholder="收件人"/>
+        </span> 
+        <span>收件人手机号：
+          <input type="text" name="receiverMobile" placeholder="收件人手机号"/>
+        </span> 
+        <span>寄件人：
+          <input type="text" name="sender" placeholder="寄件人"/>
+        </span> 
+        <span>寄件人手机号：
+          <input type="text" name="senderMobile" placeholder="寄件人手机号"/>
+        </span> 
+        <br>        
+        <span> 
+          <a onclick="expressInformationHandle.query()" class="button blue">查询</a> 
+          <a onclick="expressInformationHandle.reset()" class="button grey">清空</a>
+        </span>
+      </form>
+    </div>
+    <div class="btnGroup">
+      <a star:authorize-uri="/expressInformation/deleted" onclick="expressInformationHandle.importInfo()" class="button green">导入</a>
+      <a star:authorize-uri="/expressInformation/deleted" onclick="expressInformationHandle.remove()" class="button red">删除</a>
+    </div>
+    <div class="data-container">
+      <table id="grid-table"></table>
+      <div id="grid-pager"></div>
+    </div>
+  </div>
+  <script type="text/javascript" th:src="@{/webjars/star/js/star.authorize.js}"></script>
+  <script type="text/javascript" th:inline="javascript" star:authorize-uri="/expressInformation/deleted">
+  addAuthorize("expressInformation-deleted", true);
+  </script>
+  <script type="text/javascript" th:src="@{/webjars/star/js/star.list.comm.js}"></script>
+  <script type="text/javascript" th:inline="javascript" th:src="@{/js/mgr/expressInformation/list.js}"></script>
+</body>
+</html>

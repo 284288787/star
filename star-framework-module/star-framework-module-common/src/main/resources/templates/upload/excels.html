@@ -63,7 +63,7 @@ div{
   <script type="text/javascript" th:src="@{/webjars/artDialog/js/iframeTools.source.js}"></script>
   <script type="text/javascript">
   $(function(){
-    var importHandle = "com.star.truffle.common.importdata.TestImport";//artDialog.data("importHandle");
+    var importHandle = artDialog.data("importHandle"); //"com.star.truffle.common.importdata.TestImport"
     new UtilsHandle({
       basePath: "/",
       uploadExcels: {uploadFileId: 'uploadFile', multiple: true, items: [{

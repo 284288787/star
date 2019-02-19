@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.order.dao.write.ExpressInformationWriteDao">
+  <insert id="saveExpressInformation" useGeneratedKeys="true" keyProperty="id" parameterType="com.star.truffle.module.order.domain.ExpressInformation">
+    insert into expressinformation(id, code, sender, sender_mobile, sender_tel, sender_address, receiver, receiver_mobile, receiver_tel, receiver_address, goods_info, express_company, point_name, tracking_number, create_time)
+    values(#{id}, #{code}, #{sender}, #{senderMobile}, #{senderTel}, #{senderAddress}, #{receiver}, #{receiverMobile}, #{receiverTel}, #{receiverAddress}, #{goodsInfo}, #{expressCompany}, #{pointName}, #{trackingNumber}, #{createTime})
+  </insert>
+
+  <insert id="batchSaveExpressInformation" parameterType="java.util.List">
+    insert into expressinformation(id, code, sender, sender_mobile, sender_tel, sender_address, receiver, receiver_mobile, receiver_tel, receiver_address, goods_info, express_company, point_name, tracking_number, create_time)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.id}, #{item.code}, #{item.sender}, #{item.senderMobile}, #{item.senderTel}, #{item.senderAddress}, #{item.receiver}, #{item.receiverMobile}, #{item.receiverTel}, #{item.receiverAddress}, #{item.goodsInfo}, #{item.expressCompany}, #{item.pointName}, #{item.trackingNumber}, #{item.createTime})
+    </foreach>
+  </insert>
+
+  <update id="updateExpressInformation" parameterType="com.star.truffle.module.order.dto.req.ExpressInformationRequestDto">
+    update expressinformation
+    <trim prefix="set" suffixOverrides=",">
+      <if test="code != null and code != ''">code = #{code},</if>
+      <if test="sender != null and sender != ''">sender = #{sender},</if>
+      <if test="senderMobile != null and senderMobile != ''">sender_mobile = #{senderMobile},</if>
+      <if test="senderTel != null and senderTel != ''">sender_tel = #{senderTel},</if>
+      <if test="senderAddress != null and senderAddress != ''">sender_address = #{senderAddress},</if>
+      <if test="receiver != null and receiver != ''">receiver = #{receiver},</if>
+      <if test="receiverMobile != null and receiverMobile != ''">receiver_mobile = #{receiverMobile},</if>
+      <if test="receiverTel != null and receiverTel != ''">receiver_tel = #{receiverTel},</if>
+      <if test="receiverAddress != null and receiverAddress != ''">receiver_address = #{receiverAddress},</if>
+      <if test="goodsInfo != null and goodsInfo != ''">goods_info = #{goodsInfo},</if>
+      <if test="expressCompany != null and expressCompany != ''">express_company = #{expressCompany},</if>
+      <if test="pointName != null and pointName != ''">point_name = #{pointName},</if>
+      <if test="trackingNumber != null and trackingNumber != ''">tracking_number = #{trackingNumber},</if>
+      <if test="state != null">state = #{state},</if>
+    </trim>
+    where id = #{id}
+  </update>
+
+  <delete id="deleteExpressInformation" parameterType="java.lang.Long">
+    update expressinformation set state = 2 where id = #{id}
+  </delete>
+
+  <resultMap id="expressInformationResponseDtoResultMap" type="com.star.truffle.module.order.dto.res.ExpressInformationResponseDto">
+    <result column="id" property="id" />
+    <result column="code" property="code" />
+    <result column="sender" property="sender" />
+    <result column="sender_mobile" property="senderMobile" />
+    <result column="sender_tel" property="senderTel" />
+    <result column="sender_address" property="senderAddress" />
+    <result column="receiver" property="receiver" />
+    <result column="receiver_mobile" property="receiverMobile" />
+    <result column="receiver_tel" property="receiverTel" />
+    <result column="receiver_address" property="receiverAddress" />
+    <result column="goods_info" property="goodsInfo" />
+    <result column="express_company" property="expressCompany" />
+    <result column="point_name" property="pointName" />
+    <result column="tracking_number" property="trackingNumber" />
+    <result column="create_time" property="createTime" />
+  </resultMap>
+
+  <sql id="sql_column">
+    id, code, sender, sender_mobile, sender_tel, sender_address, receiver, receiver_mobile, receiver_tel, receiver_address, goods_info, express_company, point_name, tracking_number, create_time, state
+  </sql>
+
+  <select id="getExpressInformation" resultType="com.star.truffle.module.order.dto.res.ExpressInformationResponseDto">
+    select
+    <include refid="sql_column" />
+    from expressinformation
+    where id = #{id}
+  </select>
+
+</mapper>

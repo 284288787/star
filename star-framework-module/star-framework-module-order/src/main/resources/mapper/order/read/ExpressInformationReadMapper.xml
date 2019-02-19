@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.order.dao.read.ExpressInformationReadDao">
+  <resultMap id="expressInformationResponseDtoResultMap" type="com.star.truffle.module.order.dto.res.ExpressInformationResponseDto">
+    <result column="id" property="id" />
+    <result column="code" property="code" />
+    <result column="sender" property="sender" />
+    <result column="sender_mobile" property="senderMobile" />
+    <result column="sender_tel" property="senderTel" />
+    <result column="sender_address" property="senderAddress" />
+    <result column="receiver" property="receiver" />
+    <result column="receiver_mobile" property="receiverMobile" />
+    <result column="receiver_tel" property="receiverTel" />
+    <result column="receiver_address" property="receiverAddress" />
+    <result column="goods_info" property="goodsInfo" />
+    <result column="express_company" property="expressCompany" />
+    <result column="point_name" property="pointName" />
+    <result column="tracking_number" property="trackingNumber" />
+    <result column="create_time" property="createTime" />
+  </resultMap>
+
+  <sql id="sql_column">
+    id, code, sender, sender_mobile, sender_tel, sender_address, receiver, receiver_mobile, receiver_tel, receiver_address, goods_info, express_company, point_name, tracking_number, create_time, state
+  </sql>
+
+  <sql id="sql_where">
+    <trim prefix="WHERE" prefixOverrides="AND | OR">
+      <if test="id != null">
+        and id = #{id}
+      </if>
+      <if test="state != null">
+        and state = #{state}
+      </if>
+      <if test="code != null and code != ''">
+        and code = #{code}
+      </if>
+      <if test="sender != null and sender != ''">
+        and sender = #{sender}
+      </if>
+      <if test="senderMobile != null and senderMobile != ''">
+        and sender_mobile = #{senderMobile}
+      </if>
+      <if test="senderTel != null and senderTel != ''">
+        and sender_tel = #{senderTel}
+      </if>
+      <if test="senderAddress != null and senderAddress != ''">
+        and sender_address = #{senderAddress}
+      </if>
+      <if test="receiver != null and receiver != ''">
+        and receiver = #{receiver}
+      </if>
+      <if test="receiverMobile != null and receiverMobile != ''">
+        and receiver_mobile = #{receiverMobile}
+      </if>
+      <if test="receiverTel != null and receiverTel != ''">
+        and receiver_tel = #{receiverTel}
+      </if>
+      <if test="receiverAddress != null and receiverAddress != ''">
+        and receiver_address = #{receiverAddress}
+      </if>
+      <if test="goodsInfo != null and goodsInfo != ''">
+        and goods_info = #{goodsInfo}
+      </if>
+      <if test="expressCompany != null and expressCompany != ''">
+        and express_company = #{expressCompany}
+      </if>
+      <if test="pointName != null and pointName != ''">
+        and point_name = #{pointName}
+      </if>
+      <if test="trackingNumber != null and trackingNumber != ''">
+        and tracking_number = #{trackingNumber}
+      </if>
+    </trim>
+  </sql>
+
+  <select id="getExpressInformation" resultType="com.star.truffle.module.order.dto.res.ExpressInformationResponseDto">
+    select
+    <include refid="sql_column" />
+    from expressinformation
+    where id = #{id}
+  </select>
+
+  <select id="queryExpressInformation" resultMap="expressInformationResponseDtoResultMap">
+    select
+    <include refid="sql_column" />
+    from expressinformation
+    <include refid="sql_where" />
+    order by
+    <choose>
+      <when test="pager != null and pager.orderBy != null and pager.orderBy != ''">${pager.orderBy}</when>
+      <otherwise>id</otherwise>
+    </choose>
+    <choose>
+      <when test="pager != null and pager.orderType != null and pager.orderType != ''">${pager.orderType}</when>
+      <otherwise>desc</otherwise>
+    </choose>
+    <if test="pager != null and pager.pageSize!=null and pager.startIndex!=null">
+      limit #{pager.startIndex}, #{pager.pageSize}
+    </if>
+  </select>
+
+  <select id="queryExpressInformationCount" resultType="java.lang.Long">
+    select
+    count(1)
+    from expressinformation
+    <include refid="sql_where" />
+  </select>
+</mapper>

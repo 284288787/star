@@ -12,7 +12,7 @@ public class Build {
 
   public static void main(String[] args) throws JsonParseException, JsonMappingException, IOException {
     Project project = new Project("D:/work/git-star/star/star-framework-module", "D:/work/git-star/star/star-framework-module", "order", 12352, "0.0.4-MODULE");
-    String classpath1 = "com.star.truffle.module.order.temp.DistributorTotal";
+    String classpath1 = "com.star.truffle.module.order.temp.ExpressInformation";
     BuildFiles.build(false, project, classpath1);
   }
 }

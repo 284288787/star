@@ -117,114 +117,119 @@ public abstract class AbstractDataImport<T> {
           Object sourceValue = null, value = null;
           try {
             Cell cell = row.getCell(j);
-            CellType type = cell.getCellTypeEnum();
-            switch (type) {
-            case STRING:
-              sourceValue = cell.getStringCellValue();
-              if (!recordType.getClazz().equals(String.class)) {
-                valid = false;
-                desc = "类型错误，Excel里为文本，实际上【" + caption + "】必须为" + recordType.getTypeName();
-              }
-              if (null != recordType.getFieldType() && StringUtils.isNotBlank(recordType.getValueOpts())) {
-                String opts = recordType.getValueOpts();
-                Map<String, Object> map = starJson.str2Map(opts);
-                Object object = map.get(sourceValue);
-                if (null == object) {
+            if(null != cell) {
+              CellType type = cell.getCellTypeEnum();
+              switch (type) {
+              case STRING:
+                sourceValue = cell.getStringCellValue();
+                if (!recordType.getClazz().equals(String.class)) {
                   valid = false;
-                  desc = "值错误，只能选填指定的值";
-                } else {
-                  if (recordType.getClazz().equals(Integer.class)) {
-                    value = Integer.parseInt(object.toString());
-                  } else if (recordType.getClazz().equals(Long.class)) {
-                    value = Long.valueOf(object.toString());
-                  } else if (recordType.getClazz().equals(Double.class)) {
-                    value = Double.valueOf(object.toString());
-                  } else {
-                    value = object;
-                  }
+                  desc = "类型错误，Excel里为文本，实际上【" + caption + "】必须为" + recordType.getTypeName();
                 }
-              }
-              break;
-            case NUMERIC:
-              if (HSSFDateUtil.isCellDateFormatted(cell)) {
-                Date date = HSSFDateUtil.getJavaDate(cell.getNumericCellValue());
-                value = date;
-                sourceValue = DateUtils.formatDateTime(date);
-                if (!recordType.getClazz().equals(Date.class)) {
-                  valid = false;
-                  desc = "类型错误，Excel里为日期，实际上【" + caption + "】必须为" + recordType.getTypeName();
-                } else {
-                  sourceValue = DateUtils.formatDate(date, recordType.getPattern());
-                }
-              } else {
                 if (null != recordType.getFieldType() && StringUtils.isNotBlank(recordType.getValueOpts())) {
                   String opts = recordType.getValueOpts();
-                  if ("电话号码".equals(opts)) {
-                    sourceValue = Double.valueOf(cell.getNumericCellValue()).longValue();
-                    value = sourceValue.toString();
-                    break;
+                  Map<String, Object> map = starJson.str2Map(opts);
+                  Object object = map.get(sourceValue);
+                  if (null == object) {
+                    valid = false;
+                    desc = "值错误，只能选填指定的值";
                   } else {
-                    Map<String, Object> map = starJson.str2Map(opts);
-                    Object object = map.get(sourceValue);
-                    if (null == object) {
-                      valid = false;
-                      desc = "值错误，只能选填指定的值";
+                    if (recordType.getClazz().equals(Integer.class)) {
+                      value = Integer.parseInt(object.toString());
+                    } else if (recordType.getClazz().equals(Long.class)) {
+                      value = Long.valueOf(object.toString());
+                    } else if (recordType.getClazz().equals(Double.class)) {
+                      value = Double.valueOf(object.toString());
                     } else {
-                      if (recordType.getClazz().equals(Integer.class)) {
-                        value = Integer.parseInt(object.toString());
-                      } else if (recordType.getClazz().equals(Long.class)) {
-                        value = Long.valueOf(object.toString());
-                      } else if (recordType.getClazz().equals(Double.class)) {
-                        value = Double.valueOf(object.toString());
-                      } else {
-                        value = object;
-                      }
+                      value = object;
                     }
                   }
                 }
-                double temp = cell.getNumericCellValue() * recordType.getMultiplyBy();
-                if (recordType.getClazz().equals(Integer.class)) {
-                  sourceValue = Double.valueOf(temp).intValue();
-                } else if (recordType.getClazz().equals(Long.class)) {
-                  sourceValue = Double.valueOf(temp).longValue();
-                } else if (recordType.getClazz().equals(Double.class)) {
-                  sourceValue = temp;
-                } else if (recordType.getClazz().equals(String.class)) {
-                  sourceValue = decimalFormat.format(cell.getNumericCellValue());
+                break;
+              case NUMERIC:
+                if (HSSFDateUtil.isCellDateFormatted(cell)) {
+                  Date date = HSSFDateUtil.getJavaDate(cell.getNumericCellValue());
+                  value = date;
+                  sourceValue = DateUtils.formatDateTime(date);
+                  if (!recordType.getClazz().equals(Date.class)) {
+                    valid = false;
+                    desc = "类型错误，Excel里为日期，实际上【" + caption + "】必须为" + recordType.getTypeName();
+                  } else {
+                    sourceValue = DateUtils.formatDate(date, recordType.getPattern());
+                  }
                 } else {
-                  sourceValue = cell.getNumericCellValue();
-                  valid = false;
-                  desc = "类型错误，Excel里为数字，实际上【" + caption + "】必须为" + recordType.getTypeName();
+                  if (null != recordType.getFieldType() && StringUtils.isNotBlank(recordType.getValueOpts())) {
+                    String opts = recordType.getValueOpts();
+                    if ("电话号码".equals(opts)) {
+                      sourceValue = Double.valueOf(cell.getNumericCellValue()).longValue();
+                      value = sourceValue.toString();
+                      break;
+                    } else {
+                      Map<String, Object> map = starJson.str2Map(opts);
+                      Object object = map.get(sourceValue);
+                      if (null == object) {
+                        valid = false;
+                        desc = "值错误，只能选填指定的值";
+                      } else {
+                        if (recordType.getClazz().equals(Integer.class)) {
+                          value = Integer.parseInt(object.toString());
+                        } else if (recordType.getClazz().equals(Long.class)) {
+                          value = Long.valueOf(object.toString());
+                        } else if (recordType.getClazz().equals(Double.class)) {
+                          value = Double.valueOf(object.toString());
+                        } else {
+                          value = object;
+                        }
+                      }
+                    }
+                  }
+                  double temp = cell.getNumericCellValue() * recordType.getMultiplyBy();
+                  if (recordType.getClazz().equals(Integer.class)) {
+                    sourceValue = Double.valueOf(temp).intValue();
+                  } else if (recordType.getClazz().equals(Long.class)) {
+                    sourceValue = Double.valueOf(temp).longValue();
+                  } else if (recordType.getClazz().equals(Double.class)) {
+                    sourceValue = temp;
+                  } else if (recordType.getClazz().equals(String.class)) {
+                    sourceValue = decimalFormat.format(cell.getNumericCellValue());
+                  } else {
+                    sourceValue = cell.getNumericCellValue();
+                    valid = false;
+                    desc = "类型错误，Excel里为数字，实际上【" + caption + "】必须为" + recordType.getTypeName();
+                  }
                 }
-              }
-              break;
-            case FORMULA:
-              sourceValue = cell.getCellFormula();
-              valid = false;
-              desc = "类型错误，Excel里为公式，实际上【" + caption + "】必须为" + recordType.getTypeName();
-              break;
-            case BLANK:
-              sourceValue = null;
-              if (!recordType.isNullValue()) {
+                break;
+              case FORMULA:
+                sourceValue = cell.getCellFormula();
                 valid = false;
-                desc = "类型错误，Excel里为空，实际上【" + caption + "】必须填写值并且为" + recordType.getTypeName();
+                desc = "类型错误，Excel里为公式，实际上【" + caption + "】必须为" + recordType.getTypeName();
+                break;
+              case BLANK:
+                sourceValue = null;
+                if (!recordType.isNullValue()) {
+                  valid = false;
+                  desc = "类型错误，Excel里为空，实际上【" + caption + "】必须填写值并且为" + recordType.getTypeName();
+                }
+                break;
+              case BOOLEAN:
+                sourceValue = cell.getBooleanCellValue();
+                if (!recordType.getClazz().equals(Boolean.class)) {
+                  sourceValue = sourceValue.toString();
+                  valid = false;
+                  desc = "类型错误，Excel里是布尔值，实际上【" + caption + "】必须为" + recordType.getTypeName();
+                }
+                break;
+              default:
+                sourceValue = "未知";
+                if (!recordType.isNullValue()) {
+                  valid = false;
+                  desc = "类型错误，未知的类型，实际上【" + caption + "】必须填写值并且为" + recordType.getTypeName();
+                }
+                break;
               }
-              break;
-            case BOOLEAN:
-              sourceValue = cell.getBooleanCellValue();
-              if (!recordType.getClazz().equals(Boolean.class)) {
-                sourceValue = sourceValue.toString();
-                valid = false;
-                desc = "类型错误，Excel里是布尔值，实际上【" + caption + "】必须为" + recordType.getTypeName();
-              }
-              break;
-            default:
-              sourceValue = "未知";
-              if (!recordType.isNullValue()) {
-                valid = false;
-                desc = "类型错误，未知的类型，实际上【" + caption + "】必须填写值并且为" + recordType.getTypeName();
-              }
-              break;
+            }else {
+              valid = true;
+              value = "";
             }
           } catch (Exception e) {
             e.printStackTrace();
