@@ -3,6 +3,7 @@ package com.star.truffle.module.order.controller.api;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -72,6 +73,9 @@ public class ExpressInformationApiController {
   })
   public ApiResult<List<ExpressInformationResponseDto>> queryExpressInformation(@ApiIgnore ExpressInformationRequestDto expressInformationRequestDto) {
     try {
+      if(null == expressInformationRequestDto || StringUtils.isBlank(expressInformationRequestDto.getReceiverMobile())) {
+        throw new StarServiceException(ApiCode.PARAM_ERROR);
+      }
       List<ExpressInformationResponseDto> list = expressInformationService.queryExpressInformation(expressInformationRequestDto);
       return ApiResult.success(list);
     } catch (StarServiceException e) {
