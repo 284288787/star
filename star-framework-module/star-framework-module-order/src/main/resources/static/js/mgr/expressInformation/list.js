@@ -31,8 +31,9 @@ var expressInformationHandle = new ListHandle({
   }
 });
 $(function(){
-  var colNames = ['编号', '快递单号', '创建日期', '收件人', '收件人手机号', '收件人座机号', '收件人地址', '寄件人', '寄件人手机号', '寄件人座机号', '寄件人地址', '物品信息', '快递公司', '快递网点'];
+  var colNames = ['ID','编号', '快递单号', '创建日期', '收件人', '收件人手机号', '收件人座机号', '收件人地址', '寄件人', '寄件人手机号', '寄件人座机号', '寄件人地址', '物品信息', '快递公司', '快递网点'];
   var colModel = [
+    {name: 'id', index: 'id', hidden: true, width: 30, align: "center"}, 
     {name: 'code', index: 'code', width: 30, align: "center"}, 
     {name: 'trackingNumber', index: 'tracking_number', width: 100, align: "center"}, 
     {name: 'createTime', index: 'create_time', width: 140, align: "center", formatter:'date', formatoptions: {srcformat:'Y-m-d H:i:s',newformat:'Y-m-d H:i:s'}}, 
