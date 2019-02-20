@@ -101,7 +101,7 @@ function initCartNum(){
         $("#item1mobile ul").attr({'data-cateid':data[0].cateId, 'data-catemsg':data[0].cateName});
         for(var i = 1; i < data.length; i++) {
           idx++;
-          $("#sliderSegmentedControl .mui-scroll").append('<a class="mui-control-item '+(idx==1?'mui-active':'')+'" href="#item'+(idx)+'mobile">'+data[i].cateName+'</a>');
+          $("#sliderSegmentedControl .mui-scroll").append('<a class="mui-control-item '+(idx==1?'mui-active':'')+'" style="padding-left: 10px !important;padding-right: 10px !important;" href="#item'+(idx)+'mobile">'+data[i].cateName+'</a>');
           $("#slider .mui-slider-group").append('<div id="item'+(idx)+'mobile" class="mui-slider-item mui-control-content">\
             <div id="scroll'+idx+'" class="mui-scroll-wrapper">\
               <div class="mui-scroll">\
@@ -289,9 +289,9 @@ function loadData(index, self, pageNum, pageSize, title, callback){
           if(item.presellTime && item.presellTime.before(new Date())){
             li +='预售时间：' + item.presellTime.formatDate('M月d日 h点');
           }
-          li +='<span>已售 <b >'+item.soldNumber+'</b> 份';
+          li +='<span>已售 <b >'+(item.soldNumber*10)+'</b> 份';
           if(item.numberType == 2){
-            li +='/ 限量'+item.number+'份';
+            li +='/ 限量'+(item.number*10)+'份';
           }
           li += '</span>\
             </p>';
