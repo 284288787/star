@@ -325,7 +325,7 @@ function loadData(index, self, pageNum, pageSize, title, callback){
                   var item = items[o];
                   userCartNum[item.productId] = item.num;
                 }
-                $(".itemlist a.addCar:not(.disable)").each(function(){
+                $(".mui-slider-group a.addCar:not(.disable)").each(function(){
                   var thisObj = $(this);
                   var pid=thisObj.attr("data-pid");
                   if(userCartNum[pid] && userCartNum[pid] > 0){
@@ -342,7 +342,7 @@ function loadData(index, self, pageNum, pageSize, title, callback){
         }
         syncOtherInfo(productIds);
         
-        $(".itemlist a.addCar:not(.disable)").off().on("tap", function(){
+        $(".mui-slider-group a.addCar:not(.disable)").off().on("tap", function(){
           var thisObj=$(this);
           if(islogin()){
             var pid=thisObj.attr("data-pid");
@@ -370,7 +370,7 @@ function loadData(index, self, pageNum, pageSize, title, callback){
           }
           return false;
         });
-        $(".itemlist b.like").off().on("tap", function(){
+        $(".mui-slider-group b.like").off().on("tap", function(){
           var thisObj=$(this);
           if(islogin()){
             var pid=thisObj.attr("data-pid");

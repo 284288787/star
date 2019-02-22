@@ -44,6 +44,14 @@ $(function(){
     }
   });
   wx.ready(function(){
+    wx.onMenuShareAppMessage({
+      title: "老板，我是"+user.name+"，刚在店铺下单商品请接单！",
+      desc: '【五杂优选】：小伙伴们都买了，再不下手就晚了，赶紧抢购！',
+      link: 'http://yx.hnkbmd.com/order.html?orderId='+oid,
+      imgUrl: 'http://yx.hnkbmd.com/photo/member.jpg',
+      success: function () {
+      }
+    });
     wx.updateAppMessageShareData({
       title: "老板，我是"+user.name+"，刚在店铺下单商品请接单！",
       desc: '【五杂优选】：小伙伴们都买了，再不下手就晚了，赶紧抢购！',
@@ -51,6 +59,30 @@ $(function(){
       imgUrl: 'http://yx.hnkbmd.com/photo/member.jpg',
     }, function(res){
       alert(JSON.stringify(res))
+    });
+    wx.updateAppMessageShareData({
+      title: "老板，我是"+user.name+"，刚在店铺下单商品请接单！",
+      desc: '【五杂优选】：小伙伴们都买了，再不下手就晚了，赶紧抢购！',
+      link: 'http://yx.hnkbmd.com/order.html?orderId='+oid,
+      imgUrl: 'http://yx.hnkbmd.com/photo/member.jpg',
+      success: function(){
+      }
+    }, function(res){
+      alert(JSON.stringify(res))
+    });
+    wx.onMenuShareTimeline({
+      title: "老板，我是"+user.name+"，刚在店铺下单商品请接单！",
+      link: 'http://yx.hnkbmd.com/order.html?orderId='+oid,
+      imgUrl: 'http://yx.hnkbmd.com/photo/member.jpg',
+      success: function () {
+      }
+    });
+    wx.updateTimelineShareData({
+      title: "老板，我是"+user.name+"，刚在店铺下单商品请接单！",
+      link: 'http://yx.hnkbmd.com/order.html?orderId='+oid,
+      imgUrl: 'http://yx.hnkbmd.com/photo/member.jpg',
+      success: function () {
+      }
     });
   });
   var oid = getParam("oid");
