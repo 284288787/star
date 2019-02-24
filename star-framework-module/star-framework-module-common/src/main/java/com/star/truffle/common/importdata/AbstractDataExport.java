@@ -67,11 +67,11 @@ public abstract class AbstractDataExport<T> {
         excel = ExcelUtil.fullExcel(excel, args);
       }
       List<String[]> datas = getRecordsData(params, pageNumber, getPageSize());
+      XSSFSheet sheet = workbook.createSheet(excel.getSheetName() + (pageNumber > 1 ? pageNumber : ""));
+      Map<Integer, Integer> columnWidth = ExcelUtil.createXlsxExcelSheetHead(sheet, excel, style);
       if (null == datas || datas.isEmpty()) {
         break;
       }
-      XSSFSheet sheet = workbook.createSheet(excel.getSheetName() + (pageNumber > 1 ? pageNumber : ""));
-      Map<Integer, Integer> columnWidth = ExcelUtil.createXlsxExcelSheetHead(sheet, excel, style);
       ExcelUtil.createXlsxExcelSheetData(sheet, excel, columnWidth, datas, style);
       pageNumber ++;
     }
