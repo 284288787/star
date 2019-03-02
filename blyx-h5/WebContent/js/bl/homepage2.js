@@ -7,6 +7,7 @@ var py = getParam("py");
 var user = getLoginInfo();
 var userCartNum;
 var selfs = new Array();
+var pullToRefreshs = new Array();
 if(py) putLocalData('py', py);
 $(function(){
   ajax({
@@ -34,15 +35,15 @@ $(function(){
   });
   initCartNum();
   $("#search").on("input", function(){
-    pulldownRefresh();
+    pullToRefreshs[mui("#slider").slider().getSlideNumber()].pullDownLoading();
   });
   $("#search").keyup(function(e){
     if(e.keyCode == 13){
-      pulldownRefresh();
+      pullToRefreshs[mui("#slider").slider().getSlideNumber()].pullDownLoading();
     }
   });
   $(".mui-icon-clear").on("tap click mousedown", function(){
-    pulldownRefresh();
+    pullToRefreshs[mui("#slider").slider().getSlideNumber()].pullDownLoading();
   });
   $("#a2").on("tap", function(){
     if(islogin()){
@@ -131,7 +132,7 @@ function initCartNum(){
         initShopInfo();
         $m.each(document.querySelectorAll('.mui-slider-group .mui-scroll'), function(index, pullRefreshEl) {
           var pageNum = 1;
-          $m(pullRefreshEl).pullToRefresh({
+          pullToRefreshs[index] = $m(pullRefreshEl).pullToRefresh({
             down: {
               callback: function() {
                 var self = this;
