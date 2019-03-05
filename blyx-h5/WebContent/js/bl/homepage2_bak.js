@@ -98,12 +98,14 @@ function initCartNum(){
       url: '/api/category/queryCategory',
       success: function(data){
         var idx = 1;
-        for(var i = 0; i < data.length; i++) {
+        $("#sliderSegmentedControl .mui-scroll .mui-control-item:first").text(data[0].cateName);
+        $("#item1mobile ul").attr({'data-cateid':data[0].cateId, 'data-catemsg':data[0].cateName});
+        for(var i = 1; i < data.length; i++) {
           idx++;
           $("#sliderSegmentedControl .mui-scroll").append('<a class="mui-control-item '+(idx==1?'mui-active':'')+'" style="padding-left: 10px !important;padding-right: 10px !important;" href="#item'+(idx)+'mobile">'+data[i].cateName+'</a>');
           $("#slider .mui-slider-group").append('<div id="item'+(idx)+'mobile" class="mui-slider-item mui-control-content">\
             <div id="scroll'+idx+'" class="mui-scroll-wrapper">\
-              <div class="mui-scroll muiScroll">\
+              <div class="mui-scroll">\
                 <div class="shop clearfix">\
                   <img src="images/qq.png" alt="" class="userimg">\
                   <p>\
