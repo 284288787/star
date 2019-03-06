@@ -20,10 +20,17 @@ public class ProductConstant {
   }
   
   public static String formatMoney(Integer money) {
+    if(null == money) {
+      return "0";
+    }
+  
     DecimalFormat decimalFormat = new DecimalFormat("0.00");
     return decimalFormat.format(money / 100.0);
   }
   public static String formatMoney(String money) {
+    if(null == money) {
+      return "0";
+    }
     Integer m = Integer.parseInt(money);
     return formatMoney(m);
   }
