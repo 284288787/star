@@ -61,7 +61,7 @@ public class ExportProduct extends AbstractDataExport<Product> {
       for (ProductResponseDto product : products) {
         Map<String, Integer> buyTotal = this.orderDetailCache.buyRecordTotal(product.getProductId());
         try {
-          String[] arr = {product.getProductId().toString(), ProductConstant.getCaption(product.getState()), categories.get(product.getCateId()).getCateName(), product.getTitle(),  
+          String[] arr = {product.getProductId().toString(), ProductConstant.getCaption(product.getState()), null != categories.get(product.getCateId()) ? categories.get(product.getCateId()).getCateName() : "", product.getTitle(),  
               product.getSpecification(), 
               null == product.getPresellTime() ? "现在有货" : DateUtils.formatDate(product.getPresellTime(), "yyyy-MM-dd HH点"), 
               null == product.getOffShelfTime() ? "永不下架" : DateUtils.formatDate(product.getOffShelfTime(), "yyyy-MM-dd HH点"),
