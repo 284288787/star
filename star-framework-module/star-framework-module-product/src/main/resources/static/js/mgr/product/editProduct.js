@@ -45,7 +45,7 @@ $(function(){
     basePath: "/",
     choose: [
       {
-        object: $("input[name=cateName]"),
+        object: $("input[name=cateNames]"),
         service: "categoryService",
         title: "选择商品大分类",
         width: "800px",

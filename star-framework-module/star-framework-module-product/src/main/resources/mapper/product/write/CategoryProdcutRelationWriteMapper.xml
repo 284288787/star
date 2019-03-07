@@ -27,6 +27,10 @@
     delete from category_product_relation where id = #{id}
   </delete>
 
+  <delete id="deleteCategoryProdcutRelationByProductId" parameterType="java.lang.Long">
+    delete from category_product_relation where product_id = #{productId}
+  </delete>
+
   <resultMap id="categoryProdcutRelationResponseDtoResultMap" type="com.star.truffle.module.product.dto.res.CategoryProdcutRelationResponseDto">
     <result column="id" property="id" />
     <result column="cate_id" property="cateId" />

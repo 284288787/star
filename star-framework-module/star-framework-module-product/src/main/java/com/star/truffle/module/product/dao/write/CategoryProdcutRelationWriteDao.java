@@ -18,4 +18,6 @@ public interface CategoryProdcutRelationWriteDao {
 
   public CategoryProdcutRelationResponseDto getCategoryProdcutRelation(Long id);
 
+  public int deleteCategoryProdcutRelationByProductId(Long productId);
+
 }

@@ -144,7 +144,7 @@ $(function(){
     {name: 'mainPictureUrl', index: 'mainPictureUrl', width: '70px', align: "center", editable: false, frozen: true, sortable: false, formatter: function(cellvalue, options, rowObject){
       return "<img src='http://mgr.hnkbmd.com"+cellvalue+"' height='60px'>";
     }}, 
-    {name: 'cateName', index: 'cate_id', width: '70px', align: "center", frozen: true}, 
+    {name: 'cateNames', index: 'cate_names', width: '150px', align: "center", frozen: true}, 
     {name: 'productCateName', index: 'product_cate_id', width: '70px', align: "center", frozen: true}, 
     {name: 'productId', index: 'product_id', width: '50px', align: "center", frozen: true, formatter: function(cellvalue, options, rowObject){
       return cellvalue.toFixed(0);

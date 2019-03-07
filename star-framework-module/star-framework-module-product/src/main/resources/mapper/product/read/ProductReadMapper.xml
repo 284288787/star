@@ -27,7 +27,7 @@
         and product.product_cate_id = #{productCateId}
       </if>
       <if test="cateId != null">
-        and exists (select 1 from category c where c.cate_id = #{cateId})
+        and exists (select * from category_product_relation c where c.product_id = product.product_id and c.cate_id = #{cateId})
       </if>
       <if test="tag != null">
         and tag = #{tag}

@@ -23,6 +23,8 @@ public class ProductRequestDto extends Product {
   
   private String cateIds;
   
+  private Long cateId;
+  
   private List<ProductPicture> pictures;
   
   private ProductInventory productInventory;

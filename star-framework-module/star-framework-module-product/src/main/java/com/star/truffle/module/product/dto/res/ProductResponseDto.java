@@ -29,7 +29,7 @@ public class ProductResponseDto extends Product {
   //个人可以购买的次数 0无限
   private Integer times;
   // 分类名称
-  private String cateName;
+  private String cateIds;
   // 分类名称
   private String productCateName;
   // 当前时间 毫秒

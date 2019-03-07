@@ -60,7 +60,7 @@ public class ExportProduct extends AbstractDataExport<Product> {
       //商品ID,状态,分类,标题,规格,预售时间,下架时间,供货商,供货商联系人,供货商电话,原价,未税价,含税价,售价,分销商提成,上级分销商提成,库存总量,已售数量,实时库存,累计金额,购买人数
       for (ProductResponseDto product : products) {
         Map<String, Integer> buyTotal = this.orderDetailCache.buyRecordTotal(product.getProductId());
-        String[] arr = {product.getProductId().toString(), ProductConstant.getCaption(product.getState()), null != categories.get(product.getCateId()) ? categories.get(product.getCateId()).getCateName() : "", product.getTitle(),  
+        String[] arr = {product.getProductId().toString(), ProductConstant.getCaption(product.getState()), null != categories.get(product.getProductCateId()) ? categories.get(product.getProductCateId()).getCateName() : "", product.getTitle(),  
             product.getSpecification(), 
             null == product.getPresellTime() ? "现在有货" : DateUtils.formatDate(product.getPresellTime(), "yyyy-MM-dd HH点"), 
             null == product.getOffShelfTime() ? "永不下架" : DateUtils.formatDate(product.getOffShelfTime(), "yyyy-MM-dd HH点"),

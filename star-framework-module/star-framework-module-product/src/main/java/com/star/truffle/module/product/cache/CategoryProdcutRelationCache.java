@@ -23,11 +23,15 @@ public class CategoryProdcutRelationCache {
   private CategoryProdcutRelationWriteDao categoryProdcutRelationWriteDao;
   @Autowired
   private CategoryProdcutRelationReadDao categoryProdcutRelationReadDao;
-
+  
   public CategoryProdcutRelationResponseDto saveCategoryProdcutRelation(CategoryProdcutRelation categoryProdcutRelation){
     this.categoryProdcutRelationWriteDao.saveCategoryProdcutRelation(categoryProdcutRelation);
     CategoryProdcutRelationResponseDto categoryProdcutRelationResponseDto = this.categoryProdcutRelationWriteDao.getCategoryProdcutRelation(categoryProdcutRelation.getId());
     return categoryProdcutRelationResponseDto;
+  }
+
+  public void batchSaveCategoryProdcutRelation(List<CategoryProdcutRelation> categoryProdcutRelations){
+    this.categoryProdcutRelationWriteDao.batchSaveCategoryProdcutRelation(categoryProdcutRelations);
   }
 
   public CategoryProdcutRelationResponseDto updateCategoryProdcutRelation(CategoryProdcutRelationRequestDto categoryProdcutRelationRequestDto){
@@ -53,6 +57,10 @@ public class CategoryProdcutRelationCache {
   public Long queryCategoryProdcutRelationCount(CategoryProdcutRelationRequestDto categoryProdcutRelationRequestDto){
     Map<String, Object> conditions = starJson.bean2Map(categoryProdcutRelationRequestDto);
     return this.categoryProdcutRelationReadDao.queryCategoryProdcutRelationCount(conditions);
+  }
+
+  public void deleteCategoryProdcutRelationByProductId(Long productId) {
+    this.categoryProdcutRelationWriteDao.deleteCategoryProdcutRelationByProductId(productId);
   }
 
 }

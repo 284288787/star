@@ -4,6 +4,8 @@ package com.star.truffle.module.product.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +17,14 @@ import com.star.truffle.core.StarServiceException;
 import com.star.truffle.core.jdbc.Page;
 import com.star.truffle.core.jdbc.Page.OrderType;
 import com.star.truffle.core.web.ApiCode;
+import com.star.truffle.module.product.cache.CategoryProdcutRelationCache;
 import com.star.truffle.module.product.cache.ProductCache;
 import com.star.truffle.module.product.cache.ProductInventoryCache;
 import com.star.truffle.module.product.cache.ProductPictureCache;
 import com.star.truffle.module.product.constant.ProductEnum;
 import com.star.truffle.module.product.constant.ProductInventoryTypeEnum;
 import com.star.truffle.module.product.constant.ProductPictureTypeEnum;
+import com.star.truffle.module.product.domain.CategoryProdcutRelation;
 import com.star.truffle.module.product.domain.ProductInventory;
 import com.star.truffle.module.product.domain.ProductPicture;
 import com.star.truffle.module.product.dto.req.ProductRequestDto;
@@ -35,6 +39,8 @@ public class ProductService {
   private ProductInventoryCache productInventoryCache;
   @Autowired
   private ProductPictureCache productPictureCache;
+  @Autowired
+  private CategoryProdcutRelationCache categoryProdcutRelationCache;
 
   public Long saveProduct(ProductRequestDto product) {
     if (null == product || ! product.checkSaveData()) {
@@ -75,6 +81,7 @@ public class ProductService {
     this.productCache.saveProduct(product);
     Long productId = product.getProductId();
     this.productPictureCache.batchSavePicture(productId, pictures);
+    saveCategoryProductRelation(productId, product.getCateIds());
     return productId;
   }
 
@@ -133,6 +140,15 @@ public class ProductService {
     if(null == productId || StringUtils.isBlank(cateIds)) {
       return ;
     }
+    List<CategoryProdcutRelation> categoryProdcutRelations = 
+    Stream.of(cateIds.split(",")).map(cateId -> {
+      CategoryProdcutRelation relation = new CategoryProdcutRelation();
+      relation.setCateId(Long.parseLong(cateId));
+      relation.setProductId(productId);
+      return relation;
+    }).collect(Collectors.toList());
+    categoryProdcutRelationCache.deleteCategoryProdcutRelationByProductId(productId);
+    categoryProdcutRelationCache.batchSaveCategoryProdcutRelation(categoryProdcutRelations);
   }
 
   public ProductResponseDto getProduct(Long productId) {
@@ -191,10 +207,10 @@ public class ProductService {
     if (null == productRequestDto.getPager()) {
       productRequestDto.setPager(new Page(1, 10, "update_time", OrderType.desc));
     }
-    if (null != productRequestDto.getCateId() && productRequestDto.getCateId() == 0) {
-      productRequestDto.setCateId(null);
-      productRequestDto.setState(ProductEnum.presell.state());
-    }
+//    if (null != productRequestDto.getCateId() && productRequestDto.getCateId() == 0) {
+//      productRequestDto.setCateId(null);
+//      productRequestDto.setState(ProductEnum.presell.state());
+//    }
     return this.productCache.queryProduct(productRequestDto);
   }
 
