@@ -16,10 +16,17 @@
       <input type="hidden" name="productId" th:value="${productResponseDto.productId}">
       <table class="gy_table">
         <tr>
-          <td class="titleTd"><strong>商品类目：</strong></td>
+          <td class="titleTd"><strong>商品大分类：</strong></td>
           <td>
-            <input type="text" name="cateName" class="ipt300" placeholder="商品类目" readonly th:value="${productResponseDto.cateName}">
+            <input type="text" name="cateName" class="ipt300" placeholder="商品大分类" readonly th:value="${productResponseDto.cateName}">
             <input type="hidden" name="cateId" th:value="${productResponseDto.cateId}">
+          </td>
+        </tr>
+        <tr>
+          <td class="titleTd"><strong>商品分类：</strong></td>
+          <td>
+            <input type="text" name="productCateName" class="ipt300" placeholder="商品分类" readonly th:value="${productResponseDto.productCateName}">
+            <input type="hidden" name="productCateId" th:value="${productResponseDto.productCateId}">
           </td>
         </tr>
         <tr>

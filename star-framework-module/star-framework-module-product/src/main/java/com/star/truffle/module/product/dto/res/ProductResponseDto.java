@@ -30,6 +30,8 @@ public class ProductResponseDto extends Product {
   private Integer times;
   // 分类名称
   private String cateName;
+  // 分类名称
+  private String productCateName;
   // 当前时间 毫秒
   private Long currentTimeMillis = System.currentTimeMillis();
 }

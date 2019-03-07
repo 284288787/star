@@ -85,14 +85,24 @@ $(function(){
       {
         object: $("input[name=cateName]"),
         service: "categoryService",
-        title: "选择商品分类",
+        title: "选择商品大分类",
         width: "800px",
         height: "500px",
         callback: function(rowObject){
           $("input[name=cateName]").val(rowObject.cateName);
           $("input[name=cateId]").val(rowObject.cateId);
         }
-      }, {
+      },{
+        object: $("input[name=productCateName]"),
+        service: "productCategoryService",
+        title: "选择商品分类",
+        width: "800px",
+        height: "500px",
+        callback: function(rowObject){
+          $("input[name=productCateName]").val(rowObject.productCateName);
+          $("input[name=productCateId]").val(rowObject.productCateId);
+        }
+      },{
         object: $("input[name=tag]"),
         service: "productTagService",
         title: "选择商品标签",
@@ -105,7 +115,7 @@ $(function(){
     ],
   },{});
   
-  var colNames = ['操作', '主图', '商品分类', '商品ID', '商品状态', '单买最大量', '商品标题', '副标题', '商品标签', '预售时间', '下架时间', '提货时间', '原价', '含税价', '未税价', '售价', '一级分销提成', '二级分销提成', '库存总量', '已售数量', '实时库存', '供应商', '供应商联系人', '供应商电话', '商品品牌', '商品规格', '商品产地', '关注人数', '更新日期', '更新人'];
+  var colNames = ['操作', '主图', '商品大分类', '商品分类', '商品ID', '商品状态', '单买最大量', '商品标题', '副标题', '商品标签', '预售时间', '下架时间', '提货时间', '原价', '含税价', '未税价', '售价', '一级分销提成', '二级分销提成', '库存总量', '已售数量', '实时库存', '供应商', '供应商联系人', '供应商电话', '商品品牌', '商品规格', '商品产地', '关注人数', '更新日期', '更新人'];
   var colModel = [
     {align: "center", width: '160px', editable: false, sortable: false, frozen: true, formatter: function(cellvalue, options, rowObject){
       var temp = '';
@@ -135,6 +145,7 @@ $(function(){
       return "<img src='http://mgr.hnkbmd.com"+cellvalue+"' height='60px'>";
     }}, 
     {name: 'cateName', index: 'cate_id', width: '70px', align: "center", frozen: true}, 
+    {name: 'productCateName', index: 'product_cate_id', width: '70px', align: "center", frozen: true}, 
     {name: 'productId', index: 'product_id', width: '50px', align: "center", frozen: true, formatter: function(cellvalue, options, rowObject){
       return cellvalue.toFixed(0);
     }}, 

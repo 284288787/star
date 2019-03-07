@@ -85,7 +85,7 @@ public class CategoryService implements ChooseDataIntf {
   public List<GridColumn> getGridColumns() {
     List<GridColumn> columns = new ArrayList<>();
     columns.add(GridColumn.builder().caption("cateId").javaName("cateId").dsName("cate_id").hidden(true).build());
-    columns.add(GridColumn.builder().caption("分类名称").javaName("cateName").dsName("cateName").query(true).type("text").placeholder("分类名称").build());
+    columns.add(GridColumn.builder().caption("大分类名称").javaName("cateName").dsName("cateName").query(true).type("text").placeholder("大分类名称").build());
     return columns;
   }
 

@@ -54,7 +54,17 @@ $(function(){
           $("input[name=cateName]").val(rowObject.cateName);
           $("input[name=cateId]").val(rowObject.cateId);
         }
-      }, {
+      },{
+        object: $("input[name=productCateName]"),
+        service: "productCategoryService",
+        title: "选择商品分类",
+        width: "800px",
+        height: "500px",
+        callback: function(rowObject){
+          $("input[name=productCateName]").val(rowObject.productCateName);
+          $("input[name=productCateId]").val(rowObject.productCateId);
+        }
+      },{
         object: $("input[name=tag]"),
         service: "productTagService",
         title: "选择商品标签",

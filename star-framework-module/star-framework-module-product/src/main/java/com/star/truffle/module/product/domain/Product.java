@@ -65,6 +65,8 @@ public class Product {
   private String supplierMobile;
   // 分类id
   private Long cateId;
+  // 商品分类id
+  private Long productCateId;
   // 顺序 升序
   private Integer idx;
 }
