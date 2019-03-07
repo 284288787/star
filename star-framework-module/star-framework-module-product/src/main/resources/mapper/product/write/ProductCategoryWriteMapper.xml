@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.product.dao.write.ProductCategoryWriteDao">
+  <insert id="saveProductCategory" useGeneratedKeys="true" keyProperty="productCateId" parameterType="com.star.truffle.module.product.domain.ProductCategory">
+    insert into product_category(product_cate_id, product_cate_name, create_time)
+    values(#{productCateId}, #{productCateName}, #{createTime})
+  </insert>
+
+  <insert id="batchSaveProductCategory" parameterType="java.util.List">
+    insert into product_category(product_cate_id, product_cate_name, create_time)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.productCateId}, #{item.productCateName}, #{item.createTime})
+    </foreach>
+  </insert>
+
+  <update id="updateProductCategory" parameterType="com.star.truffle.module.product.dto.req.ProductCategoryRequestDto">
+    update product_category
+    <trim prefix="set" suffixOverrides=",">
+      <if test="productCateName != null and productCateName != ''">product_cate_name = #{productCateName},</if>
+      <if test="createTime != null">create_time = #{createTime},</if>
+    </trim>
+    where product_cate_id = #{productCateId}
+  </update>
+
+  <delete id="deleteProductCategory" parameterType="java.lang.Long">
+    delete from product_category where product_cate_id = #{productCateId}
+  </delete>
+
+  <resultMap id="productCategoryResponseDtoResultMap" type="com.star.truffle.module.product.dto.res.ProductCategoryResponseDto">
+    <result column="product_cate_id" property="productCateId" />
+    <result column="product_cate_name" property="productCateName" />
+    <result column="create_time" property="createTime" />
+  </resultMap>
+
+  <sql id="sql_column">
+    product_cate_id, product_cate_name, create_time
+  </sql>
+
+  <select id="getProductCategory" resultType="com.star.truffle.module.product.dto.res.ProductCategoryResponseDto">
+    select
+    <include refid="sql_column" />
+    from product_category
+    where product_cate_id = #{productCateId}
+  </select>
+
+</mapper>
