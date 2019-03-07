@@ -126,6 +126,13 @@ public class ProductService {
     this.productCache.updateProduct(product);
     this.productPictureCache.deleteProductPictureByProductId(product.getProductId());
     this.productPictureCache.batchSavePicture(product.getProductId(), pictures);
+    saveCategoryProductRelation(product.getProductId(), product.getCateIds());
+  }
+
+  private void saveCategoryProductRelation(Long productId, String cateIds) {
+    if(null == productId || StringUtils.isBlank(cateIds)) {
+      return ;
+    }
   }
 
   public ProductResponseDto getProduct(Long productId) {

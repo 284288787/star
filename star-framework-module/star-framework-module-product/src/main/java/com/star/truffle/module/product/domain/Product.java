@@ -64,7 +64,7 @@ public class Product {
   // 供应商电话
   private String supplierMobile;
   // 分类id
-  private Long cateId;
+  private String cateNames;
   // 商品分类id
   private Long productCateId;
   // 顺序 升序

@@ -47,12 +47,19 @@ $(function(){
       {
         object: $("input[name=cateName]"),
         service: "categoryService",
-        title: "选择商品分类",
+        title: "选择商品大分类",
         width: "800px",
         height: "500px",
-        callback: function(rowObject){
-          $("input[name=cateName]").val(rowObject.cateName);
-          $("input[name=cateId]").val(rowObject.cateId);
+        multiselect: true,
+        callback: function(items){
+          var cateNames = "";
+          var cateIds = "";
+          items.forEach(function(item){
+            cateNames += item.cateName + " ";
+            cateIds += ","+item.cateId;
+          });
+          $("input[name=cateNames]").val(cateNames);
+          $("input[name=cateIds]").val(cateIds ? cateIds.substring(1) : "");
         }
       },{
         object: $("input[name=productCateName]"),

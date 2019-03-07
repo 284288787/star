@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.product.dao.write.CategoryProdcutRelationWriteDao">
+  <insert id="saveCategoryProdcutRelation" useGeneratedKeys="true" keyProperty="id" parameterType="com.star.truffle.module.product.domain.CategoryProdcutRelation">
+    insert into category_product_relation(id, cate_id, product_id)
+    values(#{id}, #{cateId}, #{productId})
+  </insert>
+
+  <insert id="batchSaveCategoryProdcutRelation" parameterType="java.util.List">
+    insert into category_product_relation(id, cate_id, product_id)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.id}, #{item.cateId}, #{item.productId})
+    </foreach>
+  </insert>
+
+  <update id="updateCategoryProdcutRelation" parameterType="com.star.truffle.module.product.dto.req.CategoryProdcutRelationRequestDto">
+    update category_product_relation
+    <trim prefix="set" suffixOverrides=",">
+      <if test="cateId != null">cate_id = #{cateId},</if>
+      <if test="productId != null">product_id = #{productId},</if>
+    </trim>
+    where id = #{id}
+  </update>
+
+  <delete id="deleteCategoryProdcutRelation" parameterType="java.lang.Long">
+    delete from category_product_relation where id = #{id}
+  </delete>
+
+  <resultMap id="categoryProdcutRelationResponseDtoResultMap" type="com.star.truffle.module.product.dto.res.CategoryProdcutRelationResponseDto">
+    <result column="id" property="id" />
+    <result column="cate_id" property="cateId" />
+    <result column="product_id" property="productId" />
+  </resultMap>
+
+  <sql id="sql_column">
+    id, cate_id, product_id
+  </sql>
+
+  <select id="getCategoryProdcutRelation" resultType="com.star.truffle.module.product.dto.res.CategoryProdcutRelationResponseDto">
+    select
+    <include refid="sql_column" />
+    from category_product_relation
+    where id = #{id}
+  </select>
+
+</mapper>

@@ -21,6 +21,8 @@ public class ProductRequestDto extends Product {
   
   private String states;
   
+  private String cateIds;
+  
   private List<ProductPicture> pictures;
   
   private ProductInventory productInventory;

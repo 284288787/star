@@ -8,7 +8,7 @@
     product.idx, product.product_id, title, subtitle, tag, presell_time, off_shelf_time, pickup_time, state, original_price, 
     price, supplier, brand, specification, origin_place, description, subscribers, product.create_time, create_user, update_time, 
     update_user, brokerage_type, brokerage_value, number_type, number, sold_number, type, times, brokerage_first, price_han, 
-    price_wei, supplier_name, supplier_mobile, product.cate_id, c.cate_name, product.product_cate_id, a.product_cate_name, 
+    price_wei, supplier_name, supplier_mobile, product.cate_names, product.product_cate_id, a.product_cate_name, 
     (select p.url from product_picture p where p.product_id = product.product_id and p.type = 1 limit 1) mainPictureUrl
   </sql>
 
@@ -27,7 +27,7 @@
         and product.product_cate_id = #{productCateId}
       </if>
       <if test="cateId != null">
-        and product.cate_id = #{cateId}
+        and exists (select 1 from category c where c.cate_id = #{cateId})
       </if>
       <if test="tag != null">
         and tag = #{tag}
@@ -46,7 +46,6 @@
     <include refid="sql_column" />
     from product
     inner join product_inventory i on product.product_id = i.product_id 
-    LEFT JOIN category c on product.cate_id = c.cate_id
     LEFT JOIN product_category a on product.product_cate_id = a.product_cate_id
     where product.product_id = #{productId}
   </select>
@@ -56,7 +55,6 @@
     <include refid="sql_column" />
     from product
     inner join product_inventory i on product.product_id = i.product_id 
-    LEFT JOIN category c on product.cate_id = c.cate_id
     LEFT JOIN product_category a on product.product_cate_id = a.product_cate_id
     where product.idx 
     <choose>
@@ -78,7 +76,6 @@
     <include refid="sql_column" />
     from product
     inner join product_inventory i on product.product_id = i.product_id 
-    LEFT JOIN category c on product.cate_id = c.cate_id
     LEFT JOIN product_category a on product.product_cate_id = a.product_cate_id
     <include refid="sql_where" />
     order by
@@ -100,7 +97,6 @@
     count(1)
     from product
     inner join product_inventory i on product.product_id = i.product_id 
-    LEFT JOIN category c on product.cate_id = c.cate_id
     LEFT JOIN product_category a on product.product_cate_id = a.product_cate_id
     <include refid="sql_where" />
   </select>
