@@ -95,12 +95,12 @@ function initCartNum(){
       indicators: true, //是否显示滚动条
     });
     ajax({
-      url: '/api/category/queryCategory',
+      url: '/api/productCategory/queryProductCategory',
       success: function(data){
-        var idx = 1;
+        var idx = 2;
         for(var i = 0; i < data.length; i++) {
           idx++;
-          $("#sliderSegmentedControl .mui-scroll").append('<a class="mui-control-item '+(idx==1?'mui-active':'')+'" style="padding-left: 10px !important;padding-right: 10px !important;" href="#item'+(idx)+'mobile">'+data[i].cateName+'</a>');
+          $("#sliderSegmentedControl .mui-scroll").append('<a class="mui-control-item '+(idx==1?'mui-active':'')+'" style="padding-left: 10px !important;padding-right: 10px !important;" href="#item'+(idx)+'mobile">'+data[i].productCateName+'</a>');
           $("#slider .mui-slider-group").append('<div id="item'+(idx)+'mobile" class="mui-slider-item mui-control-content">\
             <div id="scroll'+idx+'" class="mui-scroll-wrapper">\
               <div class="mui-scroll muiScroll">\
@@ -119,7 +119,7 @@ function initCartNum(){
                   </p>\
                   <span class="fr">购买指数<br><b class="soldNum">0</b><br>粉丝数<br><b class="fansNum">0</b></span>\
                 </div>\
-                <ul class="mui-table-view" data-cateid="'+data[i].cateId+'" data-catemsg="'+data[i].cateName+'类商品">\
+                <ul class="mui-table-view" data-pcateid="'+data[i].productCateId+'" data-catemsg="'+data[i].productCateName+'类商品">\
                 </ul>\
               </div>\
             </div>\
@@ -259,11 +259,16 @@ function loadData(index, self, pageNum, pageSize, title, callback){
     }
   });
   var ul = self.element.querySelector('.mui-table-view');
-  var cateId = ul.dataset.cateid;
+  if(index == 0){
+    
+    self.endPullUpToRefresh(true);
+    return;
+  }
+  var productCateId = ul.dataset.pcateid;
   var catemsg = ul.dataset.catemsg;
   ajax({
     url: '/api/product/queryProduct',
-    data: {'title': title, 'pager.pageNum': pageNum, 'pager.pageSize': pageSize, 'cateId': cateId},
+    data: {'title': title, 'pager.pageNum': pageNum, 'pager.pageSize': pageSize, 'productCateId': productCateId},
     success: function(items){
       if(null != items && items.length > 0){
         self.endPullUpToRefresh(false);
@@ -403,7 +408,7 @@ function loadData(index, self, pageNum, pageSize, title, callback){
         });
         callback(index, self, productIds, callback);
       }else{
-        if(pageNum == 1){
+        if(index > 0 && pageNum == 1){
           $(".mui-pull-bottom-tips", $(self.element).parent()).hide();
           ul.appendChild($('<li>\
               <div class="nocontent">\
