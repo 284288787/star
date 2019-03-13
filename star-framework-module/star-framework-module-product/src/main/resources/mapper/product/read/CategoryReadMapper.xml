@@ -2,13 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.star.truffle.module.product.dao.read.CategoryReadDao">
   <resultMap id="categoryResponseDtoResultMap" type="com.star.truffle.module.product.dto.res.CategoryResponseDto">
-    <result column="cate_id" property="cateId" />
-    <result column="cate_name" property="cateName" />
-    <result column="create_time" property="createTime" />
   </resultMap>
 
   <sql id="sql_column">
-    cate_id, cate_name, create_time
+    cate_id, cate_name, create_time, cate_pic
   </sql>
 
   <sql id="sql_where">

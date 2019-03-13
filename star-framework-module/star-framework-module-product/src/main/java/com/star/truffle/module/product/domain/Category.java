@@ -13,6 +13,8 @@ public class Category {
   private Long cateId;
   // 分类名称
   private String cateName;
+  // 分类图片
+  private String catePic;
   // 创建日期
   private Date createTime;
 }

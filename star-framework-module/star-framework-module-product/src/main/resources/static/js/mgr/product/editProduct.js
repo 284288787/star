@@ -108,20 +108,18 @@ $(function(){
           $(this).parent().remove();
         }); 
         $('.dataImg').unbind().click(function(){
-          if($('#viewImg').length>0){ 
-            $('#viewImg').remove(); 
-          } 
-          $('body').append('<img id="viewImg" style="display:none" src="'+$(this).attr("src")+'">');
-          $('#viewImg').load(function(){
-            var w=$(this).width();
-            var h=$(this).height();
+          var img = new Image();
+          img.src = $(this).attr("src");
+          img.onload = function(){
+            var w=img.width;
+            var h=img.height;
             var l = w / h;
             if(h > screenHeight * 0.85){
               h = screenHeight * 0.85;
               w = h * l;
             }
-            artDialog.alert2('<div style="width:'+w+'px;height:'+h+'px;"><img style="height:'+h+'px" src="'+$(this).attr("src")+'">') 
-          }); 
+            artDialog.alert2('<div style="width:'+w+'px;height:'+h+'px;"><img style="height:'+h+'px" src="'+img.src+'">') 
+          }
         }); 
       } 
     }]

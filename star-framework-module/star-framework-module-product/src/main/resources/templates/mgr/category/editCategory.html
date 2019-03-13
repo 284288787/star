@@ -24,6 +24,17 @@
           </td>
         </tr>
         <tr>
+          <td><strong>封面图片：</strong></td>
+        </tr>
+        <tr>
+          <td>
+            <img th:src="@{/webjars/star/images/uploadBtn.png}" id="uploadPicBtn">
+            <span id="productPicturesDiv" th:style="${categoryResponseDto.catePic != null ? '' : 'display:none'}">
+              <span style="position: relative;"><img class="dataImg" width="70px" height="70px" th:src="${categoryResponseDto.catePic}" th:attr="data=${categoryResponseDto.catePic}"><div class="close">X</div></span>
+            </span>
+          </td>
+        </tr>
+        <tr>
           <td>
             <div class="btnGroup">
               <input type="button" value="保存" class="button blue" id="saveBtn"> <input type="button" value="关闭" class="button grey" onclick="art.dialog.close();">
@@ -35,9 +46,10 @@
   </div>
   <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
 	<script type="text/javascript" th:src="@{/webjars/artDialog/js/jquery.artDialog.js}"></script>
-	<script type="text/javascript" th:src="@{/webjars/artDialog/js/iframeTools.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/artDialog/js/iframeTools.source.js}"></script>
 	<script type="text/javascript" th:src="@{/webjars/jquery-validation/dist/jquery.validate.min.js}"></script>
 	<script type="text/javascript" th:src="@{/webjars/jquery-validation/dist/additional-methods-local.js}"></script>
+  <script type="text/javascript" th:src="@{/webjars/star/js/star.utils.js}"></script>
   <script type="text/javascript" th:src="@{/js/mgr/category/editCategory.js}"></script>
 </body>
 </html>
