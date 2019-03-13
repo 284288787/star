@@ -18,15 +18,20 @@ import com.star.truffle.core.jackson.StarJson;
 import com.star.truffle.core.jdbc.Page;
 import com.star.truffle.core.web.ApiCode;
 import com.star.truffle.module.product.cache.CategoryCache;
+import com.star.truffle.module.product.cache.ProductCache;
 import com.star.truffle.module.product.domain.Category;
 import com.star.truffle.module.product.dto.req.CategoryRequestDto;
+import com.star.truffle.module.product.dto.req.ProductRequestDto;
 import com.star.truffle.module.product.dto.res.CategoryResponseDto;
+import com.star.truffle.module.product.dto.res.ProductResponseDto;
 
 @Service
 public class CategoryService implements ChooseDataIntf {
 
   @Autowired
   private CategoryCache categoryCache;
+  @Autowired
+  private ProductCache productCache;
   @Autowired
   private StarJson starJson;
 
@@ -61,7 +66,16 @@ public class CategoryService implements ChooseDataIntf {
   }
 
   public List<CategoryResponseDto> queryCategory(CategoryRequestDto categoryRequestDto) {
-    return this.categoryCache.queryCategory(categoryRequestDto);
+    List<CategoryResponseDto> categories = this.categoryCache.queryCategory(categoryRequestDto);
+    Page pager = new Page(1, 2, null, null);
+    categories.parallelStream().filter(cate -> ! cate.getCateName().equals("会员中心") && ! cate.getCateName().equals("免费试用")).forEach(cate -> {
+      ProductRequestDto productRequestDto = new ProductRequestDto();
+      productRequestDto.setCateId(cate.getCateId());
+      productRequestDto.setPager(pager);
+      List<ProductResponseDto> products = productCache.queryProduct(productRequestDto);
+      cate.setProducts(products);
+    });
+    return categories;
   }
 
   public Long queryCategoryCount(CategoryRequestDto categoryRequestDto) {

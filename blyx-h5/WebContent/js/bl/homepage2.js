@@ -7,6 +7,7 @@ var py = getParam("py");
 var user = getLoginInfo();
 var userCartNum;
 var selfs = new Array();
+var screenWidth = $("body").width();
 var pullToRefreshs = new Array();
 if(py) putLocalData('py', py);
 $(function(){
@@ -260,7 +261,48 @@ function loadData(index, self, pageNum, pageSize, title, callback){
   });
   var ul = self.element.querySelector('.mui-table-view');
   if(index == 0){
-    
+    ajax({
+      url: '/api/category/queryCategory',
+      success: function(items){
+        var h = '<div class="recommendImgDiv">';
+        for(var o in items){
+          var item = items[o];
+          var products = item.products;
+          var html = '';
+          if(products && products.length > 0){
+            if(o % 2 == 0){
+              html = '<div class="recommendImgDiv">' +
+              '<img class="recommendImg" src="'+IMAGE_PREFIX+item.catePic+'">'+
+              '<div class="recommendProducts">'+
+              '<p class="recommendTitle">推荐单品：</p>';
+              for(var p in products){
+                var product = products[p];
+                html += '<img class="recommendProduct" src="http://mgr.hnkbmd.com'+product.mainPictureUrl+'"><br>';
+              }
+              html += '</div>'+
+              '</div>';
+            }else{
+              html = '<div class="recommendImgDiv">' +
+              '<div class="recommendProducts2">' +
+              '<p class="recommendTitle">推荐单品：</p>';
+              for(var p in products){
+                var product = products[p];
+                html += '<img class="recommendProduct" src="http://mgr.hnkbmd.com'+product.mainPictureUrl+'"><br>';
+              }
+              html += '</div>' +
+              '<img class="recommendImg" src="'+IMAGE_PREFIX+item.catePic+'">' +
+              '</div>';
+            }
+            $(".homeLi").append(html);
+          }else{
+            h += '<img class="recommendImgban1" src="http://mgr.hnkbmd.com/photo/image/40485315439449568a4b4525fb56c93am.jpg">  ';
+          }
+        }
+        h += '</div>';
+        $(".homeLi").append(h);
+        $(".recommendProduct").css({"width": screenWidth - 150})
+      }
+    });
     self.endPullUpToRefresh(true);
     return;
   }
