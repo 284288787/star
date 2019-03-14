@@ -136,8 +136,10 @@ function initCartNum(){
               callback: function() {
                 var self = this;
                 setTimeout(function() {
-                  var ul = self.element.querySelector('.mui-table-view');
-                  ul.innerHTML = "";
+                  if(index > 0){
+                    var ul = self.element.querySelector('.mui-table-view');
+                    ul.innerHTML = "";
+                  }
                   var title = $("#search").val();
                   pageNum = 1;
                   loadData(index, self, pageNum, pageSize, title, function(){
@@ -264,7 +266,9 @@ function loadData(index, self, pageNum, pageSize, title, callback){
     ajax({
       url: '/api/category/queryCategory',
       success: function(items){
+        $(".homeLi").html("");
         var h = '<div class="recommendImgDiv">';
+        var cla="recommendImgban1";
         for(var o in items){
           var item = items[o];
           var products = item.products;
@@ -272,12 +276,12 @@ function loadData(index, self, pageNum, pageSize, title, callback){
           if(products && products.length > 0){
             if(o % 2 == 0){
               html = '<div class="recommendImgDiv">' +
-              '<img class="recommendImg" src="'+IMAGE_PREFIX+item.catePic+'">'+
+              '<img class="recommendImg tojump" src="'+IMAGE_PREFIX+item.catePic+'" data-type="products" data-id="'+item.cateId+'">'+
               '<div class="recommendProducts">'+
               '<p class="recommendTitle">推荐单品：</p>';
               for(var p in products){
                 var product = products[p];
-                html += '<img class="recommendProduct" src="http://mgr.hnkbmd.com'+product.mainPictureUrl+'"><br>';
+                html += '<img class="recommendProduct tojump" src="http://mgr.hnkbmd.com'+product.mainPictureUrl+'" data-type="product" data-id="'+product.productId+'"><br>';
               }
               html += '</div>'+
               '</div>';
@@ -287,20 +291,50 @@ function loadData(index, self, pageNum, pageSize, title, callback){
               '<p class="recommendTitle">推荐单品：</p>';
               for(var p in products){
                 var product = products[p];
-                html += '<img class="recommendProduct" src="http://mgr.hnkbmd.com'+product.mainPictureUrl+'"><br>';
+                html += '<img class="recommendProduct tojump" src="http://mgr.hnkbmd.com'+product.mainPictureUrl+'" data-type="product" data-id="'+product.productId+'"><br>';
               }
               html += '</div>' +
-              '<img class="recommendImg" src="'+IMAGE_PREFIX+item.catePic+'">' +
+              '<img class="recommendImg tojump" src="'+IMAGE_PREFIX+item.catePic+'" data-type="products" data-id="'+item.cateId+'">' +
               '</div>';
             }
             $(".homeLi").append(html);
           }else{
-            h += '<img class="recommendImgban1" src="http://mgr.hnkbmd.com/photo/image/40485315439449568a4b4525fb56c93am.jpg">  ';
+            h += '<img class="'+cla+' tojump" src="'+IMAGE_PREFIX+item.catePic+'" data-type="products" data-id="'+item.cateId+'"> ';
+            cla="recommendImgban2";
           }
         }
         h += '</div>';
         $(".homeLi").append(h);
-        $(".recommendProduct").css({"width": screenWidth - 150})
+        $(".recommendProduct").css({"width": screenWidth - 195})
+        html = '<div class="recommendImgDiv blogroll">'+
+          '<div class="title">友情好店</div>'+
+          '<div class="shopImgs">'+
+            '<img class="shopImg" src="http://mgr.hnkbmd.com/photo/image/40485315439449568a4b4525fb56c93am.jpg"> '+
+            '<img class="shopImg" src="http://mgr.hnkbmd.com/photo/image/40485315439449568a4b4525fb56c93am.jpg"> '+
+            '<img class="shopImg" src="http://mgr.hnkbmd.com/photo/image/40485315439449568a4b4525fb56c93am.jpg"> '+
+            '<img class="shopImg" src="http://mgr.hnkbmd.com/photo/image/40485315439449568a4b4525fb56c93am.jpg"> <br>'+
+            '<img class="shopImg" src="http://mgr.hnkbmd.com/photo/image/40485315439449568a4b4525fb56c93am.jpg"> '+
+            '<img class="shopImg" src="http://mgr.hnkbmd.com/photo/image/40485315439449568a4b4525fb56c93am.jpg"> '+
+            '<img class="shopImg" src="http://mgr.hnkbmd.com/photo/image/40485315439449568a4b4525fb56c93am.jpg"> '+
+            '<img class="shopImg" src="http://mgr.hnkbmd.com/photo/image/40485315439449568a4b4525fb56c93am.jpg"> '+
+          '</div>'+
+        '</div>'+
+        '<div class="recommendImgDiv apply">'+
+          '<div class="title">申请店铺</div>'+
+        '</div>';
+        $(".homeLi").append(html);
+        $(".tojump").on("tap", function(){
+          var type=$(this).attr("data-type");
+          var id=$(this).attr("data-id");
+          switch(type){
+          case 'products':
+            alert(1);
+            break;
+          case 'product':
+            alert(2);
+            break;
+          }
+        });
       }
     });
     self.endPullUpToRefresh(true);
