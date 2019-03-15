@@ -354,6 +354,7 @@ function loadData(index, self, pageNum, pageSize, title, callback){
   var params = {'title': title, 'pager.pageNum': pageNum, 'pager.pageSize': pageSize, 'productCateId': productCateId};
   var cateId = getParam("cid");
   if(cateId){
+    mui("#slider").slider().gotoItem(1);
     params["cateId"] = cateId;
   }
   ajax({
