@@ -248,6 +248,31 @@ function initShopInfo(){
   });
 }
 
+function loadShops(){
+  ajax({
+    url : '/api/distributor/recommendedDistributors',
+    success: function(items){
+      var html = '<div class="recommendImgDiv blogroll">'+
+      '<div class="title">友情好店</div>'+
+      '<div class="shopImgs">';
+      for(var o in items){
+        var item = items[o];
+        html += '<img class="shopImg toShop" src="http://mgr.hnkbmd.com'+item.head+'" data-type="shop" data-id="'+item.py+'"> ';
+      }
+      html += '</div>'+
+      '</div>'+
+      '<div class="recommendImgDiv apply">'+
+        '<div class="title">申请店铺</div>'+
+      '</div>';
+      $(".homeLi").append(html);
+      $(".toShop").on("tap", function(){
+        var id=$(this).attr("data-id");
+        document.location.href="/blyx/index.html?py="+id;
+      });
+    }
+  });
+}
+
 function loadData(index, self, pageNum, pageSize, title, callback){
   $(self.element.parentNode).on("scrollend", function(e){
     var scroll = mui(self.element.parentNode).scroll();
@@ -306,32 +331,16 @@ function loadData(index, self, pageNum, pageSize, title, callback){
         h += '</div>';
         $(".homeLi").append(h);
         $(".recommendProduct").css({"width": screenWidth - 195})
-        html = '<div class="recommendImgDiv blogroll">'+
-          '<div class="title">友情好店</div>'+
-          '<div class="shopImgs">'+
-            '<img class="shopImg" src="http://mgr.hnkbmd.com/photo/image/40485315439449568a4b4525fb56c93am.jpg"> '+
-            '<img class="shopImg" src="http://mgr.hnkbmd.com/photo/image/40485315439449568a4b4525fb56c93am.jpg"> '+
-            '<img class="shopImg" src="http://mgr.hnkbmd.com/photo/image/40485315439449568a4b4525fb56c93am.jpg"> '+
-            '<img class="shopImg" src="http://mgr.hnkbmd.com/photo/image/40485315439449568a4b4525fb56c93am.jpg"> <br>'+
-            '<img class="shopImg" src="http://mgr.hnkbmd.com/photo/image/40485315439449568a4b4525fb56c93am.jpg"> '+
-            '<img class="shopImg" src="http://mgr.hnkbmd.com/photo/image/40485315439449568a4b4525fb56c93am.jpg"> '+
-            '<img class="shopImg" src="http://mgr.hnkbmd.com/photo/image/40485315439449568a4b4525fb56c93am.jpg"> '+
-            '<img class="shopImg" src="http://mgr.hnkbmd.com/photo/image/40485315439449568a4b4525fb56c93am.jpg"> '+
-          '</div>'+
-        '</div>'+
-        '<div class="recommendImgDiv apply">'+
-          '<div class="title">申请店铺</div>'+
-        '</div>';
-        $(".homeLi").append(html);
-        $(".tojump").on("tap", function(){
+        loadShops();
+        $(".tojump").off().on("tap", function(){
           var type=$(this).attr("data-type");
           var id=$(this).attr("data-id");
           switch(type){
           case 'products':
-            alert(1);
+            document.location.href="/blyx/index.html?cid="+id;
             break;
           case 'product':
-            alert(2);
+            document.location.href="/blyx/detail.html?pid="+id;
             break;
           }
         });
@@ -342,9 +351,14 @@ function loadData(index, self, pageNum, pageSize, title, callback){
   }
   var productCateId = ul.dataset.pcateid;
   var catemsg = ul.dataset.catemsg;
+  var params = {'title': title, 'pager.pageNum': pageNum, 'pager.pageSize': pageSize, 'productCateId': productCateId};
+  var cateId = getParam("cid");
+  if(cateId){
+    params["cateId"] = cateId;
+  }
   ajax({
     url: '/api/product/queryProduct',
-    data: {'title': title, 'pager.pageNum': pageNum, 'pager.pageSize': pageSize, 'productCateId': productCateId},
+    data: params,
     success: function(items){
       if(null != items && items.length > 0){
         self.endPullUpToRefresh(false);

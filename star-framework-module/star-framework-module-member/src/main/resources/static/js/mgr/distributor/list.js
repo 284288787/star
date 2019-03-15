@@ -27,6 +27,38 @@ var distributorHandle = new ListHandle({
     var url = '/download/excel/data?params=';
     url+=encodeURI(JSON.stringify(params));
     window.open(url);
+  },
+  unrecommended: function(distributorId){
+    distributorHandle.ajax({
+      url : basePath+'distributor/unrecommended',
+      data : {
+        'ids' : distributorId
+      },
+      success : function(res) {
+        if (res.code == 0) {
+          artDialog.alert("取消推荐成功")
+          distributorHandle.query();
+        } else {
+          artDialog.alert(res.msg)
+        }
+      }
+    });
+  },
+  recommended: function(distributorId){
+    distributorHandle.ajax({
+      url : basePath+'distributor/recommended',
+      data : {
+        'ids' : distributorId
+      },
+      success : function(res) {
+        if (res.code == 0) {
+          artDialog.alert("推荐成功")
+          distributorHandle.query();
+        } else {
+          artDialog.alert(res.msg)
+        }
+      }
+    });
   }
 });
 new UtilsHandle({
@@ -87,10 +119,19 @@ new UtilsHandle({
   ]
 },{});
 $(function(){
-  var colNames = ['操作', '是否可用', 'distributorId', '姓名', '店铺名称', '店铺编码', '手机号', '粉丝数', '已售件数', '分销区域拼音', '分销区域', '街道地址', '更新日期', 'openid', '营业执照', '食品流通许可证', '营业面积', '开户行', '开户名', '银行卡号'];
+  var colNames = ['操作', '是否可用', '是否推荐', 'distributorId', '姓名', '店铺名称', '店铺编码', '手机号', '粉丝数', '已售件数', '分销区域拼音', '分销区域', '街道地址', '更新日期', 'openid', '营业执照', '食品流通许可证', '营业面积', '开户行', '开户名', '银行卡号'];
   var colModel = [
     {align: "center", width: '150px', editable: false, sortable: false, frozen: true, formatter: function(cellvalue, options, rowObject){
       var temp = '';
+      if(rowObject.recommended==1){
+        if(hasAuthorize('distributor-unrecommended')){
+          temp += '<a class="linetaga" href="javascript: distributorHandle.unrecommended(\'' + rowObject.distributorId.toFixed(0) + '\');" >取消推荐</a>';
+        }
+      }else{
+        if(hasAuthorize('distributor-recommended')){
+          temp += '<a class="linetaga" href="javascript: distributorHandle.recommended(\'' + rowObject.distributorId.toFixed(0) + '\');" >推荐到首页</a>';
+        }
+      }
       temp += '<a class="linetaga" href="javascript: distributorHandle.ewm(\'' + rowObject.distributorId.toFixed(0) + '\');" >二维码</a>';
       if(hasAuthorize('distributor-editBefore')){
         temp += '<a class="linetaga" href="javascript: distributorHandle.edit(\'' + rowObject.distributorId.toFixed(0) + '\');" >编辑</a>';
@@ -107,6 +148,7 @@ $(function(){
       return temp;
     }},
     {name: 'enabled', index: 'enabled', width: 50, align: "center", frozen: true, formatter: 'select', editoptions: {value:'1:可用;0:禁用'}},
+    {name: 'recommended', index: 'recommended', width: 50, align: "center", frozen: true, formatter: 'select', editoptions: {value:'1:已推荐;0:未推荐'}},
     {name: 'distributorId', index: 'distributor_id', width: '80px', frozen: true, align: "center", formatter: function(cellvalue, options, rowObject){
       return cellvalue.toFixed(0);
     }}, 

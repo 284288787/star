@@ -32,6 +32,7 @@
       <if test="shopCode != null and shopCode != ''">shop_code = #{shopCode},</if>
       <if test="mobile != null and mobile != ''">mobile = #{mobile},</if>
       <if test="regionId != null">region_id = #{regionId},</if>
+      <if test="recommended != null">recommended = #{recommended},</if>
       <if test="parentDistributorId != null">parent_distributor_id = #{parentDistributorId},</if>
       <if test="address != null and address != ''">address = #{address},</if>
       <if test="enabled != null">enabled = #{enabled},</if>
@@ -109,7 +110,7 @@
 
   <sql id="sql_column">
     parent_distributor_id, distributor_id, head, distributor.`name`, shop_name, shop_code, mobile, distributor.region_id, address, distributor.state, 
-    enabled, distributor.create_time, distributor.update_time, open_id, distributor.fans_num, 
+    enabled, distributor.create_time, distributor.update_time, open_id, distributor.fans_num, recommended,
     distributor.sold_num, r.`name` regionName, r.`name` regionName, ifnull(p.shortName, p.areaName) provinceName , 
     ifnull(c.shortName, c.areaName) cityName, ifnull(a.shortName, a.areaName) areaName, ifnull(t.shortName, t.areaName) townName,
     p.areaId provinceId , c.areaId cityId, a.areaId areaId, t.areaId townId,

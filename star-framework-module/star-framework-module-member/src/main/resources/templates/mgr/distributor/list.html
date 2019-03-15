@@ -79,6 +79,12 @@
   <script type="text/javascript" th:inline="javascript" star:authorize-uri="/distributor/enabled">
   addAuthorize("distributor-enabled", true);
   </script>
+  <script type="text/javascript" th:inline="javascript" star:authorize-uri="/distributor/recommended">
+  addAuthorize("distributor-recommended", true);
+  </script>
+  <script type="text/javascript" th:inline="javascript" star:authorize-uri="/distributor/unrecommended">
+  addAuthorize("distributor-unrecommended", true);
+  </script>
   <script type="text/javascript" th:src="@{/webjars/star/js/star.list.comm.js}"></script>
   <script type="text/javascript" th:src="@{/webjars/star/js/star.utils.js}"></script>
   <script type="text/javascript" th:inline="javascript" th:src="@{/js/mgr/distributor/list.js}"></script>

@@ -117,6 +117,40 @@ public class DistributorController {
   }
   
   @ResponseBody
+  @RequestMapping(value = "/recommended", method = RequestMethod.POST)
+  public ApiResult<Void> recommended(@RequestParam String ids) {
+    ApiResult<Void> apiResult = null;
+    try {
+      this.distributorService.recommendedDistributor(ids);
+      apiResult = ApiResult.success();
+    } catch (StarServiceException e) {
+      e.printStackTrace();
+      apiResult = ApiResult.fail(e.getCode(), e.getMessage());
+    } catch (Exception e) {
+      e.printStackTrace();
+      apiResult = ApiResult.fail(ApiCode.SYSTEM_ERROR);
+    }
+    return apiResult;
+  }
+  
+  @ResponseBody
+  @RequestMapping(value = "/unrecommended", method = RequestMethod.POST)
+  public ApiResult<Void> unrecommended(@RequestParam String ids) {
+    ApiResult<Void> apiResult = null;
+    try {
+      this.distributorService.unrecommendedDistributor(ids);
+      apiResult = ApiResult.success();
+    } catch (StarServiceException e) {
+      e.printStackTrace();
+      apiResult = ApiResult.fail(e.getCode(), e.getMessage());
+    } catch (Exception e) {
+      e.printStackTrace();
+      apiResult = ApiResult.fail(ApiCode.SYSTEM_ERROR);
+    }
+    return apiResult;
+  }
+  
+  @ResponseBody
   @RequestMapping(value = "/enabled", method = RequestMethod.POST)
   public ApiResult<Void> enabled(@RequestParam String ids) {
     ApiResult<Void> apiResult = null;

@@ -1,6 +1,8 @@
 /**create by framework at 2018年09月18日 11:52:26**/
 package com.star.truffle.module.member.controller.api;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -97,7 +99,7 @@ public class DistributorApiController {
       return ApiResult.fail(ApiCode.SYSTEM_ERROR);
     }
   }
-
+  
   @RequestMapping(value = "/updateDistributorHead", method = RequestMethod.POST)
   @ApiOperation(value = "编辑分销商的头像", notes = "编辑分销商的头像", httpMethod = "POST", response = ApiResult.class)
   @ApiImplicitParams({
@@ -108,6 +110,20 @@ public class DistributorApiController {
     try {
       distributorService.updateDistributorHead(distributorRequestDto);
       return ApiResult.success();
+    } catch (StarServiceException e) {
+      return ApiResult.fail(e.getCode(), e.getMsg());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return ApiResult.fail(ApiCode.SYSTEM_ERROR);
+    }
+  }
+
+  @RequestMapping(value = "/recommendedDistributors", method = RequestMethod.POST)
+  @ApiOperation(value = "推荐的分销商", notes = "推荐的分销商", httpMethod = "POST", response = ApiResult.class)
+  public ApiResult<List<DistributorResponseDto>> recommendedDistributors() {
+    try {
+      List<DistributorResponseDto> list = distributorService.recommendedDistributors();
+      return ApiResult.success(list);
     } catch (StarServiceException e) {
       return ApiResult.fail(e.getCode(), e.getMsg());
     } catch (Exception e) {

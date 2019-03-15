@@ -27,6 +27,8 @@ public class Distributor {
   private String address;
   // 是否可用 1可用 0禁用
   private Integer enabled;
+  // 是否推荐到首页 1是 0否
+  private Integer recommended;
   // 创建日期
   private Date createTime;
   // 更新日期

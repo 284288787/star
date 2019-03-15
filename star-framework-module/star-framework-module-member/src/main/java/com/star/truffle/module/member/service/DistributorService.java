@@ -331,4 +331,41 @@ public class DistributorService implements ChooseDataIntf, StarInterface {
   public List<DistributorResponseDto> getDistributorsByParentId(Long distributorId) {
     return distributorCache.getDistributorsByParentId(distributorId);
   }
+  
+  public void recommendedDistributor(String idstr) {
+    if (StringUtils.isBlank(idstr)) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR);
+    }
+    String[] distributorIds = idstr.split(",");
+    for (String str : distributorIds) {
+      Long distributorId = Long.parseLong(str);
+      DistributorRequestDto dto = new DistributorRequestDto();
+      dto.setDistributorId(distributorId);
+      dto.setRecommended(1);
+      dto.setUpdateTime(new Date());
+      this.distributorCache.updateDistributor(dto);
+    }
+  }
+
+  public void unrecommendedDistributor(String idstr) {
+    if (StringUtils.isBlank(idstr)) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR);
+    }
+    String[] distributorIds = idstr.split(",");
+    for (String str : distributorIds) {
+      Long distributorId = Long.parseLong(str);
+      DistributorRequestDto dto = new DistributorRequestDto();
+      dto.setDistributorId(distributorId);
+      dto.setRecommended(0);
+      this.distributorCache.updateDistributor(dto);
+    }
+  }
+
+  public List<DistributorResponseDto> recommendedDistributors() {
+    DistributorRequestDto dto = new DistributorRequestDto();
+    dto.setRecommended(1);
+    dto.setEnabled(1);
+    List<DistributorResponseDto> list = distributorCache.queryDistributor(dto);
+    return list;
+  }
 }
