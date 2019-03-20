@@ -336,6 +336,12 @@ public class DistributorService implements ChooseDataIntf, StarInterface {
     if (StringUtils.isBlank(idstr)) {
       throw new StarServiceException(ApiCode.PARAM_ERROR);
     }
+    DistributorRequestDto distributorRequestDto = new DistributorRequestDto();
+    distributorRequestDto.setRecommended(1);
+    List<DistributorResponseDto> list = this.distributorCache.queryDistributor(distributorRequestDto);
+    if(list.size() >= 8) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR, "已经有8个店铺推荐");
+    }
     String[] distributorIds = idstr.split(",");
     for (String str : distributorIds) {
       Long distributorId = Long.parseLong(str);

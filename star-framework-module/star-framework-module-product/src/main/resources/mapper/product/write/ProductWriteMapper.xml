@@ -2,15 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.star.truffle.module.product.dao.write.ProductWriteDao">
   <insert id="saveProduct" useGeneratedKeys="true" keyProperty="productId" parameterType="com.star.truffle.module.product.domain.Product">
-    insert into product(idx, cate_names, product_cate_id, product_id, title, subtitle, tag, presell_time, off_shelf_time, pickup_time, state, original_price, price, supplier, brand, specification, origin_place, description, subscribers, create_time, create_user, update_time, update_user, brokerage_type, brokerage_value, brokerage_first, price_han, price_wei, supplier_name, supplier_mobile)
-    values(#{idx}, #{cateNames}, #{productCateId}, #{productId}, #{title}, #{subtitle}, #{tag}, #{presellTime}, #{offShelfTime}, #{pickupTime}, #{state}, #{originalPrice}, #{price}, #{supplier}, #{brand}, #{specification}, #{originPlace}, #{description}, #{subscribers}, #{createTime}, #{createUser}, #{updateTime}, #{updateUser}, #{brokerageType}, #{brokerageValue}, #{brokerageFirst}, #{priceHan}, #{priceWei}, #{supplierName}, #{supplierMobile})
+    insert into product(cover_path, idx, cate_names, product_cate_id, product_id, title, subtitle, tag, presell_time, off_shelf_time, pickup_time, state, original_price, price, supplier, brand, specification, origin_place, description, subscribers, create_time, create_user, update_time, update_user, brokerage_type, brokerage_value, brokerage_first, price_han, price_wei, supplier_name, supplier_mobile)
+    values(#{coverPath}, #{idx}, #{cateNames}, #{productCateId}, #{productId}, #{title}, #{subtitle}, #{tag}, #{presellTime}, #{offShelfTime}, #{pickupTime}, #{state}, #{originalPrice}, #{price}, #{supplier}, #{brand}, #{specification}, #{originPlace}, #{description}, #{subscribers}, #{createTime}, #{createUser}, #{updateTime}, #{updateUser}, #{brokerageType}, #{brokerageValue}, #{brokerageFirst}, #{priceHan}, #{priceWei}, #{supplierName}, #{supplierMobile})
   </insert>
 
   <insert id="batchSaveProduct" parameterType="java.util.List">
-    insert into product(idx, cate_names, product_cate_id, product_id, title, subtitle, tag, presell_time, off_shelf_time, pickup_time, state, original_price, price, supplier, brand, specification, origin_place, description, subscribers, create_time, create_user, update_time, update_user, brokerage_type, brokerage_value, brokerage_first, price_han, price_wei, supplier_name, supplier_mobile)
+    insert into product(cover_path, idx, cate_names, product_cate_id, product_id, title, subtitle, tag, presell_time, off_shelf_time, pickup_time, state, original_price, price, supplier, brand, specification, origin_place, description, subscribers, create_time, create_user, update_time, update_user, brokerage_type, brokerage_value, brokerage_first, price_han, price_wei, supplier_name, supplier_mobile)
     values
     <foreach collection="list" item="item" index="index" separator=",">
-      (#{item.idx}, #{item.cateNames}, #{item.productCateId}, #{item.productId}, #{item.title}, #{item.subtitle}, #{item.tag}, #{item.presellTime}, #{item.offShelfTime}, #{item.pickupTime}, 
+      (#{item.coverPath}, #{item.idx}, #{item.cateNames}, #{item.productCateId}, #{item.productId}, #{item.title}, #{item.subtitle}, #{item.tag}, #{item.presellTime}, #{item.offShelfTime}, #{item.pickupTime}, 
       #{item.state}, #{item.originalPrice}, #{item.price}, #{item.supplier}, #{item.brand}, #{item.specification}, #{item.originPlace}, 
       #{item.description}, #{item.subscribers}, #{item.createTime}, #{item.createUser}, #{item.updateTime}, #{item.updateUser}, 
       #{item.brokerageType}, #{item.brokerageValue}, #{item.brokerageFirst}, #{item.priceHan}, #{item.priceWei}, #{item.supplierName}, #{item.supplierMobile})
@@ -47,6 +47,7 @@
       <if test="supplierName != null">supplier_name = #{supplierName},</if>
       <if test="supplierMobile != null">supplier_mobile = #{supplierMobile},</if>
       <if test="idx != null">idx = #{idx},</if>
+      <if test="coverPath != null and coverPath != ''">cover_path = #{coverPath},</if>
     </trim>
     where product_id = #{productId}
   </update>
@@ -67,7 +68,7 @@
   </resultMap>
 
   <sql id="sql_column">
-    product.idx, product.product_id, title, subtitle, tag, presell_time, off_shelf_time, pickup_time, state, original_price, price, supplier, brand, specification, origin_place, description, subscribers, product.create_time, create_user, update_time, update_user, brokerage_type, brokerage_value,
+   cover_path, product.idx, product.product_id, title, subtitle, tag, presell_time, off_shelf_time, pickup_time, state, original_price, price, supplier, brand, specification, origin_place, description, subscribers, product.create_time, create_user, update_time, update_user, brokerage_type, brokerage_value,
     number_type, number, sold_number, type, times, brokerage_first, price_han, price_wei, supplier_name, supplier_mobile, product.cate_names, product.product_cate_id, a.product_cate_name, 
     (select p.url from product_picture p where p.product_id = product.product_id and p.type = 1 limit 1) mainPictureUrl
   </sql>

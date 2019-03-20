@@ -177,6 +177,15 @@
           </td>
         </tr>
         <tr>
+          <td class="titleTd"><strong>商品封面：</strong></td>
+          <td>
+            <img th:src="@{/webjars/star/images/uploadBtn.png}" id="uploadCoverPicBtn">
+            <span id="productCoverPathDiv">
+            <span style="position: relative;" th:if="${productResponseDto.coverPath != null}"><img class="dataImg" width="70px" height="70px" th:src="${productResponseDto.coverPath}" th:attr="data=${productResponseDto.coverPath}"><div class="close">X</div></span>
+            </span>
+          </td>
+        </tr>
+        <tr>
           <td class="titleTd"><strong>商品图片：</strong></td>
           <td>
             <img th:src="@{/webjars/star/images/uploadBtn.png}" id="uploadPicBtn">

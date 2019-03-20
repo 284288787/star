@@ -7,6 +7,8 @@ var py = getParam("py");
 var user = getLoginInfo();
 var userCartNum;
 var selfs = new Array();
+var flag = true;
+var cId = getParam("cid");
 var screenWidth = $("body").width();
 var pullToRefreshs = new Array();
 if(py) putLocalData('py', py);
@@ -306,7 +308,7 @@ function loadData(index, self, pageNum, pageSize, title, callback){
               '<p class="recommendTitle">推荐单品：</p>';
               for(var p in products){
                 var product = products[p];
-                html += '<img class="recommendProduct tojump" src="'+IMAGE_PREFIX+product.mainPictureUrl+'" data-type="product" data-id="'+product.productId+'"><br>';
+                html += '<img class="recommendProduct tojump" src="'+IMAGE_PREFIX+product.coverPath+'" data-type="product" data-id="'+product.productId+'"><br>';
               }
               html += '</div>'+
               '</div>';
@@ -316,7 +318,7 @@ function loadData(index, self, pageNum, pageSize, title, callback){
               '<p class="recommendTitle">推荐单品：</p>';
               for(var p in products){
                 var product = products[p];
-                html += '<img class="recommendProduct tojump" src="'+IMAGE_PREFIX+product.mainPictureUrl+'" data-type="product" data-id="'+product.productId+'"><br>';
+                html += '<img class="recommendProduct tojump" src="'+IMAGE_PREFIX+product.coverPath+'" data-type="product" data-id="'+product.productId+'"><br>';
               }
               html += '</div>' +
               '<img class="recommendImg tojump" src="'+IMAGE_PREFIX+item.catePic+'" data-type="products" data-id="'+item.cateId+'">' +
@@ -352,11 +354,7 @@ function loadData(index, self, pageNum, pageSize, title, callback){
   var productCateId = ul.dataset.pcateid;
   var catemsg = ul.dataset.catemsg;
   var params = {'title': title, 'pager.pageNum': pageNum, 'pager.pageSize': pageSize, 'productCateId': productCateId};
-  var cateId = getParam("cid");
-  if(cateId){
-    mui("#slider").slider().gotoItem(1);
-    params["cateId"] = cateId;
-  }
+  params["cateId"] = cId;
   ajax({
     url: '/api/product/queryProduct',
     data: params,
@@ -498,6 +496,10 @@ function loadData(index, self, pageNum, pageSize, title, callback){
           return false;
         });
         callback(index, self, productIds, callback);
+        if(flag && cId){
+          flag = false;
+          mui("#slider").slider().gotoItem(1);
+        }
       }else{
         if(index > 0 && pageNum == 1){
           $(".mui-pull-bottom-tips", $(self.element).parent()).hide();

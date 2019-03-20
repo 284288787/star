@@ -69,4 +69,6 @@ public class Product {
   private Long productCateId;
   // 顺序 升序
   private Integer idx;
+  // 封面
+  private String coverPath;
 }

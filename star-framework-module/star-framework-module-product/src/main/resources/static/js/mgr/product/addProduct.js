@@ -91,6 +91,40 @@ $(function(){
       } 
     }],
     uploadImages:{uploadFileId: 'uploadImage', multiple: true, items: [{
+      data: {"mark": 0},
+      uploadBtn: $('#uploadCoverPicBtn'), 
+      success: function (data, textStatus) {
+        if(data.code==0){
+          for(var o in data.data){
+            var pic = data.data[o].original;
+            $('#productCoverPathDiv').html('<span style="position: relative;"><img class="dataImg" width="70px" height="70px" src="'+pic+'" data="'+pic+'"><div class="close">X</div></span>'); 
+          }
+        }else{
+          artDialog.alert(data.msg);
+        }
+      },
+      complete: function (XMLHttpRequest, textStatus) {
+        $('.close').unbind().click(function(){
+          $(this).parent().remove();
+        }); 
+        $('.dataImg').unbind().click(function(){
+          if($('#viewImg').length>0){ 
+            $('#viewImg').remove(); 
+          } 
+          $('body').append('<img id="viewImg" style="display:none" src="'+$(this).attr("src")+'">');
+          $('#viewImg').load(function(){
+            var w=$(this).width();
+            var h=$(this).height();
+            var l = w / h;
+            if(h > screenHeight * 0.85){
+              h = screenHeight * 0.85;
+              w = h * l;
+            }
+            artDialog.alert2('<div style="width:'+w+'px;height:'+h+'px;"><img style="height:'+h+'px" src="'+$(this).attr("src")+'">') 
+          }); 
+        }); 
+      } 
+    },{
       data: {"mark": 1},
       uploadBtn: $('#uploadPicBtn'), 
       success: function (data, textStatus) {
@@ -342,7 +376,7 @@ $(function(){
     params["productInventory"] = {"numberType": params["numberType"], "number": params["number"], "type": 1, "times": params["times"]};
     var pictures = new Array();
     var mainFlag = 1;
-    $(".dataImg").each(function(){
+    $("#productPicturesDiv .dataImg").each(function(){
       var path = $(this).attr("data");
       if(path) {
         pictures.push({"url": path, "type": mainFlag});
@@ -360,6 +394,7 @@ $(function(){
       artDialog.alert("请填写产品描述");
       return;
     }
+    params["coverPath"] = $("#productCoverPathDiv .dataImg:first").attr("data");
     $("#saveBtn").attr("disabled", true);
     $.ajax({
       contentType: "application/json",

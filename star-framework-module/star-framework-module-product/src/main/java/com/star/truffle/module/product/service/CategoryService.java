@@ -16,6 +16,7 @@ import com.star.truffle.common.choosedata.GridPagerResponse;
 import com.star.truffle.core.StarServiceException;
 import com.star.truffle.core.jackson.StarJson;
 import com.star.truffle.core.jdbc.Page;
+import com.star.truffle.core.jdbc.Page.OrderType;
 import com.star.truffle.core.web.ApiCode;
 import com.star.truffle.module.product.cache.CategoryCache;
 import com.star.truffle.module.product.cache.ProductCache;
@@ -67,7 +68,7 @@ public class CategoryService implements ChooseDataIntf {
 
   public List<CategoryResponseDto> queryCategory(CategoryRequestDto categoryRequestDto) {
     List<CategoryResponseDto> categories = this.categoryCache.queryCategory(categoryRequestDto);
-    Page pager = new Page(1, 2, null, null);
+    Page pager = new Page(1, 2, "product.update_time", OrderType.desc);
     categories.parallelStream().filter(cate -> ! cate.getCateName().equals("会员中心") && ! cate.getCateName().equals("免费试用")).forEach(cate -> {
       ProductRequestDto productRequestDto = new ProductRequestDto();
       productRequestDto.setCateId(cate.getCateId());
