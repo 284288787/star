@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +18,11 @@ import com.star.truffle.core.StarServiceException;
 import com.star.truffle.core.jackson.StarJson;
 import com.star.truffle.core.jdbc.Page;
 import com.star.truffle.core.web.ApiCode;
+import com.star.truffle.module.product.cache.ProductCache;
 import com.star.truffle.module.product.cache.ProductCategoryCache;
 import com.star.truffle.module.product.domain.ProductCategory;
 import com.star.truffle.module.product.dto.req.ProductCategoryRequestDto;
+import com.star.truffle.module.product.dto.req.ProductRequestDto;
 import com.star.truffle.module.product.dto.res.ProductCategoryResponseDto;
 
 @Service
@@ -27,6 +30,8 @@ public class ProductCategoryService implements ChooseDataIntf {
 
   @Autowired
   private ProductCategoryCache productCategoryCache;
+  @Autowired
+  private ProductCache productCache;
   @Autowired
   private StarJson starJson;
 
@@ -61,7 +66,12 @@ public class ProductCategoryService implements ChooseDataIntf {
   }
 
   public List<ProductCategoryResponseDto> queryProductCategory(ProductCategoryRequestDto productCategoryRequestDto) {
-    return this.productCategoryCache.queryProductCategory(productCategoryRequestDto);
+    return this.productCategoryCache.queryProductCategory(productCategoryRequestDto).parallelStream().filter(category -> {
+      ProductRequestDto productRequestDto = new ProductRequestDto();
+      productRequestDto.setProductCateId(category.getProductCateId());
+      Long count = productCache.queryProductCount(productRequestDto);
+      return count > 0;
+    }).collect(Collectors.toList());
   }
 
   public Long queryProductCategoryCount(ProductCategoryRequestDto productCategoryRequestDto) {
