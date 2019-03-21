@@ -92,7 +92,7 @@ $(function(){
     {name: 'totalMoney', index: 'total_money', width: 150, align: "center", formatter: function(cellvalue, options, rowObject){
       var s = '<a class="linetaga" href="javascript: kickbackDetailHandle.detail(\'' + rowObject.id.toFixed(0) + '\', 1);" >' + (rowObject.totalMoneyYun / 100.0).toFixed(2) + 
        '</a> + <a class="linetaga" href="javascript: kickbackDetailHandle.detail(\'' + rowObject.id.toFixed(0) + '\', 2);" >' + (rowObject.totalMoney / 100.0).toFixed(2) + '</a>';
-      return (cellvalue / 100.0).toFixed(2) + ' = ' + s;
+      return ((rowObject.totalMoney + rowObject.totalMoneyYun) / 100.0).toFixed(2) + ' = ' + s;
     }}, 
     {name: 'createTime', index: 'create_time', width: 80, align: "center", formatter:'date', formatoptions: {srcformat: 'Y-m-d H:i:s', newformat:'Y-m-d H:i:s'}}, 
     {name: 'state', index: 'state', width: 50, align: "center", formatter: 'select', editoptions: {value:'1:审核中;2:汇款中;3:未通过;4:已完成'}}, 
