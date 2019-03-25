@@ -18,7 +18,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.star.truffle.core.jackson.StarJson;
 import com.star.truffle.core.okhttp.StarOkHttpClient;
-import com.star.truffle.module.weixin.config.WeixinConfig;
 import com.star.truffle.module.weixin.constant.CardTypeEnum;
 import com.star.truffle.module.weixin.dto.card.Abstract;
 import com.star.truffle.module.weixin.dto.card.AdvancedInfo;
@@ -33,6 +32,7 @@ import com.star.truffle.module.weixin.dto.card.Sku;
 import com.star.truffle.module.weixin.dto.card.UseCondition;
 import com.star.truffle.module.weixin.dto.card.res.CardDetail;
 import com.star.truffle.module.weixin.dto.card.res.CardList;
+import com.star.truffle.module.weixin.properties.WeixinConfig;
 
 import okhttp3.OkHttpClient;
 

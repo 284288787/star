@@ -10,9 +10,9 @@ import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.star.truffle.module.weixin.config.WeixinConfig;
 import com.star.truffle.module.weixin.dao.WeiXinApiDao;
 import com.star.truffle.module.weixin.dto.res.WeixinUserInfo;
+import com.star.truffle.module.weixin.properties.WeixinConfig;
 
 @Service
 public class TicketService {

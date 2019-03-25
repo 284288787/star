@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.star.truffle.core.StarServiceException;
 import com.star.truffle.core.web.ApiResult;
-import com.star.truffle.module.weixin.config.WeixinConfig;
+import com.star.truffle.module.weixin.properties.WeixinConfig;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
