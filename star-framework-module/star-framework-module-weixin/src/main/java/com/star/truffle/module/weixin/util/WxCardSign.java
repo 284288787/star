@@ -18,35 +18,35 @@ import java.util.Collections;
 public class WxCardSign {
 
   public WxCardSign() {
-    m_param_to_sign = new ArrayList<String>();
+    signParams = new ArrayList<String>();
   }
 
-  public void AddData(String value) {
-    m_param_to_sign.add(value);
+  public void addData(String value) {
+    signParams.add(value);
   }
 
-  public void AddData(Object value) {
-    m_param_to_sign.add(value.toString());
+  public void addData(Object value) {
+    signParams.add(value.toString());
   }
 
-  public String GetSignature() {
-    Collections.sort(m_param_to_sign);
+  public String getSignature() {
+    Collections.sort(signParams);
     StringBuilder string_to_sign = new StringBuilder();
-    for (String str : m_param_to_sign) {
+    for (String str : signParams) {
       string_to_sign.append(str);
     }
     System.out.println("string_to_sign:" + string_to_sign);
     try {
       MessageDigest hasher = MessageDigest.getInstance("SHA-1");
       byte[] digest = hasher.digest(string_to_sign.toString().getBytes());
-      return ByteToHexString(digest);
+      return byteToHexString(digest);
     } catch (NoSuchAlgorithmException e) {
       e.printStackTrace();
       return "";
     }
   }
 
-  public String ByteToHexString(byte[] data) {
+  public String byteToHexString(byte[] data) {
     StringBuilder str = new StringBuilder();
     for (byte b : data) {
       String hv = Integer.toHexString(b & 0xFF);
@@ -57,5 +57,5 @@ public class WxCardSign {
     return str.toString();
   }
 
-  private ArrayList<String> m_param_to_sign;
+  private ArrayList<String> signParams;
 }

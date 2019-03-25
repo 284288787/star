@@ -1,6 +1,4 @@
-package com.star.truffle.module.weixin.service;
-
-import com.star.truffle.module.weixin.util.WxCardSign;
+package com.star.truffle.module.weixin.util;
 
 /*
  * To change this license header, choose License Headers in Project Properties.
@@ -15,12 +13,12 @@ import com.star.truffle.module.weixin.util.WxCardSign;
 public class WxCardSignTest {
     public static void main(String[] args) throws Exception{
             WxCardSign signer = new WxCardSign();
-            signer.AddData("test1");
-            signer.AddData(12312312);
-            signer.AddData(55312312);
-            signer.AddData("test");
-            signer.AddData("test2");
-            System.out.println(signer.GetSignature());
+            signer.addData("test1");
+            signer.addData(12312312);
+            signer.addData(55312312);
+            signer.addData("test");
+            signer.addData("test2");
+            System.out.println(signer.getSignature());
     }
 
 }
