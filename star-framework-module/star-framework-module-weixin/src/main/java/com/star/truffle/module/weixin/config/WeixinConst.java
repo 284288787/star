@@ -1,4 +1,4 @@
-package com.star.truffle.module.weixin.service;
+package com.star.truffle.module.weixin.config;
 
 import org.springframework.stereotype.Service;
 
