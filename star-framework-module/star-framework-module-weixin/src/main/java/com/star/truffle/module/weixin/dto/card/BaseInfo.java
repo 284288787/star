@@ -1,13 +1,17 @@
 /**create by liuhua at 2019年1月24日 上午10:36:18**/
 package com.star.truffle.module.weixin.dto.card;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 //https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1451025056
 public class BaseInfo {
 

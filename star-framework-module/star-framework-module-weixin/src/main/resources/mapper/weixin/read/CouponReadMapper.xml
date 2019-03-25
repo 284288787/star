@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.weixin.dao.read.CouponReadDao">
+  <resultMap id="couponResponseDtoResultMap" type="com.star.truffle.module.weixin.dto.res.CouponResponseDto">
+    <result column="coupon_id" property="couponId" />
+    <result column="title" property="title" />
+    <result column="card_id" property="cardId" />
+    <result column="create_time" property="createTime" />
+  </resultMap>
+
+  <sql id="sql_column">
+    coupon_id, title, card_id, create_time
+  </sql>
+
+  <sql id="sql_where">
+    <trim prefix="WHERE" prefixOverrides="AND | OR">
+      <if test="couponId != null">
+        and coupon_id = #{couponId}
+      </if>
+      <if test="title != null and title != ''">
+        and title = #{title}
+      </if>
+    </trim>
+  </sql>
+
+  <select id="getCoupon" resultType="com.star.truffle.module.weixin.dto.res.CouponResponseDto">
+    select
+    <include refid="sql_column" />
+    from coupon
+    where coupon_id = #{couponId}
+  </select>
+
+  <select id="queryCoupon" resultMap="couponResponseDtoResultMap">
+    select
+    <include refid="sql_column" />
+    from coupon
+    <include refid="sql_where" />
+    order by
+    <choose>
+      <when test="pager != null and pager.orderBy != null and pager.orderBy != ''">${pager.orderBy}</when>
+      <otherwise>coupon_id</otherwise>
+    </choose>
+    <choose>
+      <when test="pager != null and pager.orderType != null and pager.orderType != ''">${pager.orderType}</when>
+      <otherwise>desc</otherwise>
+    </choose>
+    <if test="pager != null and pager.pageSize!=null and pager.startIndex!=null">
+      limit #{pager.startIndex}, #{pager.pageSize}
+    </if>
+  </select>
+
+  <select id="queryCouponCount" resultType="java.lang.Long">
+    select
+    count(1)
+    from coupon
+    <include refid="sql_where" />
+  </select>
+</mapper>

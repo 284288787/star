@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.star.truffle.module.weixin.dao.write.CouponWriteDao">
+  <insert id="saveCoupon" useGeneratedKeys="true" keyProperty="couponId" parameterType="com.star.truffle.module.weixin.domain.Coupon">
+    insert into coupon(coupon_id, title, card_id, create_time)
+    values(#{couponId}, #{title}, #{cardId}, #{createTime})
+  </insert>
+
+  <insert id="batchSaveCoupon" parameterType="java.util.List">
+    insert into coupon(coupon_id, title, card_id, create_time)
+    values
+    <foreach collection="list" item="item" index="index" separator=",">
+      (#{item.couponId}, #{item.title}, #{item.cardId}, #{item.createTime})
+    </foreach>
+  </insert>
+
+  <update id="updateCoupon" parameterType="com.star.truffle.module.weixin.dto.req.CouponRequestDto">
+    update coupon
+    <trim prefix="set" suffixOverrides=",">
+      <if test="title != null and title != ''">title = #{title},</if>
+      <if test="cardId != null and cardId != ''">card_id = #{cardId},</if>
+      <if test="createTime != null">create_time = #{createTime},</if>
+    </trim>
+    where coupon_id = #{couponId}
+  </update>
+
+  <delete id="deleteCoupon" parameterType="java.lang.Long">
+    delete from coupon where coupon_id = #{couponId}
+  </delete>
+
+  <resultMap id="couponResponseDtoResultMap" type="com.star.truffle.module.weixin.dto.res.CouponResponseDto">
+    <result column="coupon_id" property="couponId" />
+    <result column="title" property="title" />
+    <result column="card_id" property="cardId" />
+    <result column="create_time" property="createTime" />
+  </resultMap>
+
+  <sql id="sql_column">
+    coupon_id, title, card_id, create_time
+  </sql>
+
+  <select id="getCoupon" resultType="com.star.truffle.module.weixin.dto.res.CouponResponseDto">
+    select
+    <include refid="sql_column" />
+    from coupon
+    where coupon_id = #{couponId}
+  </select>
+
+</mapper>
