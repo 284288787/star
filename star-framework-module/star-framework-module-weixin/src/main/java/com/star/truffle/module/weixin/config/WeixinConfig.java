@@ -1,5 +1,5 @@
 /**create by liuhua at 2017年12月7日 下午2:49:44**/
-package com.star.truffle.module.weixin.domain;
+package com.star.truffle.module.weixin.config;
 
 public class WeixinConfig {
 

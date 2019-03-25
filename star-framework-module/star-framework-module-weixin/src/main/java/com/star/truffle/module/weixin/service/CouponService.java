@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.star.truffle.module.weixin.dto.CardReq;
+import com.star.truffle.module.weixin.dto.card.CardInfo;
 import com.star.truffle.module.weixin.dto.req.CouponRequestDto;
 import com.star.truffle.module.weixin.dto.res.CouponResponseDto;
 
@@ -21,7 +21,7 @@ public class CouponService {
     return null;
   }
 
-  public Long saveCard(CardReq cardReq) {
+  public Long saveCard(CardInfo cardReq) {
     // TODO Auto-generated method stub
     return null;
   }

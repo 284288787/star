@@ -1,5 +1,5 @@
 /**create by liuhua at 2019年1月24日 上午10:56:51**/
-package com.star.truffle.module.weixin.dto;
+package com.star.truffle.module.weixin.dto.card;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

@@ -6,13 +6,12 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.star.truffle.module.weixin.config.WeixinConfig;
 import com.star.truffle.module.weixin.dao.WeiXinApiDao;
-import com.star.truffle.module.weixin.domain.WeixinConfig;
 import com.star.truffle.module.weixin.dto.res.WeixinUserInfo;
 
 @Service

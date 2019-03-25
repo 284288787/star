@@ -1,6 +1,6 @@
 package com.star.truffle.module.weixin.service;
 
-import com.star.truffle.module.weixin.domain.WxCardSign;
+import com.star.truffle.module.weixin.util.WxCardSign;
 
 /*
  * To change this license header, choose License Headers in Project Properties.

@@ -16,7 +16,7 @@ import com.star.truffle.core.jdbc.Page;
 import com.star.truffle.core.jdbc.Page.OrderType;
 import com.star.truffle.core.web.ApiCode;
 import com.star.truffle.core.web.ApiResult;
-import com.star.truffle.module.weixin.dto.CardReq;
+import com.star.truffle.module.weixin.dto.card.CardInfo;
 import com.star.truffle.module.weixin.dto.req.CouponRequestDto;
 import com.star.truffle.module.weixin.dto.res.CouponResponseDto;
 import com.star.truffle.module.weixin.service.CouponService;
@@ -43,7 +43,7 @@ public class CardController {
   
   @ResponseBody
   @RequestMapping(value = "/add", method = RequestMethod.POST)
-  public ApiResult<Long> add(CardReq cardReq) {
+  public ApiResult<Long> add(CardInfo cardReq) {
     try {
       Long id = couponService.saveCard(cardReq);
       return ApiResult.success(id);

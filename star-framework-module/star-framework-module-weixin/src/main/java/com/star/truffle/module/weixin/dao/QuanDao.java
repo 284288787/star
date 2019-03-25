@@ -18,20 +18,21 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.star.truffle.core.jackson.StarJson;
 import com.star.truffle.core.okhttp.StarOkHttpClient;
+import com.star.truffle.module.weixin.config.WeixinConfig;
 import com.star.truffle.module.weixin.constant.CardTypeEnum;
-import com.star.truffle.module.weixin.domain.CardList;
-import com.star.truffle.module.weixin.domain.WeixinConfig;
-import com.star.truffle.module.weixin.dto.Abstract;
-import com.star.truffle.module.weixin.dto.AdvancedInfo;
-import com.star.truffle.module.weixin.dto.BaseInfo;
-import com.star.truffle.module.weixin.dto.CardReq;
-import com.star.truffle.module.weixin.dto.Cash;
-import com.star.truffle.module.weixin.dto.DateInfo;
-import com.star.truffle.module.weixin.dto.Discount;
-import com.star.truffle.module.weixin.dto.Gift;
-import com.star.truffle.module.weixin.dto.Groupon;
-import com.star.truffle.module.weixin.dto.Sku;
-import com.star.truffle.module.weixin.dto.UseCondition;
+import com.star.truffle.module.weixin.dto.card.Abstract;
+import com.star.truffle.module.weixin.dto.card.AdvancedInfo;
+import com.star.truffle.module.weixin.dto.card.BaseInfo;
+import com.star.truffle.module.weixin.dto.card.CardInfo;
+import com.star.truffle.module.weixin.dto.card.Cash;
+import com.star.truffle.module.weixin.dto.card.DateInfo;
+import com.star.truffle.module.weixin.dto.card.Discount;
+import com.star.truffle.module.weixin.dto.card.Gift;
+import com.star.truffle.module.weixin.dto.card.Groupon;
+import com.star.truffle.module.weixin.dto.card.Sku;
+import com.star.truffle.module.weixin.dto.card.UseCondition;
+import com.star.truffle.module.weixin.dto.card.res.CardDetail;
+import com.star.truffle.module.weixin.dto.card.res.CardList;
 
 import okhttp3.OkHttpClient;
 
@@ -59,8 +60,8 @@ public class QuanDao {
   public static void main(String[] args) throws IOException {
 //    CardList cardList = getCardList("ooQ_o1eQ33P9zguW7U4BvrvUa4NY");
 //    System.out.println(starJson.obj2string(cardList));
-//    System.out.println(canConsume("607054664258"));
-//    System.out.println(starJson.obj2string(getCardDetail("poQ_o1Zl9PgJ1N9Ce8UKFKRmnPfU")));
+//    System.out.println(canConsume("533794178667"));
+    System.out.println(starJson.obj2string(getCardDetail("poQ_o1Zl9PgJ1N9Ce8UKFKRmnPfU")));
     BaseInfo baseInfo = BaseInfo.builder()
         .logoUrl("http://mmbiz.qlogo.cn/mmbiz_jpg/fPINJCcdCoRKr8MZytt1GxVZt13xNyPcvNjALDeMONjKDBwXY8QDm5AVPMdakJwAj2r5QelLykNQjcQk7MmFiaA/0?wx_fmt=jpeg")
         .codeType("CODE_TYPE_NONE")
@@ -109,14 +110,14 @@ public class QuanDao {
         .baseInfo(baseInfo)
         .advancedInfo(advancedInfo)
         .build();
-    CardReq card = CardReq.builder()
+    CardInfo card = CardInfo.builder()
         .groupon(groupon)
         .cash(cash)
         .discount(discount)
         .gift(gift)
         .cardType(CardTypeEnum.DISCOUNT.name())
         .build();
-    Map<String, CardReq> cardMap = new LinkedHashMap<>();
+    Map<String, CardInfo> cardMap = new LinkedHashMap<>();
     cardMap.put("card", card);
     String params = starJson.obj2stringsnake(cardMap);
     System.out.println(params);
@@ -124,7 +125,7 @@ public class QuanDao {
 //    createShelf();
 //    WeixinConfig config = weixinConfigCard("poQ_o1XQJyMvam39dk_5C8rx-0wY", "ooQ_o1eQ33P9zguW7U4BvrvUa4NY", null);
 //    System.out.println(starJson.obj2string(config));
-    uploadPicture();
+//    uploadPicture();
   }
   
   public static void uploadPicture() throws IOException {
@@ -381,7 +382,7 @@ public class QuanDao {
    */
   public static CardList getCardList(String openId) throws IOException {
     String temp = starOkHttpClient.postJson(String.format(getCardListUrl, getAccessToken()), "{\"openid\": \"" + openId + "\"}");
-    CardList cardList = starJson.str2obj(temp, new TypeReference<CardList>() {});
+    CardList cardList = starJson.str2objsnake(temp, new TypeReference<CardList>() {});
     return cardList;
   }
   
@@ -392,7 +393,16 @@ public class QuanDao {
    * @return
    * @throws IOException
    */
-  public static Map<String, Object> getCardDetail(String cardId) throws IOException {
+  public static CardDetail getCardDetail(String cardId) throws IOException {
+    String data = "{\"card_id\": \"" + cardId + "\"}";
+    String temp = starOkHttpClient.postJson(String.format(getCardDetailUrl, getAccessToken()), data);
+    CardDetail cardDetail = starJson.str2objsnake(temp, new TypeReference<CardDetail>() {});
+    System.out.println(temp);
+    System.out.println(starJson.obj2string(cardDetail));
+    return cardDetail;
+  }
+  
+  public static Map<String, Object> getCardDetail2(String cardId) throws IOException {
     Map<String, Object> res = new LinkedHashMap<>();
     String data = "{\"card_id\": \"" + cardId + "\"}";
     String temp = starOkHttpClient.postJson(String.format(getCardDetailUrl, getAccessToken()), data);

@@ -1,5 +1,5 @@
 /**create by liuhua at 2019年1月24日 上午11:47:45**/
-package com.star.truffle.module.weixin.dto;
+package com.star.truffle.module.weixin.dto.card;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @Builder
-public class CardReq {
+public class CardInfo {
 
   private String cardType;
   private Groupon groupon;               //团购券

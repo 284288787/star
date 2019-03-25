@@ -64,6 +64,14 @@ public class StarJson {
       throw new RuntimeException(e);
     }
   }
+  
+  public <T> T str2objsnake(String jsonStr, TypeReference<T> typeReference) {
+    try {
+      return objectMapper2.readValue(jsonStr, typeReference);
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
+  }
 
   /**
    * description: 注意此修改配置，会影响此线程的objectMapper

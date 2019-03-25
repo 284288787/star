@@ -1,5 +1,5 @@
 /**create by liuhua at 2019年1月24日 下午1:52:16**/
-package com.star.truffle.module.weixin.dto;
+package com.star.truffle.module.weixin.dto.card;
 
 import lombok.Builder;
 import lombok.Getter;
