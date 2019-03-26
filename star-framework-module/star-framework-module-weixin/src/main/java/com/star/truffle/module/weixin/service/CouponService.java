@@ -1,6 +1,7 @@
 /**create by framework at 2019年03月25日 14:18:36**/
 package com.star.truffle.module.weixin.service;
 
+import java.util.Date;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +20,18 @@ public class CouponService {
   private CouponCache couponCache;
 
   public Long saveCoupon(Coupon coupon) {
+    if (null == coupon || StringUtils.isBlank(coupon.getTitle()) || StringUtils.isBlank(coupon.getCardId())) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR);
+    }
+    coupon.setCreateTime(new Date());
     this.couponCache.saveCoupon(coupon);
     return coupon.getCouponId();
   }
 
   public void updateCoupon(CouponRequestDto couponRequestDto) {
+    if (null == couponRequestDto || null == couponRequestDto.getCouponId()) {
+      throw new StarServiceException(ApiCode.PARAM_ERROR);
+    }
     this.couponCache.updateCoupon(couponRequestDto);
   }
 

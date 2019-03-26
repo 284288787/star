@@ -5,11 +5,11 @@ $(function(){
     rules: {
       title: {
         required: true,
-        zhengze: ".*{1,10}"
+        zhengze: ".{1,10}"
       },
       cardId: {
         required: true,
-        zhengze: ".*{20,40}"
+        zhengze: ".{20,40}"
       }
     },
     messages: {

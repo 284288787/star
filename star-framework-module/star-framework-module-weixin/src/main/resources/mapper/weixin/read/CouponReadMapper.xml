@@ -2,20 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.star.truffle.module.weixin.dao.read.CouponReadDao">
   <resultMap id="couponResponseDtoResultMap" type="com.star.truffle.module.weixin.dto.res.CouponResponseDto">
-    <result column="coupon_id" property="couponId" />
-    <result column="title" property="title" />
-    <result column="card_id" property="cardId" />
-    <result column="create_time" property="createTime" />
   </resultMap>
 
   <sql id="sql_column">
-    coupon_id, title, card_id, create_time
+    coupon_id, title, card_id, description, card_type, deleted, enabled, create_time
   </sql>
 
   <sql id="sql_where">
     <trim prefix="WHERE" prefixOverrides="AND | OR">
       <if test="couponId != null">
         and coupon_id = #{couponId}
+      </if>
+      <if test="deleted != null">
+        and deleted = #{deleted}
+      </if>
+      <if test="enabled != null">
+        and enabled = #{enabled}
+      </if>
+      <if test="cardId != null and cardId != ''">
+        and card_id = #{cardId}
+      </if>
+      <if test="cardType != null and cardType != ''">
+        and card_type = #{cardType}
       </if>
       <if test="title != null and title != ''">
         and title = #{title}

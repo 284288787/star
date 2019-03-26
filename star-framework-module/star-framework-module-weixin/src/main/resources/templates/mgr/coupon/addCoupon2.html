@@ -15,28 +15,59 @@
     <form action="" id="editCouponForm">
       <table class="gy_table">
         <tr>
+          <td><strong>卡券类型：</strong></td>
+          <td><select name="cardType">
+            <option value="CASH">代金券</option>
+            <option value="GIFT">兑换券</option>
+            <option value="DISCOUNT">折扣券</option>
+            <option value="GROUPON">团购券</option>
+            <option value="GENERAL_COUPON">通用优惠券</option>
+          </select></td>
+          <td><strong>卡券颜色：</strong></td>
+          <td><select name="cardType">
+            <option value="63b359">Color010</option>
+            <option value="2c9f67">Color020</option>
+            <option value="509fc9">Color030</option>
+            <option value="5885cf">Color040</option>
+            <option value="9062c0">Color050</option>
+            <option value="d09a45">Color060</option>
+            <option value="e4b138">Color070</option>
+            <option value="ee903c">Color080</option>
+            <option value="f08500">Color081</option>
+            <option value="a9d92d">Color082</option>
+            <option value="dd6549">Color090</option>
+            <option value="cc463d">Color100</option>
+            <option value="cf3e36">Color101</option>
+            <option value="5E6671">Color102</option>
+          </select></td>
+        </tr>
+        <tr>
+          <td><strong>减免金额(元)：</strong></td>
+          <td>
+            <input type="text" name="title" placeholder="减免金额">
+          </td>
+          <td><strong>减免金额(元)：</strong></td>
+          <td>
+            <input type="text" name="title" placeholder="减免金额">
+          </td>
+        </tr>
+        <tr>
           <td><strong>卡券标题：</strong></td>
-        </tr>
-        <tr>
           <td>
-            <input type="text" name="title" placeholder="卡券标题">
+            <input type="text" name="title" placeholder="卡券标题" class="ipt300">
+          </td>
+          <td><strong>卡券标题：</strong></td>
+          <td>
+            <input type="text" name="title" placeholder="卡券标题" class="ipt300">
           </td>
         </tr>
-        <tr>
-          <td><strong>微信卡券Id：</strong></td>
-        </tr>
-        <tr>
-          <td>
-            <input type="text" name="cardId" placeholder="微信卡券Id" class="ipt300">
-          </td>
-        </tr>
-        <tr>
+        <!-- <tr>
           <td>
             <div class="btnGroup">
               <input type="button" value="保存" class="button blue" id="saveBtn"> <input type="button" value="关闭" class="button grey" onclick="art.dialog.close();">
             </div>
           </td>
-        </tr>
+        </tr> -->
       </table>
     </form>
   </div>
