@@ -6,6 +6,14 @@ import java.util.Date;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * 卡券：
+ * 1.卡券可以设置适用大分类，分类
+ * 2.卡券可以设置适用具体某些供应
+ * 3.卡券可以设置适用某些用户
+ * @author liuhua
+ *
+ */
 @Getter
 @Setter
 public class Coupon {
