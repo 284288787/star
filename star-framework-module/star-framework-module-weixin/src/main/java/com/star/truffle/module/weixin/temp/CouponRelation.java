@@ -17,12 +17,25 @@ public class CouponRelation {
   @StarFieldList(inputType = InputType.text)
   private Long id;
   
-  @StarField(caption = "卡券标题", dsType = DsType.VARCHAR, dsLength = 10)
-  @StarFieldAdd(inputType = InputType.text, requiredMsg = "必填", zhengze = ".*{1,10}", zhengzeMsg = "长度在1至10个字", placeholder = "卡券标题")
-  @StarFieldEdit(inputType = InputType.text, requiredMsg = "必填", zhengze = ".*{1,10}", zhengzeMsg = "长度在1至10个字", placeholder = "卡券标题")
+  @StarField(caption = "业务类型", dsType = DsType.TINYINT, dsLength = 1, enumName = "CouponBusinessTypeEnum", 
+      enumOptTypes = "{\"type\":\"int\",\"caption\":\"String\"}", 
+      enumOptValues = "{\"cate\": {\"type\": 1, \"caption\": \"大分类\"}, \"product_cate\": {\"type\": 2, \"caption\": \"商品分类\"}, \"product\": {\"type\": 3, \"caption\": \"商品\"}, \"member\": {\"type\": 4, \"caption\": \"会员\"}}")
+  @StarFieldAdd(inputType = InputType.select, inputValue = "{\"1\":\"大分类\",\"2\":\"商品分类\",\"3\":\"商品\",\"4\":\"会员\"}", requiredMsg = "必选")
+  @StarFieldEdit(inputType = InputType.select, inputValue = "{\"1\":\"大分类\",\"2\":\"商品分类\",\"3\":\"商品\",\"4\":\"会员\"}", requiredMsg = "必选")
+  @StarFieldList(inputType = InputType.select, inputValue = "{value:'1:大分类;2:商品分类;3:商品;4:会员'}")
+  @StarFieldQuery(inputType = InputType.select, inputValue = "{\"1\":\"大分类\",\"2\":\"商品分类\",\"3\":\"商品\",\"4\":\"会员\"}")
+  private Integer businessType;
+  
+  @StarField(caption = "业务ID", dsType = DsType.BIGINT, dsLength = 20)
   @StarFieldList(inputType = InputType.text)
   @StarFieldQuery(inputType = InputType.text)
-  private Integer businessType;
   private Long businessId;
+  
+  @StarField(caption = "卡券ID", dsType = DsType.BIGINT, dsLength = 20)
+  @StarFieldList(inputType = InputType.text)
+  @StarFieldQuery(inputType = InputType.text)
   private Long couponId;
+  
+  @StarField(caption = "是否删除", dsType = DsType.TINYINT, dsLength = 1)
+  private Integer deleted;
 }
