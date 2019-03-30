@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>添加 卡券关联关系</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jquery-ui/jquery-ui.min.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/jqGrid/css/ui.jqgrid.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/artDialog/skins/simple-star.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/buttons.css}" />
+<link rel="stylesheet" type="text/css" media="screen" th:href="@{/webjars/star/css/editEntityTable.css}" />
+</head>
+<body>
+  <div class="edit-container">
+    <form action="" id="editCouponRelationForm">
+      <table class="gy_table">
+        <tr>
+          <td><strong>业务类型：</strong></td>
+        </tr>
+        <tr>
+          <td>
+            <select name="businessType">
+              <option value="">请选择...</option>
+              <option value="1">大分类</option>
+              <option value="2">商品分类</option>
+              <option value="3">商品</option>
+              <option value="4">会员</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="btnGroup">
+              <input type="button" value="保存" class="button blue" id="saveBtn"> <input type="button" value="关闭" class="button grey" onclick="art.dialog.close();">
+            </div>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </div>
+  <script type="text/javascript" th:src="@{/webjars/jquery/jquery.min.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/artDialog/js/jquery.artDialog.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/artDialog/js/iframeTools.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/jquery-validation/dist/jquery.validate.min.js}"></script>
+	<script type="text/javascript" th:src="@{/webjars/jquery-validation/dist/additional-methods-local.js}"></script>
+  <script type="text/javascript" th:src="@{/js/mgr/couponRelation/addCouponRelation.js}"></script>
+</body>
+</html>
