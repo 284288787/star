@@ -3,13 +3,16 @@ package com.star.truffle.module.weixin.service;
 
 import java.util.Date;
 import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import com.star.truffle.core.StarServiceException;
 import com.star.truffle.core.web.ApiCode;
 import com.star.truffle.module.weixin.cache.CouponCache;
 import com.star.truffle.module.weixin.domain.Coupon;
+import com.star.truffle.module.weixin.dto.card.res.CardDetail;
 import com.star.truffle.module.weixin.dto.req.CouponRequestDto;
 import com.star.truffle.module.weixin.dto.res.CouponResponseDto;
 
@@ -20,7 +23,8 @@ public class CouponService {
   private CouponCache couponCache;
 
   public Long saveCoupon(Coupon coupon) {
-    if (null == coupon || StringUtils.isBlank(coupon.getTitle()) || StringUtils.isBlank(coupon.getCardId())) {
+    if (null == coupon || StringUtils.isBlank(coupon.getCardId()) || StringUtils.isBlank(coupon.getTitle()) || 
+        StringUtils.isBlank(coupon.getDescription()) || StringUtils.isBlank(coupon.getCardType())) {
       throw new StarServiceException(ApiCode.PARAM_ERROR);
     }
     coupon.setCreateTime(new Date());
@@ -61,6 +65,10 @@ public class CouponService {
 
   public Long queryCouponCount(CouponRequestDto couponRequestDto) {
     return this.couponCache.queryCouponCount(couponRequestDto);
+  }
+
+  public CardDetail getWxCardInfo(String cardId) {
+    return couponCache.getWxCardInfo(cardId);
   }
 
 }

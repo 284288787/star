@@ -5,7 +5,7 @@ var couponHandle = new ListHandle({
   pagerId: '#grid-pager',
   formId: '#queryForm',
   entityName: '卡券',
-  winWidth: '500px',
+  winWidth: '600px',
   winHeight: '300px',
   primaryKey: 'couponId',
   urls:{

@@ -20,6 +20,7 @@ import com.star.truffle.core.jdbc.Page.OrderType;
 import com.star.truffle.core.web.ApiCode;
 import com.star.truffle.core.web.ApiResult;
 import com.star.truffle.module.weixin.domain.Coupon;
+import com.star.truffle.module.weixin.dto.card.res.CardDetail;
 import com.star.truffle.module.weixin.dto.req.CouponRequestDto;
 import com.star.truffle.module.weixin.dto.res.CouponResponseDto;
 import com.star.truffle.module.weixin.service.CouponService;
@@ -89,13 +90,27 @@ public class CouponController {
       return ApiResult.fail(ApiCode.SYSTEM_ERROR);
     }
   }
-
+  
   @ResponseBody
   @RequestMapping(value = "/deleted", method = RequestMethod.POST)
   public ApiResult<Void> delete(String ids) {
     try {
       couponService.deleteCoupon(ids);
       return ApiResult.success();
+    } catch (StarServiceException e) {
+      return ApiResult.fail(e.getCode(), e.getMsg());
+    } catch (Exception e) {
+      log.error(e.getMessage(), e);
+      return ApiResult.fail(ApiCode.SYSTEM_ERROR);
+    }
+  }
+
+  @ResponseBody
+  @RequestMapping(value = "/getWxCardInfo", method = RequestMethod.POST)
+  public ApiResult<CardDetail> getWxCardInfo(String cardId) {
+    try {
+      CardDetail cardDetail = couponService.getWxCardInfo(cardId);
+      return ApiResult.success(cardDetail);
     } catch (StarServiceException e) {
       return ApiResult.fail(e.getCode(), e.getMsg());
     } catch (Exception e) {

@@ -8,9 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.star.truffle.core.jackson.StarJson;
+import com.star.truffle.module.weixin.dao.QuanDao;
 import com.star.truffle.module.weixin.dao.read.CouponReadDao;
 import com.star.truffle.module.weixin.dao.write.CouponWriteDao;
 import com.star.truffle.module.weixin.domain.Coupon;
+import com.star.truffle.module.weixin.dto.card.res.CardDetail;
 import com.star.truffle.module.weixin.dto.req.CouponRequestDto;
 import com.star.truffle.module.weixin.dto.res.CouponResponseDto;
 
@@ -23,6 +25,8 @@ public class CouponCache {
   private CouponWriteDao couponWriteDao;
   @Autowired
   private CouponReadDao couponReadDao;
+  @Autowired
+  private QuanDao quanDao;
 
 //  @CachePut(value = "module-weixin-coupon", key = "'coupon_couponId_'+#result.couponId", condition = "#result != null and #result.couponId != null")
   public CouponResponseDto saveCoupon(Coupon coupon){
@@ -57,6 +61,10 @@ public class CouponCache {
   public Long queryCouponCount(CouponRequestDto couponRequestDto){
     Map<String, Object> conditions = starJson.bean2Map(couponRequestDto);
     return this.couponReadDao.queryCouponCount(conditions);
+  }
+
+  public CardDetail getWxCardInfo(String cardId) {
+    return quanDao.getCardDetail(cardId);
   }
 
 }
